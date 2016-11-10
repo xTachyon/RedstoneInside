@@ -5,6 +5,7 @@
 #include "logger.hpp"
 #include "nbt/nbt.hpp"
 #include "literaloperators.hpp"
+#include "block.hpp"
 
 int main(int argc, char** argv)
 {
