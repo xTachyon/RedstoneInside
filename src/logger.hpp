@@ -29,7 +29,7 @@ public:
   Logger();
   ~Logger();
 
-  template<typename T>
+  template <typename T>
   void write(const T& val, LoggerLevel level = LoggerLevel::Info)
   {
     std::lock_guard<std::mutex> guard(mMutex);
@@ -38,7 +38,7 @@ public:
     mQueue.push_back(std::make_tuple(mSstream.str(), boost::posix_time::second_clock::local_time(), level));
   }
 
-  template<typename T>
+  template <typename T>
   static void debug(const T& val)
   {
 #ifdef _DEBUG
@@ -46,7 +46,7 @@ public:
 #endif
   }
 
-  template<typename T>
+  template <typename T>
   static void debugSync(const T& val)
   {
 #ifdef _DEBUG
@@ -54,25 +54,25 @@ public:
 #endif
   }
 
-  template<typename T>
+  template <typename T>
   static void info(const T& val)
   {
     get().write(val, LoggerLevel::Info);
   }
 
-  template<typename T>
+  template <typename T>
   static void warn(const T& val)
   {
     get().write(val, LoggerLevel::Warn);
   }
 
-  template<typename T>
+  template <typename T>
   static void error(const T& val)
   {
     get().write(val, LoggerLevel::Error);
   }
 
-  template<typename T>
+  template <typename T>
   static void fatal(const T& val)
   {
     get().write(val, LoggerLevel::Fatal);

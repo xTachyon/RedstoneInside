@@ -16,32 +16,32 @@ struct SizeConstants
   static constexpr std::size_t eb = pb << 10;
 };
 
-std::size_t operator ""_kb(std::size_t data)
+std::size_t operator ""_kb(unsigned long long int data)
 {
   return data * SizeConstants::kb;
 }
 
-std::size_t operator ""_mb(std::size_t data)
+std::size_t operator ""_mb(unsigned long long int data)
 {
   return data * SizeConstants::mb;
 }
 
-std::size_t operator ""_gb(std::size_t data)
+std::size_t operator ""_gb(unsigned long long int data)
 {
   return data * SizeConstants::gb;
 }
 
-std::size_t operator ""_tb(std::size_t data)
+std::size_t operator ""_tb(unsigned long long int data)
 {
   return data * SizeConstants::tb;
 }
 
-std::size_t operator ""_pb(std::size_t data)
+std::size_t operator ""_pb(unsigned long long int data)
 {
   return data * SizeConstants::pb;
 }
 
-std::size_t operator ""_eb(std::size_t data)
+std::size_t operator ""_eb(unsigned long long int data)
 {
   return data * SizeConstants::eb;
 }

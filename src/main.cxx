@@ -18,6 +18,7 @@ int main(int argc, char** argv)
   TagCompound tag;
   tag["abc"] = 123;
   tag["123"] = "790";
+  tag["size"] = static_cast<std::int64_t>(15_gb);
   std::cout << tag["123"];
 
   return 0;
