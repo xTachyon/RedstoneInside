@@ -42,13 +42,13 @@ public:
   template <NBTType type>
   typename TagTypeInfoType<type>::returnType& get()
   {
-    return get<TagTypeInfoType<type>::castType>();
+    return get<typename TagTypeInfoType<type>::castType>();
   }
 
   template <NBTType type>
-  typename const TagTypeInfoType<type>::returnType& get() const
+  const typename TagTypeInfoType<type>::returnType& get() const
   {
-    return get<TagTypeInfoType<type>::castType>();
+    return get<typename TagTypeInfoType<type>::castType>();
   }
 
 protected:

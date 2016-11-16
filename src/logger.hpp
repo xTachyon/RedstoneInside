@@ -4,8 +4,10 @@
 # include <deque>
 # include <fstream>
 # include <mutex>
+# include <thread>
 # include <tuple>
 # include <boost/date_time/posix_time/posix_time.hpp>
+# include "mingwworkaround.hpp"
 
 namespace redi
 {
