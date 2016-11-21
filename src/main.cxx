@@ -15,11 +15,11 @@ int main(int argc, char** argv)
   using namespace redi::protocol;
   using namespace redi::nbt;
   
-  TagCompound tag;
-  tag["abc"] = 123;
-  tag["123"] = "790";
-  tag["size"] = static_cast<std::int64_t>(15_gb);
-  std::cout << tag["123"];
+  TagList list;
+  list.push(TagInt(2));
+  TagCompound comp;
+  comp["12233"] = list;
+  comp["7809"] = create(NBTType::List);
 
   return 0;
 }

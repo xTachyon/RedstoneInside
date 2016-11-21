@@ -53,12 +53,24 @@ void TagList::push(const Tag& value)
 {
   if (value.getType() == mListType)
     mData.push_back(value.clone());
+  else if (mListType == NBTType::End || empty())
+  {
+    mData.push_back(value.clone());
+    mListType = value.getType();
+  }
+  // TODO: thrown an exception here
 }
 
 void TagList::push(TagPtr value)
 {
   if (value->getType() == mListType && value)
     mData.push_back(value);
+  else if (mListType == NBTType::End || empty())
+  {
+    mData.push_back(value);
+    mListType = value->getType();
+  }
+  // and here
 }
 
 } // namespace nbt

@@ -1,6 +1,8 @@
 #include "creator.hpp"
 #include "scalar.hpp"
 #include "compound.hpp"
+#include "string.hpp"
+#include "list.hpp"
 
 namespace redi
 {
@@ -36,9 +38,11 @@ TagPtr create(NBTType type)
     break;
 
   case redi::nbt::NBTType::String:
+    return TagPtr(new TagString());
     break;
 
   case redi::nbt::NBTType::List:
+    return TagPtr(new TagList());
     break;
 
   case redi::nbt::NBTType::Compound:

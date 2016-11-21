@@ -51,3 +51,7 @@ endif()
 if(MINGW)
     target_link_libraries(redi ws2_32)
 endif()
+
+if (CMAKE_COMPILER_IS_GNUCC)
+    target_link_libraries(redi pthread)
+endif()

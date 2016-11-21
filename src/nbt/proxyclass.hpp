@@ -63,6 +63,15 @@ public:
     return *this;
   }
 
+  ProxyClass& operator=(TagPtr ptr)
+  {
+    if (mRef && ptr && mRef->getType() == ptr->getType())
+      mRef = ptr;
+    else if (mCanChangeTypes) mRef = ptr;
+
+    return *this;
+  }
+
   ProxyClass& operator=(std::int8_t data)
   {
     *this = TagByte(data);
