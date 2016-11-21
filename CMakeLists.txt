@@ -38,7 +38,7 @@ set(SOURCE_FILES
         src/session.hpp
         src/stdafx.cxx
         src/stdafx.hpp
-        src/mingwworkaround.hpp)
+        src/mingwworkaround.hpp src/nbt/vectorial.hpp)
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams system thread)

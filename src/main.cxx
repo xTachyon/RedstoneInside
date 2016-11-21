@@ -21,5 +21,7 @@ int main(int argc, char** argv)
   comp["12233"] = list;
   comp["7809"] = create(NBTType::List);
 
+  VectorType<std::int32_t> a;
+
   return 0;
 }
