@@ -10,5 +10,6 @@
 # include "string.hpp"
 # include "list.hpp"
 # include "stdspecializations.hpp"
+# include "vectorial.hpp"
 
 #endif // REDI_NBT

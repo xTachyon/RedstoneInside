@@ -21,6 +21,9 @@ class TagCompound;
 class TagList;
 
 template <typename T>
+class VectorType;
+
+template <typename T>
 struct TagTypeInfo {};
 
 template <>
@@ -46,6 +49,9 @@ struct TagTypeInfo<std::string> : std::integral_constant<NBTType, NBTType::Strin
 
 template <>
 struct TagTypeInfo<TagCompound> : std::integral_constant<NBTType, NBTType::Compound> {};
+
+template <>
+struct TagTypeInfo<VectorType<std::int32_t>> : std::integral_constant<NBTType, NBTType::IntArray> {};
 
 // Forward declaration
 
