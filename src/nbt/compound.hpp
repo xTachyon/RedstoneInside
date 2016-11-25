@@ -54,6 +54,13 @@ public:
   std::size_t size() const { return mData.size(); }
   void swap(TagCompound& other) { mData.swap(other.mData); }
 
+protected:
+
+  bool equals(const Tag& r) const override
+  {
+    return *this == dynamic_cast<const TagCompound&>(r);
+  }
+
 private:
 
   Container mData;

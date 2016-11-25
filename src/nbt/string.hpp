@@ -30,6 +30,12 @@ public:
   TagPtr clone() const override;
   void swap(TagString& r) { data.swap(r.data); }
 
+protected:
+
+  bool equals(const Tag& r) const override
+  {
+    return *this == dynamic_cast<const TagString&>(r);
+  }
 };
 
 bool operator==(const TagString& l, const TagString& r);

@@ -50,6 +50,13 @@ public:
   std::size_t size() const { return mData.size(); }
   void swap(TagList& other) { mData.swap(other.mData); }
 
+protected:
+
+  bool equals(const Tag& r) const override
+  {
+    return *this == dynamic_cast<const TagList&>(r);
+  }
+
 private:
 
   std::vector<TagPtr> mData;

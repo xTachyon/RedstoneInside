@@ -10,11 +10,6 @@ Tag::Tag(NBTType type)
 
 Tag::~Tag() {}
 
-bool Tag::equals(const Tag& r) const
-{
-  return false;
-}
-
 bool operator==(const Tag& l, const Tag& r)
 {
   return l.mType == r.mType && l.equals(r);

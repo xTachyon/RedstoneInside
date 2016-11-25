@@ -3,6 +3,7 @@
 
 # include <string>
 # include <type_traits>
+# include <vector>
 # include "type.hpp"
 
 namespace redi
@@ -43,6 +44,9 @@ struct TagTypeInfo<float> : std::integral_constant<NBTType, NBTType::Float> {};
 
 template <>
 struct TagTypeInfo<double> : std::integral_constant<NBTType, NBTType::Double> {};
+
+template <>
+struct TagTypeInfo<VectorType<std::int8_t>> : std::integral_constant<NBTType, NBTType::ByteArray> {};
 
 template <>
 struct TagTypeInfo<std::string> : std::integral_constant<NBTType, NBTType::String> {};
@@ -113,6 +117,13 @@ struct TagTypeInfoType<NBTType::Double>
 };
 
 template <>
+struct TagTypeInfoType<NBTType::ByteArray>
+{
+  using returnType = std::vector<std::int8_t>;
+  using castType = VectorType<std::int8_t>;
+};
+
+template <>
 struct TagTypeInfoType<NBTType::String>
 {
   using returnType = std::string;
@@ -131,6 +142,13 @@ struct TagTypeInfoType<NBTType::Compound>
 {
   using returnType = TagCompound;
   using castType = TagCompound;
+};
+
+template <>
+struct TagTypeInfoType<NBTType::IntArray>
+{
+  using returnType = std::vector<std::int32_t>;
+  using castType = VectorType<std::int32_t>;
 };
 
 // Best names, I know

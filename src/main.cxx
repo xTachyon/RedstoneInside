@@ -15,13 +15,22 @@ int main(int argc, char** argv)
   using namespace redi::protocol;
   using namespace redi::nbt;
   
-  TagList list;
-  list.push(TagInt(2));
-  TagCompound comp;
-  comp["12233"] = list;
-  comp["7809"] = create(NBTType::List);
+  TagByte a;
+  TagShort b;
+  TagInt c;
+  TagLong d;
+  TagFloat e;
+  TagDouble f;
+  TagString g;
+  TagList h;
+  TagCompound i;
 
-  VectorType<std::int32_t> a;
+  TagByteArray x;
+  TagIntArray z;
+
+  (&x)->get<NBTType::ByteArray>().push_back(64);
+
+  std::cout << i["123"];
 
   return 0;
 }

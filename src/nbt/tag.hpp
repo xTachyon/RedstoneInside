@@ -23,7 +23,7 @@ public:
 
   friend bool operator==(const Tag& l, const Tag& r);
 
-  virtual std::shared_ptr<Tag> clone() const { return nullptr; }
+  virtual std::shared_ptr<Tag> clone() const = 0; // { return nullptr; }
 
   template <typename T>
   T& get()
@@ -55,7 +55,7 @@ protected:
 
   NBTType mType;
 
-  virtual bool equals(const Tag& r) const;
+  virtual bool equals(const Tag& r) const = 0;
 };
 
 bool operator!=(const Tag& l, const Tag& r);
