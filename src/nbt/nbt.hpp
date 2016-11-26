@@ -11,5 +11,9 @@
 # include "list.hpp"
 # include "stdspecializations.hpp"
 # include "vectorial.hpp"
+# include "roottag.hpp"
+# include "printer.hpp"
+#include "roottag.hpp"
+#include "printer.hpp"
 
 #endif // REDI_NBT

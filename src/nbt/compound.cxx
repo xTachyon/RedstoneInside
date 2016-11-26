@@ -59,5 +59,12 @@ void TagCompound::insert(std::string&& index, const Tag& data)
   mData[std::move(index)] = data.clone();
 }
 
+ProxyClass TagCompound::operator[](std::int32_t index)
+{
+  // for convenience
+  return (*this)[std::to_string(index)];
+}
+
+
 } // namespace nbt
 } // namespace redi

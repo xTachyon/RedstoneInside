@@ -15,22 +15,17 @@ int main(int argc, char** argv)
   using namespace redi::protocol;
   using namespace redi::nbt;
   
-  TagByte a;
-  TagShort b;
-  TagInt c;
-  TagLong d;
-  TagFloat e;
-  TagDouble f;
-  TagString g;
-  TagList h;
-  TagCompound i;
+  RootTag root, nested;
+  root.name = "root abc";
+  root[1] = TagInt(6);
+  root[2] = TagDouble(87.3426);
+  nested[5] = 6;
+  nested[0] = "7654";
+  root[90] = nested;
 
-  TagByteArray x;
-  TagIntArray z;
+  std::string str = Printer(root);
 
-  (&x)->get<NBTType::ByteArray>().push_back(64);
-
-  std::cout << i["123"];
+  std::cout << str;
 
   return 0;
 }

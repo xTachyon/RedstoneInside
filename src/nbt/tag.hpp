@@ -51,6 +51,10 @@ public:
     return get<typename TagTypeInfoType<type>::castType>();
   }
 
+  bool isScalar() const;
+  bool isVector() const;
+  bool isComplex() const; // find a better name
+
 protected:
 
   NBTType mType;

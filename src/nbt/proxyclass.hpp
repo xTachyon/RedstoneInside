@@ -7,6 +7,8 @@
 # include "creator.hpp"
 # include "compound.hpp"
 # include "string.hpp"
+#include "vectorial.hpp"
+#include "list.hpp"
 
 namespace redi
 {
@@ -18,7 +20,7 @@ class ProxyClass
 public:
 
   ProxyClass(TagPtr& ref, bool canChangeTypes = true)
-    : mRef(ref), mCanChangeTypes(canChangeTypes) {}
+          : mRef(ref), mCanChangeTypes(canChangeTypes) {}
 
   ProxyClass& operator=(const Tag& ref)
   {
@@ -26,37 +28,49 @@ public:
     if (mRef && ref.getType() == mRef->getType())
       switch (ref.getType())
       {
-      case NBTType::Byte:
-        mRef->get<NBTType::Byte>() = ref.get<NBTType::Byte>();
-        break;
+        case NBTType::Byte:
+          mRef->get<NBTType::Byte>() = ref.get<NBTType::Byte>();
+          break;
 
-      case NBTType::Short:
-        mRef->get<NBTType::Short>() = ref.get<NBTType::Short>();
-        break;
+        case NBTType::Short:
+          mRef->get<NBTType::Short>() = ref.get<NBTType::Short>();
+          break;
 
-      case NBTType::Int:
-        mRef->get<NBTType::Int>() = ref.get<NBTType::Int>();
-        break;
+        case NBTType::Int:
+          mRef->get<NBTType::Int>() = ref.get<NBTType::Int>();
+          break;
 
-      case NBTType::Long:
-        mRef->get<NBTType::Long>() = ref.get<NBTType::Long>();
-        break;
+        case NBTType::Long:
+          mRef->get<NBTType::Long>() = ref.get<NBTType::Long>();
+          break;
 
-      case NBTType::Float:
-        mRef->get<NBTType::Float>() = ref.get<NBTType::Float>();
-        break;
+        case NBTType::Float:
+          mRef->get<NBTType::Float>() = ref.get<NBTType::Float>();
+          break;
 
-      case NBTType::Double:
-        mRef->get<NBTType::Double>() = ref.get<NBTType::Double>();
-        break;
+        case NBTType::Double:
+          mRef->get<NBTType::Double>() = ref.get<NBTType::Double>();
+          break;
 
-      case NBTType::String:
-        mRef->get<NBTType::String>() = ref.get<NBTType::String>();
-        break;
+        case NBTType::ByteArray:
+          mRef->get<NBTType::ByteArray>() = ref.get<NBTType::ByteArray>();
+          break;
 
-      case NBTType::Compound:
-        mRef->get<NBTType::Compound>() = ref.get<NBTType::Compound>();
-        break;
+        case NBTType::String:
+          mRef->get<NBTType::String>() = ref.get<NBTType::String>();
+          break;
+
+        case NBTType::List:
+          mRef->get<NBTType::List>() = ref.get<NBTType::List>();
+          break;
+
+        case NBTType::Compound:
+          mRef->get<NBTType::Compound>() = ref.get<NBTType::Compound>();
+          break;
+
+        case NBTType::IntArray:
+          mRef->get<NBTType::IntArray>() = ref.get<NBTType::IntArray>();
+          break;
       }
     else if (mCanChangeTypes) mRef = ref.clone();
 
@@ -138,9 +152,12 @@ public:
   operator Tag&() { if (mRef) return *mRef; }
   operator const Tag&() const { if (mRef) return *mRef; }
 
-  friend std::ostream& operator<<(std::ostream& stream, const ProxyClass& cls)
+  operator bool() const { return static_cast<bool>(mRef); }
+
+  friend std::ostream& operator<<(std::ostream& stream, const ProxyClass& obj)
   {
-    if (cls.mRef) stream << "null";
+    if (obj);
+    else stream << "null";
 
     return stream;
   }

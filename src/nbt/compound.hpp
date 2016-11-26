@@ -32,6 +32,7 @@ public:
 
   ProxyClass operator[](const std::string& index);
   ProxyClass operator[](std::string&& index);
+  ProxyClass operator[](std::int32_t index);
 
   TagCompound& operator=(const TagCompound& other);
 
