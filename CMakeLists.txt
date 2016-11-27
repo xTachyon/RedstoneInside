@@ -39,7 +39,12 @@ set(SOURCE_FILES
         src/stdafx.cxx
         src/stdafx.hpp
         src/mingwworkaround.hpp
-        src/nbt/vectorial.hpp src/nbt/printer.cxx src/nbt/printer.hpp src/nbt/roottag.hpp)
+        src/nbt/vectorial.hpp
+        src/nbt/printer.cxx
+        src/nbt/printer.hpp
+        src/nbt/roottag.hpp
+        src/nbt/bytesreader.cxx
+        src/nbt/bytesreader.hpp)
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams system thread)

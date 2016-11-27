@@ -15,7 +15,7 @@ bool operator==(const Tag& l, const Tag& r)
   return l.mType == r.mType && l.equals(r);
 }
 
-bool Tag::isScalar() const
+bool Tag::isNumeric() const
 {
   switch (mType)
   {
@@ -25,12 +25,16 @@ bool Tag::isScalar() const
     case NBTType::Long:
     case NBTType::Float:
     case NBTType::Double:
-    case NBTType::String:
       return true;
 
     default:
       return false;
   }
+}
+
+bool Tag::isScalar() const
+{
+  return isNumeric() || mType == NBTType::String;
 }
 
 bool Tag::isVector() const

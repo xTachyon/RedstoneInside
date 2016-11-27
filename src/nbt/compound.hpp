@@ -29,6 +29,8 @@ public:
     : Tag(NBTType::Compound) {}
 
   TagCompound(const TagCompound& other);
+  TagCompound(const Container& other);
+  TagCompound(Container&& other);
 
   ProxyClass operator[](const std::string& index);
   ProxyClass operator[](std::string&& index);
@@ -57,14 +59,12 @@ public:
 
 protected:
 
+  Container mData;
+
   bool equals(const Tag& r) const override
   {
     return *this == dynamic_cast<const TagCompound&>(r);
   }
-
-private:
-
-  Container mData;
 };
 
 } // namespace nbt

@@ -51,6 +51,7 @@ public:
     return get<typename TagTypeInfoType<type>::castType>();
   }
 
+  bool isNumeric() const;
   bool isScalar() const;
   bool isVector() const;
   bool isComplex() const; // find a better name

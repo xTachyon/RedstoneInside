@@ -22,7 +22,13 @@ public:
   Container data;
 
   VectorType()
-    : Tag(type) {}
+          : Tag(type) {}
+
+  VectorType(const Container& other)
+          : Tag(type), data(other) {}
+
+  VectorType(Container&& other)
+          : Tag(type), data(std::move(other)) {}
 
   operator Container&() { return data; }
   operator const Container&() const { return data; }

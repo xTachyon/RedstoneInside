@@ -1,12 +1,12 @@
 #ifndef REDI_NBT_PROXYCLASS
-# define REDI_NBT_PROXYCLASS
+#define REDI_NBT_PROXYCLASS
 
-# include <memory>
-# include "tag.hpp"
-# include "scalar.hpp"
-# include "creator.hpp"
-# include "compound.hpp"
-# include "string.hpp"
+#include <memory>
+#include "tag.hpp"
+#include "scalar.hpp"
+#include "creator.hpp"
+#include "compound.hpp"
+#include "string.hpp"
 #include "vectorial.hpp"
 #include "list.hpp"
 
@@ -131,6 +131,24 @@ public:
   ProxyClass& operator=(std::string&& data)
   {
     *this = TagString(std::move(data));
+    return *this;
+  }
+
+  ProxyClass operator=(const std::vector<std::int8_t>& data)
+  {
+    *this = TagByteArray(data);
+    return *this;
+  }
+
+  ProxyClass operator=(std::vector<std::int8_t>&& data)
+  {
+    *this = TagByteArray(std::move(data));
+    return *this;
+  }
+
+  ProxyClass operator=(std::vector<std::int32_t>&& data)
+  {
+    *this = TagIntArray(std::move(data));
     return *this;
   }
 

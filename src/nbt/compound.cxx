@@ -65,6 +65,11 @@ ProxyClass TagCompound::operator[](std::int32_t index)
   return (*this)[std::to_string(index)];
 }
 
+TagCompound::TagCompound(const TagCompound::Container& other)
+        : Tag(NBTType::Compound), mData(other) {}
+
+TagCompound::TagCompound(TagCompound::Container&& other)
+        : Tag(NBTType::Compound), mData(std::move(other)) {}
 
 } // namespace nbt
 } // namespace redi

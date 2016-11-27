@@ -13,6 +13,10 @@ class RootTag : public TagCompound
 public:
 
   std::string name;
+
+  RootTag() = default;
+
+  RootTag(RootTag&& other) : name(std::move(other.name)), TagCompound(std::move(other.mData)) {}
 };
 
 } // namespace nbt
