@@ -3,6 +3,7 @@
 #include "compound.hpp"
 #include "string.hpp"
 #include "list.hpp"
+#include "vectorial.hpp"
 
 namespace redi
 {
@@ -14,7 +15,7 @@ TagPtr create(NBTType type)
   switch (type)
   {
   case redi::nbt::NBTType::End:
-    break;
+    return nullptr;
 
   case redi::nbt::NBTType::Byte:
     return TagPtr(new TagByte());
@@ -35,27 +36,23 @@ TagPtr create(NBTType type)
     return TagPtr(new TagDouble());
 
   case redi::nbt::NBTType::ByteArray:
-    break;
+    return TagPtr(new TagByteArray());
 
   case redi::nbt::NBTType::String:
     return TagPtr(new TagString());
-    break;
 
   case redi::nbt::NBTType::List:
     return TagPtr(new TagList());
-    break;
 
   case redi::nbt::NBTType::Compound:
     return TagPtr(new TagCompound());
 
   case redi::nbt::NBTType::IntArray:
-    break;
+    return TagPtr(new TagIntArray());
 
   default:
     return nullptr;
   }
-
-  return nullptr;
 }
 
 } // namespace nbt
