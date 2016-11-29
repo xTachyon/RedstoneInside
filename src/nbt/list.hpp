@@ -41,6 +41,18 @@ public:
   bool empty() const { return mData.empty(); }
   iterator end() { return mData.end(); }
   constIterator end() const { return mData.end(); }
+  void push(std::int8_t value);
+  void push(std::int16_t value);
+  void push(std::int32_t value);
+  void push(std::int64_t value);
+  void push(float value);
+  void push(double value);
+  void push(const std::vector<std::int8_t>& value);
+  void push(std::vector<std::int8_t>&& value);
+  void push(const std::string& value);
+  void push(std::string&& value);
+  void push(const std::vector<std::int32_t>& value);
+  void push(std::vector<std::int32_t>&& value);
   void push(const Tag& value);
   void push(TagPtr value);
   reverseIterator rbegin() { return mData.rbegin(); }

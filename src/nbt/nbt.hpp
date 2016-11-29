@@ -16,5 +16,6 @@
 #include "roottag.hpp"
 #include "printer.hpp"
 #include "bytesreader.hpp"
+#include "exceptions.hpp"
 
 #endif // REDI_NBT

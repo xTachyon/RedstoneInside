@@ -73,5 +73,65 @@ void TagList::push(TagPtr value)
   // and here
 }
 
+void TagList::push(std::int8_t value)
+{
+  push(TagByte(value));
+}
+
+void TagList::push(std::int16_t value)
+{
+  push(TagShort(value));
+}
+
+void TagList::push(std::int32_t value)
+{
+  push(TagInt(value));
+}
+
+void TagList::push(std::int64_t value)
+{
+  push(TagLong(value));
+}
+
+void TagList::push(float value)
+{
+  push(TagFloat(value));
+}
+
+void TagList::push(double value)
+{
+  push(TagDouble(value));
+}
+
+void TagList::push(const std::vector<std::int8_t>& value)
+{
+  push(TagByteArray(value));
+}
+
+void TagList::push(std::vector<std::int8_t>&& value)
+{
+  push(TagByteArray(std::move(value)));
+}
+
+void TagList::push(const std::vector<std::int32_t>& value)
+{
+  push(TagIntArray(value));
+}
+
+void TagList::push(std::vector<std::int32_t>&& value)
+{
+  push(TagIntArray(std::move(value)));
+}
+
+void TagList::push(const std::string& value)
+{
+  push(TagString(value));
+}
+
+void TagList::push(std::string&& value)
+{
+  push(TagString(std::move(value)));
+}
+  
 } // namespace nbt
 } // namespace redi

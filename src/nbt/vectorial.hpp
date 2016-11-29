@@ -13,30 +13,30 @@ namespace nbt
 template <typename T>
 class VectorType : public Tag
 {
-public:
-
+  public:
+  
   static constexpr NBTType type = TagTypeInfo<VectorType<T>>::value;
-
+  
   using Container = std::vector<T>;
-
+  
   Container data;
-
+  
   VectorType()
-          : Tag(type) {}
-
+        : Tag(type) {}
+  
   VectorType(const Container& other)
-          : Tag(type), data(other) {}
-
+        : Tag(type), data(other) {}
+  
   VectorType(Container&& other)
-          : Tag(type), data(std::move(other)) {}
-
+        : Tag(type), data(std::move(other)) {}
+  
   operator Container&() { return data; }
   operator const Container&() const { return data; }
-
+  
   TagPtr clone() const override { return TagPtr(new VectorType(*this)); }
-
-protected:
-
+  
+  protected:
+  
   bool equals(const Tag& r) const override
   {
     return *this == dynamic_cast<const VectorType&>(r);
@@ -45,7 +45,7 @@ protected:
 
 using TagByteArray = VectorType<std::int8_t>;
 using TagIntArray = VectorType<std::int32_t>;
-
+  
 } // namespace nbt
 } // namespace redi
 

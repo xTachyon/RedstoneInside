@@ -44,7 +44,7 @@ set(SOURCE_FILES
         src/nbt/printer.hpp
         src/nbt/roottag.hpp
         src/nbt/bytesreader.cxx
-        src/nbt/bytesreader.hpp)
+        src/nbt/bytesreader.hpp src/nbt/exceptions.hpp src/nbt/byteswriter.cxx src/nbt/byteswriter.hpp)
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams system thread)

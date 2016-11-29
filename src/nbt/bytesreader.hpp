@@ -32,6 +32,7 @@ private:
   void need(std::size_t bytes);
   void readRoot();
   void readCompound(TagCompound& obj);
+  void readList(TagList& obj);
   std::string readString();
 
   template <typename T>

@@ -3,6 +3,7 @@
 #include "bytesreader.hpp"
 #include "proxyclass.hpp"
 #include "vectorial.hpp"
+#include "exceptions.hpp"
 
 static_assert(sizeof(float) == sizeof(std::int32_t));
 static_assert(sizeof(double) == sizeof(std::int64_t));
@@ -17,7 +18,7 @@ namespace nbt
 {
 
 BytesReader::BytesReader(const BinaryData& data)
-        : mData(data), mOffset(0)
+      : mData(data), mOffset(1)
 {
   readRoot();
 }
@@ -25,7 +26,7 @@ BytesReader::BytesReader(const BinaryData& data)
 void BytesReader::need(std::size_t bytes)
 {
   if (mOffset + bytes > mData.size())
-    throw std::invalid_argument(std::to_string(bytes) + " is out of index");
+    throw RangeErrorException(bytes, mData.size());
 }
 
 template <typename T>
@@ -33,10 +34,10 @@ T BytesReader::readNumeric()
 {
   need(sizeof(T));
   T result;
-
+  
   std::memcpy(&result, mData.data() + mOffset, sizeof(T));
   mOffset += sizeof(T);
-
+  
   return endian::big_to_native(result);
 }
 
@@ -49,7 +50,7 @@ float BytesReader::readNumeric<float>()
 }
 
 template <>
-double BytesReader::readNumeric<double >()
+double BytesReader::readNumeric<double>()
 {
   // is this a good way ?
   std::int64_t r = readNumeric<std::int64_t>();
@@ -63,19 +64,18 @@ std::vector<T> BytesReader::readVector()
   std::int32_t size = readNumeric<std::int32_t>();
   need(size * sizeof(T));
   std::vector<T> result;
-
+  
   for (std::int32_t i = 0; i < size; ++i)
     result.push_back(readNumeric<T>());
   // Compiler, optimize this for ByteArray
   // Thanks
-
+  
   return result;
 }
 
 void BytesReader::readRoot()
 {
-  if (static_cast<NBTType>(mData[0]) != NBTType::Compound) throw std::invalid_argument("root tag must pe compound");
-  mOffset = 1;
+  if (static_cast<NBTType>(mData[0]) != NBTType::Compound) throw InvalidRootTagException();
   root.name = readString();
   readCompound(root);
 }
@@ -86,7 +86,7 @@ std::string BytesReader::readString()
   need(size);
   std::string res(reinterpret_cast<const char*>(mData.data()) + mOffset, size);
   mOffset += size;
-
+  
   return res;
 }
 
@@ -94,64 +94,146 @@ void BytesReader::readCompound(TagCompound& obj)
 {
   std::int8_t type;
   std::string name;
-
+  
   need(2);
   type = mData[mOffset++];
-
+  
   while (static_cast<NBTType>(type) != NBTType::End)
   {
     name = readString();
-
+    
     switch (static_cast<NBTType>(type))
     {
       case NBTType::Byte:
         obj[name] = readNumeric<std::int8_t>();
         break;
-
+      
       case NBTType::Short:
         obj[name] = readNumeric<std::int16_t>();
         break;
-
+      
       case NBTType::Int:
         obj[name] = readNumeric<std::int32_t>();
         break;
-
+      
       case NBTType::Long:
         obj[name] = readNumeric<std::int64_t>();
         break;
-
+      
       case NBTType::Float:
         obj[name] = readNumeric<float>();
         break;
-
+      
       case NBTType::Double:
         obj[name] = readNumeric<double>();
         break;
-
+      
       case NBTType::ByteArray:
         obj[name] = readVector<std::int8_t>();
         break;
-
+      
       case NBTType::String:
         obj[name] = readString();
         break;
-
+        
+      case NBTType::List:
+        obj[name] = TagList();
+        readList(obj[name].get().get<NBTType::List>());
+        break;
+      
       case NBTType::Compound:
         obj[name] = TagCompound();
         readCompound(obj[name].get().get<NBTType::Compound>());
         break;
-
+      
       case NBTType::IntArray:
         obj[name] = readVector<std::int32_t>();
         break;
-
+      
       default:
         throw std::invalid_argument("invalid nbt type");
     }
-
+    
     type = mData[mOffset++];
   }
 }
 
+void BytesReader::readList(TagList& obj)
+{
+  NBTType type = static_cast<NBTType>(mData[mOffset++]);
+  std::int32_t size = readNumeric<std::int32_t>();
+  
+  switch (type)
+  {
+    case NBTType::Byte:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readNumeric<std::int8_t>());
+      break;
+  
+    case NBTType::Short:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readNumeric<std::int16_t>());
+      break;
+  
+    case NBTType::Int:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readNumeric<std::int32_t>());
+      break;
+  
+    case NBTType::Long:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readNumeric<std::int64_t>());
+      break;
+  
+    case NBTType::Float:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readNumeric<float>());
+      break;
+  
+    case NBTType::Double:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readNumeric<double>());
+      break;
+  
+    case NBTType::ByteArray:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readVector<std::int8_t>());
+      break;
+  
+    case NBTType::String:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readString());
+      break;
+  
+    case NBTType::List:
+      for (std::int32_t i = 0; i < size; ++i)
+      {
+        TagPtr lst(new TagList());
+        readList(lst->get<NBTType::List>());
+        obj.push(lst);
+      }
+      break;
+  
+    case NBTType::Compound:
+      for (std::int32_t i = 0; i < size; ++i)
+      {
+        TagPtr lst(new TagCompound());
+        readCompound(lst->get<NBTType::Compound>());
+        obj.push(lst);
+      }
+      break;
+  
+    case NBTType::IntArray:
+      for (std::int32_t i = 0; i < size; ++i)
+        obj.push(readVector<std::int32_t>());
+      break;
+  
+    default:
+      assert(true);
+      throw InvalidTagTypeException(type);
+  }
+  
+}
+  
 } // namespace nbt
 } // namespace redi

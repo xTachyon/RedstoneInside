@@ -11,10 +11,16 @@ namespace nbt
 {
 
 TagCompound::TagCompound(const TagCompound& other)
-  : TagCompound()
+      : TagCompound()
 {
   *this = other;
 }
+
+TagCompound::TagCompound(const TagCompound::Container& other)
+      : Tag(NBTType::Compound), mData(other) {}
+
+TagCompound::TagCompound(TagCompound::Container&& other)
+      : Tag(NBTType::Compound), mData(std::move(other)) {}
 
 ProxyClass TagCompound::operator[](const std::string& index)
 {
@@ -30,7 +36,7 @@ TagCompound& TagCompound::operator=(const TagCompound& other)
 {
   for (auto& index : other.mData)
     mData[index.first] = index.second->clone();
-
+  
   return *this;
 }
 
@@ -64,12 +70,6 @@ ProxyClass TagCompound::operator[](std::int32_t index)
   // for convenience
   return (*this)[std::to_string(index)];
 }
-
-TagCompound::TagCompound(const TagCompound::Container& other)
-        : Tag(NBTType::Compound), mData(other) {}
-
-TagCompound::TagCompound(TagCompound::Container&& other)
-        : Tag(NBTType::Compound), mData(std::move(other)) {}
-
+  
 } // namespace nbt
 } // namespace redi
