@@ -18,7 +18,7 @@ public:
   BytesReader(const BinaryData& data);
 
   operator RootTag&() { return root; }
-  operator RootTag&&() { return std::move(root); }
+  operator RootTag&&() { return std::move(root); } // hmm ?
   operator const RootTag&() const { return root; }
 
   RootTag& get() { return root; }
@@ -34,11 +34,8 @@ private:
   void readCompound(TagCompound& obj);
   void readList(TagList& obj);
   std::string readString();
-
   template <typename T>
   T readNumeric();
-
-
   template <typename T>
   std::vector<T> readVector();
 };

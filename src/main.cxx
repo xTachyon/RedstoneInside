@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     std::ifstream f(name);
     f.read(reinterpret_cast<char*>(&d[0]), fs::file_size(name));
 
-    std::cout << Printer(BytesReader(d)) << "\n\n";
+    std::cout << Printer(BytesReader(BytesWriter(BytesReader(d)))) << "\n\n";
   }
   
   return 0;

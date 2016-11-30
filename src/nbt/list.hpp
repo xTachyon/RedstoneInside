@@ -41,6 +41,7 @@ public:
   bool empty() const { return mData.empty(); }
   iterator end() { return mData.end(); }
   constIterator end() const { return mData.end(); }
+  NBTType getListType() const { return mListType; }
   void push(std::int8_t value);
   void push(std::int16_t value);
   void push(std::int32_t value);

@@ -92,17 +92,17 @@ std::string BytesReader::readString()
 
 void BytesReader::readCompound(TagCompound& obj)
 {
-  std::int8_t type;
+  NBTType type;
   std::string name;
   
   need(2);
-  type = mData[mOffset++];
+  type = static_cast<NBTType>(mData[mOffset++]);
   
-  while (static_cast<NBTType>(type) != NBTType::End)
+  while (type != NBTType::End)
   {
     name = readString();
     
-    switch (static_cast<NBTType>(type))
+    switch (type)
     {
       case NBTType::Byte:
         obj[name] = readNumeric<std::int8_t>();
@@ -154,7 +154,7 @@ void BytesReader::readCompound(TagCompound& obj)
         throw std::invalid_argument("invalid nbt type");
     }
     
-    type = mData[mOffset++];
+    type = static_cast<NBTType>(mData[mOffset++]);
   }
 }
 

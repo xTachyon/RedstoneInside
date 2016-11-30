@@ -1,5 +1,5 @@
 #ifndef REDI_NBT
-# define REDI_NBT
+#define REDI_NBT
 
 #include "type.hpp"
 #include "tag.hpp"
@@ -16,6 +16,7 @@
 #include "roottag.hpp"
 #include "printer.hpp"
 #include "bytesreader.hpp"
+#include "byteswriter.hpp"
 #include "exceptions.hpp"
 
 #endif // REDI_NBT
