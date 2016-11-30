@@ -18,13 +18,6 @@ Printer::Printer(const RootTag& obj)
   generate(obj);
 }
 
-//Printer& Printer::operator=(const RootTag& obj)
-//{
-//
-//
-//  return *this;
-//}
-
 void Printer::generate(const RootTag& obj)
 {
   writeRootTag(obj);
@@ -117,7 +110,6 @@ void Printer::writeIndentation(std::size_t size)
 
 void Printer::writeRootTag(const RootTag& obj)
 {
-  // mStr += (boost::format("%1%(\"%2%\") : %3% %4%\n") % getNBTTypeName(NBTType::Compound) % obj.name % obj.size() % ((obj.size() == 1) ? "entry" : "entries")).str();
   mStr += (boost::format("%1%(\"%2%\") : ") % getNBTTypeName(NBTType::Compound) % obj.name).str();
 
   writeCompound(obj);
@@ -136,7 +128,9 @@ void Printer::writeList(const TagList& obj, std::size_t indent)
     writeIndentation(indent + 2);
     mStr += getNBTTypeName(t.getType());
     mStr += " : ";
-    if (t.isNumeric()) writeNumeric(t);
+  
+    if (t.getType() == NBTType::String) mStr += (boost::format("\"%1%\"") % t.get<NBTType::String>()).str();
+    else if (t.isNumeric()) writeNumeric(t);
     else if (t.isVector()) writeVector(t);
     else if (t.getType() == NBTType::Compound) writeCompound(t.get<NBTType::Compound>(), indent + 2);
     else if (t.getType() == NBTType::List) writeList(t.get<NBTType::List>(), indent + 2);

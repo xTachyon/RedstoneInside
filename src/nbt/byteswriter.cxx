@@ -12,7 +12,7 @@ BytesWriter::BytesWriter(const RootTag& root)
       : mRoot(root)
 {
   writeRoot();
-  std::ofstream("out").write(reinterpret_cast<const char*>(data.c_str()), data.size());
+  // std::ofstream("out").write(reinterpret_cast<const char*>(data.c_str()), data.size());
 }
 
 template <typename T>
@@ -70,7 +70,6 @@ void BytesWriter::writeCompound(const TagCompound& obj)
       case NBTType::Int:
         writeNumeric<std::int32_t>(ref.get<NBTType::Int>());
         break;
-  
   
       case NBTType::Long:
         writeNumeric<std::int64_t>(ref.get<NBTType::Long>());
