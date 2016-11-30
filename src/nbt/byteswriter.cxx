@@ -181,5 +181,3 @@ void BytesWriter::writeRoot()
   
 } // namespace nbt
 } // namespace redi
-
-#pragma clang diagnostic pop

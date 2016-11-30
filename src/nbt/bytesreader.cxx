@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <limits>
 #include <boost/endian/conversion.hpp>
 #include "bytesreader.hpp"
@@ -5,10 +6,10 @@
 #include "vectorial.hpp"
 #include "exceptions.hpp"
 
-static_assert(sizeof(float) == sizeof(std::int32_t));
-static_assert(sizeof(double) == sizeof(std::int64_t));
-static_assert(std::numeric_limits<float>::is_iec559);
-static_assert(std::numeric_limits<double>::is_iec559);
+static_assert(sizeof(float) == sizeof(std::int32_t), "sizeof(float) == sizeof(std::int32_t)");
+static_assert(sizeof(double) == sizeof(std::int64_t), "sizeof(double) == sizeof(std::int64_t)");
+static_assert(std::numeric_limits<float>::is_iec559, "std::numeric_limits<float>::is_iec559");
+static_assert(std::numeric_limits<double>::is_iec559, "std::numeric_limits<double>::is_iec559");
 
 namespace endian = boost::endian;
 
