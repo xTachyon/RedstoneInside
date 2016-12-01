@@ -1,12 +1,14 @@
 #ifndef REDI_COMPRESSOR_HPP
 # define REDI_COMPRESSOR_HPP
 
+#include "binarydata.hpp"
+
 namespace redi
 {
 namespace compressor
 {
 
-enum : int
+enum class CompressionLevel
 {
   /*
   * Not a very good idea
@@ -20,11 +22,11 @@ enum : int
   BestCompression = 9
 };
 
-//BinaryData compresszlib(const BinaryData& data, int level = BestCompression);
-//BinaryData decompresszlib(const BinaryData& data);
-//
-//BinaryData compressgzip(const BinaryData& data, int level = BestCompression);
-//BinaryData decompresszgzip(const BinaryData& data);
+BinaryData compresszlib(const BinaryData& data, CompressionLevel level = CompressionLevel::BestCompression);
+BinaryData decompresszlib(const BinaryData& data);
+
+BinaryData compressgzip(const BinaryData& data, CompressionLevel level = CompressionLevel::BestCompression);
+BinaryData decompresszgzip(const BinaryData& data);
 
 } // namespace compressor
 } // namespace redi

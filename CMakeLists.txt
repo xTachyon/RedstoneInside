@@ -51,13 +51,19 @@ set(SOURCE_FILES
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams system thread)
-if(Boost_FOUND)
+if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     add_executable(redi ${SOURCE_FILES})
     target_link_libraries(redi ${Boost_LIBRARIES})
 endif()
 
-if(MINGW)
+find_package(ZLIB REQUIRED)
+if (ZLIB_FOUND)
+    include_directories(${ZLIB_INCLUDE_DIRS})
+    target_link_libraries(redi ${ZLIB_LIBRARIES})
+endif()
+
+if (MINGW)
     target_link_libraries(redi ws2_32)
 endif()
 
