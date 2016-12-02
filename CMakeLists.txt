@@ -29,7 +29,7 @@ set(SOURCE_FILES
         src/block.hpp
         src/compressor.cxx
         src/compressor.hpp
-        src/literaloperators.hpp
+        src/sizeliteraloperators.hpp
         src/logger.cxx
         src/logger.hpp
         src/main.cxx

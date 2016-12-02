@@ -5,7 +5,7 @@
 #include "protocol/packet.hpp"
 #include "logger.hpp"
 #include "nbt/nbt.hpp"
-#include "literaloperators.hpp"
+#include "sizeliteraloperators.hpp"
 #include "block.hpp"
 #include "binarydata.hpp"
 #include "compressor.hpp"
