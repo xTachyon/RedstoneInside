@@ -102,6 +102,10 @@ void BytesWriter::writeCompound(const TagCompound& obj)
       case NBTType::IntArray:
         writeVector(ref.get<NBTType::IntArray>());
         break;
+
+      default:
+        // TODO: handle end
+        break;
     }
   }
   
@@ -115,6 +119,9 @@ void BytesWriter::writeList(const TagList& obj)
   
   switch (obj.getListType())
   {
+    case NBTType::End:
+      break;
+
     case NBTType::Byte:
       for (std::size_t i = 0; i < obj.size(); ++i)
         writeNumeric<std::int8_t>(obj[i]->get<NBTType::Byte>());

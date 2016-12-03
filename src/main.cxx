@@ -13,7 +13,7 @@
 
 namespace fs = boost::filesystem;
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
   using namespace redi;
   using namespace redi::protocol;

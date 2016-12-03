@@ -10,8 +10,6 @@ namespace endian = boost::endian;
 namespace redi
 {
 
-Region::Region() : hasRegion(false) {}
-
 Region::Region(const std::string& filepath)
 {
   open(filepath);

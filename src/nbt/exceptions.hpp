@@ -29,10 +29,7 @@ struct RangeErrorException : public std::range_error
 struct InvalidTagTypeException : public std::exception
 {
   InvalidTagTypeException(NBTType type)
-        : mErrorMessage(std::to_string(static_cast<int>(type)) + " is not a valid NBT type")
-  {
-    assert(!(0 <= static_cast<int>(type) && static_cast<int>(type) <= 11));
-  }
+        : mErrorMessage(std::to_string(static_cast<int>(type)) + " is not a valid NBT type") {}
   
   InvalidTagTypeException(int type)
         : InvalidTagTypeException(static_cast<NBTType>(type)) {}

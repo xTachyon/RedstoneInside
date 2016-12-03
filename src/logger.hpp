@@ -42,18 +42,20 @@ public:
   template <typename T>
   static void debug(const T& val)
   {
-#ifdef _DEBUG
+#ifdef NDEBUG
     get().write(val, LoggerLevel::Debug);
 #endif
   }
 
   template <typename T>
+#ifdef NDEBUG
   static void debugSync(const T& val)
   {
-#ifdef _DEBUG
     std::cout << "DEBUGSYNC: " << val << '\n';
-#endif
   }
+#else
+  static void debugSync(const T&) {}
+#endif
 
   template <typename T>
   static void info(const T& val)

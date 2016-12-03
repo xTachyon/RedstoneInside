@@ -26,7 +26,7 @@ public:
   static constexpr std::size_t HeaderSize = 8_KB;
   static constexpr std::size_t SectorSize = 4_KB;
 
-  Region();
+  Region() = default;
   Region(const std::string& filepath);
 
   void open(const std::string& filepath);
@@ -39,7 +39,7 @@ private:
   std::fstream mFile;
   std::vector<bool> mFreeSectors;
   std::array<ChunkInfo, ChunksPerRegion> mChunks;
-  bool hasRegion;
+  bool hasRegion = false;
 
   void readHeader();
 };
