@@ -16,7 +16,7 @@ public:
 
   RootTag() = default;
 
-  RootTag(RootTag&& other) : name(std::move(other.name)), TagCompound(std::move(other.mData)) {}
+  RootTag(RootTag&& other) :  TagCompound(std::move(other.mData)), name(std::move(other.name)) {}
 };
 
 } // namespace nbt

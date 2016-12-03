@@ -9,6 +9,7 @@
 #include "string.hpp"
 #include "vectorial.hpp"
 #include "list.hpp"
+#include "printer.hpp"
 
 namespace redi
 {
@@ -70,6 +71,10 @@ public:
 
         case NBTType::IntArray:
           mRef->get<NBTType::IntArray>() = ref.get<NBTType::IntArray>();
+          break;
+
+        default:
+          // TODO: handle end ?
           break;
       }
     else if (mCanChangeTypes) mRef = ref.clone();
@@ -164,17 +169,22 @@ public:
     return mRef->get<TagCompound>()[std::move(index)];
   }
 
-  Tag& get() { if (mRef) return *mRef; }
-  const Tag& get() const { if (mRef) return *mRef; }
+  Tag& get() { if (mRef) return *mRef; throw 1; }
+  const Tag& get() const { if (mRef) return *mRef; throw 1; }
 
-  operator Tag&() { if (mRef) return *mRef; }
-  operator const Tag&() const { if (mRef) return *mRef; }
+  operator Tag&() { if (mRef) return *mRef; throw 1; }
+  operator const Tag&() const { if (mRef) return *mRef; throw 1; }
+  // TODO: throw something better
 
   operator bool() const { return static_cast<bool>(mRef); }
 
   friend std::ostream& operator<<(std::ostream& stream, const ProxyClass& obj)
   {
-    if (obj);
+    if (obj)
+    {
+      if (obj.mRef->getType() == NBTType::Compound && dynamic_cast<const RootTag*>(obj.mRef.get()) != nullptr) stream << Printer(dynamic_cast<const RootTag&>(*obj.mRef.get()));
+      else stream << "only root tags can be printed";
+    }
     else stream << "null";
 
     return stream;
