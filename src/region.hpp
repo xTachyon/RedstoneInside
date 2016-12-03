@@ -22,7 +22,7 @@ class Region
 {
 public:
 
-  static constexpr std::int32_t ChunksPerRegion = 1 << 10;
+  static constexpr std::size_t ChunksPerRegion = 1 << 10;
   static constexpr std::size_t HeaderSize = 8_KB;
   static constexpr std::size_t SectorSize = 4_KB;
 
