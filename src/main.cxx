@@ -19,9 +19,9 @@ int main(int, char**)
   using namespace redi::protocol;
   using namespace redi::nbt;
   
-  BinaryData e = reinterpret_cast<const std::uint8_t*>("abcdefghijklmnopqrstuvwxyz1234567891011121314151617181920212223242526272829303132");
-  e = compressor::compresszlib(e);
-  e = compressor::decompresszlib(e);
+  //BinaryData e = reinterpret_cast<const std::uint8_t*>("abcdefghijklmnopqrstuvwxyz1234567891011121314151617181920212223242526272829303132");
+  //e = compressor::compresszlib(e);
+  //e = compressor::decompresszlib(e);
   
   while (true)
   {
