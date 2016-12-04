@@ -15,6 +15,11 @@ Region::Region(const std::string& filepath)
   open(filepath);
 }
 
+Region::~Region()
+{
+  close();
+}
+
 void Region::open(const std::string& filepath)
 {
   clear();
@@ -23,7 +28,7 @@ void Region::open(const std::string& filepath)
   std::uintmax_t size = fs::file_size(path);
   if (size % 4 != 0 || size < HeaderSize) createNewRegion(filepath);
   mFile.open(filepath, std::ios::in | std::ios::out | std::ios::binary);
-  if (!mFile) throw std::invalid_argument("can\'t open file " + filepath);
+  if (!mFile) throw std::invalid_argument("can't open file " + filepath);
   mFreeSectors.resize(size / SectorSize);
   std::fill(mFreeSectors.begin(), mFreeSectors.end(), true);
   readHeader();
@@ -36,6 +41,12 @@ void Region::clear()
   mFreeSectors.clear();
   std::fill(mChunks.begin(), mChunks.end(), ChunkInfo());
   hasRegion = false;
+}
+
+void Region::close()
+{
+  saveHeader();
+  clear();
 }
 
 void Region::createNewRegion(const std::string& filepath)
@@ -75,6 +86,27 @@ void Region::readHeader()
     for (std::size_t j = th.offset, max = th.offset + th.sectors; j < max; ++j)
       mFreeSectors[j] = false;
   }
+}
+
+void Region::saveHeader()
+{
+  BinaryData buf(HeaderSize, static_cast<std::uint8_t>(0));
+  std::uint8_t* buffer = &buf[0];
+
+  for (std::size_t i = 0; i < ChunksPerRegion; ++i)
+  {
+    ChunkInfo& th = mChunks[i];
+
+    th.offset = endian::native_to_big(th.offset) >> 8;
+    endian::native_to_big_inplace(th.time);
+    reinterpret_cast<std::uint8_t*>(&th.offset)[3] = th.sectors;
+
+    std::memcpy(buffer + i * 4, &th.offset, sizeof(std::uint32_t));
+    std::memcpy(buffer + i * 4 + SectorSize, &th.time, sizeof(std::uint32_t));
+  }
+
+  mFile.seekp(0, mFile.beg);
+  mFile.write(reinterpret_cast<const char*>(buffer), buf.size());
 }
 
 } // namespace redi
