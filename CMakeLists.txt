@@ -49,7 +49,9 @@ set(SOURCE_FILES
         src/nbt/byteswriter.cxx
         src/nbt/byteswriter.hpp
         src/region.cxx
-        src/region.hpp)
+        src/region.hpp
+        src/chunk.cxx
+        src/chunk.hpp)
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams system thread)

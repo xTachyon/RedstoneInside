@@ -1,16 +1,18 @@
-#ifndef REDI_BLOCK_HPP
-# define REDI_BLOCK_HPP
+#ifndef REDI_BLOCK
+#define REDI_BLOCK
+
+#include <cstdint>
 
 namespace redi
 {
 struct Block
 {
   std::uint16_t id;
-  std::int8_t data;
+  std::uint8_t data;
   std::int8_t skylight;
   std::int8_t blocklight;
 
-  Block(std::uint16_t id = 0, std::int8_t data = 0, std::int8_t skylight = 0, std::int8_t blocklight = 0)
+  Block(std::uint16_t id = 0, std::uint8_t data = 0, std::int8_t skylight = 0, std::int8_t blocklight = 0)
     : id(id), data(data), skylight(skylight), blocklight(blocklight) {}
 };
 enum class Blocks : std::uint16_t
@@ -238,4 +240,4 @@ enum class Blocks : std::uint16_t
 
 } // namespace redi
 
-#endif // REDI_BLOCK_HPP
+#endif // REDI_BLOCK
