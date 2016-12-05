@@ -71,6 +71,7 @@ void Printer::writeVector(const Tag& obj)
       break;
 
     default:
+      elements = 0;
       assert(true);
   }
 

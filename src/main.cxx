@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <type_traits>
 #include <boost/filesystem.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/filter/zlib.hpp>
 #include "protocol/packet.hpp"
 #include "logger.hpp"
 #include "nbt/nbt.hpp"
@@ -10,6 +12,8 @@
 #include "binarydata.hpp"
 #include "compressor.hpp"
 #include "region.hpp"
+#include "util/util.hpp"
+#include "position.hpp"
 
 namespace fs = boost::filesystem;
 
@@ -18,17 +22,30 @@ int main(int, char**)
   using namespace redi;
   using namespace redi::protocol;
   using namespace redi::nbt;
-  
-  //BinaryData e = reinterpret_cast<const std::uint8_t*>("abcdefghijklmnopqrstuvwxyz1234567891011121314151617181920212223242526272829303132");
-  //e = compressor::compresszlib(e);
-  //e = compressor::decompresszlib(e);
-  
+
   while (true)
   {
     std::string name;
     std::getline(std::cin, name);
 
-    Region r(name);
+    try
+    {
+      //BinaryData d = Region(name).readChunk(ChunkPosition(-14, 2));
+      //std::ofstream("s.bin", std::ios::binary).write(reinterpret_cast<const char*>(&d[0]), d.size());
+      BinaryData d;
+      d.resize(fs::file_size("s.bin"));
+      std::ifstream("s.bin", std::ios::binary).read(reinterpret_cast<char*>(&d[0]), d.size());
+
+      Region(name).writeChunk(ChunkPosition(3, 15), d);
+    }
+    catch (boost::iostreams::zlib_error& e)
+    {
+      std::cout << e.what() << " --- " << e.code() << " --- " << e.error() << '\n';
+    }
+    catch (std::exception& e)
+    {
+      std::cout << e.what() << '\n';
+    }
   }
   
   return 0;

@@ -22,11 +22,11 @@ enum class CompressionLevel
   BestCompression = 9
 };
 
-BinaryData compresszlib(const BinaryData& data, CompressionLevel level = CompressionLevel::BestCompression);
-BinaryData decompresszlib(const BinaryData& data);
+BinaryData compressZlib(const BinaryData& data, CompressionLevel level = CompressionLevel::BestCompression);
+BinaryData decompressZlib(const BinaryData& data);
 
-BinaryData compressgzip(const BinaryData& data, CompressionLevel level = CompressionLevel::BestCompression);
-BinaryData decompresszgzip(const BinaryData& data);
+BinaryData compressGzip(const BinaryData& data, CompressionLevel level = CompressionLevel::BestCompression);
+BinaryData decompressGzip(const BinaryData& data);
 
 } // namespace compressor
 } // namespace redi

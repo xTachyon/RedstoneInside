@@ -10,7 +10,7 @@ namespace redi
 namespace compressor
 {
 
-BinaryData compresszlib(const BinaryData& data, CompressionLevel level)
+BinaryData compressZlib(const BinaryData& data, CompressionLevel level)
 {
   BinaryData result;
 
@@ -26,7 +26,7 @@ BinaryData compresszlib(const BinaryData& data, CompressionLevel level)
   return result;
 }
 
-BinaryData decompresszlib(const BinaryData& data)
+BinaryData decompressZlib(const BinaryData& data)
 {
   BinaryData result;
 
@@ -42,7 +42,7 @@ BinaryData decompresszlib(const BinaryData& data)
   return result;
 }
 
-BinaryData compressgzip(const BinaryData& data, CompressionLevel level)
+BinaryData compressGzip(const BinaryData& data, CompressionLevel level)
 {
   BinaryData result;
 
@@ -58,7 +58,7 @@ BinaryData compressgzip(const BinaryData& data, CompressionLevel level)
   return result;
 }
 
-BinaryData decompresszgzip(const BinaryData& data)
+BinaryData decompressGzip(const BinaryData& data)
 {
   BinaryData result;
 

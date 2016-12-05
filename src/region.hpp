@@ -5,6 +5,8 @@
 #include <fstream>
 #include <vector>
 #include "sizeliteraloperators.hpp"
+#include "position.hpp"
+#include "binarydata.hpp"
 
 namespace redi
 {
@@ -25,6 +27,7 @@ public:
   static constexpr std::size_t ChunksPerRegion = 1 << 10;
   static constexpr std::size_t HeaderSize = 8_KB;
   static constexpr std::size_t SectorSize = 4_KB; // uhh, sectors. Earth is on Sector 2814
+  static constexpr std::size_t ChunkHeaderSize = 5;
 
   Region() = default;
   Region(const std::string& filepath);
@@ -32,10 +35,13 @@ public:
 
   void clear();
   void close();
+  void flush();
   void open(const std::string& filepath);
-
+  BinaryData readChunk(const ChunkPosition& ch);
+  void writeChunk(const ChunkPosition& ch, const BinaryData& data, bool updateDate = true);
 
   static void createNewRegion(const std::string& filepath);
+  static std::int32_t getChunkNumberInRegion(const ChunkPosition& other);
 
 private:
   
