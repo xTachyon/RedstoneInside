@@ -10,13 +10,13 @@ namespace redi
 namespace nbt
 {
 
-class NBTSerializer
+class BytesWriter
 {
 public:
   
   BinaryData data;
   
-  NBTSerializer(const RootTag& root);
+  BytesWriter(const RootTag& root);
   
   operator BinaryData&() { return data; }
   operator const BinaryData&() const { return data; }
