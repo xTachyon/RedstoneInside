@@ -43,11 +43,11 @@ set(SOURCE_FILES
         src/nbt/printer.cxx
         src/nbt/printer.hpp
         src/nbt/roottag.hpp
-        src/nbt/bytesreader.cxx
-        src/nbt/bytesreader.hpp
+        src/nbt/deserializer.cxx
+        src/nbt/deserializer.hpp
         src/nbt/exceptions.hpp
-        src/nbt/byteswriter.cxx
-        src/nbt/byteswriter.hpp
+        src/nbt/serializer.cxx
+        src/nbt/serializer.hpp
         src/region.cxx
         src/region.hpp
         src/chunk.cxx

@@ -1,5 +1,5 @@
 #include <boost/endian/conversion.hpp>
-#include "byteswriter.hpp"
+#include "serializer.hpp"
 #include "nbt.hpp"
 #include <fstream>
 
@@ -8,7 +8,7 @@ namespace redi
 namespace nbt
 {
 
-BytesWriter::BytesWriter(const RootTag& root)
+NBTSerializer::NBTSerializer(const RootTag& root)
       : mRoot(root)
 {
   writeRoot();
@@ -16,32 +16,32 @@ BytesWriter::BytesWriter(const RootTag& root)
 }
 
 template <typename T>
-void BytesWriter::writeNumeric(T number)
+void NBTSerializer::writeNumeric(T number)
 {
   boost::endian::native_to_big_inplace(number);
   writeRaw(number);
 }
 
 template <>
-void BytesWriter::writeNumeric<float>(float number)
+void NBTSerializer::writeNumeric<float>(float number)
 {
   writeNumeric(*reinterpret_cast<std::int32_t*>(&number));
 }
 
 template <>
-void BytesWriter::writeNumeric<double>(double number)
+void NBTSerializer::writeNumeric<double>(double number)
 {
   writeNumeric(*reinterpret_cast<std::int64_t*>(&number));
 }
 
-void BytesWriter::writeString(const std::string& str)
+void NBTSerializer::writeString(const std::string& str)
 {
   writeNumeric(static_cast<std::int16_t>(str.size()));
   writeRaw(str.c_str(), str.size());
 }
 
 template <typename T>
-void BytesWriter::writeVector(const std::vector<T>& vect)
+void NBTSerializer::writeVector(const std::vector<T>& vect)
 {
   writeNumeric(static_cast<std::int32_t>(vect.size()));
   
@@ -49,7 +49,7 @@ void BytesWriter::writeVector(const std::vector<T>& vect)
     writeRaw<T>(vect[i]);
 }
 
-void BytesWriter::writeCompound(const TagCompound& obj)
+void NBTSerializer::writeCompound(const TagCompound& obj)
 {
   for (const auto& index : obj)
   {
@@ -112,7 +112,7 @@ void BytesWriter::writeCompound(const TagCompound& obj)
   data.push_back(static_cast<std::uint8_t>(NBTType::End));
 }
 
-void BytesWriter::writeList(const TagList& obj)
+void NBTSerializer::writeList(const TagList& obj)
 {
   data.push_back(static_cast<std::uint8_t>(obj.getListType()));
   writeNumeric(static_cast<std::int32_t>(obj.size()));
@@ -179,7 +179,7 @@ void BytesWriter::writeList(const TagList& obj)
   }
 }
 
-void BytesWriter::writeRoot()
+void NBTSerializer::writeRoot()
 {
   data.push_back(static_cast<std::uint8_t>(NBTType::Compound));
   writeString(mRoot.name);

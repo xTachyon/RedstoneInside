@@ -1,5 +1,5 @@
-#ifndef REDI_NBT_BYTESREADER
-#define REDI_NBT_BYTESREADER
+#ifndef REDI_NBT_SERIALIZER
+#define REDI_NBT_SERIALIZER
 
 #include "roottag.hpp"
 #include "../binarydata.hpp"
@@ -9,13 +9,13 @@ namespace redi
 namespace nbt
 {
 
-class BytesReader
+class NBTDeserializer
 {
 public:
 
   RootTag root;
 
-  BytesReader(const BinaryData& data);
+  NBTDeserializer(const BinaryData& data);
 
   operator RootTag&() { return root; }
   operator RootTag&&() { return std::move(root); } // hmm ?
@@ -43,4 +43,4 @@ private:
 } // namespace nbt
 } // namespace redi
 
-#endif // REDI_NBT_BYTESREADER
+#endif // REDI_NBT_SERIALIZER
