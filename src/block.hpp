@@ -5,17 +5,8 @@
 
 namespace redi
 {
-struct Block
-{
-  std::uint16_t id;
-  std::uint8_t data;
-  std::int8_t skylight;
-  std::int8_t blocklight;
 
-  Block(std::uint16_t id = 0, std::uint8_t data = 0, std::int8_t skylight = 0, std::int8_t blocklight = 0)
-    : id(id), data(data), skylight(skylight), blocklight(blocklight) {}
-};
-enum class Blocks : std::uint16_t
+enum class BlockType : std::uint16_t
 {
   Air = 0,
   Stone = 1,
@@ -236,6 +227,17 @@ enum class Blocks : std::uint16_t
   BoneBlock = 216,
   StructureVoid = 217,
   StructureBlock = 255
+};
+
+struct Block
+{
+  BlockType type;
+  std::uint8_t data;
+  std::int8_t skylight;
+  std::int8_t blocklight;
+
+  Block(BlockType type = BlockType::Air, std::uint8_t data = 0, std::int8_t skylight = 0, std::int8_t blocklight = 0)
+      : type(type), data(data), skylight(skylight), blocklight(blocklight) {}
 };
 
 } // namespace redi

@@ -28,13 +28,7 @@ int main(int, char**)
 
     try
     {
-      //BinaryData d = Region(name).readChunk(ChunkPosition(-14, 2));
-      //std::ofstream("s.bin", std::ios::binary).write(reinterpret_cast<const char*>(&d[0]), d.size());
-      BinaryData d;
-      d.resize(fs::file_size("s.bin"));
-      std::ifstream("s.bin", std::ios::binary).read(reinterpret_cast<char*>(&d[0]), d.size());
-
-      Region(name).writeChunk(ChunkPosition(3, 15), d);
+      std::cout << Printer(NBTDeserializer(Region(name).readChunk(ChunkPosition(3, 12))));
     }
     catch (std::exception& e)
     {
