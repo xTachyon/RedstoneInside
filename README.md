@@ -7,3 +7,4 @@ Thanks to:
 - ##c++, ##c++-general channels on freenode
 - #mcdevs and wiki.vg
 - boost
+- zlib

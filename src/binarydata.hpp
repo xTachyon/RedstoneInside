@@ -24,6 +24,11 @@ public:
     append(ptr, size);
   }
 
+  BinaryData(const char* ptr, base::size_type size)
+  {
+    append(ptr, size);
+  }
+
   void append(const std::uint8_t* ptr, base::size_type size)
   {
     insert(end(), ptr, ptr + size);
@@ -32,6 +37,11 @@ public:
   void append(const char* ptr, base::size_type size)
   {
     append(reinterpret_cast<const std::uint8_t*>(ptr), size);
+  }
+
+  const char* dataAsConstChar() const
+  {
+    return reinterpret_cast<const char*>(data());
   }
 };
 
