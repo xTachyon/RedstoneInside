@@ -8,3 +8,4 @@ Thanks to:
 - #mcdevs and wiki.vg
 - boost
 - zlib
+- nlohmann.json

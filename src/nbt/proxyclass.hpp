@@ -9,7 +9,7 @@
 #include "string.hpp"
 #include "vectorial.hpp"
 #include "list.hpp"
-#include "printer.hpp"
+#include "prettyprint.hpp"
 
 namespace redi
 {
@@ -182,7 +182,7 @@ public:
   {
     if (obj)
     {
-      if (obj.mRef->getType() == NBTType::Compound && dynamic_cast<const RootTag*>(obj.mRef.get()) != nullptr) stream << Printer(dynamic_cast<const RootTag&>(*obj.mRef.get()));
+      if (obj.mRef->getType() == NBTType::Compound && dynamic_cast<const RootTag*>(obj.mRef.get()) != nullptr) stream << PrettyPrint(dynamic_cast<const RootTag&>(*obj.mRef.get()));
       else stream << "only root tags can be printed";
     }
     else stream << "null";

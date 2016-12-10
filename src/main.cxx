@@ -21,6 +21,9 @@ int main(int, char**)
   using namespace redi;
   using namespace redi::protocol;
   using namespace redi::nbt;
+  using json = nlohmann::json;
+  
+  json j;
 
 //  while (true)
 //  {
@@ -29,7 +32,7 @@ int main(int, char**)
 //
 //    try
 //    {
-//      std::cout << Printer(NBTDeserializer(Region(name).readChunk(ChunkPosition(3, 12))));
+//      std::cout << PrettyPrint(NBTDeserializer(Region(name).readChunk(ChunkPosition(3, 12))));
 //    }
 //    catch (std::exception& e)
 //    {

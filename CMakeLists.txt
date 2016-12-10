@@ -40,8 +40,8 @@ set(SOURCE_FILES
         src/stdafx.hpp
         src/mingwworkaround.hpp
         src/nbt/vectorial.hpp
-        src/nbt/printer.cxx
-        src/nbt/printer.hpp
+        src/nbt/prettyprint.cxx
+        src/nbt/prettyprint.hpp
         src/nbt/roottag.hpp
         src/nbt/deserializer.cxx
         src/nbt/deserializer.hpp
@@ -54,7 +54,7 @@ set(SOURCE_FILES
         src/chunk.hpp)
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
-    message(FATAL_ERROR "JSON NOT found")
+    message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
 else()
     message(STATUS "JSON found : ${JSON_REPO_DIR}/src")
     include_directories(${JSON_REPO_DIR}/src)
@@ -90,5 +90,5 @@ if(MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
     endif()
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR MINGW)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wdisabled-optimization")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wdisabled-optimization -Wno-unused-local-typedefs -Wno-overflow -Wno-deprecated-declarations")
 endif()

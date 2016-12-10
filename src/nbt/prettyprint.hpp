@@ -10,11 +10,11 @@ namespace redi
 namespace nbt
 {
 
-class Printer
+class PrettyPrint
 {
 public:
 
-  Printer(const RootTag& obj);
+  PrettyPrint(const RootTag& obj);
 
   operator const std::string&() const { return mStr; }
   operator std::string&&() { return std::move(mStr); }

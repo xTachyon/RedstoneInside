@@ -1,7 +1,7 @@
 #include <cassert>
 #include <string>
 #include <boost/format.hpp>
-#include "printer.hpp"
+#include "prettyprint.hpp"
 #include "scalar.hpp"
 #include "string.hpp"
 #include "vectorial.hpp"
@@ -13,17 +13,17 @@ namespace redi
 namespace nbt
 {
 
-Printer::Printer(const RootTag& obj)
+PrettyPrint::PrettyPrint(const RootTag& obj)
 {
   generate(obj);
 }
 
-void Printer::generate(const RootTag& obj)
+void PrettyPrint::generate(const RootTag& obj)
 {
   writeRootTag(obj);
 }
 
-void Printer::writeNumeric(const Tag& obj)
+void PrettyPrint::writeNumeric(const Tag& obj)
 {
   switch (obj.getType())
   {
@@ -56,7 +56,7 @@ void Printer::writeNumeric(const Tag& obj)
   }
 }
 
-void Printer::writeVector(const Tag& obj)
+void PrettyPrint::writeVector(const Tag& obj)
 {
   std::size_t elements;
 
@@ -78,7 +78,7 @@ void Printer::writeVector(const Tag& obj)
   mStr += std::to_string(elements) + ((elements == 1) ? " element" : " elements");
 }
 
-void Printer::writeCompound(const TagCompound& obj, std::size_t indent)
+void PrettyPrint::writeCompound(const TagCompound& obj, std::size_t indent)
 {
   mStr += std::to_string(obj.size()) + ((obj.size() == 1) ? " entry" : " entries") + '\n';
   writeIndentation(indent);
@@ -104,19 +104,19 @@ void Printer::writeCompound(const TagCompound& obj, std::size_t indent)
   mStr += '}';
 }
 
-void Printer::writeIndentation(std::size_t size)
+void PrettyPrint::writeIndentation(std::size_t size)
 {
   for (std::size_t i = 0; i < size; ++i) mStr += ' ';
 }
 
-void Printer::writeRootTag(const RootTag& obj)
+void PrettyPrint::writeRootTag(const RootTag& obj)
 {
   mStr += (boost::format("%1%(\"%2%\") : ") % getNBTTypeName(NBTType::Compound) % obj.name).str();
 
   writeCompound(obj);
 }
 
-void Printer::writeList(const TagList& obj, std::size_t indent)
+void PrettyPrint::writeList(const TagList& obj, std::size_t indent)
 {
   mStr += std::to_string(obj.size()) + ((obj.size() == 1) ? " entry" : " entries") + '\n';
   writeIndentation(indent);
