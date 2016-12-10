@@ -53,21 +53,28 @@ set(SOURCE_FILES
         src/chunk.cxx
         src/chunk.hpp)
 
+if("${JSON_REPO_DIR} " STREQUAL " ")
+    message(FATAL_ERROR "JSON NOT found")
+else()
+    message(STATUS "JSON found : ${JSON_REPO_DIR}/src")
+    include_directories(${JSON_REPO_DIR}/src)
+endif()
+
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams system thread)
-if (Boost_FOUND)
+if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     add_executable(redi ${SOURCE_FILES})
     target_link_libraries(redi ${Boost_LIBRARIES})
 endif()
 
 find_package(ZLIB REQUIRED)
-if (ZLIB_FOUND)
+if(ZLIB_FOUND)
     include_directories(${ZLIB_INCLUDE_DIRS})
     target_link_libraries(redi ${ZLIB_LIBRARIES})
 endif()
 
-if (MINGW)
+if(MINGW)
     target_link_libraries(redi ws2_32)
 endif()
 
@@ -75,13 +82,13 @@ if (CMAKE_COMPILER_IS_GNUCC)
     target_link_libraries(redi pthread)
 endif()
 
-if (MSVC)
+if(MSVC)
     # http://stackoverflow.com/a/3818084/4091452
     if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
         string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     else()
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
     endif()
-elseif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR MINGW)
+elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wdisabled-optimization")
 endif()

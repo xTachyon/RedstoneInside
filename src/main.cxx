@@ -12,6 +12,7 @@
 #include "region.hpp"
 #include "util/util.hpp"
 #include "position.hpp"
+#include <json.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -21,21 +22,20 @@ int main(int, char**)
   using namespace redi::protocol;
   using namespace redi::nbt;
 
-  while (true)
-  {
-    std::string name;
-    std::getline(std::cin, name);
-
-    try
-    {
-      std::cout << Printer(NBTDeserializer(Region(name).readChunk(ChunkPosition(3, 12))));
-    }
-    catch (std::exception& e)
-    {
-      std::cout << e.what() << '\n';
-    }
-  }
-
+//  while (true)
+//  {
+//    std::string name;
+//    std::getline(std::cin, name);
+//
+//    try
+//    {
+//      std::cout << Printer(NBTDeserializer(Region(name).readChunk(ChunkPosition(3, 12))));
+//    }
+//    catch (std::exception& e)
+//    {
+//      std::cout << e.what() << '\n';
+//    }
+//  }
 
   return 0;
 }

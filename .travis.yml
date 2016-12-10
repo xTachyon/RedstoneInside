@@ -10,23 +10,15 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-#      - george-edison55-cmake-3.x
     packages:
       - gcc-6
       - g++-6
-#      - cmake
 
 install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-6" CC="gcc-6"; fi
 
-before_script:
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 100 --slave /usr/bin/g++ g++ /usr/bin/g++-6
-  - wget http://kent.dl.sourceforge.net/project/boost/boost/1.62.0/boost_1_62_0.tar.bz2
-  - tar -xjf boost_1_62_0.tar.bz2
-  - cd boost_1_62_0/
-  - sudo ./bootstrap.sh --prefix=/usr/local
-  - sudo ./b2 install -j 8
-  - cd ..
-#  - sudo apt-get install libboost-all-dev
+cache:
+  directories:
+    - libs
 
-script: cmake . && make
+script: bash travisbuild.sh

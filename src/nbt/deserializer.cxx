@@ -101,7 +101,7 @@ void NBTDeserializer::readCompound(TagCompound& obj)
 
   while (type != static_cast<std::uint8_t>(NBTType::End))
   {
-    if (!(0 <= type && type <= 11)) throw InvalidTagTypeException(type);
+    if (type > 11) throw InvalidTagTypeException(type);
     name = readString();
 
     switch (static_cast<NBTType>(type))
@@ -163,7 +163,7 @@ void NBTDeserializer::readCompound(TagCompound& obj)
 void NBTDeserializer::readList(TagList& obj)
 {
   std::uint8_t type = mData[mOffset++];
-  if (!(0 <= type && type <= 11)) throw InvalidTagTypeException(type);
+  if (type > 11) throw InvalidTagTypeException(type);
   std::int32_t size = readNumeric<std::int32_t>();
 
   switch (static_cast<NBTType>(type))
