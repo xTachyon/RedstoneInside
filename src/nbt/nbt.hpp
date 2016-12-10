@@ -1,5 +1,5 @@
-#ifndef REDI_NBT
-#define REDI_NBT
+#ifndef REDI_NBT_NBT
+#define REDI_NBT_NBT
 
 #include "type.hpp"
 #include "tag.hpp"
@@ -14,9 +14,8 @@
 #include "roottag.hpp"
 #include "prettyprint.hpp"
 #include "roottag.hpp"
-#include "prettyprint.hpp"
 #include "deserializer.hpp"
 #include "serializer.hpp"
 #include "exceptions.hpp"
 
-#endif // REDI_NBT
+#endif // REDI_NBT_NBT

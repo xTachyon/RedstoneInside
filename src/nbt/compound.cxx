@@ -70,6 +70,16 @@ ProxyClass TagCompound::operator[](std::int32_t index)
   // for convenience
   return (*this)[std::to_string(index)];
 }
+
+const ProxyClass TagCompound::operator[](const std::string& index) const
+{
+  return (*this)[index];
+}
+
+const ProxyClass TagCompound::operator[](std::int32_t index) const
+{
+  return (*this)[std::to_string(index)];
+}
   
 } // namespace nbt
 } // namespace redi

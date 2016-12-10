@@ -35,6 +35,8 @@ public:
   ProxyClass operator[](const std::string& index);
   ProxyClass operator[](std::string&& index);
   ProxyClass operator[](std::int32_t index);
+  const ProxyClass operator[](const std::string& index) const;
+  const ProxyClass operator[](std::int32_t index) const;
 
   TagCompound& operator=(const TagCompound& other);
 
@@ -48,6 +50,7 @@ public:
   bool empty() const { return mData.empty(); }
   iterator end() { return mData.end(); }
   constIterator end() const { return mData.end(); }
+  const Container& getContainer() const { return mData; }
   void insert(const std::string& index, const Tag& data);
   void insert(std::string&& index, const Tag& data);
   reverseIterator rbegin() { return mData.rbegin(); }

@@ -12,7 +12,7 @@
 #include "region.hpp"
 #include "util/util.hpp"
 #include "position.hpp"
-#include <json.hpp>
+#include <boost/optional.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -21,10 +21,9 @@ int main(int, char**)
   using namespace redi;
   using namespace redi::protocol;
   using namespace redi::nbt;
-  using json = nlohmann::json;
   
-  json j;
-
+  std::cout << sizeof(boost::optional<const BinaryData&>);
+  
 //  while (true)
 //  {
 //    std::string name;

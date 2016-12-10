@@ -35,5 +35,8 @@
 #include <boost/endian/conversion.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
+#include <boost/optional.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/thread.hpp>
+
+#include <json.hpp>
