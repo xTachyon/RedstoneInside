@@ -16,16 +16,26 @@ struct Position
     : x(x), y(y), z(z) {}
 };
 
+struct BlockPosition
+{
+  std::int32_t x;
+  std::int32_t y;
+  std::int32_t z;
+  
+  BlockPosition(std::int32_t x = 0, std::int32_t y = 0, std::int32_t z = 0)
+        : x(x), y(y), z(z) {}
+};
+
 struct Location : public Position
 {
   using Position::Position;
 };
 
-struct ChunkPosition
+struct Vector2
 {
   std::int32_t x, z;
 
-  ChunkPosition(std::int32_t x = 0, std::int32_t z = 0)
+  Vector2(std::int32_t x = 0, std::int32_t z = 0)
     : x(x), z(z) {}
 };
 

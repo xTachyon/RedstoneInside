@@ -45,6 +45,8 @@ class VectorType : public Tag
 
 using TagByteArray = VectorType<std::int8_t>;
 using TagIntArray = VectorType<std::int32_t>;
+using Int8Vector = std::vector<std::int8_t>;
+using Int32Vector = std::vector<std::int32_t>;
   
 } // namespace nbt
 } // namespace redi

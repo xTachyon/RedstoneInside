@@ -12,6 +12,7 @@
 #include "region.hpp"
 #include "util/util.hpp"
 #include "position.hpp"
+#include "chunk.hpp"
 #include <boost/optional.hpp>
 
 namespace fs = boost::filesystem;
@@ -22,22 +23,21 @@ int main(int, char**)
   using namespace redi::protocol;
   using namespace redi::nbt;
   
-  std::cout << sizeof(boost::optional<const BinaryData&>);
-  
-//  while (true)
-//  {
-//    std::string name;
-//    std::getline(std::cin, name);
-//
-//    try
-//    {
-//      std::cout << PrettyPrint(NBTDeserializer(Region(name).readChunk(ChunkPosition(3, 12))));
-//    }
-//    catch (std::exception& e)
-//    {
-//      std::cout << e.what() << '\n';
-//    }
-//  }
+  while (true)
+  {
+    std::string name;
+    std::getline(std::cin, name);
+    if (name == "*") break;
+
+    try
+    {
+      Chunk c(Region(name).readChunk(Vector2(3, 12)));
+    }
+    catch (std::exception& e)
+    {
+      std::cout << e.what() << '\n';
+    }
+  }
 
   return 0;
 }

@@ -1,10 +1,10 @@
 #ifndef REDI_NBT_COMPOUND
-#	define REDI_NBT_COMPOUND
+#define REDI_NBT_COMPOUND
 
-# include <map>
-# include <string>
-# include <utility>
-# include "tag.hpp"
+#include <map>
+#include <string>
+#include <utility>
+#include "tag.hpp"
 
 namespace redi
 {
@@ -35,8 +35,8 @@ public:
   ProxyClass operator[](const std::string& index);
   ProxyClass operator[](std::string&& index);
   ProxyClass operator[](std::int32_t index);
-  const ProxyClass operator[](const std::string& index) const;
-  const ProxyClass operator[](std::int32_t index) const;
+  const TagPtr& operator[](const std::string& index) const;
+  const TagPtr& operator[](std::int32_t index) const;
 
   TagCompound& operator=(const TagCompound& other);
 
@@ -47,9 +47,11 @@ public:
   constIterator begin() const { return mData.begin(); }
   void clear() { mData.clear(); }
   TagPtr clone() const override;
+  std::size_t count(const std::string& key) const { return mData.count(key); }
   bool empty() const { return mData.empty(); }
   iterator end() { return mData.end(); }
   constIterator end() const { return mData.end(); }
+  bool keyExists(const std::string& key) const { return mData.count(key) == 1; }
   const Container& getContainer() const { return mData; }
   void insert(const std::string& index, const Tag& data);
   void insert(std::string&& index, const Tag& data);

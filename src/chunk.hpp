@@ -7,6 +7,7 @@
 #include "block.hpp"
 #include "binarydata.hpp"
 #include "nbt/nbt.hpp"
+#include "position.hpp"
 
 namespace redi
 {
@@ -18,13 +19,17 @@ public:
   static constexpr std::size_t ChunkMaxX = 16;
   static constexpr std::size_t ChunkMaxY = 256;
   static constexpr std::size_t ChunkMaxZ = 16;
+  static constexpr std::int8_t BlocksPerSection = 16;
   
   Chunk();
-  Chunk(const BinaryData& data) { *this = data; }
-  Chunk(const nbt::RootTag& root) { *this = root; }
+  Chunk(const BinaryData& data) : Chunk() { *this = data; }
+  Chunk(const nbt::RootTag& root) : Chunk() { *this = root; }
   
   Chunk& operator=(const BinaryData& data);
   Chunk& operator=(const nbt::RootTag& root);
+  
+  Block& operator()(BlockPosition pos) { return mBlocks[pos.x][pos.y][pos.z]; };
+  Block& operator()(std::int32_t x, std::int32_t y, std::int32_t z) { return mBlocks[x][y][z]; }
 
 private:
 
@@ -36,11 +41,13 @@ private:
   void deserializeChunk(const nbt::RootTag& root);
   void deserializeBiomes(const nbt::TagIntArray& biomes) = delete;
   void deserializeSections(const nbt::TagList& sections);
-  void deserializeSection(std::int8_t nthSection, const nbt::TagByteArray& blocks,
-                          boost::optional<const nbt::TagByteArray&> add,
-                          const nbt::TagByteArray& data, const nbt::TagByteArray& blocklight,
-                          const nbt::TagByteArray& skylight);
+  void deserializeSection(std::int8_t nthSection, const nbt::Int8Vector& blocks,
+                          boost::optional<const nbt::Int8Vector&> add,
+                          const nbt::Int8Vector& data, const nbt::Int8Vector& blocklight,
+                          const nbt::Int8Vector& skylight);
 };
+
+void bestTerrainGenerator(Chunk& ch);
 
 } // namespace redi
 

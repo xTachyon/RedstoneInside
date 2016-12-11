@@ -71,12 +71,12 @@ ProxyClass TagCompound::operator[](std::int32_t index)
   return (*this)[std::to_string(index)];
 }
 
-const ProxyClass TagCompound::operator[](const std::string& index) const
+const TagPtr& TagCompound::operator[](const std::string& index) const
 {
-  return (*this)[index];
+  return mData.at(index);
 }
 
-const ProxyClass TagCompound::operator[](std::int32_t index) const
+const TagPtr& TagCompound::operator[](std::int32_t index) const
 {
   return (*this)[std::to_string(index)];
 }

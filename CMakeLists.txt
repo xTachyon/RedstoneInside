@@ -51,7 +51,9 @@ set(SOURCE_FILES
         src/region.cxx
         src/region.hpp
         src/chunk.cxx
-        src/chunk.hpp)
+        src/chunk.hpp
+        src/world.cxx
+        src/world.hpp)
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
     message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
