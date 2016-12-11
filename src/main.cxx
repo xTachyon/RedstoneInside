@@ -2,6 +2,7 @@
 #include <fstream>
 #include <boost/filesystem.hpp>
 #include <boost/multi_array.hpp>
+#include <boost/lockfree/queue.hpp>
 #include "protocol/packet.hpp"
 #include "logger.hpp"
 #include "nbt/nbt.hpp"
@@ -14,14 +15,20 @@
 #include "position.hpp"
 #include "chunk.hpp"
 #include <boost/optional.hpp>
+#include <boost/asio.hpp>
+#include "threadsafequeue.hpp"
 
 namespace fs = boost::filesystem;
+namespace asio = boost::asio;
 
 int main(int, char**)
 {
   using namespace redi;
   using namespace redi::protocol;
   using namespace redi::nbt;
+  
+  boost::lockfree::queue<int> q;
+  
   
   while (true)
   {

@@ -1,8 +1,8 @@
 #ifndef REDI_SESSION
-# define REDI_SESSION
+#define REDI_SESSION
 
-# include <deque>
-# include "protocol/packet.hpp"
+#include "protocol/packet.hpp"
+#include "threadsafequeue.hpp"
 
 namespace redi
 {
@@ -14,9 +14,12 @@ public:
   Session(boost::asio::ip::tcp::socket&& socket);
 
 private:
+  
+  using PacketQueue = ThreadSafeQueue<protocol::Packet>;
 
   boost::asio::ip::tcp::socket mSocket;
-  std::deque<std::shared_ptr<protocol::Packet>> mToBeSend;
+  PacketQueue mPacketsToBeSend;
+  PacketQueue mReceivedPackets;
 };
 
 } // namespace redi

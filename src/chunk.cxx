@@ -103,7 +103,6 @@ void Chunk::deserializeSection(std::int8_t nthSection, const nbt::Int8Vector& bl
   }
 }
 
-
 void bestTerrainGenerator(Chunk& ch)
 {
   for (std::size_t x = 0; x < Chunk::ChunkMaxX; ++x)
@@ -118,4 +117,5 @@ void bestTerrainGenerator(Chunk& ch)
     for (std::size_t z = 0; z < Chunk::ChunkMaxZ; ++z)
       ch(x, 2, z) = BlockType::Leaves2;
 }
+
 } // namespace redi
