@@ -15,10 +15,6 @@ int main(int, char**)
 {
   using namespace redi;
   
-  asio::io_service io;
-  asio::ip::tcp::socket s(io);
-  asio::ip::tcp::socket c(std::move(s));
-  
   while (true)
   {
     std::string name;
