@@ -1,22 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <boost/filesystem.hpp>
-#include <boost/multi_array.hpp>
-#include <boost/lockfree/queue.hpp>
+#include <boost/asio.hpp>
 #include "protocol/packet.hpp"
 #include "logger.hpp"
 #include "nbt/nbt.hpp"
-#include "sizeliteraloperators.hpp"
-#include "block.hpp"
-#include "binarydata.hpp"
-#include "compressor.hpp"
 #include "region.hpp"
-#include "util/util.hpp"
-#include "position.hpp"
 #include "chunk.hpp"
-#include <boost/optional.hpp>
-#include <boost/asio.hpp>
-#include "threadsafequeue.hpp"
 
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;
@@ -24,11 +14,10 @@ namespace asio = boost::asio;
 int main(int, char**)
 {
   using namespace redi;
-  using namespace redi::protocol;
-  using namespace redi::nbt;
   
-  boost::lockfree::queue<int> q;
-  
+  asio::io_service io;
+  asio::ip::tcp::socket s(io);
+  asio::ip::tcp::socket c(std::move(s));
   
   while (true)
   {

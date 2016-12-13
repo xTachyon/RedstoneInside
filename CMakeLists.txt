@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.2)
 project(redi)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 
 set(SOURCE_FILES
         src/nbt/compiletimemagic.hpp
@@ -56,7 +59,9 @@ set(SOURCE_FILES
         src/world.hpp
         src/threadsafequeue.hpp
         src/connectionlistener.cxx
-        src/connectionlistener.hpp)
+        src/connectionlistener.hpp
+        src/server.cxx
+        src/server.hpp)
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
     message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
