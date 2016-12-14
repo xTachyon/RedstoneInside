@@ -61,7 +61,14 @@ set(SOURCE_FILES
         src/connectionlistener.cxx
         src/connectionlistener.hpp
         src/server.cxx
-        src/server.hpp src/player.cxx src/player.hpp)
+        src/server.hpp
+        src/player.cxx
+        src/player.hpp
+        src/events/event.cxx
+        src/events/event.hpp
+        src/events/eventtype.hpp
+        src/events/eventmanager.cxx
+        src/events/eventmanager.hpp)
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
     message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")

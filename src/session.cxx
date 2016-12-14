@@ -12,16 +12,11 @@ Session::Session(boost::asio::ip::tcp::socket&& socket)
       : mSocket(std::move(socket)) {}
 
 Session::Session(Session&& s)
-      : mSocket(std::move(s.mSocket))
-{}
+      : mSocket(std::move(s.mSocket)) {}
 
 void Session::handleRead(const boost::system::error_code& error, std::size_t bytes)
 {
-  if (error)
-  {
-    Logger::warn(error.message());
-    return;
-  }
+  if (error) Logger::warn(error.message());
   
   mReceivingPacket.resize(bytes);
   readNext();
@@ -48,7 +43,7 @@ void Session::writeNext()
 
 void Session::handleWrite(const boost::system::error_code& error)
 {
-  if (error) Logger::warn("Can't send packet");
+  if (error) Logger::warn(error.message());
   writeNext();
 }
   

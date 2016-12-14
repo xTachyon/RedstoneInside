@@ -1,6 +1,10 @@
 #ifndef REDI_SERVER
 #define REDI_SERVER
 
+#include <list>
+#include "session.hpp"
+#include "player.hpp"
+
 namespace redi
 {
 
@@ -10,6 +14,10 @@ public:
   
 private:
   
+  using SessionList = std::list<Session>;
+  using PlayerList = std::list<Player>;
+  
+  SessionList mPlayerlessList;
 };
   
 } // namespace redi
