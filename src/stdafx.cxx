@@ -1,3 +1,1 @@
-#ifdef NDEBUG
-# include "stdafx.hpp"
-#endif // NDEBUG
+#include "stdafx.hpp"

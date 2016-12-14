@@ -1,6 +1,8 @@
 #ifndef REDI_PLAYER
 #define REDI_PLAYER
 
+#include "session.hpp"
+
 namespace redi
 {
 
@@ -10,7 +12,8 @@ public:
   
 private:
   
-  
+  Session mSession;
+  std::string mNickname;
 };
 
 } // namespace redi
