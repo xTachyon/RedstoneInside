@@ -1,12 +1,10 @@
 #ifndef REDI_PACKET
-# define REDI_PACKET
+#define REDI_PACKET
 
 # include <string>
 # include "../binarydata.hpp"
 
-namespace redi
-{
-namespace protocol
+namespace redi::protocol
 {
 
 enum class HandshakePacketType
@@ -44,18 +42,18 @@ public:
     data.append(reinterpret_cast<const std::uint8_t*>(&ref), size);
   }
 
-  void writeBool(bool data);
-  void writeSignedByte(std::int8_t data);
-  void writeUnsignedByte(std::uint8_t data);
-  void writeBigShort(std::int16_t data);
-  void writeBigUnsignedShort(std::uint16_t data);
-  void writeBigInt(std::int32_t data);
-  void writeBigLong(std::uint64_t data);
-  void writeBigFloat(float data);
-  void writeBigDouble(double data);
-  void writeVarInt(std::int32_t data);
-  void writeVarLong(std::int64_t data);
-  void writeString(const std::string& data);
+  void writeBool(bool value);
+  void writeSignedByte(std::int8_t value);
+  void writeUnsignedByte(std::uint8_t value);
+  void writeBigShort(std::int16_t value);
+  void writeBigUnsignedShort(std::uint16_t value);
+  void writeBigInt(std::int32_t value);
+  void writeBigLong(std::uint64_t value);
+  void writeBigFloat(float value);
+  void writeBigDouble(double value);
+  void writeVarInt(std::int32_t value);
+  void writeVarLong(std::int64_t value);
+  void writeString(const std::string& value);
 
   bool readBool();
   std::int8_t readSygnedByte();
@@ -81,7 +79,6 @@ private:
   void need(std::size_t bytes);
 };
 
-} // namespace protocol
-} // namespace redi
+} // namespace redi::protocol
 
 #endif

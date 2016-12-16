@@ -4,10 +4,9 @@
 
 namespace endian = boost::endian;
 
-namespace redi
+namespace redi::protocol
 {
-namespace protocol
-{
+
 Packet::Packet(std::int32_t packetID)
   : readIndex(0), startsAt(0)
 {
@@ -27,67 +26,67 @@ Packet::Packet(PlayPacketType t)
 Packet::Packet(StatusPacketType t)
   : Packet(static_cast<std::int32_t>(t)) {}
 
-void Packet::writeBool(bool data)
+void Packet::writeBool(bool value)
 {
-  this->data.push_back(data ? 1 : 0);
+  this->data.push_back(value ? 1 : 0);
 }
 
-void Packet::writeSignedByte(std::int8_t data)
+void Packet::writeSignedByte(std::int8_t value)
 {
-  writeRaw(data);
+  writeRaw(value);
 }
 
-void Packet::writeUnsignedByte(std::uint8_t data)
+void Packet::writeUnsignedByte(std::uint8_t value)
 {
-  this->data.push_back(data);
+  this->data.push_back(value);
 }
 
-void Packet::writeBigShort(std::int16_t data)
+void Packet::writeBigShort(std::int16_t value)
 {
-  writeRaw(endian::native_to_big(data));
+  writeRaw(endian::native_to_big(value));
 }
 
-void Packet::writeBigUnsignedShort(std::uint16_t data)
+void Packet::writeBigUnsignedShort(std::uint16_t value)
 {
-  writeRaw(endian::native_to_big(data));
+  writeRaw(endian::native_to_big(value));
 }
 
-void Packet::writeBigInt(std::int32_t data)
+void Packet::writeBigInt(std::int32_t value)
 {
-  writeRaw(endian::native_to_big(data));
+  writeRaw(endian::native_to_big(value));
 }
 
-void Packet::writeBigLong(std::uint64_t data)
+void Packet::writeBigLong(std::uint64_t value)
 {
-  writeRaw(endian::native_to_big(data));
+  writeRaw(endian::native_to_big(value));
 }
 
-void Packet::writeBigFloat(float data)
+void Packet::writeBigFloat(float value)
 {
-  writeRaw(*reinterpret_cast<std::int32_t*>(&data));
+  writeRaw(*reinterpret_cast<std::int32_t*>(&value));
 }
 
-void Packet::writeBigDouble(double data)
+void Packet::writeBigDouble(double value)
 {
-  writeRaw(*reinterpret_cast<std::int64_t*>(&data));
+  writeRaw(*reinterpret_cast<std::int64_t*>(&value));
 }
 
-void Packet::writeVarInt(std::int32_t data)
+void Packet::writeVarInt(std::int32_t value)
 {
-  BinaryData res(writeVarIntInternal(data));
+  BinaryData res(writeVarIntInternal(value));
   this->data.append(res.data(), res.size());
 }
 
-void Packet::writeVarLong(std::int64_t data)
+void Packet::writeVarLong(std::int64_t value)
 {
-  BinaryData res(writeVarIntInternal(data));
+  BinaryData res(writeVarIntInternal(value));
   this->data.append(res.data(), res.size());
 }
 
-void Packet::writeString(const std::string& data)
+void Packet::writeString(const std::string& value)
 {
-  writeVarInt(static_cast<std::int32_t>(data.size()));
-  this->data.append(reinterpret_cast<const std::uint8_t*>(data.data()), data.size());
+  writeVarInt(static_cast<std::int32_t>(value.size()));
+  this->data.append(reinterpret_cast<const std::uint8_t*>(value.data()), value.size());
 }
 
 bool Packet::readBool()
@@ -181,17 +180,17 @@ void Packet::finish()
   startsAt = readIndex = 5 - res.size();
 }
 
-BinaryData Packet::writeVarIntInternal(std::int64_t data)
+BinaryData Packet::writeVarIntInternal(std::int64_t value)
 {
   std::uint8_t buffer[10];
   std::size_t i = 0;
 
-  while ((data & -128) != 0)
+  while ((value & -128) != 0)
   {
-    buffer[i++] = (data & 127) | 128;
-    data >>= 7;
+    buffer[i++] = (value & 127) | 128;
+    value >>= 7;
   }
-  buffer[i++] = static_cast<std::uint8_t>(data);
+  buffer[i++] = static_cast<std::uint8_t>(value);
 
   return BinaryData(buffer, i);
 }
@@ -220,5 +219,4 @@ void Packet::need(std::size_t bytes)
     throw std::invalid_argument(std::to_string(bytes) + " is out of index");
 }
 
-} // namespace protocol
-} // namespace redi
+} // namespace redi::protocol
