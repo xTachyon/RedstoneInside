@@ -4,7 +4,9 @@
 
 namespace endian = boost::endian;
 
-namespace redi::protocol
+namespace redi
+{
+namespace protocol
 {
 
 Packet::Packet(std::int32_t packetID)
@@ -218,5 +220,6 @@ void Packet::need(std::size_t bytes)
   if (bytes + readIndex > data.size())
     throw std::invalid_argument(std::to_string(bytes) + " is out of index");
 }
-
-} // namespace redi::protocol
+  
+} // namespace protocol
+} // namespace redi
