@@ -11,6 +11,10 @@ namespace redi
 class Server
 {
 public:
+
+  Server() : mEntityCount(0) {}
+
+  std::int32_t getNewEntityID() { return mEntityCount++; }
   
 private:
   
@@ -18,6 +22,8 @@ private:
   using PlayerList = std::list<Player>;
   
   SessionList mPlayerlessList;
+
+  std::int32_t mEntityCount;
 };
   
 } // namespace redi
