@@ -9,7 +9,9 @@ namespace redi
 class Event
 {
 public:
-  
+
+  void a() {}
+
 private:
   
   EventType mType;

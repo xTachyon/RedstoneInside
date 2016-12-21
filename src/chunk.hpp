@@ -16,9 +16,9 @@ class Chunk
 {
 public:
 
-  static constexpr std::size_t ChunkMaxX = 16;
-  static constexpr std::size_t ChunkMaxY = 256;
-  static constexpr std::size_t ChunkMaxZ = 16;
+  static constexpr std::uint16_t ChunkMaxX = 16;
+  static constexpr std::uint16_t ChunkMaxY = 256;
+  static constexpr std::uint16_t ChunkMaxZ = 16;
   static constexpr std::int8_t BlocksPerSection = 16;
   
   Chunk();

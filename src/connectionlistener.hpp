@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <boost/asio.hpp>
+#include "mingwworkaround.hpp"
 
 namespace redi
 {

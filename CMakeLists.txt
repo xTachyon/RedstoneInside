@@ -68,7 +68,10 @@ set(SOURCE_FILES
         src/events/event.hpp
         src/events/eventtype.hpp
         src/events/eventmanager.cxx
-        src/events/eventmanager.hpp)
+        src/events/eventmanager.hpp
+        src/events/observer.hpp
+        src/events/vanillaobserver.cxx
+        src/events/vanillaobserver.hpp)
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
     message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
@@ -108,4 +111,8 @@ if(MSVC)
     endif()
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wdisabled-optimization -Wno-unused-local-typedefs -Wno-overflow -Wno-deprecated-declarations")
+endif()
+
+if(WIN32)
+    target_link_libraries(redi wsock32)
 endif()

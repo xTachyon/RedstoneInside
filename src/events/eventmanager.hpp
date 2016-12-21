@@ -1,6 +1,7 @@
 #ifndef REDI_EVENT_EVENTMANAGER
 #define REDI_EVENT_EVENTMANAGER
 
+#include "observer.hpp"
 
 namespace redi
 {

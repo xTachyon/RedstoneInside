@@ -7,6 +7,7 @@
 #include "nbt/nbt.hpp"
 #include "region.hpp"
 #include "chunk.hpp"
+#include "events/event.hpp"
 
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;
@@ -14,7 +15,7 @@ namespace asio = boost::asio;
 int main(int, char**)
 {
   using namespace redi;
-  
+
   while (true)
   {
     std::string name;
