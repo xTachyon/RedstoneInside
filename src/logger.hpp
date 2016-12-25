@@ -1,15 +1,14 @@
 #ifndef REDI_LOGGER
 # define REDI_LOGGER
 
-# include <deque>
-# include <fstream>
-# include <mutex>
-# include <thread>
-# include <tuple>
-# include <boost/chrono/chrono.hpp>
-# include <boost/date_time/posix_time/posix_time.hpp>
-# include <boost/thread/thread.hpp>
-# include "mingwworkaround.hpp"
+#include <deque>
+#include <fstream>
+#include <mutex>
+#include <thread>
+#include <tuple>
+#include <boost/chrono/chrono.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread/thread.hpp>
 
 namespace redi
 {

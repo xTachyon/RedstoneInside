@@ -16,6 +16,8 @@ int main(int, char**)
 {
   using namespace redi;
 
+  std::cout << sizeof(std::vector<Event*>);
+  
   while (true)
   {
     std::string name;

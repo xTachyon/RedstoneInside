@@ -3,7 +3,6 @@
 
 #include <deque>
 #include <mutex>
-#include "mingwworkaround.hpp"
 
 namespace redi
 {

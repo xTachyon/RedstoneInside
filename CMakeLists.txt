@@ -41,7 +41,6 @@ set(SOURCE_FILES
         src/session.hpp
         src/stdafx.cxx
         src/stdafx.hpp
-        src/mingwworkaround.hpp
         src/nbt/vectorial.hpp
         src/nbt/prettyprint.cxx
         src/nbt/prettyprint.hpp

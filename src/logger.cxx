@@ -25,7 +25,7 @@ Logger::~Logger()
 
 void Logger::workingThread()
 {
-//  using namespace std::chrono_literals;
+  using namespace std::chrono_literals;
 
   Container local;
   std::string result;
@@ -39,8 +39,7 @@ void Logger::workingThread()
     }
 
     run(local, result);
-    boost::this_thread::sleep_for(boost::chrono::milliseconds(5));
-        //(5ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5ms));
   }
 
   run(mQueue, result);
