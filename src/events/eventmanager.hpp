@@ -1,39 +1,51 @@
 #ifndef REDI_EVENT_EVENTMANAGER
 #define REDI_EVENT_EVENTMANAGER
 
-#include <functional>
 #include <deque>
-#include <memory>
+#include <map>
+#include <vector>
 #include "observer.hpp"
 
 namespace redi
 {
 
-struct FunctorBase
-{
-  virtual ~FunctorBase() {}
-};
-
-template <typename T>
-struct Functor : public FunctorBase
-{
-  std::function<void(T&)> callback;
-
-  void operator()(T& arg)
-  {
-    callback(arg);
-  }
-};
-
 class EventManager
 {
 public:
   
+  ~EventManager();
   
+  void addObserver(Observer& ref);
+  void addObserver(Observer* ptr);
+  void deleteObserver(Observer& ref);
+  void deleteObserver(Observer* ptr);
+  void registerEvent(Observer& ref, EventType type, EventPriority priority = EventPriority::Normal);
+  void registerEvent(Observer* ptr, EventType type, EventPriority priority = EventPriority::Normal);
+  
+  void triggerWeatherChange();
   
 private:
   
-  std::deque<std::unique_ptr<FunctorBase>> mEventQueue;
+  using EventDataVector = std::vector<EventData>;
+  
+  std::map<Observer*, EventDataVector> mEvents;
+  
+  template <typename Functor, typename Ev>
+  void trigger(Functor f, Ev& event)
+  {
+    // TODO: Implement priorities
+    
+    for (auto& index : mEvents)
+    {
+      for (EventData& i : index.second)
+        if (i.type == event.getType())
+      {
+        (index.first->*f)(event);
+        if (!event) return;
+        break;
+      }
+    }
+  }
 };
   
 } // namespace redi

@@ -3,6 +3,7 @@
 
 #include <functional>
 #include "eventtype.hpp"
+#include "event.hpp"
 
 namespace redi
 {
@@ -19,9 +20,16 @@ public:
   {
     manager = std::addressof(m);
   }
+  
+  void registerManager(EventManager* m)
+  {
+    manager = m;
+  }
 
   virtual void onEnable() {}
   virtual void onDisable() {}
+  
+  virtual void onWeatherChange(WeatherChangeEvent&) {}
 
 protected:
 

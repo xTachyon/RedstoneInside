@@ -9,8 +9,10 @@ namespace redi
 class VanillaObserver : public Observer
 {
 public:
+  
+  void onEnable() override ;
 
-
+  void onWeatherChange(WeatherChangeEvent& event) override;
 };
 
 } // namespace redi
