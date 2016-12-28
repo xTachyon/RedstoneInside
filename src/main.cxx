@@ -22,6 +22,7 @@ int main(int, char**)
   VanillaObserver obs;
   manager.addObserver(obs);
   manager.triggerWeatherChange();
+  
 
   return 0;
 }

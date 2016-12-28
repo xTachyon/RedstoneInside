@@ -1,13 +1,11 @@
-#include <iostream>
 #include "eventmanager.hpp"
 #include "vanillaobserver.hpp"
 
 namespace redi
 {
 
-void VanillaObserver::onWeatherChange(WeatherChangeEvent& event)
+void VanillaObserver::onWeatherChange(WeatherChangeEvent&)
 {
-  std::cout << &event;
 }
 
 void VanillaObserver::onEnable()

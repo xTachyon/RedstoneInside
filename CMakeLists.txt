@@ -70,7 +70,8 @@ set(SOURCE_FILES
         src/events/eventmanager.hpp
         src/events/observer.hpp
         src/events/vanillaobserver.cxx
-        src/events/vanillaobserver.hpp)
+        src/events/vanillaobserver.hpp
+        src/protocol/protocol.hpp)
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
     message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")

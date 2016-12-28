@@ -35,5 +35,4 @@ private:
   
 } // namespace redi
 
-
 #endif // REDI_CONNECTIONLISTENER
