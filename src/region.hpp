@@ -37,11 +37,11 @@ public:
   void close();
   void flush();
   void open(const std::string& filepath);
-  BinaryData readChunk(const Vector2& ch);
-  void writeChunk(const Vector2& ch, const BinaryData& data, bool updateDate = true);
+  BinaryData readChunk(const Vector2i& ch);
+  void writeChunk(const Vector2i& ch, const BinaryData& data, bool updateDate = true);
 
   static void createNewRegion(const std::string& filepath);
-  static std::int32_t getChunkNumberInRegion(const Vector2& other);
+  static std::int32_t getChunkNumberInRegion(const Vector2i& other);
 
 private:
   

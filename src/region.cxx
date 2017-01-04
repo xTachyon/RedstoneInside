@@ -37,7 +37,7 @@ void Region::open(const std::string& filepath)
   hasRegion = true;
 }
 
-BinaryData Region::readChunk(const Vector2& ch)
+BinaryData Region::readChunk(const Vector2i& ch)
 {
   BinaryData result(ChunkHeaderSize, '\0');
   std::int32_t chunknumber = getChunkNumberInRegion(ch);
@@ -74,7 +74,7 @@ BinaryData Region::readChunk(const Vector2& ch)
   return result;
 }
 
-void Region::writeChunk(const Vector2& ch, const BinaryData& data, bool updateDate)
+void Region::writeChunk(const Vector2i& ch, const BinaryData& data, bool updateDate)
 {
   BinaryData result(ChunkHeaderSize, '\0');
   std::int32_t chunknumber = getChunkNumberInRegion(ch);
@@ -174,7 +174,7 @@ void Region::createNewRegion(const std::string& filepath)
   file.write(std::array<char, HeaderSize>().data(), HeaderSize);
 }
 
-std::int32_t Region::getChunkNumberInRegion(const Vector2& other)
+std::int32_t Region::getChunkNumberInRegion(const Vector2i& other)
 {
   return (other.x & 31) + (other.z & 31) * 32;
 }

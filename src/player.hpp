@@ -10,10 +10,13 @@ class Player
 {
 public:
   
+  Session& getSession() { return mSession; }
+  
 private:
   
   Session mSession;
   std::string mNickname;
+  std::string mUUID;
 };
 
 } // namespace redi

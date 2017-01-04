@@ -9,10 +9,19 @@
 namespace redi
 {
 
+enum class Stage
+{
+  Play,
+  Status,
+  Login
+};
+
 class Session
 {
 public:
 
+  Stage stage;
+  
   Session(boost::asio::ip::tcp::socket&& socket);
   Session(Session&& s);
 

@@ -2,6 +2,7 @@
 #define REDI_PACKET
 
 # include <string>
+#include <cstdint>
 # include "../binarydata.hpp"
 
 namespace redi

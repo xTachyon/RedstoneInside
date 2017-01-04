@@ -1,4 +1,5 @@
 #include <boost/endian/conversion.hpp>
+#include <cstdint>
 #include "packet.hpp"
 #include "../logger.hpp"
 

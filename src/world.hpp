@@ -30,8 +30,8 @@ private:
   std::string mWorldName;
   std::string mDirectory;
   WorldGenerator mGenerator;
-  std::map<Vector2, Region> mRegions;
-  std::map<Vector2, Chunk> mChunks;
+  std::map<Vector2i, Region> mRegions;
+  std::map<Vector2i, Chunk> mChunks;
 };
   
 } // namespace redi

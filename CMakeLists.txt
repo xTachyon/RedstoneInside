@@ -71,7 +71,13 @@ set(SOURCE_FILES
         src/events/observer.hpp
         src/events/vanillaobserver.cxx
         src/events/vanillaobserver.hpp
-        src/protocol/protocol.hpp)
+        src/protocol/protocol.hpp
+        src/protocol/protocol1_11.cxx
+        src/protocol/protocol1_11.hpp
+        src/protocol/packetreader.cxx
+        src/protocol/packetreader.hpp
+        src/events/packetwriter.cxx
+        src/events/packetwriter.hpp)
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
     message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
