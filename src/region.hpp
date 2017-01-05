@@ -6,7 +6,7 @@
 #include <vector>
 #include "sizeliteraloperators.hpp"
 #include "position.hpp"
-#include "binarydata.hpp"
+#include "bytebuffer.hpp"
 
 namespace redi
 {
@@ -37,8 +37,8 @@ public:
   void close();
   void flush();
   void open(const std::string& filepath);
-  BinaryData readChunk(const Vector2i& ch);
-  void writeChunk(const Vector2i& ch, const BinaryData& data, bool updateDate = true);
+  ByteBuffer readChunk(const Vector2i& ch);
+  void writeChunk(const Vector2i& ch, const ByteBuffer& data, bool updateDate = true);
 
   static void createNewRegion(const std::string& filepath);
   static std::int32_t getChunkNumberInRegion(const Vector2i& other);

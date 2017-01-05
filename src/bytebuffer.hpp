@@ -8,7 +8,7 @@
 namespace redi
 {
 
-class BinaryData : public std::vector<std::uint8_t>
+class ByteBuffer : public std::vector<std::uint8_t>
 {
 public:
 
@@ -18,19 +18,19 @@ public:
   using base::operator=;
   using base::operator[];
 
-  BinaryData() = default;
+  ByteBuffer() = default;
 
-  BinaryData(const std::uint8_t* ptr, base::size_type size)
+  ByteBuffer(const std::uint8_t* ptr, base::size_type size)
   {
     append(ptr, size);
   }
   
-  BinaryData(const char* ptr)
+  ByteBuffer(const char* ptr)
   {
     append(ptr, std::strlen(ptr));
   }
 
-  BinaryData(const char* ptr, base::size_type size)
+  ByteBuffer(const char* ptr, base::size_type size)
   {
     append(ptr, size);
   }

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <boost/endian/conversion.hpp>
-#include "../binarydata.hpp"
+#include "../bytebuffer.hpp"
 
 namespace redi
 {
@@ -12,7 +12,7 @@ class PacketWriter
 {
 public:
   
-  BinaryData data;
+  ByteBuffer data;
   
   PacketWriter(std::int32_t packetid);
   

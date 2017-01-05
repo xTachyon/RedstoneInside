@@ -2,7 +2,7 @@
 #define REDI_NBT_BYTESWRITER
 
 
-#include "../binarydata.hpp"
+#include "../bytebuffer.hpp"
 #include "roottag.hpp"
 
 namespace redi
@@ -14,15 +14,15 @@ class NBTSerializer
 {
 public:
   
-  BinaryData data;
+  ByteBuffer data;
   
   NBTSerializer(const RootTag& root);
   
-  operator BinaryData&() { return data; }
-  operator const BinaryData&() const { return data; }
+  operator ByteBuffer&() { return data; }
+  operator const ByteBuffer&() const { return data; }
   
-  BinaryData& get() { return data; }
-  const BinaryData& get() const { return data; }
+  ByteBuffer& get() { return data; }
+  const ByteBuffer& get() const { return data; }
   
 private:
   

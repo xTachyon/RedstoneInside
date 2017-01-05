@@ -1,7 +1,7 @@
 #ifndef REDI_COMPRESSOR_HPP
 # define REDI_COMPRESSOR_HPP
 
-#include "binarydata.hpp"
+#include "bytebuffer.hpp"
 
 namespace redi
 {
@@ -22,11 +22,11 @@ enum class CompressionLevel
   BestCompression = 9
 };
 
-BinaryData compressZlib(const BinaryData& data, CompressionLevel level = CompressionLevel::BestCompression);
-BinaryData decompressZlib(const BinaryData& data);
+ByteBuffer compressZlib(const ByteBuffer& data, CompressionLevel level = CompressionLevel::BestCompression);
+ByteBuffer decompressZlib(const ByteBuffer& data);
 
-BinaryData compressGzip(const BinaryData& data, CompressionLevel level = CompressionLevel::BestCompression);
-BinaryData decompressGzip(const BinaryData& data);
+ByteBuffer compressGzip(const ByteBuffer& data, CompressionLevel level = CompressionLevel::BestCompression);
+ByteBuffer decompressGzip(const ByteBuffer& data);
 
 } // namespace compressor
 } // namespace redi

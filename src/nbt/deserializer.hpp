@@ -2,7 +2,7 @@
 #define REDI_NBT_SERIALIZER
 
 #include "roottag.hpp"
-#include "../binarydata.hpp"
+#include "../bytebuffer.hpp"
 
 namespace redi
 {
@@ -15,7 +15,7 @@ public:
 
   RootTag root;
 
-  NBTDeserializer(const BinaryData& data);
+  NBTDeserializer(const ByteBuffer& data);
 
   operator RootTag&() { return root; }
   operator RootTag&&() { return std::move(root); } // hmm ?
@@ -26,7 +26,7 @@ public:
 
 private:
 
-  const BinaryData& mData;
+  const ByteBuffer& mData;
   std::size_t mOffset;
 
   void need(std::size_t bytes);

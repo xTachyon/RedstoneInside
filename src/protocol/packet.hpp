@@ -3,7 +3,7 @@
 
 # include <string>
 #include <cstdint>
-# include "../binarydata.hpp"
+# include "../bytebuffer.hpp"
 
 namespace redi
 {
@@ -30,7 +30,7 @@ class Packet
 {
   public:
   
-  BinaryData data;
+  ByteBuffer data;
   std::size_t readIndex;
   std::size_t startsAt;
   
@@ -102,7 +102,7 @@ class Packet
   
   static constexpr std::int32_t fiveBytesInt = 1 << 31;
   
-  BinaryData writeVarIntInternal(std::int64_t data);
+  ByteBuffer writeVarIntInternal(std::int64_t data);
   
   std::int64_t readVarIntInternal();
   

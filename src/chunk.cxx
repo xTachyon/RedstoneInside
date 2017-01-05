@@ -8,7 +8,7 @@ namespace redi
 
 Chunk::Chunk() : mBlocks(boost::extents[16][256][16]) {}
 
-Chunk& Chunk::operator=(const BinaryData& data)
+Chunk& Chunk::operator=(const ByteBuffer& data)
 {
   deserializeChunk(nbt::NBTDeserializer(data).get());
   return *this;

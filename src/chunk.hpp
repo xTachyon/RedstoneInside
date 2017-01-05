@@ -5,7 +5,7 @@
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
 #include "block.hpp"
-#include "binarydata.hpp"
+#include "bytebuffer.hpp"
 #include "nbt/nbt.hpp"
 #include "position.hpp"
 
@@ -22,10 +22,10 @@ public:
   static constexpr std::int8_t BlocksPerSection = 16;
   
   Chunk();
-  Chunk(const BinaryData& data) : Chunk() { *this = data; }
+  Chunk(const ByteBuffer& data) : Chunk() { *this = data; }
   Chunk(const nbt::RootTag& root) : Chunk() { *this = root; }
   
-  Chunk& operator=(const BinaryData& data);
+  Chunk& operator=(const ByteBuffer& data);
   Chunk& operator=(const nbt::RootTag& root);
   
   Block& operator()(BlockPosition pos) { return mBlocks[pos.x][pos.y][pos.z]; };

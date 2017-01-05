@@ -12,8 +12,8 @@ public:
 
   Protocol1_11(Player& player) : Protocol(player) {}
   
-  void readPacket(const BinaryData& buffer);
-  void readHandshake(const BinaryData& buffer, std::size_t& offset);
+  void readPacket(const ByteBuffer& buffer);
+  void readHandshake(const ByteBuffer& buffer, std::size_t& offset);
 };
   
 } // namespace redi

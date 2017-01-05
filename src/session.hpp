@@ -34,7 +34,7 @@ private:
   boost::asio::ip::tcp::socket mSocket;
   PacketQueue mPacketsToBeSend;
   PacketPtr mSendingPacket;
-  BinaryData mReceivingPacket;
+  ByteBuffer mReceivingPacket;
   
   void handleRead(const boost::system::error_code& error, std::size_t bytes);
   void readNext();

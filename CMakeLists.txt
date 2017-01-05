@@ -28,7 +28,7 @@ set(SOURCE_FILES
         src/protocol/packet.hpp
         src/util/util.cxx
         src/util/util.hpp
-        src/binarydata.hpp
+        src/bytebuffer.hpp
         src/block.hpp
         src/compressor.cxx
         src/compressor.hpp
@@ -77,7 +77,12 @@ set(SOURCE_FILES
         src/protocol/packetreader.cxx
         src/protocol/packetreader.hpp
         src/events/packetwriter.cxx
-        src/events/packetwriter.hpp)
+        src/events/packetwriter.hpp
+        src/util/base64.hpp
+        src/util/base64.cxx)
+
+add_executable(redi ${SOURCE_FILES})
+
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
     message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
@@ -90,8 +95,16 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams system thread)
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
-    add_executable(redi ${SOURCE_FILES})
     target_link_libraries(redi ${Boost_LIBRARIES})
+endif()
+
+find_package(OpenSSL)
+if(OPENSSL_FOUND)
+    message(STATUS "OpenSSL version: ${OPENSSL_VERSION}")
+    include_directories(${OPENSSL_INCLUDE_DIRS})
+    target_link_libraries(redi ${OPENSSL_LIBRARIES})
+else()
+    message(FATAL_ERROR "Openssl not found")
 endif()
 
 find_package(ZLIB REQUIRED)

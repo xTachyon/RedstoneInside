@@ -76,13 +76,13 @@ void Packet::writeBigDouble(double value)
 
 void Packet::writeVarInt(std::int32_t value)
 {
-  BinaryData res(writeVarIntInternal(value));
+  ByteBuffer res(writeVarIntInternal(value));
   this->data.append(res.data(), res.size());
 }
 
 void Packet::writeVarLong(std::int64_t value)
 {
-  BinaryData res(writeVarIntInternal(value));
+  ByteBuffer res(writeVarIntInternal(value));
   this->data.append(res.data(), res.size());
 }
 
@@ -177,13 +177,13 @@ std::string Packet::readString()
 
 void Packet::finish()
 {
-  BinaryData res(writeVarIntInternal(data.size() - 5));
+  ByteBuffer res(writeVarIntInternal(data.size() - 5));
   for (std::size_t i = 0, j = 5 - res.size(); i < res.size(); ++i, ++j)
     data[j] = res[i];
   startsAt = readIndex = 5 - res.size();
 }
 
-BinaryData Packet::writeVarIntInternal(std::int64_t value)
+ByteBuffer Packet::writeVarIntInternal(std::int64_t value)
 {
   std::uint8_t buffer[10];
   std::size_t i = 0;
@@ -195,7 +195,7 @@ BinaryData Packet::writeVarIntInternal(std::int64_t value)
   }
   buffer[i++] = static_cast<std::uint8_t>(value);
 
-  return BinaryData(buffer, i);
+  return ByteBuffer(buffer, i);
 }
 
 std::int64_t Packet::readVarIntInternal()

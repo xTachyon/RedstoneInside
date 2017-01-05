@@ -18,7 +18,7 @@ namespace redi
 namespace nbt
 {
 
-NBTDeserializer::NBTDeserializer(const BinaryData& data)
+NBTDeserializer::NBTDeserializer(const ByteBuffer& data)
     : mData(data), mOffset(1)
 {
   readRoot();

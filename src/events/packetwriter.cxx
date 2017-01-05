@@ -95,7 +95,7 @@ void PacketWriter::writeVarLong(std::int64_t v)
 
 void PacketWriter::finish(bool)
 {
-  BinaryData d(std::move(data));
+  ByteBuffer d(std::move(data));
   
   writeVarInt(d.size());
   data.append(d.data(), d.size());

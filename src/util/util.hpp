@@ -5,6 +5,7 @@
 #include <typeinfo>
 #include <vector>
 #include <boost/asio.hpp>
+#include "base64.hpp"
 
 namespace redi
 {

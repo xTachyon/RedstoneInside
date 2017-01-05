@@ -1,7 +1,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/endian/conversion.hpp>
 #include "region.hpp"
-#include "binarydata.hpp"
+#include "bytebuffer.hpp"
 #include "logger.hpp"
 #include "compressor.hpp"
 #include "util/util.hpp"
@@ -37,9 +37,9 @@ void Region::open(const std::string& filepath)
   hasRegion = true;
 }
 
-BinaryData Region::readChunk(const Vector2i& ch)
+ByteBuffer Region::readChunk(const Vector2i& ch)
 {
-  BinaryData result(ChunkHeaderSize, '\0');
+  ByteBuffer result(ChunkHeaderSize, '\0');
   std::int32_t chunknumber = getChunkNumberInRegion(ch);
   ChunkInfo& th = mChunks[chunknumber];
 
@@ -74,12 +74,12 @@ BinaryData Region::readChunk(const Vector2i& ch)
   return result;
 }
 
-void Region::writeChunk(const Vector2i& ch, const BinaryData& data, bool updateDate)
+void Region::writeChunk(const Vector2i& ch, const ByteBuffer& data, bool updateDate)
 {
-  BinaryData result(ChunkHeaderSize, '\0');
+  ByteBuffer result(ChunkHeaderSize, '\0');
   std::int32_t chunknumber = getChunkNumberInRegion(ch);
   ChunkInfo& th = mChunks[chunknumber];
-  BinaryData dataToBeWritten(compressor::compressZlib(data));
+  ByteBuffer dataToBeWritten(compressor::compressZlib(data));
   std::size_t newSectorsCount =
     ((dataToBeWritten.size() + 5) % SectorSize == 0)
     ? (dataToBeWritten.size() + 5) / SectorSize
@@ -181,7 +181,7 @@ std::int32_t Region::getChunkNumberInRegion(const Vector2i& other)
 
 void Region::readHeader()
 {
-  BinaryData buffer(HeaderSize, static_cast<std::uint8_t>(0));
+  ByteBuffer buffer(HeaderSize, static_cast<std::uint8_t>(0));
 
   mFile.seekg(std::ios::beg);
   mFile.read(reinterpret_cast<char*>(&buffer[0]), HeaderSize);
@@ -212,7 +212,7 @@ void Region::readHeader()
 
 void Region::saveHeader()
 {
-  BinaryData buf(HeaderSize, static_cast<std::uint8_t>(0));
+  ByteBuffer buf(HeaderSize, static_cast<std::uint8_t>(0));
   std::uint8_t* buffer = &buf[0];
 
   for (std::size_t i = 0; i < ChunksPerRegion; ++i)
