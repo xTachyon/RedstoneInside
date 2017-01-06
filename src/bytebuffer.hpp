@@ -45,7 +45,7 @@ public:
     append(reinterpret_cast<const std::uint8_t*>(ptr), size);
   }
 
-  const char* dataAsConstChar() const
+  const char* as_const_char() const
   {
     return reinterpret_cast<const char*>(data());
   }
