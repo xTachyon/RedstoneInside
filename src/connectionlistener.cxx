@@ -1,15 +1,18 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include "connectionlistener.hpp"
+#include "logger.hpp"
+#include "server.hpp"
 
 namespace asio = boost::asio;
 
 namespace redi
 {
 
-ConnectionListener::ConnectionListener(asio::io_service& io, std::uint16_t port)
+ConnectionListener::ConnectionListener(asio::io_service& io, std::uint16_t port, Server* ptr)
       : mIoService(io), mSocket(mIoService),
-        mAcceptor(mIoService, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+        mAcceptor(mIoService, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
+        mServer(ptr)
 {
   mThread = std::thread(&ConnectionListener::serverThread, this);
 }
@@ -20,29 +23,30 @@ ConnectionListener::~ConnectionListener()
   mThread.join();
 }
 
-void ConnectionListener::listen(asio::ip::tcp::socket& socket, boost::asio::ip::tcp::acceptor& acceptor)
+void ConnectionListener::listen()
 {
-  acceptor.async_accept(socket,
-                        boost::bind(ConnectionListener::handleAccept,
-                                    asio::placeholders::error,
-                                    std::ref(socket),
-                                    std::ref(acceptor)));
+  mAcceptor.async_accept(mSocket,
+                        boost::bind(&ConnectionListener::handleAccept, this,
+                                    asio::placeholders::error));
 }
 
-void ConnectionListener::handleAccept(const boost::system::error_code& error, asio::ip::tcp::socket& socket,
-                                      asio::ip::tcp::acceptor& acceptor)
+void ConnectionListener::handleAccept(const boost::system::error_code& error)
 {
-  if (!error)
+  if (error)
   {
-    socket.close();
+    Logger::error(error.message());
+  }
+  else
+  {
+    mServer->addConnectedSession(std::move(mSocket));
   }
   
-  ConnectionListener::listen(socket, acceptor);
+  listen();
 }
 
 void ConnectionListener::serverThread()
 {
-  listen(mSocket, mAcceptor);
+  listen();
   mIoService.run();
 }
   

@@ -27,10 +27,6 @@ std::uint8_t PacketReader::readUByte()
 
 std::int16_t PacketReader::readShort()
 {
-//  need(sizeof(std::int16_t));
-//  std::int16_t x;
-//  std::copy(std::addressof(data[offset]), std::addressof(data[offset + sizeof(std::int16_t)]), reinterpret_cast<std::uint8_t*>(std::addressof(x)));
-//  return endian::big_to_native(x);
   return readBNumber<std::int16_t>();
 }
 

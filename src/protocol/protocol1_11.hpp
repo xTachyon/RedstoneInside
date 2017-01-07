@@ -10,12 +10,21 @@ namespace redi
 class Protocol1_11 : public Protocol
 {
 public:
-
-  Protocol1_11(Player& player) : Protocol(player) {}
   
-  void readPacket(const ByteBuffer& buffer);
-  void readHandshake(const ByteBuffer& buffer, std::size_t& offset);
+  Protocol1_11(Session* ptr) : Protocol(ptr) {}
+  
+  virtual ~Protocol1_11();
+  
+  virtual void handlePacket(ByteBuffer& buffer) override;
+  virtual void handleHandshake(PacketReader& reader) override;
+  virtual void handleStatusRequest(PacketReader& reader) override;
+  virtual void handleStatusPing(PacketReader&) override;
+  
+  virtual void sendStatusPong(std::int64_t number) override;
+  
 };
+
+inline Protocol1_11::~Protocol1_11() {}
   
 } // namespace redi
 

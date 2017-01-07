@@ -16,6 +16,8 @@ public:
   
   PacketWriter(std::int32_t packetid);
   
+  operator ByteBuffer&&() { return std::move(data); }
+  
   void writeBool(bool v);
   void writeByte(std::int8_t v);
   void writeUByte(std::uint8_t v);

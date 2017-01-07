@@ -4,41 +4,60 @@
 #include <boost/asio.hpp>
 #include "threadsafequeue.hpp"
 #include "sizeliteraloperators.hpp"
+#include "bytebuffer.hpp"
+#include "protocol/protocol.hpp"
 
 namespace redi
 {
 
-enum class Stage
+enum class State
 {
   Play,
   Status,
   Login
 };
 
+class Server;
+
 class Session
 {
 public:
 
-  Stage stage;
+  State stage;
   
-  Session(boost::asio::ip::tcp::socket&& socket);
+  Session(boost::asio::ip::tcp::socket&& socket, Server* server);
+  Session(Session&) = delete;
   Session(Session&& s);
+  
+  void sendPacket(ByteBuffer&& pkt)
+  {
+    mSendingQueue.push(std::make_shared<ByteBuffer>(std::move(pkt)));
+    writeNext();
+  }
+  
+  boost::asio::ip::tcp::socket& getSocket() { return mSocket; }
+  
+  void kill();
 
 private:
   
-//  using PacketPtr = std::shared_ptr<protocol::Packet>;
-//  using PacketQueue = ThreadSafeQueue<PacketPtr>;
-//  static constexpr std::size_t MaximumTcpPackeSize = 64_KB;
-//
-//  boost::asio::ip::tcp::socket mSocket;
-//  PacketQueue mPacketsToBeSend;
-//  PacketPtr mSendingPacket;
-//  ByteBuffer mReceivingPacket;
-//
-//  void handleRead(const boost::system::error_code& error, std::size_t bytes);
-//  void readNext();
-//  void writeNext();
-//  void handleWrite(const boost::system::error_code& error);
+  using PacketPtr = std::shared_ptr<ByteBuffer>;
+  using PacketQueue = ThreadSafeQueue<PacketPtr>;
+  using ProtocolPtr = std::unique_ptr<Protocol>;
+  
+  boost::asio::ip::tcp::socket mSocket;
+  PacketQueue mSendingQueue;
+  PacketPtr mSendingPacket;
+  ByteBuffer mReceivingPacket;
+  ProtocolPtr mProtocol;
+  std::uint8_t mReceivingPacketSize[5];
+  std::uint8_t mReceivingPacketCountSize;
+  Server* mServer;
+  
+  void handleRead(const boost::system::error_code& error, bool header = true);
+  void readNext();
+  void handleWrite(const boost::system::error_code& error);
+  void writeNext();
 };
 
 } // namespace redi

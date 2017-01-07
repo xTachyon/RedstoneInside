@@ -2,6 +2,7 @@
 #define REDI_PACKETREADER_HPP
 
 #include <string>
+#include <boost/endian/conversion.hpp>
 #include "../bytebuffer.hpp"
 
 namespace redi

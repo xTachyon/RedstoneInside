@@ -7,21 +7,17 @@
 namespace redi
 {
 
+class Server;
+
 class ConnectionListener
 {
 public:
   
-  ConnectionListener(boost::asio::io_service& io, std::uint16_t port);
+  ConnectionListener(boost::asio::io_service& io, std::uint16_t port, Server* ptr);
   ConnectionListener(const ConnectionListener&) = delete;
   ~ConnectionListener();
   
   ConnectionListener& operator=(const ConnectionListener&) = delete;
-  
-  // TODO: do this with delegates
-  
-  static void listen(boost::asio::ip::tcp::socket& socket, boost::asio::ip::tcp::acceptor& acceptor);
-  static void handleAccept(const boost::system::error_code& error, boost::asio::ip::tcp::socket& socket,
-                           boost::asio::ip::tcp::acceptor& acceptor);
   
 private:
   
@@ -29,8 +25,11 @@ private:
   boost::asio::ip::tcp::socket mSocket;
   boost::asio::ip::tcp::acceptor mAcceptor;
   std::thread mThread;
+  Server* mServer;
   
   void serverThread();
+  void listen();
+  void handleAccept(const boost::system::error_code& error);
 };
   
 } // namespace redi
