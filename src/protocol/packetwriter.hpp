@@ -22,7 +22,7 @@ public:
   void writeShort(std::int16_t v);
   void writeUShort(std::uint16_t v);
   void writeInt(std::int32_t v);
-  void writeLong(std::int32_t v);
+  void writeLong(std::int64_t v);
   void writeFloat(float v);
   void writeDouble(double v);
   void writeString(const std::string& v);

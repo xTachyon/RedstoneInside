@@ -24,8 +24,6 @@ set(SOURCE_FILES
         src/nbt/tag.hpp
         src/nbt/type.cxx
         src/nbt/type.hpp
-        src/protocol/packet.cxx
-        src/protocol/packet.hpp
         src/util/util.cxx
         src/util/util.hpp
         src/bytebuffer.hpp
@@ -76,8 +74,8 @@ set(SOURCE_FILES
         src/protocol/protocol1_11.hpp
         src/protocol/packetreader.cxx
         src/protocol/packetreader.hpp
-        src/events/packetwriter.cxx
-        src/events/packetwriter.hpp
+        src/protocol/packetwriter.cxx
+        src/protocol/packetwriter.hpp
         src/util/base64.hpp
         src/util/base64.cxx)
 

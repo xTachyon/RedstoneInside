@@ -2,6 +2,7 @@
 #define REDI_PROTOCOL111_HPP
 
 #include "protocol.hpp"
+#include "../bytebuffer.hpp"
 
 namespace redi
 {

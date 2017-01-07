@@ -38,7 +38,7 @@ void PacketWriter::writeInt(std::int32_t v)
   writeBNumber(v);
 }
 
-void PacketWriter::writeLong(std::int32_t v)
+void PacketWriter::writeLong(std::int64_t v)
 {
   writeBNumber(v);
 }

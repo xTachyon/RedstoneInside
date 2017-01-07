@@ -1,6 +1,6 @@
 #include <cstdint>
-#include "packet.hpp"
 #include "protocol1_11.hpp"
+#include "../bytebuffer.hpp"
 
 namespace redi
 {
