@@ -31,5 +31,7 @@ if [ ! -d "libs/openssl-1.0.2g" ]; then
   cd ../..
 fi
 
-cmake -DBOOST_INCLUDEDIR=libs/boost/include -DBOOST_LIBRARYDIR=libs/boost/lib -DJSON_REPO_DIR=libs/json -DOPENSSL_ROOT_DIR=libs/openssl-1.0.2g
+mkdir build
+cd build
+cmake .. -DBOOST_INCLUDEDIR=libs/boost/include -DBOOST_LIBRARYDIR=libs/boost/lib -DJSON_REPO_DIR=libs/json
 make

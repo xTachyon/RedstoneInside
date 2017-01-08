@@ -4,8 +4,6 @@ project(redi)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
-
 set(SOURCE_FILES
         src/nbt/compiletimemagic.hpp
         src/nbt/compound.cxx
@@ -24,7 +22,6 @@ set(SOURCE_FILES
         src/nbt/tag.hpp
         src/nbt/type.cxx
         src/nbt/type.hpp
-        src/util/util.cxx
         src/util/util.hpp
         src/bytebuffer.hpp
         src/block.hpp
@@ -77,7 +74,7 @@ set(SOURCE_FILES
         src/protocol/packetwriter.cxx
         src/protocol/packetwriter.hpp
         src/util/base64.hpp
-        src/util/base64.cxx)
+        src/util/time.hpp src/util/time.cxx src/util/string.hpp)
 
 add_executable(redi ${SOURCE_FILES})
 
@@ -96,14 +93,14 @@ if(Boost_FOUND)
     target_link_libraries(redi ${Boost_LIBRARIES})
 endif()
 
-find_package(OpenSSL)
-if(OPENSSL_FOUND)
-    message(STATUS "OpenSSL version: ${OPENSSL_VERSION}")
-    include_directories(${OPENSSL_INCLUDE_DIRS})
-    target_link_libraries(redi ${OPENSSL_LIBRARIES})
-else()
-    message(FATAL_ERROR "Openssl not found")
-endif()
+#find_package(OpenSSL)
+#if(OPENSSL_FOUND)
+#    message(STATUS "OpenSSL version: ${OPENSSL_VERSION}")
+#    include_directories(${OPENSSL_INCLUDE_DIRS})
+#    target_link_libraries(redi ${OPENSSL_LIBRARIES})
+#else()
+#    message(FATAL_ERROR "Openssl not found")
+#endif()
 
 find_package(ZLIB REQUIRED)
 if(ZLIB_FOUND)

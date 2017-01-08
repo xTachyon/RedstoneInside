@@ -3,6 +3,7 @@
 #include <boost/asio.hpp>
 #include "connectionlistener.hpp"
 #include "server.hpp"
+#include "util/util.hpp"
 
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;
@@ -10,11 +11,8 @@ namespace asio = boost::asio;
 int main(int, char**)
 {
   using namespace redi;
-
-  asio::io_service ioservice;
   
-  std::shared_ptr<int> p(new int(5));
-  p = {};
+  asio::io_service ioservice;
   
   Server server(ioservice);
   server.run();
