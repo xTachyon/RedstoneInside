@@ -30,49 +30,49 @@ void NBTDeserializer::need(std::size_t bytes)
     throw RangeErrorException(bytes, mData.size());
 }
 
-template <typename T>
-T NBTDeserializer::readNumeric()
-{
-  need(sizeof(T));
-  T result;
+//template <typename T>
+//T NBTDeserializer::readNumber()
+//{
+//  need(sizeof(T));
+//  T result;
+//
+//  std::memcpy(&result, mData.data() + mOffset, sizeof(T));
+//  mOffset += sizeof(T);
+//
+//  return endian::big_to_native(result);
+//}
 
-  std::memcpy(&result, mData.data() + mOffset, sizeof(T));
-  mOffset += sizeof(T);
-
-  return endian::big_to_native(result);
-}
-
-template <>
-float NBTDeserializer::readNumeric<float>()
-{
-  // is this a good way ?
-  std::int32_t r = readNumeric<std::int32_t>();
-  return *reinterpret_cast<float*>(&r);
-}
-
-template <>
-double NBTDeserializer::readNumeric<double>()
-{
-  // is this a good way ?
-  std::int64_t r = readNumeric<std::int64_t>();
-  return *reinterpret_cast<double*>(&r);
-}
+//template <>
+//float NBTDeserializer::readNumber<float>()
+//{
+//  // is this a good way ?
+//  std::int32_t r = readNumber<std::int32_t>();
+//  return *reinterpret_cast<float*>(&r);
+//}
+//
+//template <>
+//double NBTDeserializer::readNumber<double>()
+//{
+//  // is this a good way ?
+//  std::int64_t r = readNumber<std::int64_t>();
+//  return *reinterpret_cast<double*>(&r);
+//}
 
 
-template <typename T>
-std::vector<T> NBTDeserializer::readVector()
-{
-  std::int32_t size = readNumeric<std::int32_t>();
-  need(size * sizeof(T));
-  std::vector<T> result;
-
-  for (std::int32_t i = 0; i < size; ++i)
-    result.push_back(readNumeric<T>());
-  // Compiler, optimize this for ByteArray
-  // Thanks
-
-  return result;
-}
+//template <typename T>
+//std::vector<T> NBTDeserializer::readVector()
+//{
+//  std::int32_t size = readNumber<std::int32_t>();
+//  need(size * sizeof(T));
+//  std::vector<T> result;
+//
+//  for (std::int32_t i = 0; i < size; ++i)
+//    result.push_back(readNumber<T>());
+//  // Compiler, optimize this for ByteArray
+//  // Thanks
+//
+//  return result;
+//}
 
 void NBTDeserializer::readRoot()
 {
@@ -83,7 +83,7 @@ void NBTDeserializer::readRoot()
 
 std::string NBTDeserializer::readString()
 {
-  std::int32_t size = readNumeric<std::int16_t>();
+  std::int32_t size = readNumber<std::int16_t>();
   need(size);
   std::string res(reinterpret_cast<const char*>(mData.data()) + mOffset, size);
   mOffset += size;
@@ -107,27 +107,27 @@ void NBTDeserializer::readCompound(TagCompound& obj)
     switch (static_cast<NBTType>(type))
     {
       case NBTType::Byte:
-        obj[name] = readNumeric<std::int8_t>();
+        obj[name] = readNumber<std::int8_t>();
         break;
 
       case NBTType::Short:
-        obj[name] = readNumeric<std::int16_t>();
+        obj[name] = readNumber<std::int16_t>();
         break;
 
       case NBTType::Int:
-        obj[name] = readNumeric<std::int32_t>();
+        obj[name] = readNumber<std::int32_t>();
         break;
 
       case NBTType::Long:
-        obj[name] = readNumeric<std::int64_t>();
+        obj[name] = readNumber<std::int64_t>();
         break;
 
       case NBTType::Float:
-        obj[name] = readNumeric<float>();
+        obj[name] = readNumber<float>();
         break;
 
       case NBTType::Double:
-        obj[name] = readNumeric<double>();
+        obj[name] = readNumber<double>();
         break;
 
       case NBTType::ByteArray:
@@ -164,7 +164,7 @@ void NBTDeserializer::readList(TagList& obj)
 {
   std::uint8_t type = mData[mOffset++];
   if (type > 11) throw InvalidTagTypeException(type);
-  std::int32_t size = readNumeric<std::int32_t>();
+  std::int32_t size = readNumber<std::int32_t>();
 
   switch (static_cast<NBTType>(type))
   {
@@ -173,32 +173,32 @@ void NBTDeserializer::readList(TagList& obj)
 
     case NBTType::Byte:
       for (std::int32_t i = 0; i < size; ++i)
-        obj.push(readNumeric<std::int8_t>());
+        obj.push(readNumber<std::int8_t>());
       break;
 
     case NBTType::Short:
       for (std::int32_t i = 0; i < size; ++i)
-        obj.push(readNumeric<std::int16_t>());
+        obj.push(readNumber<std::int16_t>());
       break;
 
     case NBTType::Int:
       for (std::int32_t i = 0; i < size; ++i)
-        obj.push(readNumeric<std::int32_t>());
+        obj.push(readNumber<std::int32_t>());
       break;
 
     case NBTType::Long:
       for (std::int32_t i = 0; i < size; ++i)
-        obj.push(readNumeric<std::int64_t>());
+        obj.push(readNumber<std::int64_t>());
       break;
 
     case NBTType::Float:
       for (std::int32_t i = 0; i < size; ++i)
-        obj.push(readNumeric<float>());
+        obj.push(readNumber<float>());
       break;
 
     case NBTType::Double:
       for (std::int32_t i = 0; i < size; ++i)
-        obj.push(readNumeric<double>());
+        obj.push(readNumber<double>());
       break;
 
     case NBTType::ByteArray:

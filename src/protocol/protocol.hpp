@@ -8,12 +8,13 @@ namespace redi
 {
 
 class Session;
+using SessionPtr = std::shared_ptr<Session>;
 
 class Protocol
 {
 public:
   
-  Protocol(Session* player) : mSession(player) {}
+  Protocol(SessionPtr player) : mSession(player) {}
   
   virtual void handlePacket(ByteBuffer&) {}
   virtual void handleHandshake(PacketReader&) {}
@@ -26,7 +27,7 @@ public:
   
 protected:
 
-  Session* mSession;
+  SessionPtr mSession;
 };
 
 inline Protocol::~Protocol() {}

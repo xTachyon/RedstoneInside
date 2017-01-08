@@ -18,27 +18,32 @@ public:
   void addConnectedSession(boost::asio::ip::tcp::socket&& socket)
   {
     std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mConnectedClients.emplace_back(std::move(socket), this);
+    mConnectedClients.emplace_back(std::make_shared<Session>(std::move(socket), this));
+    mConnectedClients.back()->setProtocol(mConnectedClients.back());
   }
   void killConnectedSession(Session* th)
   {
     std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mConnectedClients.remove_if([&](const Session& ar)
+    mConnectedClients.remove_if([&](const SessionPtr& ar)
                                 {
-                                  return std::addressof(ar) == th;
+                                  return std::addressof(*ar) == th;
                                 });
   }
   void run();
+  void addPacket(Protocol* ptr, ByteBuffer&& buffer);
+  void addPlayer(const std::string nick, const std::string uuid, SessionPtr session);
   
 private:
   
-  using SessionList = std::list<Session>;
+  using SessionList = std::list<SessionPtr>;
   using PlayerList = std::list<Player>;
   
   SessionList mConnectedClients;
   std::mutex mConnectedClientsMutex;
   ConnectionListener mListener;
   boost::asio::io_service& mIoService;
+  ThreadSafeQueue<std::pair<Protocol*, ByteBuffer>> mPacketsToBeHandled;
+  std::list<Player> mPlayers;
 
   std::int32_t mEntityCount;
 };

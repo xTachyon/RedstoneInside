@@ -12,10 +12,37 @@ namespace redi
 
 enum class State
 {
+  Handshake,
   Play,
   Status,
   Login
 };
+
+inline const char* getStateName(State s)
+{
+  const char* ptr;
+  
+  switch (s)
+  {
+  case State::Play:
+    ptr = "Play";
+    break;
+    
+  case State::Status:
+    ptr = "Status;";
+    break;
+    
+  case State::Login:
+    ptr = "Login";
+    break;
+    
+  case State::Handshake:
+    ptr = "Handshake";
+    break;
+  }
+  
+  return ptr;
+}
 
 class Server;
 
@@ -36,8 +63,10 @@ public:
   }
   
   boost::asio::ip::tcp::socket& getSocket() { return mSocket; }
+  Server& getServer() { return *mServer; }
   
   void kill();
+  void setProtocol(SessionPtr ptr);
 
 private:
   
@@ -59,6 +88,8 @@ private:
   void handleWrite(const boost::system::error_code& error);
   void writeNext();
 };
+
+using SessionPtr = std::shared_ptr<Session>;
 
 } // namespace redi
 

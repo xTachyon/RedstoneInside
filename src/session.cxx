@@ -13,13 +13,13 @@ namespace redi
 {
 
 Session::Session(boost::asio::ip::tcp::socket&& socket, Server* server)
-      : stage(State::Login), mSocket(std::move(socket)), mProtocol(new Protocol1_11(this)), mServer(server)
+      : stage(State::Handshake), mSocket(std::move(socket)), mServer(server)
 {
   readNext();
 }
 
 Session::Session(Session&& s)
-      : stage(State::Login), mSocket(std::move(s.mSocket)), mProtocol(new Protocol1_11(this))
+      : stage(State::Login), mSocket(std::move(s.mSocket))
 {
   readNext();
 }
@@ -63,7 +63,7 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
   {
     ++mReceivingPacketCountSize;
     
-    if ((mReceivingPacketSize[mReceivingPacketCountSize] & 0b10000000) != 0)
+    if ((mReceivingPacketSize[mReceivingPacketCountSize - 1] & 0b10000000) != 0)
     {
       if (mReceivingPacketCountSize > 5) static_cast<void>(header); // TODO: kill connection
       else asio::async_read(mSocket, asio::buffer(mReceivingPacketSize + mReceivingPacketCountSize, 1),
@@ -80,7 +80,7 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
   }
   else
   {
-    mProtocol->handlePacket(mReceivingPacket);
+    mServer->addPacket(mProtocol.get(), std::move(mReceivingPacket));
     readNext();
   }
 }
@@ -88,6 +88,11 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 void Session::kill()
 {
   mServer->killConnectedSession(this);
+}
+
+void Session::setProtocol(SessionPtr ptr)
+{
+  mProtocol.reset(new Protocol1_11(ptr));
 }
   
 } // namespace redi

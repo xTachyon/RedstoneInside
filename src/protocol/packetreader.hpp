@@ -34,6 +34,11 @@ public:
   std::int32_t readVarInt();
   std::int64_t readVarLong();
   
+  void consumeUShort();
+  void consumeInt();
+  void consumeString();
+  void consumeVarInt();
+  
   template <typename T>
   static T readVarIntPacket(const std::uint8_t* ptr, std::size_t& bytes)
   {

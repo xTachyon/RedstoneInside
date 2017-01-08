@@ -120,4 +120,28 @@ void PacketReader::need(std::size_t bytes)
     throw std::runtime_error(std::to_string(bytes) + " is out of index");
 }
 
+void PacketReader::consumeUShort()
+{
+  need(sizeof(std::uint16_t));
+  offset += sizeof(std::uint16_t);
+}
+
+void PacketReader::consumeInt()
+{
+  need(sizeof(std::int32_t));
+  offset += sizeof(std::int32_t);
+}
+
+void PacketReader::consumeString()
+{
+  std::size_t size = static_cast<std::size_t>(readVarInt());
+  need(size);
+  offset += size;
+}
+
+void PacketReader::consumeVarInt()
+{
+  static_cast<void>(readVarInt());
+}
+  
 } // namespace redi
