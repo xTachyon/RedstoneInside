@@ -18,14 +18,14 @@ public:
   Protocol(SessionPtr player) : mSession(player) {}
   
   virtual void handlePacket(ByteBuffer&) {}
-  virtual void handleHandshake(PacketReader&) {}
-  virtual void handleStatusRequest(PacketReader&) {}
-  virtual void handleStatusPing(PacketReader&) {}
   
   virtual void sendStatusPong(std::int64_t) {}
   virtual void sendJoinGame(const Player&) {}
   virtual void sendSetCompression() {}
   virtual void sendLoginSucces(const std::string&, const std::string&) {}
+  virtual void sendSpawnPosition() {}
+  virtual void sendPlayerAbilities() {}
+  virtual void sendPlayerPositionAndLook() {}
   
   virtual ~Protocol() = 0;
   

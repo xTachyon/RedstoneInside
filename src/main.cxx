@@ -12,7 +12,7 @@ namespace asio = boost::asio;
 int main(int, char**)
 {
   using namespace redi;
-
+  
   asio::io_service ioservice;
   
   Server server(ioservice);

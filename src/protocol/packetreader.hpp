@@ -4,6 +4,7 @@
 #include <string>
 #include <boost/endian/conversion.hpp>
 #include "../bytebuffer.hpp"
+#include "../position.hpp"
 
 namespace redi
 {
@@ -15,7 +16,7 @@ public:
   ByteBuffer data;
   std::size_t offset;
   
-  PacketReader(std::size_t offset) : offset(offset) {}
+  PacketReader(std::size_t offset = 0) : offset(offset) {}
   PacketReader(const ByteBuffer& data, std::size_t offset = 0)
         : data(data), offset(offset) {}
   PacketReader(ByteBuffer&& data, std::size_t offset = 0)
@@ -33,11 +34,15 @@ public:
   std::string readString();
   std::int32_t readVarInt();
   std::int64_t readVarLong();
+  Vector3i readPosition();
+  ByteBuffer readByteArray(std::size_t size);
   
   void consumeUShort();
   void consumeInt();
   void consumeString();
   void consumeVarInt();
+  
+  static PacketReader getFromCompressedPacket(const ByteBuffer& buffer);
   
   template <typename T>
   static T readVarIntPacket(const std::uint8_t* ptr, std::size_t& bytes)

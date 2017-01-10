@@ -13,15 +13,23 @@ namespace redi
 {
 
 Session::Session(boost::asio::ip::tcp::socket&& socket, Server* server)
-      : stage(State::Handshake), mSocket(std::move(socket)), mServer(server)
+      : state(State::Handshake), setCompressionSent(false), mSocket(std::move(socket)), mServer(server)
 {
   readNext();
 }
 
 Session::Session(Session&& s)
-      : stage(State::Login), mSocket(std::move(s.mSocket))
+      : state(State::Login), mSocket(std::move(s.mSocket))
 {
   readNext();
+}
+
+Session::~Session()
+{
+  if (mPlayer)
+  {
+    mServer->disconnectPlayer(*mPlayer);
+  }
 }
 
 void Session::writeNext()
@@ -37,7 +45,8 @@ void Session::handleWrite(const boost::system::error_code& error)
 {
   if (error)
   {
-    Logger::error(error.message());
+    kill();
+    Logger::error("Client dc'ed");
   }
   else
   {
@@ -57,7 +66,8 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 {
   if (error)
   {
-    Logger::error(error.message());
+    kill();
+    Logger::error("Client dc'ed");
   }
   else if (header)
   {
@@ -80,6 +90,13 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
   }
   else
   {
+    std::ostringstream ss;
+    ss << "Packet: ";
+    for (std::size_t i = 0; i < mReceivingPacket.size(); ++i) ss << (int)mReceivingPacket[i] << ' ';
+    ss << "\n";
+    ss.write(mReceivingPacket.as_const_char(), mReceivingPacket.size());
+    Logger::info(ss.str());
+    
     mServer->addPacket(mProtocol.get(), std::move(mReceivingPacket));
     readNext();
   }
@@ -87,12 +104,17 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 
 void Session::kill()
 {
-  mServer->killConnectedSession(this);
+  mServer->killConnectedSession(*this);
 }
 
 void Session::setProtocol(SessionPtr ptr)
 {
   mProtocol.reset(new Protocol1_11(ptr));
+}
+
+void Session::setPlayer(Player& player)
+{
+  mPlayer = std::addressof(player);
 }
   
 } // namespace redi

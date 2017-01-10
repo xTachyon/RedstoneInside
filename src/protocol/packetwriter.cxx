@@ -1,3 +1,4 @@
+#include "../compressor.hpp"
 #include "packetwriter.hpp"
 
 namespace redi
@@ -104,12 +105,32 @@ void PacketWriter::writeVarLong(std::uint64_t v)
   } while (v != 0);
 }
 
-void PacketWriter::finish(bool)
+
+void PacketWriter::writePosition(std::int64_t x, std::int64_t y, std::int64_t z)
 {
-  ByteBuffer d(std::move(data));
-  
-  writeVarInt(d.size());
-  data.append(d.data(), d.size());
+  writeLong(((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF));
 }
 
+void PacketWriter::commit(bool compressed)
+{
+  if (compressed)
+  {
+    ByteBuffer comp = compressor::compressZlib(data);
+    PacketWriter wr;
+    wr.writeVarInt(data.size());
+    
+    data.clear();
+    writeVarInt(wr.data.size() + comp.size());
+    data += wr.data;
+    data += comp;
+  }
+  else
+  {
+    ByteBuffer d(std::move(data));
+  
+    writeVarInt(d.size());
+    data.append(d.data(), d.size());
+  }
+}
+  
 } // namespace redi

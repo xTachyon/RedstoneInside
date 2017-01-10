@@ -42,10 +42,17 @@ void Server::addPlayer(const std::string nick, SessionPtr session)
   std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
   
   mPlayers.emplace_back(nick, uuid, session, getNewEntityID(), this);
+  Player& player = mPlayers.back();
+  Protocol& protocol = player.getSession().getProtocol();
   
-  mPlayers.back().getSession().getProtocol().sendSetCompression();
-  mPlayers.back().getSession().getProtocol().sendLoginSucces(nick, uuid);
-  mPlayers.back().getSession().getProtocol().sendJoinGame(mPlayers.back());
+  player.getSession().setPlayer(player);
+  
+  protocol.sendSetCompression();
+  protocol.sendLoginSucces(nick, uuid);
+  protocol.sendJoinGame(mPlayers.back());
+  protocol.sendSpawnPosition();
+  protocol.sendPlayerAbilities();
+  protocol.sendPlayerPositionAndLook();
 }
   
 } // namespace redi

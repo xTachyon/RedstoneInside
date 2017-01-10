@@ -29,6 +29,14 @@ enum class Difficulty : std::uint8_t
   Hard
 };
 
+enum PlayerAbilitiesFlag : std::int8_t
+{
+  Invulnerable = 0x01,
+  Flying = 0x02,
+  AllowFlying = 0x04,
+  CreativeMode = 0x08
+};
+
 struct ServerConfig
 {
   bool onlineMode = false;

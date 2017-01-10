@@ -1,6 +1,7 @@
 #ifndef REDI_SESSION
 #define REDI_SESSION
 
+#include <atomic>
 #include <boost/asio.hpp>
 #include "threadsafequeue.hpp"
 #include "sizeliteraloperators.hpp"
@@ -50,11 +51,13 @@ class Session
 {
 public:
 
-  State stage;
+  State state;
+  std::atomic_bool setCompressionSent;
   
   Session(boost::asio::ip::tcp::socket&& socket, Server* server);
   Session(Session&) = delete;
   Session(Session&& s);
+  ~Session();
   
   void sendPacket(ByteBuffer&& pkt)
   {
@@ -68,6 +71,7 @@ public:
   void kill();
   void setProtocol(SessionPtr ptr);
   Protocol& getProtocol() { return *mProtocol; }
+  void setPlayer(Player& player);
 
 private:
   
@@ -83,6 +87,7 @@ private:
   std::uint8_t mReceivingPacketSize[5];
   std::uint8_t mReceivingPacketCountSize;
   Server* mServer;
+  Player* mPlayer;
   
   void handleRead(const boost::system::error_code& error, bool header = true);
   void readNext();

@@ -56,6 +56,13 @@ public:
   }
 };
 
+inline ByteBuffer& operator+=(ByteBuffer& l, const ByteBuffer& r)
+{
+  l.append(r.data(), r.size());
+  
+  return l;
+}
+
 } // namespace redi
 
 #endif // REDI_BINARYDATA

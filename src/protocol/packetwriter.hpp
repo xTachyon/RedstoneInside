@@ -32,7 +32,8 @@ public:
   void writeVarInt(std::uint32_t v);
   void writeVarLong(std::int64_t v);
   void writeVarLong(std::uint64_t v);
-  void finish(bool compressed = false);
+  void writePosition(std::int64_t x, std::int64_t y, std::int64_t z);
+  void commit(bool compressed = true);
   
   template <typename T>
   void writeVarInt(T number)
@@ -44,6 +45,12 @@ public:
   void writeVarLong(T number)
   {
     writeVarLong(static_cast<std::int64_t>(number));
+  }
+  
+  template <typename T, typename K, typename L>
+  void writePosition(T x, K y, L z)
+  {
+    writePosition(static_cast<std::int64_t>(x), static_cast<std::int64_t>(y), static_cast<std::int64_t>(z));
   }
   
 private:

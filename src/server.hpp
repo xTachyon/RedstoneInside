@@ -24,13 +24,21 @@ public:
     mConnectedClients.emplace_back(std::make_shared<Session>(std::move(socket), this));
     mConnectedClients.back()->setProtocol(mConnectedClients.back());
   }
-  void killConnectedSession(Session* th)
+  void killConnectedSession(const Session& th)
   {
     std::lock_guard<std::mutex> l(mConnectedClientsMutex);
     mConnectedClients.remove_if([&](const SessionPtr& ar)
                                 {
-                                  return std::addressof(*ar) == th;
+                                  return std::addressof(*ar) == std::addressof(th);
                                 });
+  }
+  void disconnectPlayer(const Player& player)
+  {
+    killConnectedSession(player.getSession());
+    mPlayers.remove_if([&](const Player& p)
+    {
+      return std::addressof(player) == std::addressof(p);
+    });
   }
   void run();
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);

@@ -51,6 +51,7 @@ struct Vector3
 
 using Vector2i = Vector2<std::int32_t>;
 using Vector3i = Vector3<std::int32_t>;
+using Vector3d = Vector3<double>;
   
 } // namespace redi
 

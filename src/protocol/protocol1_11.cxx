@@ -15,12 +15,16 @@ namespace redi
 
 void Protocol1_11::handlePacket(ByteBuffer& buffer)
 {
-  PacketReader reader(std::move(buffer));
+  PacketReader reader;
+  
+  if (mSession->setCompressionSent) reader = PacketReader::getFromCompressedPacket(buffer);
+  else reader.data = std::move(buffer);
+  
   std::int32_t type = reader.readVarInt();
   
-  Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->stage) % getIP()).str());
+  Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->state) % getIP()).str());
   
-  switch (mSession->stage)
+  switch (mSession->state)
   {
     case State::Login:
     {
@@ -52,7 +56,8 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     {
       switch (type)
       {
-        
+      case 0x04:
+        handleClientSettings(reader);
       }
     }
     break;
@@ -81,11 +86,11 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
   switch (nextstate)
   {
     case 1:
-      mSession->stage = State::Status;
+      mSession->state = State::Status;
       break;
     
     case 2:
-      mSession->stage = State::Login;
+      mSession->state = State::Login;
       break;
     
     default:
@@ -106,7 +111,7 @@ void Protocol1_11::handleStatusRequest(PacketReader&)
   j["players"]["online"] = 0;
   
   writer.writeString(j.dump());
-  writer.finish();
+  writer.commit(false);
   
   Logger::info("Status request from " + getIP());
   
@@ -123,7 +128,7 @@ void Protocol1_11::sendStatusPong(std::int64_t number)
 {
   PacketWriter writer(0x01);
   writer.writeLong(number);
-  writer.finish();
+  writer.commit(false);
   
   Logger::info("Status pong " + std::to_string(number) + " from " + getIP());
   
@@ -154,7 +159,7 @@ void Protocol1_11::handleLoginStart(PacketReader& reader)
   Logger::info((boost::format("Received Login start packet: %1%") % nick).str());
   
   mSession->getServer().addPlayer(nick, mSession);
-  mSession->stage = State::Play;
+  mSession->state = State::Play;
 }
 
 void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& uuid)
@@ -162,7 +167,7 @@ void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& u
   PacketWriter writer(0x02);
   writer.writeString(uuid);
   writer.writeString(nick);
-  writer.finish();
+  writer.commit();
   mSession->sendPacket(writer);
   
   Logger::info((boost::format("Sending Login success packet: %1% -- %2%") % nick % uuid).str());
@@ -178,7 +183,7 @@ void Protocol1_11::sendJoinGame(const Player& player)
   writer.writeUByte(static_cast<std::uint8_t>(player.getServer().config.maxPlayers));
   writer.writeString(player.getServer().config.evelType);
   writer.writeBool(player.getServer().config.reducedDebugInfo);
-  writer.finish();
+  writer.commit();
   mSession->sendPacket(writer);
   
   Logger::info("Sent join game packet");
@@ -187,22 +192,67 @@ void Protocol1_11::sendJoinGame(const Player& player)
 void Protocol1_11::sendSetCompression()
 {
   PacketWriter writer(0x03);
-  writer.writeVarInt(60000);
-  writer.finish();
+  writer.writeVarInt(1);
+  writer.commit(false);
   
-  std::cout << "\n\n";
-  for (std::size_t i = 0; i < writer.data.size(); ++i)
-    std::cout << (int)writer.data[i] << ' ';
-  std::cout << "\n\n";
-
-
-//  PacketReader r(std::move(writer.data));
-//  auto a = r.readVarInt();
-//  auto b = r.readVarInt();
-//  auto c = r.readVarInt();
   mSession->sendPacket(writer);
+  mSession->setCompressionSent = true;
   
   Logger::info("Sent set compression");
+}
+
+void Protocol1_11::sendSpawnPosition()
+{
+  PacketWriter writer(0x43);
+  writer.writePosition(0, 0, 0);
+  writer.commit();
+  
+  mSession->sendPacket(writer);
+  
+  Logger::info("Sent spawn position");
+}
+
+void Protocol1_11::sendPlayerAbilities()
+{
+  PacketWriter writer(0x2B);
+  writer.writeByte(PlayerAbilitiesFlag::AllowFlying | PlayerAbilitiesFlag::CreativeMode | PlayerAbilitiesFlag::Flying | PlayerAbilitiesFlag::Invulnerable);
+  writer.writeFloat(1.0f);
+  writer.writeFloat(1.0f);
+  writer.commit();
+  
+  mSession->sendPacket(writer);
+  
+  Logger::info("Send Player Abilities");
+}
+
+void Protocol1_11::handleClientSettings(PacketReader& reader)
+{
+  std::string locale = reader.readString();
+  std::int8_t viewdistance = reader.readByte();
+  std::int32_t chatmode = reader.readVarInt();
+  bool chatcolors = reader.readBool();
+  std::uint8_t skinparts = reader.readUByte();
+  std::int32_t mainhand = reader.readVarInt();
+  
+  Logger::info((boost::format("Client with locale %1% and viewdistance %2% chatmode %3% chatcolors %4% skinparts %5% mainhand %6%")
+               % locale % viewdistance % chatmode % chatcolors % skinparts % mainhand).str());
+}
+
+void Protocol1_11::sendPlayerPositionAndLook()
+{
+  PacketWriter writer(0x2E);
+  writer.writeDouble(0);
+  writer.writeDouble(0);
+  writer.writeDouble(0);
+  writer.writeFloat(0);
+  writer.writeFloat(0);
+  writer.writeByte(0);
+  writer.writeVarInt(0);
+  writer.commit();
+  
+  mSession->sendPacket(writer);
+  
+  Logger::info("Send Player Position And Look");
 }
   
   

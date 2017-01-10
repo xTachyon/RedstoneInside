@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <boost/endian/conversion.hpp>
 #include "packetreader.hpp"
+#include "../compressor.hpp"
 
 namespace endian = boost::endian;
 
@@ -74,16 +75,18 @@ std::string PacketReader::readString()
 
 std::uint32_t PacketReader::readVarUInt()
 {
-  std::uint32_t Value = 0;
-  int Shift = 0;
-  unsigned char b = 0;
+  std::uint32_t result = 0;
+  int shift = 0;
+  std::uint8_t b = 0;
+  
   do
   {
     b = readUByte();
-    Value = Value | ((static_cast<std::uint32_t>(b & 0x7f)) << Shift);
-    Shift += 7;
+    result = result | ((static_cast<std::uint32_t>(b & 0x7f)) << shift);
+    shift += 7;
   } while ((b & 0x80) != 0);
-  return Value;
+  
+  return result;
 }
 
 std::int32_t PacketReader::readVarInt()
@@ -94,23 +97,48 @@ std::int32_t PacketReader::readVarInt()
 
 std::uint64_t PacketReader::readVarULong()
 {
-  std::uint64_t Value = 0;
-  int Shift = 0;
-  unsigned char b = 0;
+  std::uint64_t result = 0;
+  int shift = 0;
+  std::uint8_t b = 0;
+  
   do
   {
     b = readUByte();
-    Value = Value | ((static_cast<std::uint64_t>(b & 0x7f)) << Shift);
-    Shift += 7;
+    result = result | ((static_cast<std::uint64_t>(b & 0x7f)) << shift);
+    shift += 7;
   } while ((b & 0x80) != 0);
-  return Value;
   
+  return result;
 }
 
 std::int64_t PacketReader::readVarLong()
 {
   std::uint64_t x = readVarULong();
   return *reinterpret_cast<std::int64_t*>(std::addressof(x));
+}
+
+Vector3i PacketReader::readPosition()
+{
+  Vector3i result;
+  
+  std::int64_t raw = readLong();
+  std::uint32_t rx = static_cast<std::uint32_t>((raw >> 38) & 0x03ffffff);
+  std::uint32_t ry = static_cast<std::uint32_t>((raw >> 26) & 0x0fff);
+  std::uint32_t rz = static_cast<std::uint32_t>(raw & 0x03ffffff);
+  
+  result.x = (rx & 0x02000000) == 0 ? static_cast<std::int32_t>(rx) : -(0x04000000 - static_cast<std::int32_t>(rx));
+  result.y = (ry & 0x0800)     == 0 ? static_cast<std::int32_t>(ry) : -(0x0800     - static_cast<std::int32_t>(ry));
+  result.z = (rz & 0x02000000) == 0 ? static_cast<std::int32_t>(rz) : -(0x04000000 - static_cast<std::int32_t>(rz));
+  
+  return result;
+}
+
+ByteBuffer PacketReader::readByteArray(std::size_t size)
+{
+  need(size);
+  ByteBuffer result(data.data(), size);
+  offset += size;
+  return result;
 }
 
 void PacketReader::need(std::size_t bytes)
@@ -142,5 +170,17 @@ void PacketReader::consumeVarInt()
 {
   static_cast<void>(readVarInt());
 }
+
+PacketReader PacketReader::getFromCompressedPacket(const ByteBuffer& buf)
+{
+  PacketReader reader(buf);
+  
+  std::size_t len = static_cast<std::size_t>(reader.readVarInt());
+  ByteBuffer buffer = compressor::decompressZlib(ByteBuffer(reader.data.begin() + reader.offset, reader.data.end()));
+  if (len != buffer.size()) throw std::runtime_error("Uncompressed length is not equal with the one specified");
+  
+  return PacketReader(std::move(buffer));
+}
+
   
 } // namespace redi

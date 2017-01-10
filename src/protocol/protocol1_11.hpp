@@ -19,15 +19,19 @@ public:
   virtual ~Protocol1_11();
   
   virtual void handlePacket(ByteBuffer& buffer) override;
-  virtual void handleHandshake(PacketReader& reader) override;
-  virtual void handleStatusRequest(PacketReader& reader) override;
-  virtual void handleStatusPing(PacketReader&) override;
+  virtual void handleHandshake(PacketReader& reader);
+  virtual void handleStatusRequest(PacketReader& reader);
+  virtual void handleStatusPing(PacketReader&);
   virtual void handleLoginStart(PacketReader&);
+  virtual void handleClientSettings(PacketReader&);
   
   virtual void sendStatusPong(std::int64_t number) override;
   virtual void sendLoginSucces(const std::string& nick, const std::string& uuid) override;
   virtual void sendJoinGame(const Player& player) override;
   virtual void sendSetCompression() override;
+  virtual void sendSpawnPosition() override;
+  virtual void sendPlayerAbilities() override;
+  virtual void sendPlayerPositionAndLook() override;
   
   std::string getIP();
   static std::string getIP(boost::asio::ip::tcp::socket& socket);

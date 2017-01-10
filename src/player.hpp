@@ -22,6 +22,7 @@ public:
   const Server& getServer() const { return *mServer; }
   Gamemode getGamemode() const { return mGamemode; }
   Dimension getDimension() const { return mDimension; }
+  Vector3d getPosition() const { return mPosition; }
   
 private:
   
@@ -31,6 +32,7 @@ private:
   Server* mServer;
   Gamemode mGamemode;
   Dimension mDimension;
+  Vector3d mPosition;
 };
 
 } // namespace redi
