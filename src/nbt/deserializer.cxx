@@ -30,50 +30,6 @@ void NBTDeserializer::need(std::size_t bytes)
     throw RangeErrorException(bytes, mData.size());
 }
 
-//template <typename T>
-//T NBTDeserializer::readNumber()
-//{
-//  need(sizeof(T));
-//  T result;
-//
-//  std::memcpy(&result, mData.data() + mOffset, sizeof(T));
-//  mOffset += sizeof(T);
-//
-//  return endian::big_to_native(result);
-//}
-
-//template <>
-//float NBTDeserializer::readNumber<float>()
-//{
-//  // is this a good way ?
-//  std::int32_t r = readNumber<std::int32_t>();
-//  return *reinterpret_cast<float*>(&r);
-//}
-//
-//template <>
-//double NBTDeserializer::readNumber<double>()
-//{
-//  // is this a good way ?
-//  std::int64_t r = readNumber<std::int64_t>();
-//  return *reinterpret_cast<double*>(&r);
-//}
-
-
-//template <typename T>
-//std::vector<T> NBTDeserializer::readVector()
-//{
-//  std::int32_t size = readNumber<std::int32_t>();
-//  need(size * sizeof(T));
-//  std::vector<T> result;
-//
-//  for (std::int32_t i = 0; i < size; ++i)
-//    result.push_back(readNumber<T>());
-//  // Compiler, optimize this for ByteArray
-//  // Thanks
-//
-//  return result;
-//}
-
 void NBTDeserializer::readRoot()
 {
   if (static_cast<NBTType>(mData[0]) != NBTType::Compound) throw InvalidRootTagException();

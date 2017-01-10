@@ -8,6 +8,8 @@
 namespace redi
 {
 
+class Player;
+
 class Protocol1_11 : public Protocol
 {
 public:
@@ -23,8 +25,9 @@ public:
   virtual void handleLoginStart(PacketReader&);
   
   virtual void sendStatusPong(std::int64_t number) override;
-  virtual void sendLoginSucces(const std::string& nick, const std::string& uuid);
-  
+  virtual void sendLoginSucces(const std::string& nick, const std::string& uuid) override;
+  virtual void sendJoinGame(const Player& player) override;
+  virtual void sendSetCompression() override;
   
   std::string getIP();
   static std::string getIP(boost::asio::ip::tcp::socket& socket);

@@ -8,6 +8,7 @@ namespace redi
 {
 
 class Session;
+class Player;
 using SessionPtr = std::shared_ptr<Session>;
 
 class Protocol
@@ -22,6 +23,9 @@ public:
   virtual void handleStatusPing(PacketReader&) {}
   
   virtual void sendStatusPong(std::int64_t) {}
+  virtual void sendJoinGame(const Player&) {}
+  virtual void sendSetCompression() {}
+  virtual void sendLoginSucces(const std::string&, const std::string&) {}
   
   virtual ~Protocol() = 0;
   

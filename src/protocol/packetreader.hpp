@@ -67,6 +67,9 @@ private:
   {
     return boost::endian::big_to_native(readNumber<T>());
   }
+  
+  std::uint32_t readVarUInt();
+  std::uint64_t readVarULong();
 };
 
   

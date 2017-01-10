@@ -1,8 +1,6 @@
 #include <cstdint>
 #include <boost/format.hpp>
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
+#include <json.hpp>
 #include "protocol1_11.hpp"
 #include "../bytebuffer.hpp"
 #include "../session.hpp"
@@ -10,6 +8,7 @@
 #include "../logger.hpp"
 #include "packetwriter.hpp"
 #include "../server.hpp"
+#include "../player.hpp"
 
 namespace redi
 {
@@ -97,7 +96,16 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
 void Protocol1_11::handleStatusRequest(PacketReader&)
 {
   PacketWriter writer(0x00);
-  writer.writeString("{\"description\":{\"text\":\"REDI\"},\"players\":{\"max\":0,\"online\":0},\"version\":{\"name\":\"REDI\",\"protocol\":316}}");
+  
+  const ServerConfig& config = mSession->getServer().config;
+  nlohmann::json j;
+  j["description"]["text"] = config.motd;
+  j["version"]["name"] = "Redi";
+  j["version"]["protocol"] = 316;
+  j["players"]["max"] = config.maxPlayers;
+  j["players"]["online"] = 0;
+  
+  writer.writeString(j.dump());
   writer.finish();
   
   Logger::info("Status request from " + getIP());
@@ -142,12 +150,10 @@ std::string Protocol1_11::getIP()
 void Protocol1_11::handleLoginStart(PacketReader& reader)
 {
   std::string nick = reader.readString();
-  std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
   
   Logger::info((boost::format("Received Login start packet: %1%") % nick).str());
   
-  mSession->getServer().addPlayer(nick, uuid, mSession);
-  sendLoginSucces(nick, uuid);
+  mSession->getServer().addPlayer(nick, mSession);
   mSession->stage = State::Play;
 }
 
@@ -160,6 +166,43 @@ void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& u
   mSession->sendPacket(writer);
   
   Logger::info((boost::format("Sending Login success packet: %1% -- %2%") % nick % uuid).str());
+}
+
+void Protocol1_11::sendJoinGame(const Player& player)
+{
+  PacketWriter writer(0x23);
+  writer.writeInt(player.id);
+  writer.writeUByte(static_cast<std::uint8_t>(player.getGamemode()));
+  writer.writeInt(static_cast<std::int32_t>(player.getDimension()));
+  writer.writeUByte(static_cast<std::uint8_t>(player.getServer().config.difficulty));
+  writer.writeUByte(static_cast<std::uint8_t>(player.getServer().config.maxPlayers));
+  writer.writeString(player.getServer().config.evelType);
+  writer.writeBool(player.getServer().config.reducedDebugInfo);
+  writer.finish();
+  mSession->sendPacket(writer);
+  
+  Logger::info("Sent join game packet");
+}
+
+void Protocol1_11::sendSetCompression()
+{
+  PacketWriter writer(0x03);
+  writer.writeVarInt(60000);
+  writer.finish();
+  
+  std::cout << "\n\n";
+  for (std::size_t i = 0; i < writer.data.size(); ++i)
+    std::cout << (int)writer.data[i] << ' ';
+  std::cout << "\n\n";
+
+
+//  PacketReader r(std::move(writer.data));
+//  auto a = r.readVarInt();
+//  auto b = r.readVarInt();
+//  auto c = r.readVarInt();
+  mSession->sendPacket(writer);
+  
+  Logger::info("Sent set compression");
 }
   
   

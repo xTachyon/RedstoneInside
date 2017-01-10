@@ -74,7 +74,7 @@ set(SOURCE_FILES
         src/protocol/packetwriter.cxx
         src/protocol/packetwriter.hpp
         src/util/base64.hpp
-        src/util/time.hpp src/util/time.cxx src/util/string.hpp)
+        src/util/time.hpp src/util/time.cxx src/util/string.hpp src/serverconfig.hpp)
 
 add_executable(redi ${SOURCE_FILES})
 

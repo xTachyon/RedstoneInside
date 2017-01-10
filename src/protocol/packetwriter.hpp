@@ -29,7 +29,9 @@ public:
   void writeDouble(double v);
   void writeString(const std::string& v);
   void writeVarInt(std::int32_t v);
+  void writeVarInt(std::uint32_t v);
   void writeVarLong(std::int64_t v);
+  void writeVarLong(std::uint64_t v);
   void finish(bool compressed = false);
   
   template <typename T>
@@ -45,6 +47,8 @@ public:
   }
   
 private:
+  
+  PacketWriter() = default;
   
   template <typename T>
   void writeNumber(T number)

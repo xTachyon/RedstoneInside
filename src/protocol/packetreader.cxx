@@ -72,46 +72,45 @@ std::string PacketReader::readString()
   return result;
 }
 
-std::int32_t PacketReader::readVarInt()
+std::uint32_t PacketReader::readVarUInt()
 {
-  std::int32_t numRead = 0;
-  std::int32_t result = 0;
-  std::int8_t read;
+  std::uint32_t Value = 0;
+  int Shift = 0;
+  unsigned char b = 0;
   do
   {
-    read = readByte();
-    std::int32_t value = (read & 0b01111111);
-    result |= (value << (7 * numRead));
-    
-    numRead++;
-    if (numRead > 5)
-    {
-      throw new std::runtime_error("VarInt is too big");
-    }
-  } while ((read & 0b10000000) != 0);
+    b = readUByte();
+    Value = Value | ((static_cast<std::uint32_t>(b & 0x7f)) << Shift);
+    Shift += 7;
+  } while ((b & 0x80) != 0);
+  return Value;
+}
+
+std::int32_t PacketReader::readVarInt()
+{
+  std::uint32_t x = readVarUInt();
+  return *reinterpret_cast<std::int32_t*>(std::addressof(x));
+}
+
+std::uint64_t PacketReader::readVarULong()
+{
+  std::uint64_t Value = 0;
+  int Shift = 0;
+  unsigned char b = 0;
+  do
+  {
+    b = readUByte();
+    Value = Value | ((static_cast<std::uint64_t>(b & 0x7f)) << Shift);
+    Shift += 7;
+  } while ((b & 0x80) != 0);
+  return Value;
   
-  return result;
 }
 
 std::int64_t PacketReader::readVarLong()
 {
-  std::int32_t numRead = 0;
-  std::int32_t result = 0;
-  std::int8_t read;
-  do
-  {
-    read = readByte();
-    std::int32_t value = (read & 0b01111111);
-    result |= (value << (7 * numRead));
-    
-    numRead++;
-    if (numRead > 10)
-    {
-      throw new std::runtime_error("VarLong is too big");
-    }
-  } while ((read & 0b10000000) != 0);
-  
-  return result;
+  std::uint64_t x = readVarULong();
+  return *reinterpret_cast<std::int64_t*>(std::addressof(x));
 }
 
 void PacketReader::need(std::size_t bytes)

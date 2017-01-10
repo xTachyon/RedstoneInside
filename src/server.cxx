@@ -1,3 +1,6 @@
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include "server.hpp"
 #include "util/util.hpp"
 #include "logger.hpp"
@@ -23,6 +26,7 @@ void Server::run()
     if (n > s + 2)
     {
       Logger::info("Number of connections: " + std::to_string(std::distance(mConnectedClients.begin(), mConnectedClients.end())));
+      Logger::info("Number of players: " + std::to_string(std::distance(mPlayers.begin(), mPlayers.end())));
       s = n;
     }
   }
@@ -33,9 +37,15 @@ void Server::addPacket(Protocol* ptr, ByteBuffer&& buffer)
   mPacketsToBeHandled.push(std::pair<Protocol*, ByteBuffer>(ptr, std::move(buffer)));
 }
 
-void Server::addPlayer(const std::string nick, const std::string uuid, SessionPtr session)
+void Server::addPlayer(const std::string nick, SessionPtr session)
 {
-  mPlayers.emplace_back(nick, uuid, session);
+  std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  
+  mPlayers.emplace_back(nick, uuid, session, getNewEntityID(), this);
+  
+  mPlayers.back().getSession().getProtocol().sendSetCompression();
+  mPlayers.back().getSession().getProtocol().sendLoginSucces(nick, uuid);
+  mPlayers.back().getSession().getProtocol().sendJoinGame(mPlayers.back());
 }
   
 } // namespace redi

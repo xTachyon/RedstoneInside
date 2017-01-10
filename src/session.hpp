@@ -67,6 +67,7 @@ public:
   
   void kill();
   void setProtocol(SessionPtr ptr);
+  Protocol& getProtocol() { return *mProtocol; }
 
 private:
   

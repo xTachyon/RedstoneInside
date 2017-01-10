@@ -67,9 +67,14 @@ void PacketWriter::writeString(const std::string& v)
 
 void PacketWriter::writeVarInt(std::int32_t v)
 {
+  writeVarInt(*reinterpret_cast<std::uint32_t*>(std::addressof(v)));
+}
+
+void PacketWriter::writeVarInt(std::uint32_t v)
+{
   do
   {
-    std::uint8_t temp = static_cast<std::uint8_t>(v & 0b01111111);
+    std::int8_t temp = static_cast<std::uint8_t>(v & 0b01111111);
     v >>= 7;
     if (v != 0)
     {
@@ -79,7 +84,13 @@ void PacketWriter::writeVarInt(std::int32_t v)
   } while (v != 0);
 }
 
+
 void PacketWriter::writeVarLong(std::int64_t v)
+{
+  writeVarLong(*reinterpret_cast<std::uint64_t*>(std::addressof(v)));
+}
+
+void PacketWriter::writeVarLong(std::uint64_t v)
 {
   do
   {

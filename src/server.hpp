@@ -4,6 +4,7 @@
 #include <list>
 #include "player.hpp"
 #include "connectionlistener.hpp"
+#include "serverconfig.hpp"
 
 namespace redi
 {
@@ -11,6 +12,8 @@ namespace redi
 class Server
 {
 public:
+  
+  ServerConfig config;
 
   Server(boost::asio::io_service& io_service) : mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0) {}
 
@@ -31,7 +34,7 @@ public:
   }
   void run();
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);
-  void addPlayer(const std::string nick, const std::string uuid, SessionPtr session);
+  void addPlayer(const std::string nick, SessionPtr session);
   
 private:
   
