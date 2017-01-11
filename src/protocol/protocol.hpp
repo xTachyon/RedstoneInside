@@ -9,13 +9,12 @@ namespace redi
 
 class Session;
 class Player;
-using SessionPtr = std::shared_ptr<Session>;
 
 class Protocol
 {
 public:
   
-  Protocol(SessionPtr player) : mSession(player) {}
+  Protocol(Session* session) : mSession(session) {}
   
   virtual void handlePacket(ByteBuffer&) {}
   
@@ -26,12 +25,13 @@ public:
   virtual void sendSpawnPosition() {}
   virtual void sendPlayerAbilities() {}
   virtual void sendPlayerPositionAndLook() {}
+  virtual void sendKeepAkive() {}
   
   virtual ~Protocol() = 0;
   
 protected:
 
-  SessionPtr mSession;
+  Session* mSession;
 };
 
 inline Protocol::~Protocol() {}

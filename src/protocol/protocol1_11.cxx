@@ -9,6 +9,7 @@
 #include "packetwriter.hpp"
 #include "../server.hpp"
 #include "../player.hpp"
+#include "../util/util.hpp"
 
 namespace redi
 {
@@ -253,6 +254,17 @@ void Protocol1_11::sendPlayerPositionAndLook()
   mSession->sendPacket(writer);
   
   Logger::info("Send Player Position And Look");
+}
+
+void Protocol1_11::sendKeepAkive()
+{
+  PacketWriter writer(0x1F);
+  writer.writeVarInt(util::getRandomInt32());
+  writer.commit();
+  
+  mSession->sendPacket(writer);
+  
+  Logger::info("Send Keep Alive");
 }
   
   

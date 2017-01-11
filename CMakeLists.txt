@@ -58,14 +58,14 @@ set(SOURCE_FILES
         src/server.hpp
         src/player.cxx
         src/player.hpp
-        src/events/event.cxx
-        src/events/event.hpp
-        src/events/eventtype.hpp
-        src/events/eventmanager.cxx
-        src/events/eventmanager.hpp
-        src/events/observer.hpp
-        src/events/vanillaobserver.cxx
-        src/events/vanillaobserver.hpp
+#        src/events/event.cxx
+#        src/events/event.hpp
+#        src/events/eventtype.hpp
+#        src/events/eventmanager.cxx
+#        src/events/eventmanager.hpp
+#        src/events/observer.hpp
+#        src/events/vanillaobserver.cxx
+#        src/events/vanillaobserver.hpp
         src/protocol/protocol.hpp
         src/protocol/protocol1_11.cxx
         src/protocol/protocol1_11.hpp
@@ -74,7 +74,11 @@ set(SOURCE_FILES
         src/protocol/packetwriter.cxx
         src/protocol/packetwriter.hpp
         src/util/base64.hpp
-        src/util/time.hpp src/util/time.cxx src/util/string.hpp src/serverconfig.hpp)
+        src/util/time.hpp
+        src/util/time.cxx
+        src/util/string.hpp
+        src/serverconfig.hpp
+        src/event.hpp)
 
 add_executable(redi ${SOURCE_FILES})
 
@@ -112,7 +116,7 @@ if(MINGW)
     target_link_libraries(redi ws2_32)
 endif()
 
-if (CMAKE_COMPILER_IS_GNUCC)
+if (UNIX)
     target_link_libraries(redi pthread)
 endif()
 

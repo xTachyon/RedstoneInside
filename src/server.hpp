@@ -5,6 +5,7 @@
 #include "player.hpp"
 #include "connectionlistener.hpp"
 #include "serverconfig.hpp"
+#include "event.hpp"
 
 namespace redi
 {
@@ -21,32 +22,16 @@ public:
   void addConnectedSession(boost::asio::ip::tcp::socket&& socket)
   {
     std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mConnectedClients.emplace_back(std::make_shared<Session>(std::move(socket), this));
-    mConnectedClients.back()->setProtocol(mConnectedClients.back());
-  }
-  void killConnectedSession(const Session& th)
-  {
-    std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mConnectedClients.remove_if([&](const SessionPtr& ar)
-                                {
-                                  return std::addressof(*ar) == std::addressof(th);
-                                });
-  }
-  void disconnectPlayer(const Player& player)
-  {
-    killConnectedSession(player.getSession());
-    mPlayers.remove_if([&](const Player& p)
-    {
-      return std::addressof(player) == std::addressof(p);
-    });
+    mConnectedClients.emplace_back(std::move(socket), this);
   }
   void run();
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);
-  void addPlayer(const std::string nick, SessionPtr session);
+  void addPlayer(const std::string nick, Session* session);
+  void addEvent(EventPtr ptr);
   
 private:
   
-  using SessionList = std::list<SessionPtr>;
+  using SessionList = std::list<Session>;
   using PlayerList = std::list<Player>;
   
   SessionList mConnectedClients;
@@ -55,12 +40,11 @@ private:
   boost::asio::io_service& mIoService;
   ThreadSafeQueue<std::pair<Protocol*, ByteBuffer>> mPacketsToBeHandled;
   std::list<Player> mPlayers;
+  ThreadSafeQueue<EventPtr> mActions;
 
   std::int32_t mEntityCount;
 };
   
 } // namespace redi
-
-
 
 #endif // REDI_SERVER

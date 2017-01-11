@@ -181,6 +181,5 @@ PacketReader PacketReader::getFromCompressedPacket(const ByteBuffer& buf)
   
   return PacketReader(std::move(buffer));
 }
-
   
 } // namespace redi

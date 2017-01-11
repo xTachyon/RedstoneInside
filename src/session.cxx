@@ -1,5 +1,6 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
+#include <boost/format.hpp>
 #include "session.hpp"
 #include "logger.hpp"
 #include "protocol/protocol.hpp"
@@ -13,7 +14,7 @@ namespace redi
 {
 
 Session::Session(boost::asio::ip::tcp::socket&& socket, Server* server)
-      : state(State::Handshake), setCompressionSent(false), mSocket(std::move(socket)), mServer(server)
+      : state(State::Handshake), setCompressionSent(false), mSocket(std::move(socket)), mProtocol(new Protocol1_11(this)), mServer(server)
 {
   readNext();
 }
@@ -26,10 +27,7 @@ Session::Session(Session&& s)
 
 Session::~Session()
 {
-  if (mPlayer)
-  {
-    mServer->disconnectPlayer(*mPlayer);
-  }
+  Logger::info((boost::format("Session %1% destroyed") % this).str());
 }
 
 void Session::writeNext()
@@ -90,13 +88,6 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
   }
   else
   {
-    std::ostringstream ss;
-    ss << "Packet: ";
-    for (std::size_t i = 0; i < mReceivingPacket.size(); ++i) ss << (int)mReceivingPacket[i] << ' ';
-    ss << "\n";
-    ss.write(mReceivingPacket.as_const_char(), mReceivingPacket.size());
-    Logger::info(ss.str());
-    
     mServer->addPacket(mProtocol.get(), std::move(mReceivingPacket));
     readNext();
   }
@@ -104,12 +95,8 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 
 void Session::kill()
 {
-  mServer->killConnectedSession(*this);
-}
-
-void Session::setProtocol(SessionPtr ptr)
-{
-  mProtocol.reset(new Protocol1_11(ptr));
+  EventPtr ptr(new EventSessionDC(this));
+  mServer->addEvent(ptr);
 }
 
 void Session::setPlayer(Player& player)

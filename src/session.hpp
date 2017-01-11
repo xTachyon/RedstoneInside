@@ -69,9 +69,10 @@ public:
   Server& getServer() { return *mServer; }
   
   void kill();
-  void setProtocol(SessionPtr ptr);
   Protocol& getProtocol() { return *mProtocol; }
+  Protocol* getProtocolPtr() { return mProtocol.get(); }
   void setPlayer(Player& player);
+  boost::asio::io_service& getIoService() { return mSocket.get_io_service(); }
 
 private:
   
@@ -94,8 +95,6 @@ private:
   void handleWrite(const boost::system::error_code& error);
   void writeNext();
 };
-
-using SessionPtr = std::shared_ptr<Session>;
 
 } // namespace redi
 

@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 #include "protocol.hpp"
 #include "../bytebuffer.hpp"
+#include "../logger.hpp"
 
 namespace redi
 {
@@ -14,7 +15,7 @@ class Protocol1_11 : public Protocol
 {
 public:
   
-  Protocol1_11(SessionPtr ptr) : Protocol(ptr) {}
+  Protocol1_11(Session* ptr) : Protocol(ptr) {}
   
   virtual ~Protocol1_11();
   
@@ -32,12 +33,16 @@ public:
   virtual void sendSpawnPosition() override;
   virtual void sendPlayerAbilities() override;
   virtual void sendPlayerPositionAndLook() override;
+  virtual void sendKeepAkive() override;
   
   std::string getIP();
   static std::string getIP(boost::asio::ip::tcp::socket& socket);
 };
 
-inline Protocol1_11::~Protocol1_11() {}
+inline Protocol1_11::~Protocol1_11()
+{
+  Logger::info((boost::format("Protocol %1% destroyed") % this).str());
+}
   
 } // namespace redi
 

@@ -25,19 +25,19 @@ inline void swap<redi::nbt::TagList>(redi::nbt::TagList& l, redi::nbt::TagList& 
 }
 
 template <>
-inline void swap<redi::nbt::TagString>(redi::nbt::TagString& l, redi::nbt::TagString& r)
+inline void swap<redi::nbt::TagString>(redi::nbt::TagString& l, redi::nbt::TagString& r) noexcept
 {
   l.swap(r);
 }
 
 template <>
-inline void swap<redi::nbt::TagByteArray>(redi::nbt::TagByteArray& l, redi::nbt::TagByteArray& r)
+inline void swap<redi::nbt::TagByteArray>(redi::nbt::TagByteArray& l, redi::nbt::TagByteArray& r) noexcept
 {
   l.data.swap(r.data);
 }
 
 template <>
-inline void swap<redi::nbt::TagIntArray>(redi::nbt::TagIntArray& l, redi::nbt::TagIntArray& r)
+inline void swap<redi::nbt::TagIntArray>(redi::nbt::TagIntArray& l, redi::nbt::TagIntArray& r) noexcept
 {
   l.data.swap(r.data);
 }
