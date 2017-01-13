@@ -35,15 +35,19 @@ void Server::run()
           Player* player = event.player;
           if (player)
           {
+            mConnectedClients.remove_if([&](const Session& ar)
+                                        {
+                                          return player->getSessionPtr() == std::addressof(ar);
+                                        });
             mPlayers.remove_if([&](const Player& p)
                                {
                                  return std::addressof(p) == player;
                                });
-            EventPtr ptr(new EventSessionDC(player->getSessionPtr()));
-            addEvent(ptr);
+//            EventPtr ptr(new EventSessionDC(player->getSessionPtr()));
+//            addEvent(ptr);
           }
         }
-        break;
+          break;
         
         case EventType::SessionDC:
         {
@@ -57,7 +61,7 @@ void Server::run()
                                         return event.session == std::addressof(ar);
                                       });
         }
-        break;
+          break;
         
         case EventType::SendKeepAlive:
         {
@@ -65,7 +69,7 @@ void Server::run()
           Protocol* p = event.session.getProtocolPtr();
           if (p) p->sendKeepAkive();
         }
-        break;
+          break;
         }
       }
     }

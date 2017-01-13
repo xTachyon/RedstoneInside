@@ -26,9 +26,11 @@ public:
   Dimension getDimension() const { return mDimension; }
   Vector3d getPosition() const { return mPosition; }
   
-private:
+  static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::deadline_timer* timer,
+                                        Protocol* protocol);
   
-  using TimePoint = std::chrono::time_point<std::chrono::steady_clock>;
+  
+  private:
   
   std::string mNickname;
   std::string mUUID;
@@ -38,10 +40,6 @@ private:
   Dimension mDimension;
   Vector3d mPosition;
   boost::asio::deadline_timer mSendKeepAlive;
-  //boost::asio::deadline_timer mReceivedKeepAlive;
-  //TimePoint mLastReceivedKeepAlive;
-  
-  void onSendKeepAliveTimerRing();
 };
 
 } // namespace redi

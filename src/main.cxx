@@ -24,6 +24,34 @@ int main(int, char**)
   {
     redi::Logger::error(e.what());
   }
-  
+
   return 0;
 }
+
+//enum class State
+//{
+//  Ok,
+//  Error
+//};
+//
+//struct Test
+//{
+//  int a;
+//
+//  Test() : a(0) {}
+//
+//  void increment(State s = State::Ok)
+//  {
+//    if (s == State::Ok) ++a;
+//  }
+//};
+//
+//int main()
+//{
+//  void (Test::* f)(State) = &Test::increment;
+//  Test* a = nullptr;
+//
+//  (a->*f)(State::Error);
+//
+//  return 0;
+//}

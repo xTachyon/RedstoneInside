@@ -89,6 +89,7 @@ private:
   std::uint8_t mReceivingPacketCountSize;
   Server* mServer;
   Player* mPlayer;
+  std::atomic_uchar mErrors;
   
   void handleRead(const boost::system::error_code& error, bool header = true);
   void readNext();

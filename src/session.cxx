@@ -14,7 +14,7 @@ namespace redi
 {
 
 Session::Session(boost::asio::ip::tcp::socket&& socket, Server* server)
-      : state(State::Handshake), setCompressionSent(false), mSocket(std::move(socket)), mProtocol(new Protocol1_11(this)), mServer(server)
+      : state(State::Handshake), setCompressionSent(false), mSocket(std::move(socket)), mProtocol(new Protocol1_11(this)), mServer(server), mErrors(0)
 {
   readNext();
 }
@@ -27,6 +27,7 @@ Session::Session(Session&& s)
 
 Session::~Session()
 {
+  while (mErrors < 1);
   Logger::info((boost::format("Session %1% destroyed") % this).str());
 }
 
@@ -43,6 +44,7 @@ void Session::handleWrite(const boost::system::error_code& error)
 {
   if (error)
   {
+    ++mErrors;
     kill();
     Logger::error("Client dc'ed");
   }
@@ -64,6 +66,7 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 {
   if (error)
   {
+    ++mErrors;
     kill();
     Logger::error("Client dc'ed");
   }
