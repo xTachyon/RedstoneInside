@@ -112,32 +112,37 @@ void PacketWriter::writePosition(std::int64_t x, std::int64_t y, std::int64_t z)
   writeLong(((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF));
 }
 
-void PacketWriter::commit(bool compressed)
+void PacketWriter::commit(bool)
 {
-  std::cout << (int)data[0] << " -- " << std::boolalpha << compressed << '\n';
-  if (compressed)
-  {
-//    ByteBuffer comp = compressor::compressZlib(data);
-//    PacketWriter wr;
-//    wr.writeVarInt(comp.size());
-//
+//  std::cout << (int)data[0] << " -- " << std::boolalpha << compressed << '\n';
+//  if (compressed)
+//  {
+////    ByteBuffer comp = compressor::compressZlib(data);
+////    PacketWriter wr;
+////    wr.writeVarInt(comp.size());
+////
+////    data.clear();
+////    writeVarInt(wr.data.size() + comp.size());
+////    data += wr.data;
+////    data += comp;
+//    ByteBuffer original = data;
 //    data.clear();
-//    writeVarInt(wr.data.size() + comp.size());
-//    data += wr.data;
-//    data += comp;
-    ByteBuffer original = data;
-    data.clear();
-    writeVarInt(original.size() + 1);
-    writeVarInt(0);
-    data += original;
-  }
-  else
-  {
+//    writeVarInt(original.size() + 1);
+//    writeVarInt(0);
+//    data += original;
+//  }
+//  else
+//  {
     ByteBuffer d(std::move(data));
   
     writeVarInt(d.size());
     data.append(d.data(), d.size());
-  }
+  
+  std::cout << '\n';
+  for (int i = 0; i < data.size(); ++i)
+    std::cout << (int)data[i] << ' ';
+  std::cout << '\n';
+//  }
 }
   
 } // namespace redi

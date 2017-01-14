@@ -40,7 +40,7 @@ enum PlayerAbilitiesFlag : std::int8_t
 struct ServerConfig
 {
   bool onlineMode = false;
-  int maxPlayers = 1472;
+  int maxPlayers = 20;
   std::string motd = "Redi - May contain nuts";
   Gamemode gamemode = Gamemode::Creative;
   Difficulty difficulty = Difficulty::Peaceful;

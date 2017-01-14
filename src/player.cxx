@@ -8,7 +8,7 @@ namespace redi
 
 Player::Player(const std::string& name, const std::string uuid, Session* session, std::int32_t id, Server* server,
                Gamemode gamemode)
-  : id(id), mNickname(name), mUUID(uuid), mSession(session), mServer(server), mGamemode(gamemode), mSendKeepAlive(session->getIoService()) //, mReceivedKeepAlive(session->getIoService())
+  : id(id), mNickname(name), mUUID(uuid), mSession(session), mServer(server), mGamemode(gamemode), mSendKeepAlive(session->getIoService()), mDimension(Dimension::Overworld) //, mReceivedKeepAlive(session->getIoService())
 {
   mSendKeepAlive.expires_from_now(boost::posix_time::seconds(5));
   mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, std::addressof(mSendKeepAlive), mSession->getProtocolPtr()));

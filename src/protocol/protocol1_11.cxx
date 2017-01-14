@@ -173,15 +173,15 @@ void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& u
   PacketWriter writer(0x02);
   writer.writeString("ecc8e29d-0936-42cb-8492-14ed40555ffd");
   writer.writeString(nick);
-  std::cout << '\n';
-  for (int i = 0; i < writer.data.size(); ++i)
-    std::cout << (int)writer.data[i] << ' ';
-  std::cout << '\n';
+//  std::cout << '\n';
+//  for (int i = 0; i < writer.data.size(); ++i)
+//    std::cout << (int)writer.data[i] << ' ';
+//  std::cout << '\n';
   writer.commit();
-  std::cout << '\n';
-  for (int i = 0; i < writer.data.size(); ++i)
-    std::cout << (int)writer.data[i] << ' ';
-  std::cout << '\n';
+//  std::cout << '\n';
+//  for (int i = 0; i < writer.data.size(); ++i)
+//    std::cout << (int)writer.data[i] << ' ';
+//  std::cout << '\n';
   
   std::lock_guard<std::mutex> l(mIsUsed);
   
