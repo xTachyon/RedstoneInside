@@ -38,8 +38,6 @@ public:
   
   std::string getIP();
   static std::string getIP(boost::asio::ip::tcp::socket& socket);
-  
-  std::mutex mIsUsed;
 };
 
 inline Protocol1_11::~Protocol1_11()

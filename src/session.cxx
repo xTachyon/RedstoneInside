@@ -36,19 +36,10 @@ void Session::writeNext()
   
   mSendingPacket = mSendingQueue.pop();
   
-//  std::ostringstream ss;
-//  ss << "packet sending now: ";
-//  ss.write(mSendingPacket->as_const_char(), mSendingPacket->size());
-//  ss << "\n";
-//  for (std::size_t i = 0; i < mSendingPacket->size(); ++i)
-//  {
-//    ss << (int)(*mSendingPacket)[i] << ' ';
-//  }
-//  Logger::info(ss.str());
-  std::this_thread::sleep_for(std::chrono::milliseconds(5));
-  
   asio::async_write(mSocket, asio::buffer(mSendingPacket->data(), mSendingPacket->size()),
                     boost::bind(&Session::handleWrite, this, asio::placeholders::error));
+  // Crash sometimes here when trying to access a dead object
+  // TODO: solve this
 }
 
 void Session::handleWrite(const boost::system::error_code& error)

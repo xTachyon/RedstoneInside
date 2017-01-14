@@ -115,8 +115,6 @@ void Protocol1_11::handleStatusRequest(PacketReader&)
   writer.writeString(j.dump());
   writer.commit(false);
   
-  std::lock_guard<std::mutex> l(mIsUsed);
-  
   mSession->sendPacket(writer, "Status Request");
   
 }
@@ -132,8 +130,6 @@ void Protocol1_11::sendStatusPong(std::int64_t number)
   PacketWriter writer(0x01);
   writer.writeLong(number);
   writer.commit(false);
-  
-  std::lock_guard<std::mutex> l(mIsUsed);
   
   mSession->sendPacket(writer, "Status Pong");
   mSession->kill();
@@ -170,21 +166,9 @@ void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& u
   PacketWriter writer(0x02);
   writer.writeString("ecc8e29d-0936-42cb-8492-14ed40555ffd");
   writer.writeString(nick);
-//  std::cout << '\n';
-//  for (int i = 0; i < writer.data.size(); ++i)
-//    std::cout << (int)writer.data[i] << ' ';
-//  std::cout << '\n';
   writer.commit();
-//  std::cout << '\n';
-//  for (int i = 0; i < writer.data.size(); ++i)
-//    std::cout << (int)writer.data[i] << ' ';
-//  std::cout << '\n';
-  
-  std::lock_guard<std::mutex> l(mIsUsed);
-  
+ 
   mSession->sendPacket(writer, "Send Login Success");
-  
-//  Logger::info((boost::format("Sending Login success packet: %1% -- %2%") % nick % uuid).str());
 }
 
 void Protocol1_11::sendJoinGame(const Player& player)
@@ -199,11 +183,7 @@ void Protocol1_11::sendJoinGame(const Player& player)
   writer.writeBool(player.getServer().config.reducedDebugInfo);
   writer.commit();
   
-  std::lock_guard<std::mutex> l(mIsUsed);
-  
   mSession->sendPacket(writer, "Send Join Game");
-  
-//  Logger::info("Sent join game packet");
 }
 
 void Protocol1_11::sendSetCompression()
@@ -212,12 +192,8 @@ void Protocol1_11::sendSetCompression()
   writer.writeVarInt(-1);
   writer.commit(false);
   
-  std::lock_guard<std::mutex> l(mIsUsed);
-  
   mSession->sendPacket(writer, "Sent set compression");
   mSession->setCompressionSent = true;
-
-//  Logger::info("Sent set compression");
 }
 
 void Protocol1_11::sendSpawnPosition()
@@ -226,11 +202,7 @@ void Protocol1_11::sendSpawnPosition()
   writer.writePosition(0, 0, 0);
   writer.commit();
   
-  std::lock_guard<std::mutex> l(mIsUsed);
-  
   mSession->sendPacket(writer, "Sent Spawn Position");
-  
-//  Logger::info("Sent spawn position");
 }
 
 void Protocol1_11::sendPlayerAbilities()
@@ -240,12 +212,8 @@ void Protocol1_11::sendPlayerAbilities()
   writer.writeFloat(1.0f);
   writer.writeFloat(1.0f);
   writer.commit();
-  
-  std::lock_guard<std::mutex> l(mIsUsed);
-  
+
   mSession->sendPacket(writer, "Send Player Abilities");
-  
-//  Logger::info("Send Player Abilities");
 }
 
 void Protocol1_11::handleClientSettings(PacketReader& reader)
@@ -256,11 +224,6 @@ void Protocol1_11::handleClientSettings(PacketReader& reader)
   bool chatcolors = reader.readBool();
   std::uint8_t skinparts = reader.readUByte();
   std::int32_t mainhand = reader.readVarInt();
-  
-  Logger::info((boost::format("Client with locale %1% and viewdistance %2% chatmode %3% chatcolors %4% skinparts %5% mainhand %6%")
-               % locale % viewdistance % chatmode % chatcolors % skinparts % mainhand).str());
-  
-//  sendPlayerPositionAndLook();
 }
 
 void Protocol1_11::sendPlayerPositionAndLook()
@@ -273,12 +236,7 @@ void Protocol1_11::sendPlayerPositionAndLook()
   writer.writeFloat(0);
   writer.writeByte(0);
   writer.writeVarInt(6543);
-//  std::cout << '\n';
-//  for (int i = 0; i < writer.data.size(); ++i)
-//    std::cout << (int)writer.data[i] << ' ';
   writer.commit();
-  
-  std::lock_guard<std::mutex> l(mIsUsed);
   
   mSession->sendPacket(writer, "Send Player Position And Look");
 }
@@ -288,8 +246,6 @@ void Protocol1_11::sendKeepAlive()
   PacketWriter writer(0x1F);
   writer.writeVarInt(util::getRandomInt32());
   writer.commit();
-  
-  std::lock_guard<std::mutex> l(mIsUsed);
   
   mSession->sendPacket(writer, "Send Keep Alive");
 }
@@ -301,10 +257,7 @@ void Protocol1_11::sendTimeUpdate()
   writer.writeLong(0);
   writer.commit();
   
-  std::lock_guard<std::mutex> l(mIsUsed);
-  
   mSession->sendPacket(writer, "Send Time Update");
 }
-  
-  
+
 } // namespace redi

@@ -137,11 +137,6 @@ void PacketWriter::commit(bool)
   
     writeVarInt(d.size());
     data.append(d.data(), d.size());
-  
-  std::cout << '\n';
-  for (int i = 0; i < data.size(); ++i)
-    std::cout << (int)data[i] << ' ';
-  std::cout << '\n';
 //  }
 }
   

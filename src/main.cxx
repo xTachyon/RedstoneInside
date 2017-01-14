@@ -13,27 +13,6 @@ namespace asio = boost::asio;
 
 int main(int, char**)
 {
-//  redi::PacketWriter writer(0x02);
-//  writer.writeString("ecc8e29d-0936-42cb-8492-14ed40555ffd");
-//  writer.writeString("Dulcan");
-//
-//  std::cout << '\n';
-//  for (int i = 0; i < writer.data.size(); ++i)
-//    std::cout << (int)writer.data[i] << ' ';
-//  std::cout << '\n';
-//
-//  writer.commit();
-//
-//  std::cout << '\n';
-//  for (int i = 0; i < writer.data.size(); ++i)
-//    std::cout << (int)writer.data[i] << ' ';
-//  std::cout << '\n';
-//
-//  redi::PacketReader reader(std::move(writer.data));
-//  int i = reader.readVarInt();
-//  std::string uuid = reader.readString();
-//  std::string nick = reader.readString();
-  
   asio::io_service io_service;
 
   try
