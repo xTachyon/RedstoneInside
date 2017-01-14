@@ -14,7 +14,7 @@ namespace redi
 {
 
 Session::Session(boost::asio::ip::tcp::socket&& socket, Server* server)
-      : state(State::Handshake), setCompressionSent(false), mSocket(std::move(socket)), mProtocol(new Protocol1_11(this)), mServer(server), mErrors(0)
+      : state(State::Handshake), setCompressionSent(false), mSocket(std::move(socket)), mProtocol(new Protocol1_11(this)), mServer(server)
 {
   readNext();
 }
@@ -27,7 +27,6 @@ Session::Session(Session&& s)
 
 Session::~Session()
 {
-  while (mErrors < 1);
   Logger::info((boost::format("Session %1% destroyed") % this).str());
 }
 
@@ -36,6 +35,18 @@ void Session::writeNext()
   if (mSendingPacket || mSendingQueue.empty()) return;
   
   mSendingPacket = mSendingQueue.pop();
+  
+//  std::ostringstream ss;
+//  ss << "packet sending now: ";
+//  ss.write(mSendingPacket->as_const_char(), mSendingPacket->size());
+//  ss << "\n";
+//  for (std::size_t i = 0; i < mSendingPacket->size(); ++i)
+//  {
+//    ss << (int)(*mSendingPacket)[i] << ' ';
+//  }
+//  Logger::info(ss.str());
+  std::this_thread::sleep_for(std::chrono::milliseconds(5));
+  
   asio::async_write(mSocket, asio::buffer(mSendingPacket->data(), mSendingPacket->size()),
                     boost::bind(&Session::handleWrite, this, asio::placeholders::error));
 }
@@ -44,7 +55,6 @@ void Session::handleWrite(const boost::system::error_code& error)
 {
   if (error)
   {
-    ++mErrors;
     kill();
     Logger::error("Client dc'ed");
   }
@@ -66,7 +76,6 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 {
   if (error)
   {
-    ++mErrors;
     kill();
     Logger::error("Client dc'ed");
   }
@@ -105,6 +114,23 @@ void Session::kill()
 void Session::setPlayer(Player& player)
 {
   mPlayer = std::addressof(player);
+}
+
+void Session::sendPacket(ByteBuffer&& pkt, const char* message)
+{
+//  std::ostringstream ss;
+//  ss << "packet in queue: ";
+//  ss.write(pkt.as_const_char(), pkt.size());
+//  ss << "\n";
+//  for (std::size_t i = 0; i < pkt.size(); ++i)
+//  {
+//    ss << (int)pkt[i] << ' ';
+//  }
+//  Logger::info(ss.str());
+  
+  mSendingQueue.push(std::make_shared<ByteBuffer>(std::move(pkt)));
+  std::cout << message << "\n";
+  writeNext();
 }
   
 } // namespace redi

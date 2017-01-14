@@ -1,3 +1,4 @@
+#include <iostream>
 #include "../compressor.hpp"
 #include "packetwriter.hpp"
 
@@ -113,16 +114,22 @@ void PacketWriter::writePosition(std::int64_t x, std::int64_t y, std::int64_t z)
 
 void PacketWriter::commit(bool compressed)
 {
+  std::cout << (int)data[0] << " -- " << std::boolalpha << compressed << '\n';
   if (compressed)
   {
-    ByteBuffer comp = compressor::compressZlib(data);
-    PacketWriter wr;
-    wr.writeVarInt(data.size());
-    
+//    ByteBuffer comp = compressor::compressZlib(data);
+//    PacketWriter wr;
+//    wr.writeVarInt(comp.size());
+//
+//    data.clear();
+//    writeVarInt(wr.data.size() + comp.size());
+//    data += wr.data;
+//    data += comp;
+    ByteBuffer original = data;
     data.clear();
-    writeVarInt(wr.data.size() + comp.size());
-    data += wr.data;
-    data += comp;
+    writeVarInt(original.size() + 1);
+    writeVarInt(0);
+    data += original;
   }
   else
   {

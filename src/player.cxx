@@ -10,7 +10,7 @@ Player::Player(const std::string& name, const std::string uuid, Session* session
                Gamemode gamemode)
   : id(id), mNickname(name), mUUID(uuid), mSession(session), mServer(server), mGamemode(gamemode), mSendKeepAlive(session->getIoService()) //, mReceivedKeepAlive(session->getIoService())
 {
-  mSendKeepAlive.expires_from_now(boost::posix_time::seconds(1));
+  mSendKeepAlive.expires_from_now(boost::posix_time::seconds(5));
   mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, std::addressof(mSendKeepAlive), mSession->getProtocolPtr()));
 }
 
@@ -24,7 +24,7 @@ void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, bo
 {
   if (!error)
   {
-    protocol->sendKeepAkive();
+    protocol->sendKeepAlive();
     
     timer->expires_from_now(boost::posix_time::seconds(10));
     timer->async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, timer, protocol));

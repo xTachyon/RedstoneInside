@@ -18,8 +18,9 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
 {
   PacketReader reader;
   
-  if (mSession->setCompressionSent) reader = PacketReader::getFromCompressedPacket(buffer);
-  else reader.data = std::move(buffer);
+//  if (mSession->setCompressionSent) reader = PacketReader::getFromCompressedPacket(buffer);
+//  else
+  reader.data = std::move(buffer);
   
   std::int32_t type = reader.readVarInt();
   
@@ -114,9 +115,11 @@ void Protocol1_11::handleStatusRequest(PacketReader&)
   writer.writeString(j.dump());
   writer.commit(false);
   
-  Logger::info("Status request from " + getIP());
+//  Logger::info("Status request from " + getIP());
+  std::lock_guard<std::mutex> l(mIsUsed);
   
-  mSession->sendPacket(writer);
+  mSession->sendPacket(writer, "Status Request");
+  
 }
 
 void Protocol1_11::handleStatusPing(PacketReader& reader)
@@ -131,9 +134,11 @@ void Protocol1_11::sendStatusPong(std::int64_t number)
   writer.writeLong(number);
   writer.commit(false);
   
-  Logger::info("Status pong " + std::to_string(number) + " from " + getIP());
+//  Logger::info("Status pong " + std::to_string(number) + " from " + getIP());
   
-  mSession->sendPacket(writer);
+  std::lock_guard<std::mutex> l(mIsUsed);
+  
+  mSession->sendPacket(writer, "Status Pong");
   mSession->kill();
 }
 
@@ -166,12 +171,23 @@ void Protocol1_11::handleLoginStart(PacketReader& reader)
 void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& uuid)
 {
   PacketWriter writer(0x02);
-  writer.writeString(uuid);
+  writer.writeString("ecc8e29d-0936-42cb-8492-14ed40555ffd");
   writer.writeString(nick);
+  std::cout << '\n';
+  for (int i = 0; i < writer.data.size(); ++i)
+    std::cout << (int)writer.data[i] << ' ';
+  std::cout << '\n';
   writer.commit();
-  mSession->sendPacket(writer);
+  std::cout << '\n';
+  for (int i = 0; i < writer.data.size(); ++i)
+    std::cout << (int)writer.data[i] << ' ';
+  std::cout << '\n';
   
-  Logger::info((boost::format("Sending Login success packet: %1% -- %2%") % nick % uuid).str());
+  std::lock_guard<std::mutex> l(mIsUsed);
+  
+  mSession->sendPacket(writer, "Send Login Success");
+  
+//  Logger::info((boost::format("Sending Login success packet: %1% -- %2%") % nick % uuid).str());
 }
 
 void Protocol1_11::sendJoinGame(const Player& player)
@@ -185,21 +201,26 @@ void Protocol1_11::sendJoinGame(const Player& player)
   writer.writeString(player.getServer().config.evelType);
   writer.writeBool(player.getServer().config.reducedDebugInfo);
   writer.commit();
-  mSession->sendPacket(writer);
   
-  Logger::info("Sent join game packet");
+  std::lock_guard<std::mutex> l(mIsUsed);
+  
+  mSession->sendPacket(writer, "Send Join Game");
+  
+//  Logger::info("Sent join game packet");
 }
 
 void Protocol1_11::sendSetCompression()
 {
   PacketWriter writer(0x03);
-  writer.writeVarInt(1);
+  writer.writeVarInt(-1);
   writer.commit(false);
   
-  mSession->sendPacket(writer);
-  mSession->setCompressionSent = true;
+  std::lock_guard<std::mutex> l(mIsUsed);
   
-  Logger::info("Sent set compression");
+  mSession->sendPacket(writer, "Sent set compression");
+  mSession->setCompressionSent = true;
+
+//  Logger::info("Sent set compression");
 }
 
 void Protocol1_11::sendSpawnPosition()
@@ -208,9 +229,11 @@ void Protocol1_11::sendSpawnPosition()
   writer.writePosition(0, 0, 0);
   writer.commit();
   
-  mSession->sendPacket(writer);
+  std::lock_guard<std::mutex> l(mIsUsed);
   
-  Logger::info("Sent spawn position");
+  mSession->sendPacket(writer, "Sent Spawn Position");
+  
+//  Logger::info("Sent spawn position");
 }
 
 void Protocol1_11::sendPlayerAbilities()
@@ -221,9 +244,11 @@ void Protocol1_11::sendPlayerAbilities()
   writer.writeFloat(1.0f);
   writer.commit();
   
-  mSession->sendPacket(writer);
+  std::lock_guard<std::mutex> l(mIsUsed);
   
-  Logger::info("Send Player Abilities");
+  mSession->sendPacket(writer, "Send Player Abilities");
+  
+//  Logger::info("Send Player Abilities");
 }
 
 void Protocol1_11::handleClientSettings(PacketReader& reader)
@@ -237,6 +262,8 @@ void Protocol1_11::handleClientSettings(PacketReader& reader)
   
   Logger::info((boost::format("Client with locale %1% and viewdistance %2% chatmode %3% chatcolors %4% skinparts %5% mainhand %6%")
                % locale % viewdistance % chatmode % chatcolors % skinparts % mainhand).str());
+  
+//  sendPlayerPositionAndLook();
 }
 
 void Protocol1_11::sendPlayerPositionAndLook()
@@ -248,23 +275,38 @@ void Protocol1_11::sendPlayerPositionAndLook()
   writer.writeFloat(0);
   writer.writeFloat(0);
   writer.writeByte(0);
-  writer.writeVarInt(0);
+  writer.writeVarInt(6543);
+//  std::cout << '\n';
+//  for (int i = 0; i < writer.data.size(); ++i)
+//    std::cout << (int)writer.data[i] << ' ';
   writer.commit();
   
-  mSession->sendPacket(writer);
+  std::lock_guard<std::mutex> l(mIsUsed);
   
-  Logger::info("Send Player Position And Look");
+  mSession->sendPacket(writer, "Send Player Position And Look");
 }
 
-void Protocol1_11::sendKeepAkive()
+void Protocol1_11::sendKeepAlive()
 {
   PacketWriter writer(0x1F);
   writer.writeVarInt(util::getRandomInt32());
   writer.commit();
   
-  mSession->sendPacket(writer);
+  std::lock_guard<std::mutex> l(mIsUsed);
   
-  Logger::info("Send Keep Alive");
+  mSession->sendPacket(writer, "Send Keep Alive");
+}
+
+void Protocol1_11::sendTimeUpdate()
+{
+  PacketWriter writer(0x44);
+  writer.writeLong(0);
+  writer.writeLong(0);
+  writer.commit();
+  
+  std::lock_guard<std::mutex> l(mIsUsed);
+  
+  mSession->sendPacket(writer, "Send Time Update");
 }
   
   

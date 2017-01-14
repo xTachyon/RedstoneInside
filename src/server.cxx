@@ -67,7 +67,7 @@ void Server::run()
         {
           const EventSendKeepAliveRing& event = x->get<EventSendKeepAliveRing>();
           Protocol* p = event.session.getProtocolPtr();
-          if (p) p->sendKeepAkive();
+          if (p) p->sendKeepAlive();
         }
           break;
         }
@@ -106,7 +106,8 @@ void Server::addPlayer(const std::string nick, Session* session)
   protocol.sendLoginSucces(nick, uuid);
   protocol.sendJoinGame(mPlayers.back());
   protocol.sendSpawnPosition();
-  protocol.sendPlayerAbilities();
+//  protocol.sendPlayerAbilities();
+//  protocol.sendTimeUpdate();
   protocol.sendPlayerPositionAndLook();
 }
 

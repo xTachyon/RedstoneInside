@@ -33,7 +33,7 @@ public:
   void writeVarLong(std::int64_t v);
   void writeVarLong(std::uint64_t v);
   void writePosition(std::int64_t x, std::int64_t y, std::int64_t z);
-  void commit(bool compressed = true);
+  void commit(bool compressed = false);
   
   template <typename T>
   void writeVarInt(T number)

@@ -30,7 +30,7 @@ inline const char* getStateName(State s)
     break;
     
   case State::Status:
-    ptr = "Status;";
+    ptr = "Status";
     break;
     
   case State::Login:
@@ -59,11 +59,7 @@ public:
   Session(Session&& s);
   ~Session();
   
-  void sendPacket(ByteBuffer&& pkt)
-  {
-    mSendingQueue.push(std::make_shared<ByteBuffer>(std::move(pkt)));
-    writeNext();
-  }
+  void sendPacket(ByteBuffer&& pkt, const char* message);
   
   boost::asio::ip::tcp::socket& getSocket() { return mSocket; }
   Server& getServer() { return *mServer; }
@@ -89,7 +85,6 @@ private:
   std::uint8_t mReceivingPacketCountSize;
   Server* mServer;
   Player* mPlayer;
-  std::atomic_uchar mErrors;
   
   void handleRead(const boost::system::error_code& error, bool header = true);
   void readNext();

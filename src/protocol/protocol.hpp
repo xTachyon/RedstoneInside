@@ -25,7 +25,8 @@ public:
   virtual void sendSpawnPosition() {}
   virtual void sendPlayerAbilities() {}
   virtual void sendPlayerPositionAndLook() {}
-  virtual void sendKeepAkive() {}
+  virtual void sendKeepAlive() {}
+  virtual void sendTimeUpdate() {}
   
   virtual ~Protocol() = 0;
   

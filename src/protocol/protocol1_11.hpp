@@ -33,10 +33,13 @@ public:
   virtual void sendSpawnPosition() override;
   virtual void sendPlayerAbilities() override;
   virtual void sendPlayerPositionAndLook() override;
-  virtual void sendKeepAkive() override;
+  virtual void sendKeepAlive() override;
+  virtual void sendTimeUpdate() override;
   
   std::string getIP();
   static std::string getIP(boost::asio::ip::tcp::socket& socket);
+  
+  std::mutex mIsUsed;
 };
 
 inline Protocol1_11::~Protocol1_11()

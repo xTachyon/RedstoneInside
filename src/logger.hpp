@@ -49,7 +49,12 @@ public:
   {
     std::cout << "DEBUGSYNC: " << val << '\n';
   }
-
+  
+  static void info(const char* ptr)
+  {
+    get().write(ptr, LoggerLevel::Info);
+  }
+  
   template <typename T>
   static void info(const T& val)
   {
