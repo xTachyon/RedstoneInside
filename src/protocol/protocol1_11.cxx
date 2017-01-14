@@ -115,7 +115,6 @@ void Protocol1_11::handleStatusRequest(PacketReader&)
   writer.writeString(j.dump());
   writer.commit(false);
   
-//  Logger::info("Status request from " + getIP());
   std::lock_guard<std::mutex> l(mIsUsed);
   
   mSession->sendPacket(writer, "Status Request");
@@ -133,8 +132,6 @@ void Protocol1_11::sendStatusPong(std::int64_t number)
   PacketWriter writer(0x01);
   writer.writeLong(number);
   writer.commit(false);
-  
-//  Logger::info("Status pong " + std::to_string(number) + " from " + getIP());
   
   std::lock_guard<std::mutex> l(mIsUsed);
   
