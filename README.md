@@ -3,9 +3,11 @@
 
 A C++ Minecraft server.
 
-Thanks to:
-- ##c++, ##c++-general channels on freenode
-- #mcdevs and wiki.vg
+Dependicies:
 - boost
 - zlib
 - nlohmann.json
+
+Thanks to:
+- ##c++, ##c++-general channels on freenode
+- #mcdevs and wiki.vg

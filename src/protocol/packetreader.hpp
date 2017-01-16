@@ -4,7 +4,7 @@
 #include <string>
 #include <boost/endian/conversion.hpp>
 #include "../bytebuffer.hpp"
-#include "../position.hpp"
+#include "../vectorn.hpp"
 
 namespace redi
 {

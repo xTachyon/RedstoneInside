@@ -6,6 +6,7 @@
 #include "connectionlistener.hpp"
 #include "serverconfig.hpp"
 #include "event.hpp"
+#include "world.hpp"
 
 namespace redi
 {
@@ -33,14 +34,16 @@ private:
   
   using SessionList = std::list<Session>;
   using PlayerList = std::list<Player>;
+  using WorldList = std::list<World>;
   
   SessionList mConnectedClients;
   std::mutex mConnectedClientsMutex;
   ConnectionListener mListener;
   boost::asio::io_service& mIoService;
   ThreadSafeQueue<std::pair<Protocol*, ByteBuffer>> mPacketsToBeHandled;
-  std::list<Player> mPlayers;
+  PlayerList mPlayers;
   ThreadSafeQueue<EventPtr> mActions;
+  WorldList mWorlds;
 
   std::int32_t mEntityCount;
 };

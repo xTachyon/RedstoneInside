@@ -24,14 +24,14 @@ set(SOURCE_FILES
         src/nbt/type.hpp
         src/util/util.hpp
         src/bytebuffer.hpp
-        src/block.hpp
+        src/world/block.hpp
         src/compressor.cxx
         src/compressor.hpp
         src/sizeliteraloperators.hpp
         src/logger.cxx
         src/logger.hpp
         src/main.cxx
-        src/position.hpp
+        src/vectorn.hpp
         src/session.cxx
         src/session.hpp
         src/stdafx.cxx
@@ -45,10 +45,10 @@ set(SOURCE_FILES
         src/nbt/exceptions.hpp
         src/nbt/serializer.cxx
         src/nbt/serializer.hpp
-        src/region.cxx
-        src/region.hpp
-        src/chunk.cxx
-        src/chunk.hpp
+        src/world/region.cxx
+        src/world/region.hpp
+        src/world/chunk.cxx
+        src/world/chunk.hpp
         src/world.cxx
         src/world.hpp
         src/threadsafequeue.hpp
@@ -78,7 +78,12 @@ set(SOURCE_FILES
         src/util/time.cxx
         src/util/string.hpp
         src/serverconfig.hpp
-        src/event.hpp)
+        src/event.hpp src/world/biome.hpp
+        src/world/chunkcolumn.hpp
+        src/world/terraingenerator.cxx
+        src/world/terraingenerator.hpp
+        src/protocol/chunkserializer.cxx
+        src/protocol/chunkserializer.hpp src/world/chunkmanager.cxx src/world/chunkmanager.hpp)
 
 add_executable(redi ${SOURCE_FILES})
 
