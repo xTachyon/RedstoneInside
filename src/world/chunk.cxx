@@ -118,7 +118,7 @@ namespace redi
 //      ch(x, 2, z) = BlockType::Leaves2;
 //}
 
-Chunk::Chunk() : mInhabitedTime(0), mGenerator(std::make_unique<TerrainGenerator>())
+Chunk::Chunk() : mBlocks(boost::extents[16][16]), mInhabitedTime(0), mGenerator(std::make_unique<TerrainGenerator>())
 {
 }
 

@@ -64,6 +64,8 @@ public:
 
   Block& operator()(Vector3i pos) { return mBlocks[pos.x][pos.z][pos.y]; };
   Block& operator()(std::int32_t x, std::int32_t y, std::int32_t z) { return mBlocks[x][z][y]; }
+  Block operator()(Vector3i pos) const { return mBlocks[pos.x][pos.z][pos.y]; };
+  Block operator()(std::int32_t x, std::int32_t y, std::int32_t z) const { return mBlocks[x][z][y]; }
 
 private:
 

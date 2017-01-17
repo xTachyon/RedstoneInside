@@ -17,7 +17,7 @@ public:
   
   ServerConfig config;
 
-  Server(boost::asio::io_service& io_service) : mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0) {}
+  Server(boost::asio::io_service& io_service);
 
   std::int32_t getNewEntityID() { return mEntityCount++; }
   void addConnectedSession(boost::asio::ip::tcp::socket&& socket)
@@ -29,6 +29,7 @@ public:
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);
   void addPlayer(const std::string nick, Session* session);
   void addEvent(EventPtr ptr);
+  void addWorld(const std::string& worldname, const std::string& worlddir);
   
 private:
   

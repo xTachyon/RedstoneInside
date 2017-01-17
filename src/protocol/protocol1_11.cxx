@@ -10,6 +10,7 @@
 #include "../server.hpp"
 #include "../player.hpp"
 #include "../util/util.hpp"
+#include "chunkserializer.hpp"
 
 namespace redi
 {
@@ -199,7 +200,7 @@ void Protocol1_11::sendSetCompression()
 void Protocol1_11::sendSpawnPosition()
 {
   PacketWriter writer(0x43);
-  writer.writePosition(0, 0, 0);
+  writer.writePosition(0, 100, 0);
   writer.commit();
   
   mSession->sendPacket(writer, "Sent Spawn Position");
@@ -216,21 +217,21 @@ void Protocol1_11::sendPlayerAbilities()
   mSession->sendPacket(writer, "Send Player Abilities");
 }
 
-void Protocol1_11::handleClientSettings(PacketReader& reader)
+void Protocol1_11::handleClientSettings(PacketReader&)
 {
-  std::string locale = reader.readString();
-  std::int8_t viewdistance = reader.readByte();
-  std::int32_t chatmode = reader.readVarInt();
-  bool chatcolors = reader.readBool();
-  std::uint8_t skinparts = reader.readUByte();
-  std::int32_t mainhand = reader.readVarInt();
+//  std::string locale = reader.readString();
+//  std::int8_t viewdistance = reader.readByte();
+//  std::int32_t chatmode = reader.readVarInt();
+//  bool chatcolors = reader.readBool();
+//  std::uint8_t skinparts = reader.readUByte();
+//  std::int32_t mainhand = reader.readVarInt();
 }
 
 void Protocol1_11::sendPlayerPositionAndLook()
 {
   PacketWriter writer(0x2E);
   writer.writeDouble(0);
-  writer.writeDouble(0);
+  writer.writeDouble(200);
   writer.writeDouble(0);
   writer.writeFloat(0);
   writer.writeFloat(0);
@@ -260,4 +261,10 @@ void Protocol1_11::sendTimeUpdate()
   mSession->sendPacket(writer, "Send Time Update");
 }
 
+void Protocol1_11::sendChunk(const Chunk& chunk, Vector2i pos)
+{
+  ChunkSerializer s(chunk, pos);
+  mSession->sendPacket(s(), "Send Chunk data");
+}
+  
 } // namespace redi

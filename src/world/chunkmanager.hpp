@@ -15,6 +15,7 @@ public:
   ChunkManager(const std::string& regiondir, WorldGenerator generator);
   
   Block operator()(Vector3i pos);
+  const Chunk& getChunk(Vector2i pos);
   
   void loadChunk(Vector2i pos);
   

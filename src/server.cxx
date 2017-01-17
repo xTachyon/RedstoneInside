@@ -106,14 +106,35 @@ void Server::addPlayer(const std::string nick, Session* session)
   protocol.sendLoginSucces(nick, uuid);
   protocol.sendJoinGame(mPlayers.back());
   protocol.sendSpawnPosition();
-//  protocol.sendPlayerAbilities();
-//  protocol.sendTimeUpdate();
+  //protocol.sendPlayerAbilities();
+  protocol.sendTimeUpdate();
   protocol.sendPlayerPositionAndLook();
+  
+  ChunkManager& cm = mWorlds.back().getChunkManager();
+  for (std::int32_t i = -10; i < 21; ++i)
+  {
+    for (std::int32_t j = -10; j < 21; ++j)
+    {
+      Vector2i r(i, j);
+      
+      protocol.sendChunk(cm.getChunk(r), r);
+    }
+  }
 }
 
 void Server::addEvent(EventPtr ptr)
 {
   mActions.push(ptr);
+}
+
+void Server::addWorld(const std::string& worldname, const std::string& worlddir)
+{
+  mWorlds.emplace_back(worldname, worlddir, std::make_shared<TerrainGenerator>());
+}
+
+Server::Server(boost::asio::io_service& io_service) : mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0)
+{
+  addWorld("world", "world/region");
 }
   
 } // namespace redi

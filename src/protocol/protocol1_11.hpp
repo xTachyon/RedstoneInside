@@ -35,6 +35,7 @@ public:
   virtual void sendPlayerPositionAndLook() override;
   virtual void sendKeepAlive() override;
   virtual void sendTimeUpdate() override;
+  virtual void sendChunk(const Chunk&, Vector2i pos) override;
   
   std::string getIP();
   static std::string getIP(boost::asio::ip::tcp::socket& socket);

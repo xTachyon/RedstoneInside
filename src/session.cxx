@@ -101,7 +101,6 @@ void Session::kill()
   EventPtr ptr(new EventSessionDC(this));
   mServer->addEvent(ptr);
 }
-
 void Session::setPlayer(Player& player)
 {
   mPlayer = std::addressof(player);
@@ -109,18 +108,8 @@ void Session::setPlayer(Player& player)
 
 void Session::sendPacket(ByteBuffer&& pkt, const char* message)
 {
-//  std::ostringstream ss;
-//  ss << "packet in queue: ";
-//  ss.write(pkt.as_const_char(), pkt.size());
-//  ss << "\n";
-//  for (std::size_t i = 0; i < pkt.size(); ++i)
-//  {
-//    ss << (int)pkt[i] << ' ';
-//  }
-//  Logger::info(ss.str());
-  
   mSendingQueue.push(std::make_shared<ByteBuffer>(std::move(pkt)));
-  std::cout << message << "\n";
+  Logger::info(message);
   writeNext();
 }
   

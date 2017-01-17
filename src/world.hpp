@@ -17,6 +17,7 @@ class World
 public:
 
   World(const std::string& worldname, const std::string& worlddir, WorldGenerator ptr, Dimension dim = Dimension::Overworld);
+  ChunkManager& getChunkManager() { return mChunkManager; }
   
 private:
 

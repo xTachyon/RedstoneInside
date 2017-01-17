@@ -7,6 +7,8 @@
 #include "util/util.hpp"
 #include "protocol/packetwriter.hpp"
 #include "logger.hpp"
+#include "world/chunk.hpp"
+#include "protocol/chunkserializer.hpp"
 
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;
