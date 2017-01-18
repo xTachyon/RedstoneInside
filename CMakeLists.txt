@@ -83,10 +83,13 @@ set(SOURCE_FILES
         src/world/terraingenerator.cxx
         src/world/terraingenerator.hpp
         src/protocol/chunkserializer.cxx
-        src/protocol/chunkserializer.hpp src/world/chunkmanager.cxx src/world/chunkmanager.hpp)
+        src/protocol/chunkserializer.hpp
+        src/world/chunkmanager.cxx
+        src/world/chunkmanager.hpp
+        src/protocol/chunkserializer13.cxx
+        src/protocol/chunkserializer13.hpp)
 
 add_executable(redi ${SOURCE_FILES})
-
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
     message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")

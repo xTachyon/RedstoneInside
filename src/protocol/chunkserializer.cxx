@@ -91,7 +91,7 @@ void ChunkSerializer::generatePaletteAndDataArray(std::vector<std::int32_t>& pal
     {
       for (std::uint16_t y = 0; y < 16; ++y)
       {
-        std::int32_t blockstate = 2480;//generateBlockStateID(mChunk(x, y + plusy, z));
+        std::int32_t blockstate = generateBlockStateID(mChunk(x, y + plusy, z));
         
         std::size_t found_at = 0;
         bool found = false;
