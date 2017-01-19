@@ -111,12 +111,12 @@ void Server::addPlayer(const std::string nick, Session* session)
   protocol.sendPlayerPositionAndLook();
   
   ChunkManager& cm = mWorlds.back().getChunkManager();
-  for (std::int32_t i = -10; i < 21; ++i)
+  for (std::int32_t i = 0; i < 1; ++i)
   {
-    for (std::int32_t j = -10; j < 21; ++j)
+    for (std::int32_t j = 0; j < 1; ++j)
     {
       Vector2i r(i, j);
-      
+
       protocol.sendChunk(cm.getChunk(r), r);
     }
   }

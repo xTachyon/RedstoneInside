@@ -35,6 +35,7 @@ void Session::writeNext()
   if (mSendingPacket || mSendingQueue.empty()) return;
   
   mSendingPacket = mSendingQueue.pop();
+  if (!mSendingPacket) return;
   
   asio::async_write(mSocket, asio::buffer(mSendingPacket->data(), mSendingPacket->size()),
                     boost::bind(&Session::handleWrite, this, asio::placeholders::error));

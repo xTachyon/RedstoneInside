@@ -18,25 +18,25 @@ class ChunkSerializer13
   
   private:
   
-  static constexpr std::size_t PaletteBits = 13;
+  static constexpr std::size_t ChunkSectionsNumber = 16;
+  static constexpr std::size_t BitsPerBlock = 13;
   static constexpr std::size_t BlocksPerSection = 16 * 16 * 16;
-  static constexpr std::size_t SectionsSizeWithoutSkyLight =
-        1 + // Bits per block
-        1 + // Palette length
-        2 +
-        BlocksPerSection * PaletteBits / 8 / 8 * 8 +
-        128;
-  
+  static constexpr std::size_t ChunkSectionDataSize = BlocksPerSection * BitsPerBlock / 8 / 8;
+  static constexpr std::size_t BiomeDataSize = 256;
   
   const Chunk& mChunk;
   Vector2i mPosition;
   Dimension mDimension;
   
+  void writeHeader(PacketWriter& writer);
   void writeChunkSections(PacketWriter& writer);
   void writeChunkSection(PacketWriter& writer, std::uint8_t nth);
+  void writeBlockLight(PacketWriter& writer, std::uint8_t nth);
+  void writeSkyLight(PacketWriter& writer, std::uint8_t nth);
+  void writeBiomes(PacketWriter& writer);
+  void writeBlockEntities(PacketWriter& writer);
   
-  static std::int32_t generateBlockStateID(Block b);
-  static std::size_t getChunkSize(Dimension d = Dimension::Overworld);
+  static uint64_t generateBlockStateID(Block b);
 };
   
 } // namespace redi

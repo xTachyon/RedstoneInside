@@ -11,6 +11,7 @@
 #include "../player.hpp"
 #include "../util/util.hpp"
 #include "chunkserializer.hpp"
+#include "chunkserializer13.hpp"
 
 namespace redi
 {
@@ -263,8 +264,7 @@ void Protocol1_11::sendTimeUpdate()
 
 void Protocol1_11::sendChunk(const Chunk& chunk, Vector2i pos)
 {
-  ChunkSerializer s(chunk, pos);
-  mSession->sendPacket(s(), "Send Chunk data");
+  mSession->sendPacket(ChunkSerializer13(chunk, pos)(), "Send Chunk data");
 }
   
 } // namespace redi
