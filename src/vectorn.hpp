@@ -2,6 +2,7 @@
 #define REDI_POSITION
 
 #include <cstdint>
+#include <boost/format.hpp>
 
 namespace redi
 {
@@ -38,7 +39,19 @@ struct Vector2
   {
     return x < r.x || (x == r.x && z < r.z);
   }
+  
+  std::string toString() const
+  {
+    return (boost::format("(%1%, %2%)") % x % z).str();
+  }
 };
+
+template <typename T>
+std::ostream& operator<<(std::ostream& stream, const Vector2<T>& val)
+{
+  stream << val.toString();
+  return stream;
+}
 
 template <typename T>
 struct Vector3
@@ -52,7 +65,19 @@ struct Vector3
   {
     return x == r.x && y == r.y && z == r.z;
   }
+  
+  std::string toString() const
+  {
+    return (boost::format("(%1%, %2%, %3%)") % x % y % z).str();
+  }
 };
+
+template <typename T>
+std::ostream& operator<<(std::ostream& stream, const Vector3<T>& val)
+{
+  stream << val.toString();
+  return stream;
+}
 
 using Vector2i = Vector2<std::int32_t>;
 using Vector3i = Vector3<std::int32_t>;

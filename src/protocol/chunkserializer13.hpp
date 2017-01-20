@@ -23,6 +23,10 @@ class ChunkSerializer13
   static constexpr std::size_t BlocksPerSection = 16 * 16 * 16;
   static constexpr std::size_t ChunkSectionDataSize = BlocksPerSection * BitsPerBlock / 8 / 8;
   static constexpr std::size_t BiomeDataSize = 256;
+  static constexpr std::size_t LightDataSize = BlocksPerSection / 2;
+  static constexpr std::uint8_t SectionX = 16;
+  static constexpr std::uint8_t SectionY = 16;
+  static constexpr std::uint8_t SectionZ = 16;
 
   const size_t NumChunkSections = 16;
   const size_t ChunkSectionDataArraySize = (BlocksPerSection * BitsPerBlock) / 8 / 8;  // Convert from bit count to long count
@@ -30,8 +34,9 @@ class ChunkSerializer13
   const Chunk& mChunk;
   Vector2i mPosition;
   Dimension mDimension;
-
-  void writeHeader(PacketWriter& writer);
+  PacketWriter packet;
+  
+  void writeHeader();
   void writeChunkSections(PacketWriter& writer);
   void writeChunkSection(PacketWriter& writer, std::uint8_t nth);
   void writeBlockLight(PacketWriter& writer, std::uint8_t nth);

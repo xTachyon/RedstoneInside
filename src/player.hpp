@@ -7,13 +7,15 @@
 namespace redi
 {
 
+class World;
+
 class Player
 {
 public:
   
   const std::int32_t id;
   
-  Player(const std::string& name, const std::string uuid, Session* session, std::int32_t id, Server* server,
+  Player(const std::string& name, const std::string uuid, Session* session, std::int32_t id, Server* server, World* world,
            Gamemode gamemode = Gamemode::Creative);
   ~Player();
   
@@ -25,6 +27,8 @@ public:
   Gamemode getGamemode() const { return mGamemode; }
   Dimension getDimension() const { return mDimension; }
   Vector3d getPosition() const { return mPosition; }
+  World& getWorld() { return *mWorld; }
+  const World& getWorld() const { return *mWorld; }
   
   static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::deadline_timer* timer,
                                         Protocol* protocol);
@@ -40,6 +44,7 @@ public:
   Dimension mDimension;
   Vector3d mPosition;
   boost::asio::deadline_timer mSendKeepAlive;
+  World* mWorld;
 };
 
 } // namespace redi

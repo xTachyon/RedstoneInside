@@ -9,10 +9,24 @@ void TerrainGenerator::generate(Chunk& chunk)
 {
   for (std::int32_t x = 0; x < Chunk::ChunkMaxX; ++x)
   {
-    for (std::int32_t z = 0; z < Chunk::ChunkMaxZ; ++z)
+    for (std::int32_t y = 0; y < Chunk::ChunkMaxY; ++y)
     {
-      chunk(x, 0, z).type = BlockType::Bedrock;
-      chunk(x, 1, z).type = BlockType::DiamondBlock;
+      for (std::int32_t z = 0; z < Chunk::ChunkMaxZ; ++z)
+      {
+        if (y == 0)
+        {
+          chunk(x, y, z).type = BlockType::Bedrock;
+        }
+        else if (y == 1)
+        {
+          chunk(x, y, z).type = BlockType::Glowstone;
+        }
+        else if (y == 2)
+        {
+          chunk(x, y, z).type = BlockType::Leaves2;
+        }
+      }
+        
     }
   }
 }

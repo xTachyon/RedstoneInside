@@ -45,6 +45,11 @@ void PacketWriter::writeLong(std::int64_t v)
   writeBNumber(v);
 }
 
+void PacketWriter::writeULong(std::uint64_t v)
+{
+  writeBNumber(v);
+}
+
 void PacketWriter::writeFloat(float v)
 {
   std::int32_t c;
@@ -89,10 +94,10 @@ void PacketWriter::writeVarInt(std::uint32_t v)
 
 void PacketWriter::writeVarLong(std::int64_t v)
 {
-  writeVarLong(*reinterpret_cast<std::uint64_t*>(std::addressof(v)));
+  writeVarULong(*reinterpret_cast<std::uint64_t*>(std::addressof(v)));
 }
 
-void PacketWriter::writeVarLong(std::uint64_t v)
+void PacketWriter::writeVarULong(std::uint64_t v)
 {
   do
   {

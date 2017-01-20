@@ -16,12 +16,6 @@ namespace asio = boost::asio;
 
 int main(int, char**)
 {
-  redi::Chunk c;
-  redi::TerrainGenerator t;
-  t.generate(c);
-  redi::ChunkSerializer13 s(c, redi::Vector2i(0, 0));
-  redi::ByteBuffer b = s();
-  
   asio::io_service io_service;
 
   try

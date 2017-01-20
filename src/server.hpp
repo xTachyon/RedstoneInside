@@ -15,6 +15,8 @@ class Server
 {
 public:
   
+  using PlayerList = std::list<Player>;
+  
   ServerConfig config;
 
   Server(boost::asio::io_service& io_service);
@@ -30,11 +32,13 @@ public:
   void addPlayer(const std::string nick, Session* session);
   void addEvent(EventPtr ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
+  std::size_t getOnlinePlayersNumber() const { return mOnlinePlayers; }
+  PlayerList& getOnlinePlayers() { return mPlayers; }
+  const PlayerList& getOnlinePlayers() const { return mPlayers; }
   
 private:
   
   using SessionList = std::list<Session>;
-  using PlayerList = std::list<Player>;
   using WorldList = std::list<World>;
   
   SessionList mConnectedClients;
@@ -45,6 +49,7 @@ private:
   PlayerList mPlayers;
   ThreadSafeQueue<EventPtr> mActions;
   WorldList mWorlds;
+  std::size_t mOnlinePlayers;
 
   std::int32_t mEntityCount;
 };

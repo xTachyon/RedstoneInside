@@ -18,13 +18,13 @@ namespace redi
 
 void Protocol1_11::handlePacket(ByteBuffer& buffer)
 {
-  PacketReader reader;
+  PacketReader pkt;
   
-//  if (mSession->setCompressionSent) reader = PacketReader::getFromCompressedPacket(buffer);
+//  if (mSession->setCompressionSent) pkt = PacketReader::getFromCompressedPacket(buffer);
 //  else
-  reader.data = std::move(buffer);
+  pkt.data = std::move(buffer);
   
-  std::int32_t type = reader.readVarInt();
+  std::int32_t type = pkt.readVarInt();
   
   Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->state) % getIP()).str());
   
@@ -35,7 +35,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
       switch (type)
       {
       case 0x00:
-        handleLoginStart(reader);
+        handleLoginStart(pkt);
         break;
       }
     }
@@ -46,11 +46,11 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
       switch (type)
       {
         case 0x00:
-          handleStatusRequest(reader);
+          handleStatusRequest(pkt);
           break;
           
         case 0x01:
-          handleStatusPing(reader);
+          handleStatusPing(pkt);
           break;
       }
     }
@@ -61,7 +61,12 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
       switch (type)
       {
       case 0x04:
-        handleClientSettings(reader);
+        handleClientSettings(pkt);
+        break;
+        
+      case 0x1C:
+        handlePlayerBlockPlacement(pkt);
+        break;
       }
     }
     break;
@@ -71,7 +76,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     switch (type)
     {
     case 0x00:
-      handleHandshake(reader);
+      handleHandshake(pkt);
       break;
     }
   }
@@ -232,7 +237,7 @@ void Protocol1_11::sendPlayerPositionAndLook()
 {
   PacketWriter writer(0x2E);
   writer.writeDouble(0);
-  writer.writeDouble(200);
+  writer.writeDouble(70);
   writer.writeDouble(0);
   writer.writeFloat(0);
   writer.writeFloat(0);
@@ -265,6 +270,11 @@ void Protocol1_11::sendTimeUpdate()
 void Protocol1_11::sendChunk(const Chunk& chunk, Vector2i pos)
 {
   mSession->sendPacket(ChunkSerializer13(chunk, pos)(), "Send Chunk data");
+}
+
+void Protocol1_11::handlePlayerBlockPlacement(PacketReader& pkt)
+{
+  Vector3i location = pkt.readPosition();
 }
   
 } // namespace redi

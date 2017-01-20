@@ -43,8 +43,8 @@ void Server::run()
                                {
                                  return std::addressof(p) == player;
                                });
-//            EventPtr ptr(new EventSessionDC(player->getSessionPtr()));
-//            addEvent(ptr);
+            player->getWorld().deletePlayer(player);
+            --mOnlinePlayers;
           }
         }
           break;
@@ -74,12 +74,12 @@ void Server::run()
       }
     }
     
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
     
     n = util::getUnixTimestamp();
-    if (n > s + 4)
+    if (n > s + 9)
     {
-      Logger::info((boost::format("Number of connections: %1% --- Number of players: %2%")
+      Logger::debug((boost::format("Number of connections: %1% --- Number of players: %2%")
                     % std::distance(mConnectedClients.begin(), mConnectedClients.end())
                     % std::distance(mPlayers.begin(), mPlayers.end())).str());
       s = n;
@@ -96,11 +96,13 @@ void Server::addPlayer(const std::string nick, Session* session)
 {
   std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
   
-  mPlayers.emplace_back(nick, uuid, session, getNewEntityID(), this);
+  mPlayers.emplace_back(nick, uuid, session, getNewEntityID(), this, &mWorlds.back());
   Player& player = mPlayers.back();
   Protocol& protocol = player.getSession().getProtocol();
+  ++mOnlinePlayers;
   
   player.getSession().setPlayer(player);
+  player.getWorld().addPlayer(&player);
   
   protocol.sendSetCompression();
   protocol.sendLoginSucces(nick, uuid);
@@ -111,9 +113,9 @@ void Server::addPlayer(const std::string nick, Session* session)
   protocol.sendPlayerPositionAndLook();
   
   ChunkManager& cm = mWorlds.back().getChunkManager();
-  for (std::int32_t i = 0; i < 1; ++i)
+  for (std::int32_t i = -5; i < 5; ++i)
   {
-    for (std::int32_t j = 0; j < 1; ++j)
+    for (std::int32_t j = -5; j < 5; ++j)
     {
       Vector2i r(i, j);
 
@@ -132,7 +134,7 @@ void Server::addWorld(const std::string& worldname, const std::string& worlddir)
   mWorlds.emplace_back(worldname, worlddir, std::make_shared<TerrainGenerator>());
 }
 
-Server::Server(boost::asio::io_service& io_service) : mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0)
+Server::Server(boost::asio::io_service& io_service) : mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0)
 {
   addWorld("world", "world/region");
 }

@@ -1,3 +1,4 @@
+#include "player.hpp"
 #include "world.hpp"
 
 namespace redi
@@ -9,5 +10,14 @@ World::World(const std::string& worldname, const std::string& worlddir, WorldGen
     mDimension(dim)
 {}
 
+void World::addPlayer(Player* player)
+{
+  mPlayers.push_back(player);
+}
 
+void World::deletePlayer(Player* player)
+{
+  mPlayers.remove(player);
+}
+  
 } // namespace redi

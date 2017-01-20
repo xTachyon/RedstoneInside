@@ -25,13 +25,14 @@ public:
   void writeUShort(std::uint16_t v);
   void writeInt(std::int32_t v);
   void writeLong(std::int64_t v);
+  void writeULong(std::uint64_t v);
   void writeFloat(float v);
   void writeDouble(double v);
   void writeString(const std::string& v);
   void writeVarInt(std::int32_t v);
   void writeVarInt(std::uint32_t v);
   void writeVarLong(std::int64_t v);
-  void writeVarLong(std::uint64_t v);
+  void writeVarULong(std::uint64_t v);
   void writePosition(std::int64_t x, std::int64_t y, std::int64_t z);
   void commit(bool compressed = false);
   
