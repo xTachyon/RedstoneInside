@@ -60,8 +60,6 @@ void ChunkSerializer13::writeChunkSection(PacketWriter& writer, std::uint8_t nth
   writer.writeUByte(0); // Palette length
   writer.writeVarInt(ChunkSectionDataArraySize); // Data Array Length
   
-  std::size_t startIndex = nth * BlocksPerSection;
-  
   std::uint64_t temp = 0;
   std::uint64_t currentlyWrittenIndex = 0;
   

@@ -49,9 +49,8 @@ private:
   PlayerList mPlayers;
   ThreadSafeQueue<EventPtr> mActions;
   WorldList mWorlds;
-  std::size_t mOnlinePlayers;
-
   std::int32_t mEntityCount;
+  std::size_t mOnlinePlayers;
 };
   
 } // namespace redi

@@ -58,14 +58,6 @@ set(SOURCE_FILES
         src/server.hpp
         src/player.cxx
         src/player.hpp
-#        src/eventsold/events.cxx
-#        src/eventsold/events.hpp
-#        src/eventsold/eventtype.hpp
-#        src/eventsold/eventmanager.cxx
-#        src/eventsold/eventmanager.hpp
-#        src/eventsold/observer.hpp
-#        src/eventsold/vanillaobserver.cxx
-#        src/eventsold/vanillaobserver.hpp
         src/protocol/protocol.hpp
         src/protocol/protocol1_11.cxx
         src/protocol/protocol1_11.hpp
@@ -83,12 +75,17 @@ set(SOURCE_FILES
         src/world/chunkcolumn.hpp
         src/world/terraingenerator.cxx
         src/world/terraingenerator.hpp
-        src/protocol/chunkserializer.cxx
-        src/protocol/chunkserializer.hpp
         src/world/chunkmanager.cxx
         src/world/chunkmanager.hpp
         src/protocol/chunkserializer13.cxx
-        src/protocol/chunkserializer13.hpp src/events/eventtype.hpp src/events/events.hpp src/events/playerdisconnected.hpp src/events/sessiondisconnected.hpp src/events/sendkeepalivering.hpp)
+        src/protocol/chunkserializer13.hpp
+        src/events/eventtype.hpp
+        src/events/events.hpp
+        src/events/playerdisconnected.hpp
+        src/events/sessiondisconnected.hpp
+        src/events/sendkeepalivering.hpp
+        src/events/eventmanager.cxx
+        src/events/eventmanager.hpp)
 
 add_executable(redi ${SOURCE_FILES})
 

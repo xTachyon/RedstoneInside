@@ -10,7 +10,6 @@
 #include "../server.hpp"
 #include "../player.hpp"
 #include "../util/util.hpp"
-#include "chunkserializer.hpp"
 #include "chunkserializer13.hpp"
 
 namespace redi
