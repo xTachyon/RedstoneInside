@@ -58,14 +58,14 @@ set(SOURCE_FILES
         src/server.hpp
         src/player.cxx
         src/player.hpp
-#        src/events/event.cxx
-#        src/events/event.hpp
-#        src/events/eventtype.hpp
-#        src/events/eventmanager.cxx
-#        src/events/eventmanager.hpp
-#        src/events/observer.hpp
-#        src/events/vanillaobserver.cxx
-#        src/events/vanillaobserver.hpp
+#        src/eventsold/events.cxx
+#        src/eventsold/events.hpp
+#        src/eventsold/eventtype.hpp
+#        src/eventsold/eventmanager.cxx
+#        src/eventsold/eventmanager.hpp
+#        src/eventsold/observer.hpp
+#        src/eventsold/vanillaobserver.cxx
+#        src/eventsold/vanillaobserver.hpp
         src/protocol/protocol.hpp
         src/protocol/protocol1_11.cxx
         src/protocol/protocol1_11.hpp
@@ -78,7 +78,8 @@ set(SOURCE_FILES
         src/util/time.cxx
         src/util/string.hpp
         src/serverconfig.hpp
-        src/event.hpp src/world/biome.hpp
+        src/events/event.hpp
+        src/world/biome.hpp
         src/world/chunkcolumn.hpp
         src/world/terraingenerator.cxx
         src/world/terraingenerator.hpp
@@ -87,7 +88,7 @@ set(SOURCE_FILES
         src/world/chunkmanager.cxx
         src/world/chunkmanager.hpp
         src/protocol/chunkserializer13.cxx
-        src/protocol/chunkserializer13.hpp)
+        src/protocol/chunkserializer13.hpp src/events/eventtype.hpp src/events/events.hpp src/events/playerdisconnected.hpp src/events/sessiondisconnected.hpp src/events/sendkeepalivering.hpp)
 
 add_executable(redi ${SOURCE_FILES})
 

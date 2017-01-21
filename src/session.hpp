@@ -92,6 +92,16 @@ private:
   void writeNext();
 };
 
+inline bool operator==(const Session& l, const Session& r)
+{
+  return &l == &r;
+}
+
+inline bool operator!=(const Session& l, const Session& r)
+{
+  return !(l == r);
+}
+
 } // namespace redi
 
 #endif // REDI_SESSION

@@ -29,15 +29,15 @@ void Server::run()
       {
         switch (x->getType())
         {
-        case EventType::PlayerDC:
+        case EventType::PlayerDisconnected:
         {
-          const EventPlayerDC& event = x->get<EventPlayerDC>();
-          Player* player = event.player;
+          const EventPlayerDisconnected& event = x->get<EventPlayerDisconnected>();
+          Player* player = &event.player;
           if (player)
           {
             mConnectedClients.remove_if([&](const Session& ar)
                                         {
-                                          return player->getSessionPtr() == std::addressof(ar);
+                                          return player->getSession() == ar;
                                         });
             mPlayers.remove_if([&](const Player& p)
                                {
@@ -49,21 +49,21 @@ void Server::run()
         }
           break;
         
-        case EventType::SessionDC:
+        case EventType::SessionDisconnected:
         {
-          const EventSessionDC& event = x->get<EventSessionDC>();
+          const EventSessionDisconnected& event = x->get<EventSessionDisconnected>();
           mPlayers.remove_if([&](const Player& p)
                              {
-                               return p.getSessionPtr() == event.session;
+                               return p.getSession() == event.session;
                              });
           mConnectedClients.remove_if([&](const Session& ar)
                                       {
-                                        return event.session == std::addressof(ar);
+                                        return event.session == ar;
                                       });
         }
           break;
         
-        case EventType::SendKeepAlive:
+        case EventType::SendKeepAliveRing:
         {
           const EventSendKeepAliveRing& event = x->get<EventSendKeepAliveRing>();
           Protocol* p = event.session.getProtocolPtr();

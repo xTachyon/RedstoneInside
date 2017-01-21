@@ -1,38 +1,34 @@
-#ifndef REDI_EVENT_EVENT
-#define REDI_EVENT_EVENT
+#ifndef REDI_EVENT_HPP
+#define REDI_EVENT_HPP
 
 #include "eventtype.hpp"
 
 namespace redi
 {
 
-class Event
+struct Event
 {
-public:
-
-  Event(EventType type) : mType(type), mIsCancelled(false) {}
+  const  EventType type;
   
-  operator bool() const { return !mIsCancelled; }
+  Event(EventType type) : type(type) {}
   
-  void cancel() { mIsCancelled = true; }
-  bool isCancelled() const { return mIsCancelled; }
-  EventType getType() const { return mType; }
+  virtual ~Event() = 0;
   
-private:
+  EventType getType() const { return type; }
   
-  EventType mType;
-  bool mIsCancelled;
+  template <typename T>
+  T& get()
+  {
+    T* ptr = dynamic_cast<T*>(this);
+    if (ptr) return *ptr;
+    throw std::runtime_error("Event dynamic cast failed");
+  }
 };
 
-class WeatherChangeEvent : public Event
-{
-public:
-  
-  static constexpr EventType type = EventType::WeatherChange;
-  
-  WeatherChangeEvent() : Event(type) {}
-};
+inline Event::~Event() {}
+
+using EventPtr = std::shared_ptr<Event>;
 
 } // namespace redi
 
-#endif //REDI_EVENT_EVENT
+#endif //REDI_EVENT_HPP

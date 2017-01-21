@@ -1,41 +1,16 @@
-#ifndef REDI_EVENT_TYPE
-#define REDI_EVENT_TYPE
-
-#include <cstdint>
-#include <functional>
-#include <memory>
+#ifndef REDI_EVENT_EVENTTYPE_HPP
+#define REDI_EVENT_EVENTTYPE_HPP
 
 namespace redi
 {
 
-enum class EventType : std::uint16_t
+enum class EventType
 {
-  SomethingHappened,
-  ClientConnected,
-  WeatherChange
-};
-
-enum class EventPriority : std::uint8_t
-{
-  Lowest,
-  Low,
-  Normal,
-  High,
-  Highest,
-  Monitor
-};
-
-class Observer;
-
-struct EventData
-{
-  EventType type;
-  EventPriority priority;
-  
-  EventData(EventType type = EventType::SomethingHappened, EventPriority priority = EventPriority::Normal)
-        : type(type), priority(priority) {}
+  PlayerDisconnected,
+  SessionDisconnected,
+  SendKeepAliveRing
 };
 
 } // namespace redi
 
-#endif // REDI_EVENT_TYPE
+#endif // REDI_EVENT_EVENTTYPE_HPP

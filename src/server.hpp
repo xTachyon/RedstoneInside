@@ -5,7 +5,7 @@
 #include "player.hpp"
 #include "connectionlistener.hpp"
 #include "serverconfig.hpp"
-#include "event.hpp"
+#include "events/events.hpp"
 #include "world.hpp"
 
 namespace redi
