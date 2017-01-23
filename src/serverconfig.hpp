@@ -2,6 +2,7 @@
 #define REDI_SERVERCONFIG_HPP
 
 #include <string>
+#include "bytebuffer.hpp"
 
 namespace redi
 {
@@ -13,6 +14,8 @@ enum class Gamemode : std::uint8_t
   Adventure,
   Spectator
 };
+
+const char* GamemodeEnumToString(Gamemode);
 
 enum class Dimension : std::int8_t
 {
@@ -29,6 +32,8 @@ enum class Difficulty : std::uint8_t
   Hard
 };
 
+const char* DifficultyEnumToString(Difficulty);
+
 enum PlayerAbilitiesFlag : std::int8_t
 {
   Invulnerable = 0x01,
@@ -39,13 +44,24 @@ enum PlayerAbilitiesFlag : std::int8_t
 
 struct ServerConfig
 {
-  bool onlineMode = false;
-  int maxPlayers = 20;
-  std::string motd = "Redi - May contain nuts";
-  Gamemode gamemode = Gamemode::Creative;
-  Difficulty difficulty = Difficulty::Peaceful;
-  std::string evelType = "default";
-  bool reducedDebugInfo = false;
+  bool onlineMode;
+  int maxPlayers;
+  std::string motd;
+  Gamemode gamemode;
+  Difficulty difficulty;
+  std::string levelType;
+  bool reducedDebugInfo;
+  ByteBuffer iconb64;
+  
+  std::string configpath;
+  std::string iconpath;
+  
+  ServerConfig(std::string&& filepath);
+  
+  void readConfig();
+  void readIcon();
+  void writeConfig();
+  void writeIcon();
 };
   
 } // namespace redi

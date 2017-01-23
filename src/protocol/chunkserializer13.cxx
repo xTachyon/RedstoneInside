@@ -145,7 +145,6 @@ void ChunkSerializer13::writeBlockEntities(PacketWriter& writer)
 std::uint64_t ChunkSerializer13::generateBlockStateID(Block b)
 {
   constexpr std::uint64_t OverflowMask = (1 << BitsPerBlock) - 1;
-  //constexpr std::uint64_t OverflowMask = 0b111111111;
   return ((static_cast<std::uint64_t>(b.type) & OverflowMask)
         << 4) | b.data;
 }

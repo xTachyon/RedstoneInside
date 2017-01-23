@@ -85,7 +85,10 @@ set(SOURCE_FILES
         src/events/sessiondisconnected.hpp
         src/events/sendkeepalivering.hpp
         src/events/eventmanager.cxx
-        src/events/eventmanager.hpp)
+        src/events/eventmanager.hpp
+        src/events/functor.hpp
+        src/events/eventpriority.hpp
+        src/serverconfig.cxx src/bytebuffer.cxx)
 
 add_executable(redi ${SOURCE_FILES})
 
@@ -97,7 +100,7 @@ else()
 endif()
 
 set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost REQUIRED COMPONENTS filesystem iostreams system thread)
+find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options system thread)
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     target_link_libraries(redi ${Boost_LIBRARIES})

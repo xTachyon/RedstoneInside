@@ -2,7 +2,6 @@
 #define REDI_BINARYDATA
 
 #include <cstdint>
-#include <cstring>
 #include <vector>
 
 namespace redi
@@ -25,10 +24,7 @@ public:
     append(ptr, size);
   }
   
-  ByteBuffer(const char* ptr)
-  {
-    append(ptr, std::strlen(ptr));
-  }
+  ByteBuffer(const char* ptr);
 
   ByteBuffer(const char* ptr, base::size_type size)
   {
@@ -56,12 +52,8 @@ public:
   }
 };
 
-inline ByteBuffer& operator+=(ByteBuffer& l, const ByteBuffer& r)
-{
-  l.append(r.data(), r.size());
-  
-  return l;
-}
+ByteBuffer& operator+=(ByteBuffer& l, const ByteBuffer& r);
+ByteBuffer operator+(ByteBuffer l, const ByteBuffer& r);
 
 } // namespace redi
 

@@ -134,7 +134,7 @@ void Server::addWorld(const std::string& worldname, const std::string& worlddir)
   mWorlds.emplace_back(worldname, worlddir, std::make_shared<TerrainGenerator>());
 }
 
-Server::Server(boost::asio::io_service& io_service) : mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0)
+Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0)
 {
   addWorld("world", "world/region");
 }
