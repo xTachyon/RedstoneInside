@@ -88,7 +88,11 @@ set(SOURCE_FILES
         src/events/eventmanager.hpp
         src/events/functor.hpp
         src/events/eventpriority.hpp
-        src/serverconfig.cxx src/bytebuffer.cxx)
+        src/serverconfig.cxx src/bytebuffer.cxx
+        src/chatmanager.cxx
+        src/chatmanager.hpp src/events/chatmessage.hpp)
+
+add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 
 add_executable(redi ${SOURCE_FILES})
 

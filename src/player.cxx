@@ -36,5 +36,10 @@ void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, bo
   
   Logger::debug("Send Keep Alive Timer Ring " + std::to_string(error.value()));
 }
+
+void Player::sendPacket(ByteBufferSharedPtr ptr)
+{
+  mSession->sendPacket(ptr);
+}
   
 } // namespace red

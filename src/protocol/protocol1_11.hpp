@@ -26,6 +26,7 @@ public:
   virtual void handleLoginStart(PacketReader&);
   virtual void handleClientSettings(PacketReader&);
   virtual void handlePlayerBlockPlacement(PacketReader&);
+  virtual void handleChatMessage(PacketReader&);
   
   virtual void sendStatusPong(std::int64_t number) override;
   virtual void sendLoginSucces(const std::string& nick, const std::string& uuid) override;

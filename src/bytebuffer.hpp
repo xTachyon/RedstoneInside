@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <boost/asio/detail/shared_ptr.hpp>
 
 namespace redi
 {
@@ -54,6 +55,8 @@ public:
 
 ByteBuffer& operator+=(ByteBuffer& l, const ByteBuffer& r);
 ByteBuffer operator+(ByteBuffer l, const ByteBuffer& r);
+
+using ByteBufferSharedPtr = std::shared_ptr<ByteBuffer>;
 
 } // namespace redi
 

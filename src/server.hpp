@@ -7,6 +7,7 @@
 #include "serverconfig.hpp"
 #include "events/events.hpp"
 #include "world.hpp"
+#include "chatmanager.hpp"
 
 namespace redi
 {
@@ -35,6 +36,10 @@ public:
   std::size_t getOnlinePlayersNumber() const { return mOnlinePlayers; }
   PlayerList& getOnlinePlayers() { return mPlayers; }
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
+  void broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp);
+  
+  static bool toAllPlayers(const Player&) { return true; }
+  static bool toAllPlayersExcept(const Player& player, const Player& except);
   
 private:
   
@@ -51,6 +56,7 @@ private:
   WorldList mWorlds;
   std::int32_t mEntityCount;
   std::size_t mOnlinePlayers;
+  ChatManager mChatManager;
 };
   
 } // namespace redi

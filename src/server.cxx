@@ -70,6 +70,13 @@ void Server::run()
           if (p) p->sendKeepAlive();
         }
           break;
+        
+        case EventType::ChatMessage:
+        {
+          const EventChatMessage& event = x->get<EventChatMessage>();
+          mChatManager(event);
+        }
+          break;
         }
       }
     }
@@ -80,8 +87,8 @@ void Server::run()
     if (n > s + 9)
     {
       Logger::debug((boost::format("Number of connections: %1% --- Number of players: %2%")
-                    % std::distance(mConnectedClients.begin(), mConnectedClients.end())
-                    % std::distance(mPlayers.begin(), mPlayers.end())).str());
+                     % std::distance(mConnectedClients.begin(), mConnectedClients.end())
+                     % std::distance(mPlayers.begin(), mPlayers.end())).str());
       s = n;
     }
   }
@@ -118,7 +125,7 @@ void Server::addPlayer(const std::string nick, Session* session)
     for (std::int32_t j = -5; j < 5; ++j)
     {
       Vector2i r(i, j);
-
+      
       protocol.sendChunk(cm.getChunk(r), r);
     }
   }
@@ -134,9 +141,22 @@ void Server::addWorld(const std::string& worldname, const std::string& worlddir)
   mWorlds.emplace_back(worldname, worlddir, std::make_shared<TerrainGenerator>());
 }
 
-Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0)
+Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0), mChatManager(*this)
 {
   addWorld("world", "world/region");
+}
+
+void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp)
+{
+  std::for_each(mPlayers.begin(), mPlayers.end(), [&](Player& player)
+  {
+    if (comp(player)) player.sendPacket(ptr);
+  });
+}
+
+bool Server::toAllPlayersExcept(const Player& player, const Player& except)
+{
+  return false;
 }
   
 } // namespace redi

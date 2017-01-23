@@ -60,6 +60,7 @@ public:
   ~Session();
   
   void sendPacket(ByteBuffer&& pkt, const char* message);
+  void sendPacket(ByteBufferSharedPtr ptr);
   
   boost::asio::ip::tcp::socket& getSocket() { return mSocket; }
   Server& getServer() { return *mServer; }
@@ -68,6 +69,7 @@ public:
   Protocol& getProtocol() { return *mProtocol; }
   Protocol* getProtocolPtr() { return mProtocol.get(); }
   void setPlayer(Player& player);
+  Player& getPlayer() { return *mPlayer; }
   boost::asio::io_service& getIoService() { return mSocket.get_io_service(); }
 
 private:

@@ -36,6 +36,9 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
       case 0x00:
         handleLoginStart(pkt);
         break;
+
+      default:
+        break;
       }
     }
       break;
@@ -51,6 +54,9 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
         case 0x01:
           handleStatusPing(pkt);
           break;
+
+      default:
+        break;
       }
     }
       break;
@@ -59,12 +65,19 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     {
       switch (type)
       {
+      case 0x02:
+        handleChatMessage(pkt);
+        break;
+      
       case 0x04:
         handleClientSettings(pkt);
         break;
         
       case 0x1C:
         handlePlayerBlockPlacement(pkt);
+        break;
+        
+      default:
         break;
       }
     }
@@ -76,6 +89,9 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     {
     case 0x00:
       handleHandshake(pkt);
+      break;
+
+    default:
       break;
     }
   }
@@ -274,6 +290,11 @@ void Protocol1_11::sendChunk(const Chunk& chunk, Vector2i pos)
 void Protocol1_11::handlePlayerBlockPlacement(PacketReader& pkt)
 {
   Vector3i location = pkt.readPosition();
+}
+
+void Protocol1_11::handleChatMessage(PacketReader& pkt)
+{
+  mSession->getServer().addEvent(std::make_shared<EventChatMessage>(mSession->getPlayer(), pkt.readString()));
 }
   
 } // namespace redi

@@ -6,5 +6,6 @@
 #include "playerdisconnected.hpp"
 #include "sessiondisconnected.hpp"
 #include "sendkeepalivering.hpp"
+#include "chatmessage.hpp"
 
 #endif // REDI_EVENTS_EVENTS_HPP

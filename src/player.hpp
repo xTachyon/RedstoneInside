@@ -29,6 +29,8 @@ public:
   Vector3d getPosition() const { return mPosition; }
   World& getWorld() { return *mWorld; }
   const World& getWorld() const { return *mWorld; }
+  void sendPacket(ByteBufferSharedPtr ptr);
+  const std::string& getPlayerName() const { return mNickname; }
   
   static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::deadline_timer* timer,
                                         Protocol* protocol);

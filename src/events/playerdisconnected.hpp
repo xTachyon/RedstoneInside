@@ -2,6 +2,7 @@
 #define REDI_EVENTS_PLAYERDISCONNECTED_HPP
 
 #include "event.hpp"
+#include "../player.hpp"
 
 namespace redi
 {
