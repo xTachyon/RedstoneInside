@@ -99,7 +99,7 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 
 void Session::kill()
 {
-  EventPtr ptr(new EventSessionDisconnected(*this));
+  EventSharedPtr ptr(new EventSessionDisconnect(*this));
   mServer->addEvent(ptr);
 }
 void Session::setPlayer(Player& player)

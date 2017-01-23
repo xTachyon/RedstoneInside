@@ -2,9 +2,10 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/format.hpp>
-#include "server.hpp"
 #include "util/util.hpp"
 #include "logger.hpp"
+#include "exceptions.hpp"
+#include "server.hpp"
 
 namespace redi
 {
@@ -21,64 +22,17 @@ void Server::run()
       x.first->handlePacket(x.second);
     }
     
-    while (!mActions.empty())
+    try
     {
-      auto x = mActions.pop();
-      
-      if (x)
-      {
-        switch (x->getType())
-        {
-        case EventType::PlayerDisconnected:
-        {
-          const EventPlayerDisconnected& event = x->get<EventPlayerDisconnected>();
-          Player* player = &event.player;
-          if (player)
-          {
-            mConnectedClients.remove_if([&](const Session& ar)
-                                        {
-                                          return player->getSession() == ar;
-                                        });
-            mPlayers.remove_if([&](const Player& p)
-                               {
-                                 return std::addressof(p) == player;
-                               });
-            player->getWorld().deletePlayer(player);
-            --mOnlinePlayers;
-          }
-        }
-          break;
-        
-        case EventType::SessionDisconnected:
-        {
-          const EventSessionDisconnected& event = x->get<EventSessionDisconnected>();
-          mPlayers.remove_if([&](const Player& p)
-                             {
-                               return p.getSession() == event.session;
-                             });
-          mConnectedClients.remove_if([&](const Session& ar)
-                                      {
-                                        return event.session == ar;
-                                      });
-        }
-          break;
-        
-        case EventType::SendKeepAliveRing:
-        {
-          const EventSendKeepAliveRing& event = x->get<EventSendKeepAliveRing>();
-          Protocol* p = event.session.getProtocolPtr();
-          if (p) p->sendKeepAlive();
-        }
-          break;
-        
-        case EventType::ChatMessage:
-        {
-          const EventChatMessage& event = x->get<EventChatMessage>();
-          mChatManager(event);
-        }
-          break;
-        }
-      }
+      mEventManager();
+    }
+    catch (StopServer&)
+    {
+      return;
+    }
+    catch (std::exception&)
+    {
+      throw;
     }
     
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -131,9 +85,9 @@ void Server::addPlayer(const std::string nick, Session* session)
   }
 }
 
-void Server::addEvent(EventPtr ptr)
+void Server::addEvent(EventSharedPtr ptr)
 {
-  mActions.push(ptr);
+  mEventManager.addEvent(ptr);
 }
 
 void Server::addWorld(const std::string& worldname, const std::string& worlddir)
@@ -141,7 +95,8 @@ void Server::addWorld(const std::string& worldname, const std::string& worlddir)
   mWorlds.emplace_back(worldname, worlddir, std::make_shared<TerrainGenerator>());
 }
 
-Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0), mChatManager(*this)
+Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, 25565, this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0),
+                                                      mChatManager(*this), mEventManager(*this)
 {
   addWorld("world", "world/region");
 }
@@ -156,7 +111,7 @@ void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<boo
 
 bool Server::toAllPlayersExcept(const Player& player, const Player& except)
 {
-  return false;
+  return player != except;
 }
   
 } // namespace redi

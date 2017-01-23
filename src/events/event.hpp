@@ -27,7 +27,7 @@ struct Event
 
 inline Event::~Event() {}
 
-using EventPtr = std::shared_ptr<Event>;
+using EventSharedPtr = std::shared_ptr<Event>;
 
 } // namespace redi
 

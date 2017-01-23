@@ -25,7 +25,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
   
   std::int32_t type = pkt.readVarInt();
   
-  Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->state) % getIP()).str());
+//  Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->state) % getIP()).str());
   
   switch (mSession->state)
   {
@@ -138,7 +138,6 @@ void Protocol1_11::handleStatusRequest(PacketReader&)
   writer.commit(false);
   
   mSession->sendPacket(writer, "Status Request");
-  
 }
 
 void Protocol1_11::handleStatusPing(PacketReader& reader)

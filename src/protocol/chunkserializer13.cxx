@@ -43,7 +43,7 @@ void ChunkSerializer13::writeHeader()
   packet.writeVarInt(0xFFFF); // Primary Bit Mask - Bitmask with bits set to 1 for every 16×16×16 chunk section whose data is included in Data.
   packet.writeVarInt(size); // Size of Data in bytes, plus size of Biomes in bytes if present
   
-  Logger::debug((boost::format("Sending chunk %1%") % mPosition).str());
+//  Logger::debug((boost::format("Sending chunk %1%") % mPosition).str());
 }
 
 void ChunkSerializer13::writeChunkSections(PacketWriter& writer)

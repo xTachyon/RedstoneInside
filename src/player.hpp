@@ -49,6 +49,9 @@ public:
   World* mWorld;
 };
 
+bool operator==(const Player& l, const Player& r);
+bool operator!=(const Player& l, const Player& r);
+
 } // namespace redi
 
 #endif // REDI_PLAYER

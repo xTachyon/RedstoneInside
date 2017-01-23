@@ -41,5 +41,15 @@ void Player::sendPacket(ByteBufferSharedPtr ptr)
 {
   mSession->sendPacket(ptr);
 }
+
+bool operator==(const Player& l, const Player& r)
+{
+  return &l == &r;
+}
+
+bool operator!=(const Player& l, const Player& r)
+{
+  return !(l == r);
+}
   
 } // namespace red

@@ -8,6 +8,7 @@
 #include "event.hpp"
 #include "../threadsafequeue.hpp"
 #include "eventpriority.hpp"
+#include "events.hpp"
 
 namespace redi
 {
@@ -20,16 +21,22 @@ struct EventData
 
 class EventManager
 {
-  public:
+public:
   
-  EventManager() = default;
+  EventManager(Server& server);
   
-
+  void operator()();
   
-  private:
+  void addEvent(EventSharedPtr ptr);
+  void handlePlayerDisconnect(EventPlayerDisconnect& event);
+  void handleSessionDisconnect(EventSessionDisconnect& event);
+  void handleSendKeepAliveRing(EventSendKeepAliveRing& event);
+  void handleChatMessage(EventChatMessage& event);
   
-//  std::map<EventType, std::vector<boost::signals2::signal<void>>> mCallbacks;
-  ThreadSafeQueue<EventPtr> mEvents;
+private:
+  
+  ThreadSafeQueue<EventSharedPtr> mEvents;
+  Server& mServer;
 };
   
 } // namespace redi

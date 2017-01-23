@@ -6,11 +6,11 @@
 namespace redi
 {
 
-struct EventSessionDisconnected : public Event
+struct EventSessionDisconnect : public Event
 {
   Session& session;
   
-  EventSessionDisconnected(Session& s) : Event(EventType::SessionDisconnected), session(s) {}
+  EventSessionDisconnect(Session& s) : Event(EventType::SessionDisconnect), session(s) {}
 };
   
 } // namespace redi

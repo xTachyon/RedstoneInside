@@ -90,7 +90,9 @@ set(SOURCE_FILES
         src/events/eventpriority.hpp
         src/serverconfig.cxx src/bytebuffer.cxx
         src/chatmanager.cxx
-        src/chatmanager.hpp src/events/chatmessage.hpp)
+        src/chatmanager.hpp
+        src/events/chatmessage.hpp
+        src/exceptions.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

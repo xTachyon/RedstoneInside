@@ -7,11 +7,11 @@
 namespace redi
 {
 
-struct EventPlayerDisconnected : public Event
+struct EventPlayerDisconnect : public Event
 {
   Player& player;
   
-  EventPlayerDisconnected(Player& player) : Event(EventType::PlayerDisconnected), player(player) {}
+  EventPlayerDisconnect(Player& player) : Event(EventType::PlayerDisconnect), player(player) {}
   
 };
   

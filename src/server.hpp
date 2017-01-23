@@ -8,6 +8,7 @@
 #include "events/events.hpp"
 #include "world.hpp"
 #include "chatmanager.hpp"
+#include "events/eventmanager.hpp"
 
 namespace redi
 {
@@ -31,7 +32,7 @@ public:
   void run();
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);
   void addPlayer(const std::string nick, Session* session);
-  void addEvent(EventPtr ptr);
+  void addEvent(EventSharedPtr ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
   std::size_t getOnlinePlayersNumber() const { return mOnlinePlayers; }
   PlayerList& getOnlinePlayers() { return mPlayers; }
@@ -43,6 +44,8 @@ public:
   
 private:
   
+  friend class EventManager;
+  
   using SessionList = std::list<Session>;
   using WorldList = std::list<World>;
   
@@ -52,11 +55,11 @@ private:
   boost::asio::io_service& mIoService;
   ThreadSafeQueue<std::pair<Protocol*, ByteBuffer>> mPacketsToBeHandled;
   PlayerList mPlayers;
-  ThreadSafeQueue<EventPtr> mActions;
   WorldList mWorlds;
   std::int32_t mEntityCount;
   std::size_t mOnlinePlayers;
   ChatManager mChatManager;
+  EventManager mEventManager;
 };
   
 } // namespace redi

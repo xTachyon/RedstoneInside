@@ -1,7 +1,7 @@
 #ifndef REDI_NBT_EXCEPTIONS
 #define REDI_NBT_EXCEPTIONS
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 #include <boost/format.hpp>
 #include "type.hpp"

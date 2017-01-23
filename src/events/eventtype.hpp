@@ -6,8 +6,8 @@ namespace redi
 
 enum class EventType
 {
-  PlayerDisconnected,
-  SessionDisconnected,
+  PlayerDisconnect,
+  SessionDisconnect,
   SendKeepAliveRing,
   ChatMessage
 };
