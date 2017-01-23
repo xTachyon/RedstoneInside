@@ -113,6 +113,11 @@ bool Server::toAllPlayersExcept(const Player& player, const Player& except)
 {
   return player != except;
 }
+
+std::size_t Server::getOnlinePlayersNumber() const
+{
+  return static_cast<std::size_t>(std::distance(mPlayers.begin(), mPlayers.end()));
+}
   
 } // namespace redi
 

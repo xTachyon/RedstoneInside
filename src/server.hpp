@@ -34,7 +34,7 @@ public:
   void addPlayer(const std::string nick, Session* session);
   void addEvent(EventSharedPtr ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
-  std::size_t getOnlinePlayersNumber() const { return mOnlinePlayers; }
+  std::size_t getOnlinePlayersNumber() const;
   PlayerList& getOnlinePlayers() { return mPlayers; }
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
   void broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp);

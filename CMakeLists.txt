@@ -92,7 +92,8 @@ set(SOURCE_FILES
         src/chatmanager.cxx
         src/chatmanager.hpp
         src/events/chatmessage.hpp
-        src/exceptions.hpp src/events/statusrequest.hpp)
+        src/exceptions.hpp
+        src/events/statusrequest.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

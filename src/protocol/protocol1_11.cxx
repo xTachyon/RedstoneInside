@@ -125,21 +125,6 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
 void Protocol1_11::handleStatusRequest(PacketReader&)
 {
   mSession->getServer().addEvent(std::make_shared<EventStatusRequest>(*mSession));
-  
-//  PacketWriter writer(0x00);
-//
-//  const ServerConfig& config = mSession->getServer().config;
-//  nlohmann::json j;
-//  j["description"]["text"] = config.motd;
-//  j["version"]["name"] = "Redi";
-//  j["version"]["protocol"] = 316;
-//  j["players"]["max"] = config.maxPlayers;
-//  j["players"]["online"] = 0;
-//
-//  writer.writeString(j.dump());
-//  writer.commit(false);
-//
-//  mSession->sendPacket(writer, "Status Request");
 }
 
 void Protocol1_11::handleStatusPing(PacketReader& reader)
@@ -187,7 +172,7 @@ void Protocol1_11::handleLoginStart(PacketReader& reader)
 void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& uuid)
 {
   PacketWriter writer(0x02);
-  writer.writeString("ecc8e29d-0936-42cb-8492-14ed40555ffd");
+  writer.writeString(uuid);
   writer.writeString(nick);
   writer.commit();
  

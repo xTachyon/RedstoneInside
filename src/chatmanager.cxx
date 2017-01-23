@@ -5,6 +5,7 @@
 #include "events/events.hpp"
 #include "protocol/packetwriter.hpp"
 #include "logger.hpp"
+#include "exceptions.hpp"
 
 namespace redi
 {
@@ -13,9 +14,11 @@ ChatManager::ChatManager(Server& server) : mServer(server) {}
 
 void ChatManager::operator()(const EventChatMessage& event)
 {
+  if (event.message == "/stop") throw StopServer();
+  
   nlohmann::json j;
   
-  std::string finalmessage = (boost::format("[%3%]%1%: %2%") % event.player.getPlayerName() % event.message % &event.player).str();
+  std::string finalmessage = (boost::format("§d[%3%]§b%1%§e: §c%2%") % event.player.getPlayerName() % event.message % &event.player).str();
   j["text"] = finalmessage;
   Logger::info(finalmessage);
   
