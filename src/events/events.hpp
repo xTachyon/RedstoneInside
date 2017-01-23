@@ -7,5 +7,6 @@
 #include "sessiondisconnected.hpp"
 #include "sendkeepalivering.hpp"
 #include "chatmessage.hpp"
+#include "statusrequest.hpp"
 
 #endif // REDI_EVENTS_EVENTS_HPP

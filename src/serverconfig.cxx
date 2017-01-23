@@ -66,7 +66,7 @@ void ServerConfig::readIcon()
       file.read(buffer.as_char(), buffer.size());
     }
     
-    iconb64 = ByteBuffer("data:image/png;base64,") + util::Base64Encoder::encode(buffer);
+    iconb64 = std::string("data:image/png;base64,") + util::Base64Encoder::encodeToString(buffer);
   }
   else
   {
@@ -74,7 +74,7 @@ void ServerConfig::readIcon()
   
     iconb64 = DefaultIcon;
     writeIcon();
-    iconb64 = ByteBuffer("data:image/png;base64,") + DefaultIcon;
+    iconb64 = std::string("data:image/png;base64,") + DefaultIcon;
   }
 }
 

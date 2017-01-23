@@ -1,5 +1,8 @@
+#include <json.hpp>
 #include "eventmanager.hpp"
 #include "../server.hpp"
+#include "../util/util.hpp"
+#include "../protocol/packetwriter.hpp"
 
 namespace redi
 {
@@ -29,6 +32,10 @@ void EventManager::operator()()
       
     case EventType::ChatMessage:
       handleChatMessage(e->get<EventChatMessage>());
+      break;
+      
+    case EventType::StatusRequest:
+      handleStatusRequest(e->get<EventStatusRequest>());
       break;
     
     default:
@@ -60,10 +67,13 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 
 void EventManager::handleSessionDisconnect(EventSessionDisconnect& event)
 {
+  bool hasPlayer = false;
   mServer.mPlayers.remove_if([&](const Player& p)
                      {
-                       return p.getSession() == event.session;
+                       hasPlayer = (event.session == p.getSession());
+                       return hasPlayer;
                      });
+  if (hasPlayer) --mServer.mOnlinePlayers;
   mServer.mConnectedClients.remove_if([&](const Session& ar)
                               {
                                 return event.session == ar;
@@ -79,6 +89,36 @@ void EventManager::handleSendKeepAliveRing(EventSendKeepAliveRing& event)
 void EventManager::handleChatMessage(EventChatMessage& event)
 {
   mServer.mChatManager(event);
+}
+
+void EventManager::handleStatusRequest(EventStatusRequest& event)
+{
+  const ServerConfig& config = mServer.config;
+  nlohmann::json j;
+  
+  j["description"]["text"] = config.motd;
+  j["version"]["name"] = "RedstoneInside";
+  j["version"]["protocol"] = 316;
+  j["players"]["max"] = config.maxPlayers;
+  j["players"]["online"] = mServer.getOnlinePlayersNumber();
+  j["players"]["sample"] = nlohmann::json::array();
+  j["favicon"] = config.iconb64;
+  
+  for (const auto& player: mServer.getOnlinePlayers())
+  {
+    nlohmann::json c;
+    
+    c["id"] = player.getUUID();
+    c["name"] = player.getPlayerName();
+    
+    j["players"]["sample"].push_back(c);
+  }
+  
+  PacketWriter pkt(0x00);
+  pkt.writeString(j.dump());
+  pkt.commit();
+  
+  event.session.sendPacket(pkt, "Status Request");
 }
   
 } // namespace redi

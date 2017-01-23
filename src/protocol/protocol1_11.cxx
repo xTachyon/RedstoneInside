@@ -124,20 +124,22 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
 
 void Protocol1_11::handleStatusRequest(PacketReader&)
 {
-  PacketWriter writer(0x00);
+  mSession->getServer().addEvent(std::make_shared<EventStatusRequest>(*mSession));
   
-  const ServerConfig& config = mSession->getServer().config;
-  nlohmann::json j;
-  j["description"]["text"] = config.motd;
-  j["version"]["name"] = "Redi";
-  j["version"]["protocol"] = 316;
-  j["players"]["max"] = config.maxPlayers;
-  j["players"]["online"] = 0;
-  
-  writer.writeString(j.dump());
-  writer.commit(false);
-  
-  mSession->sendPacket(writer, "Status Request");
+//  PacketWriter writer(0x00);
+//
+//  const ServerConfig& config = mSession->getServer().config;
+//  nlohmann::json j;
+//  j["description"]["text"] = config.motd;
+//  j["version"]["name"] = "Redi";
+//  j["version"]["protocol"] = 316;
+//  j["players"]["max"] = config.maxPlayers;
+//  j["players"]["online"] = 0;
+//
+//  writer.writeString(j.dump());
+//  writer.commit(false);
+//
+//  mSession->sendPacket(writer, "Status Request");
 }
 
 void Protocol1_11::handleStatusPing(PacketReader& reader)

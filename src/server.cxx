@@ -42,7 +42,7 @@ void Server::run()
     {
       Logger::debug((boost::format("Number of connections: %1% --- Number of players: %2%")
                      % std::distance(mConnectedClients.begin(), mConnectedClients.end())
-                     % std::distance(mPlayers.begin(), mPlayers.end())).str());
+                     % mOnlinePlayers).str());
       s = n;
     }
   }

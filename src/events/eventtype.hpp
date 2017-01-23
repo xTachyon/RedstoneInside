@@ -9,7 +9,8 @@ enum class EventType
   PlayerDisconnect,
   SessionDisconnect,
   SendKeepAliveRing,
-  ChatMessage
+  ChatMessage,
+  StatusRequest
 };
 
 } // namespace redi

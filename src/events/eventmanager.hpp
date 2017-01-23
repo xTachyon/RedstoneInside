@@ -32,6 +32,7 @@ public:
   void handleSessionDisconnect(EventSessionDisconnect& event);
   void handleSendKeepAliveRing(EventSendKeepAliveRing& event);
   void handleChatMessage(EventChatMessage& event);
+  void handleStatusRequest(EventStatusRequest& event);
   
 private:
   

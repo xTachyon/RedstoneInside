@@ -51,7 +51,7 @@ struct ServerConfig
   Difficulty difficulty;
   std::string levelType;
   bool reducedDebugInfo;
-  ByteBuffer iconb64;
+  std::string iconb64;
   
   std::string configpath;
   std::string iconpath;
