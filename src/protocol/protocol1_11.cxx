@@ -282,5 +282,17 @@ void Protocol1_11::handleChatMessage(PacketReader& pkt)
 {
   mSession->getServer().addEvent(std::make_shared<EventChatMessage>(mSession->getPlayer(), pkt.readString()));
 }
+
+ByteBuffer Protocol1_11::createChatPacket(const std::string& json, ChatPosition position)
+{
+  PacketWriter pkt(0x0F);
+  
+  pkt.writeString(json);
+  pkt.writeByte(static_cast<std::int8_t>(position));
+  
+  pkt.commit();
+  
+  return pkt;
+}
   
 } // namespace redi

@@ -39,6 +39,8 @@ public:
   virtual void sendTimeUpdate() override;
   virtual void sendChunk(const Chunk&, Vector2i pos) override;
   
+  virtual ByteBuffer createChatPacket(const std::string& json, ChatPosition position) override;
+  
   std::string getIP();
   static std::string getIP(boost::asio::ip::tcp::socket& socket);
 };

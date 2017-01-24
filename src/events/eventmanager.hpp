@@ -4,7 +4,6 @@
 #include <map>
 #include <boost/signals2.hpp>
 #include "eventtype.hpp"
-#include "functor.hpp"
 #include "event.hpp"
 #include "../threadsafequeue.hpp"
 #include "eventpriority.hpp"
@@ -12,12 +11,6 @@
 
 namespace redi
 {
-
-struct EventData
-{
-  std::unique_ptr<FunctorBase> callback;
-  EventPriority priority;
-};
 
 class EventManager
 {

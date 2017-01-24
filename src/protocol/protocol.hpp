@@ -4,6 +4,7 @@
 #include "../bytebuffer.hpp"
 #include "packetreader.hpp"
 #include "../world/chunk.hpp"
+#include "../enums.hpp"
 
 namespace redi
 {
@@ -17,6 +18,8 @@ public:
   
   Protocol(Session* session) : mSession(session) {}
   
+  virtual ~Protocol() = 0;
+  
   virtual void handlePacket(ByteBuffer&) {}
   
   virtual void sendStatusPong(std::int64_t) {}
@@ -28,10 +31,9 @@ public:
   virtual void sendPlayerPositionAndLook() {}
   virtual void sendKeepAlive() {}
   virtual void sendTimeUpdate() {}
-  virtual void sendChunk(const Chunk&, Vector2i)
-  {}
+  virtual void sendChunk(const Chunk&, Vector2i) {}
   
-  virtual ~Protocol() = 0;
+  virtual ByteBuffer createChatPacket(const std::string&, ChatPosition) { return {}; }
   
 protected:
 
