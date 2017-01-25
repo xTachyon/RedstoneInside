@@ -92,6 +92,7 @@ void ServerConfig::writeConfig()
   root.put("difficulty", static_cast<int>(difficulty));
   root.put("level-type", levelType);
   root.put("port", port);
+  root.put("server-icon", "icon.png");
 
   write_ini(configpath, root);
 }

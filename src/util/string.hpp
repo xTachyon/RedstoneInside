@@ -3,6 +3,7 @@
 
 #include <cctype>
 #include <string>
+#include <sstream>
 #include <typeinfo>
 
 namespace redi
@@ -55,6 +56,14 @@ inline std::basic_string<T> toUppercase(std::basic_string<T> str)
   }
   
   return str;
+}
+
+template <typename T>
+inline std::string toString(const T& ref)
+{
+  std::ostringstream ss;
+  ss << ref;
+  return ss.str();
 }
   
 } // namespace util
