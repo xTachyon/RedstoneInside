@@ -19,7 +19,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
 {
   PacketReader pkt;
   
-//  if (mSession->setCompressionSent) pkt = PacketReader::getFromCompressedPacket(buffer);
+//  if (mSession->mSetCompressionIsSent) pkt = PacketReader::getFromCompressedPacket(buffer);
 //  else
   pkt.data = std::move(buffer);
   
@@ -27,9 +27,9 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
   
 //  Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->state) % getIP()).str());
   
-  switch (mSession->state)
+  switch (mSession->getConnectionState())
   {
-    case State::Login:
+    case ConnectionState::Login:
     {
       switch (type)
       {
@@ -43,7 +43,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     }
       break;
     
-    case State::Status:
+    case ConnectionState::Status:
     {
       switch (type)
       {
@@ -61,7 +61,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     }
       break;
       
-    case State::Play:
+    case ConnectionState::Play:
     {
       switch (type)
       {
@@ -83,7 +83,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     }
     break;
     
-  case State::Handshake:
+  case ConnectionState::Handshake:
   {
     switch (type)
     {
@@ -105,16 +105,16 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
   reader.consumeUShort();
   std::int32_t nextstate = reader.readVarInt();
   
-  Logger::info((boost::format("Handhake with next state %1% from %2%") % getStateName(static_cast<State>(nextstate)) % getIP()).str());
+  Logger::info((boost::format("Handhake with next state %1% from %2%") % getStateName(static_cast<ConnectionState>(nextstate)) % getIP()).str());
   
   switch (nextstate)
   {
     case 1:
-      mSession->state = State::Status;
+      mSession->setConnectionState(ConnectionState::Status);
       break;
     
     case 2:
-      mSession->state = State::Login;
+      mSession->setConnectionState(ConnectionState::Login);
       break;
     
     default:
@@ -140,7 +140,7 @@ void Protocol1_11::sendStatusPong(std::int64_t number)
   writer.commit(false);
   
   mSession->sendPacket(writer, "Status Pong");
-  mSession->kill();
+  mSession->disconnect();
 }
 
 std::string Protocol1_11::getIP(boost::asio::ip::tcp::socket& socket)
@@ -165,7 +165,7 @@ void Protocol1_11::handleLoginStart(PacketReader& reader)
   
   Logger::info((boost::format("Received Login start packet: %1%") % nick).str());
   
-  mSession->state = State::Play;
+  mSession->setConnectionState(ConnectionState::Play);
   mSession->getServer().addPlayer(nick, mSession);
 }
 
@@ -201,7 +201,7 @@ void Protocol1_11::sendSetCompression()
   writer.commit(false);
   
   mSession->sendPacket(writer, "Sent set compression");
-  mSession->setCompressionSent = true;
+  mSession->setCompressionIsSent(true);
 }
 
 void Protocol1_11::sendSpawnPosition()

@@ -14,7 +14,7 @@ Player::Player(const std::string& name, const std::string uuid, Session* session
   Logger::info((boost::format("%1% has joined the game") % mNickname).str());
   
   mSendKeepAlive.expires_from_now(boost::posix_time::seconds(5));
-  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, std::addressof(mSendKeepAlive), mSession->getProtocolPtr()));
+  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, std::addressof(mSendKeepAlive), &mSession->getProtocol()));
 }
 
 Player::~Player()

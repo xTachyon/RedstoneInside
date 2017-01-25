@@ -7,86 +7,66 @@
 #include "sizeliteraloperators.hpp"
 #include "bytebuffer.hpp"
 #include "protocol/protocol.hpp"
+#include "enums.hpp"
 
 namespace redi
 {
-
-enum class State
-{
-  Handshake,
-  Play,
-  Status,
-  Login
-};
-
-inline const char* getStateName(State s)
-{
-  const char* ptr;
-  
-  switch (s)
-  {
-  case State::Play:
-    ptr = "Play";
-    break;
-    
-  case State::Status:
-    ptr = "Status";
-    break;
-    
-  case State::Login:
-    ptr = "Login";
-    break;
-    
-  case State::Handshake:
-    ptr = "Handshake";
-    break;
-  }
-  
-  return ptr;
-}
 
 class Server;
 
 class Session
 {
 public:
-
-  State state;
-  std::atomic_bool setCompressionSent;
   
   Session(boost::asio::ip::tcp::socket&& socket, Server* server);
-  Session(Session&) = delete;
-  Session(Session&& s);
+  Session(const Session&) = delete;
+  Session(Session&& s) = delete;
   ~Session();
   
   void sendPacket(ByteBuffer&& pkt, const char* message);
   void sendPacket(ByteBufferSharedPtr ptr);
   
   boost::asio::ip::tcp::socket& getSocket() { return mSocket; }
-  Server& getServer() { return *mServer; }
+  const boost::asio::ip::tcp::socket& getSocket() const { return mSocket; }
+  // And no, I don't have any idea why would I need a socket constant
+  // Remember to add a reason here if you ever do this
   
-  void kill();
-  Protocol& getProtocol() { return *mProtocol; }
-  Protocol* getProtocolPtr() { return mProtocol.get(); }
-  void setPlayer(Player& player);
-  Player& getPlayer() { return *mPlayer; }
   boost::asio::io_service& getIoService() { return mSocket.get_io_service(); }
 
-private:
+  Server& getServer() { return *mServer; }
+  const Server& getServer() const { return *mServer; }
+  
+  Protocol& getProtocol() { return *mProtocol; }
+  const Protocol& getProtocol() const { return *mProtocol; }
+  
+  Player& getPlayer() { return *mPlayer; }
+  void setPlayer(Player& player);
+  
+  ConnectionState getConnectionState() const { return mConnectionState; }
+  void setConnectionState(ConnectionState s) { mConnectionState = s; }
+  
+  bool getCompressionIsSent() const { return mSetCompressionIsSent; }
+  void setCompressionIsSent(bool b) { mSetCompressionIsSent = b; }
+  
+  void disconnect();
+  
+  private:
   
   using PacketPtr = std::shared_ptr<ByteBuffer>;
   using PacketQueue = ThreadSafeQueue<PacketPtr>;
-  using ProtocolPtr = std::unique_ptr<Protocol>;
+  using ProtocolUniquePtr = std::unique_ptr<Protocol>;
   
   boost::asio::ip::tcp::socket mSocket;
   PacketQueue mSendingQueue;
   PacketPtr mSendingPacket;
   ByteBuffer mReceivingPacket;
-  ProtocolPtr mProtocol;
-  std::uint8_t mReceivingPacketSize[5];
-  std::uint8_t mReceivingPacketCountSize;
+  ProtocolUniquePtr mProtocol;
   Server* mServer;
   Player* mPlayer;
+  ConnectionState mConnectionState;
+  std::atomic_bool mSetCompressionIsSent;
+  std::uint8_t mReceivingPacketSize[5];
+  std::uint8_t mReceivingPacketCountSize;
   
   void handleRead(const boost::system::error_code& error, bool header = true);
   void readNext();
