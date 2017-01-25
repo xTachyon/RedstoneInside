@@ -52,18 +52,19 @@ struct ServerConfig
   std::string levelType;
   bool reducedDebugInfo;
   std::string iconb64;
-  
+  int port;
+
   std::string configpath;
   std::string iconpath;
-  
+
   ServerConfig(std::string&& filepath);
-  
+
   void readConfig();
   void readIcon();
   void writeConfig();
   void writeIcon();
 };
-  
+
 } // namespace redi
 
 #endif //REDI_SERVERCONFIG_HPP
