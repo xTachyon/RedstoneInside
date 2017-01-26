@@ -55,7 +55,7 @@ void Server::addPacket(Protocol* ptr, ByteBuffer&& buffer)
 
 void Server::addPlayer(const std::string nick, Session* session)
 {
-  std::string uuid = boost::lexical_cast<std::string>(boost::uuids::random_generator()());
+  boost::uuids::uuid uuid = boost::uuids::random_generator()();
 
   mPlayers.emplace_back(nick, uuid, session, getNewEntityID(), this, &mWorlds.back());
   Player& player = mPlayers.back();
@@ -66,7 +66,7 @@ void Server::addPlayer(const std::string nick, Session* session)
   player.getWorld().addPlayer(&player);
 
   protocol.sendSetCompression();
-  protocol.sendLoginSucces(nick, uuid);
+  protocol.sendLoginSucces(nick, player.getUUID());
   protocol.sendJoinGame(mPlayers.back());
   protocol.sendSpawnPosition();
   //protocol.sendPlayerAbilities();

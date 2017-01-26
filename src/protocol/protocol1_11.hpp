@@ -15,7 +15,9 @@ class Protocol1_11 : public Protocol
 {
 public:
   
-  Protocol1_11(Session* ptr) : Protocol(ptr) {}
+  static constexpr ProtocolVersion version = ProtocolVersion::V1_11_2;
+  
+  Protocol1_11(Session& ptr) : Protocol(ptr, version) {}
   
   virtual ~Protocol1_11();
   
@@ -25,7 +27,7 @@ public:
   virtual void handleStatusPing(PacketReader&);
   virtual void handleLoginStart(PacketReader&);
   virtual void handleClientSettings(PacketReader&);
-  virtual void handlePlayerBlockPlacement(PacketReader&);
+  virtual void handlePlayerBlockPlacement(PacketReader&) = delete;
   virtual void handleChatMessage(PacketReader&);
   
   virtual void sendStatusPong(std::int64_t number) override;

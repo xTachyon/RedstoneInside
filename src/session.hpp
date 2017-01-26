@@ -18,10 +18,13 @@ class Session
 {
 public:
   
-  Session(boost::asio::ip::tcp::socket&& socket, Server* server);
+  Session(boost::asio::ip::tcp::socket&& socket, Server& server);
   Session(const Session&) = delete;
   Session(Session&& s) = delete;
   ~Session();
+  
+  Session& operator=(const Session&) = delete;
+  Session& operator=(Session&&) = delete;
   
   void sendPacket(ByteBuffer&& pkt, const char* message);
   void sendPacket(ByteBufferSharedPtr ptr);
@@ -33,8 +36,8 @@ public:
   
   boost::asio::io_service& getIoService() { return mSocket.get_io_service(); }
 
-  Server& getServer() { return *mServer; }
-  const Server& getServer() const { return *mServer; }
+  Server& getServer() { return mServer; }
+  const Server& getServer() const { return mServer; }
   
   Protocol& getProtocol() { return *mProtocol; }
   const Protocol& getProtocol() const { return *mProtocol; }
@@ -61,7 +64,7 @@ public:
   PacketPtr mSendingPacket;
   ByteBuffer mReceivingPacket;
   ProtocolUniquePtr mProtocol;
-  Server* mServer;
+  Server& mServer;
   Player* mPlayer;
   ConnectionState mConnectionState;
   std::atomic_bool mSetCompressionIsSent;

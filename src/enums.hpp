@@ -22,6 +22,14 @@ enum class ConnectionState
 
 const char* getStateName(ConnectionState s);
 
+enum class ProtocolVersion
+{
+  V1_9_3_4 = 110,
+  V1_10_X = 210,
+  V1_11 = 315,
+  V1_11_2 = 316
+};
+
 } // namespace redi
 
 #endif // REDI_ENUMS_HPP

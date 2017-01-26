@@ -16,7 +16,7 @@ class Protocol
 {
 public:
   
-  Protocol(Session* session) : mSession(session) {}
+  Protocol(Session& session, ProtocolVersion version) : mSession(session), mProtocolVersion(version) {}
   
   virtual ~Protocol() = 0;
   
@@ -35,9 +35,12 @@ public:
   
   virtual ByteBuffer createChatPacket(const std::string&, ChatPosition) { return {}; }
   
+  ProtocolVersion getProtocolVersion() const { return mProtocolVersion; }
+  
 protected:
 
-  Session* mSession;
+  Session& mSession;
+  const ProtocolVersion mProtocolVersion;
 };
 
 inline Protocol::~Protocol() {}

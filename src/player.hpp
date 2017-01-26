@@ -1,6 +1,9 @@
 #ifndef REDI_PLAYER
 #define REDI_PLAYER
 
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include "session.hpp"
 #include "serverconfig.hpp"
 
@@ -13,10 +16,10 @@ class Player
 {
 public:
   
-  const std::int32_t id;
   
-  Player(const std::string& name, const std::string uuid, Session* session, std::int32_t id, Server* server, World* world,
-           Gamemode gamemode = Gamemode::Creative);
+  Player(const std::string& name, boost::uuids::uuid uuid, Session* session, std::int32_t id, Server* server,
+         World* world,
+         Gamemode gamemode = Gamemode::Creative);
   ~Player();
   
   Session& getSession() { return *mSession; }
@@ -31,23 +34,24 @@ public:
   const World& getWorld() const { return *mWorld; }
   void sendPacket(ByteBufferSharedPtr ptr);
   const std::string& getPlayerName() const { return mNickname; }
-  const std::string& getUUID() const { return mUUID; }
+  std::string getUUID() const { return boost::lexical_cast<std::string>(mUUID); }
+  std::int32_t getEntityID() const { return mEntityID; }
   
   static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::deadline_timer* timer,
                                         Protocol* protocol);
   
-  
   private:
   
+  boost::uuids::uuid mUUID;
   std::string mNickname;
-  std::string mUUID;
-  Session* mSession;
   Server* mServer;
+  World* mWorld;
+  Session* mSession;
   Gamemode mGamemode;
   Dimension mDimension;
   Vector3d mPosition;
   boost::asio::deadline_timer mSendKeepAlive;
-  World* mWorld;
+  const std::int32_t mEntityID;
 };
 
 bool operator==(const Player& l, const Player& r);

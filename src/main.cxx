@@ -12,7 +12,6 @@ int main(int, char**)
   auto b = sizeof(redi::Server);
   auto c = sizeof(redi::Player);
   auto d = sizeof(redi::ConnectionListener);
-  auto e = sizeof(std::atomic_bool);
   
   asio::io_service io_service;
 

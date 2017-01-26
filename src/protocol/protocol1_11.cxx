@@ -27,7 +27,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
   
 //  Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->state) % getIP()).str());
   
-  switch (mSession->getConnectionState())
+  switch (mSession.getConnectionState())
   {
     case ConnectionState::Login:
     {
@@ -74,7 +74,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
         break;
         
       case 0x1C:
-        handlePlayerBlockPlacement(pkt);
+//        handlePlayerBlockPlacement(pkt);
         break;
         
       default:
@@ -110,11 +110,11 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
   switch (nextstate)
   {
     case 1:
-      mSession->setConnectionState(ConnectionState::Status);
+      mSession.setConnectionState(ConnectionState::Status);
       break;
     
     case 2:
-      mSession->setConnectionState(ConnectionState::Login);
+      mSession.setConnectionState(ConnectionState::Login);
       break;
     
     default:
@@ -124,7 +124,7 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
 
 void Protocol1_11::handleStatusRequest(PacketReader&)
 {
-  mSession->getServer().addEvent(std::make_shared<EventStatusRequest>(*mSession));
+  mSession.getServer().addEvent(std::make_shared<EventStatusRequest>(mSession));
 }
 
 void Protocol1_11::handleStatusPing(PacketReader& reader)
@@ -139,8 +139,8 @@ void Protocol1_11::sendStatusPong(std::int64_t number)
   writer.writeLong(number);
   writer.commit(false);
   
-  mSession->sendPacket(writer, "Status Pong");
-  mSession->disconnect();
+  mSession.sendPacket(writer, "Status Pong");
+  mSession.disconnect();
 }
 
 std::string Protocol1_11::getIP(boost::asio::ip::tcp::socket& socket)
@@ -156,7 +156,7 @@ std::string Protocol1_11::getIP(boost::asio::ip::tcp::socket& socket)
 
 std::string Protocol1_11::getIP()
 {
-  return getIP(mSession->getSocket());
+  return getIP(mSession.getSocket());
 }
 
 void Protocol1_11::handleLoginStart(PacketReader& reader)
@@ -165,8 +165,8 @@ void Protocol1_11::handleLoginStart(PacketReader& reader)
   
   Logger::info((boost::format("Received Login start packet: %1%") % nick).str());
   
-  mSession->setConnectionState(ConnectionState::Play);
-  mSession->getServer().addPlayer(nick, mSession);
+  mSession.setConnectionState(ConnectionState::Play);
+  mSession.getServer().addPlayer(nick, &mSession);
 }
 
 void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& uuid)
@@ -176,13 +176,13 @@ void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& u
   writer.writeString(nick);
   writer.commit();
  
-  mSession->sendPacket(writer, "Send Login Success");
+  mSession.sendPacket(writer, "Send Login Success");
 }
 
 void Protocol1_11::sendJoinGame(const Player& player)
 {
   PacketWriter writer(0x23);
-  writer.writeInt(player.id);
+  writer.writeInt(player.getEntityID());
   writer.writeUByte(static_cast<std::uint8_t>(player.getGamemode()));
   writer.writeInt(static_cast<std::int32_t>(player.getDimension()));
   writer.writeUByte(static_cast<std::uint8_t>(player.getServer().config.difficulty));
@@ -191,7 +191,7 @@ void Protocol1_11::sendJoinGame(const Player& player)
   writer.writeBool(player.getServer().config.reducedDebugInfo);
   writer.commit();
   
-  mSession->sendPacket(writer, "Send Join Game");
+  mSession.sendPacket(writer, "Send Join Game");
 }
 
 void Protocol1_11::sendSetCompression()
@@ -200,8 +200,8 @@ void Protocol1_11::sendSetCompression()
   writer.writeVarInt(-1);
   writer.commit(false);
   
-  mSession->sendPacket(writer, "Sent set compression");
-  mSession->setCompressionIsSent(true);
+  mSession.sendPacket(writer, "Sent set compression");
+  mSession.setCompressionIsSent(true);
 }
 
 void Protocol1_11::sendSpawnPosition()
@@ -210,7 +210,7 @@ void Protocol1_11::sendSpawnPosition()
   writer.writePosition(0, 100, 0);
   writer.commit();
   
-  mSession->sendPacket(writer, "Sent Spawn Position");
+  mSession.sendPacket(writer, "Sent Spawn Position");
 }
 
 void Protocol1_11::sendPlayerAbilities()
@@ -221,7 +221,7 @@ void Protocol1_11::sendPlayerAbilities()
   writer.writeFloat(1.0f);
   writer.commit();
 
-  mSession->sendPacket(writer, "Send Player Abilities");
+  mSession.sendPacket(writer, "Send Player Abilities");
 }
 
 void Protocol1_11::handleClientSettings(PacketReader&)
@@ -246,7 +246,7 @@ void Protocol1_11::sendPlayerPositionAndLook()
   writer.writeVarInt(6543);
   writer.commit();
   
-  mSession->sendPacket(writer, "Send Player Position And Look");
+  mSession.sendPacket(writer, "Send Player Position And Look");
 }
 
 void Protocol1_11::sendKeepAlive()
@@ -255,7 +255,7 @@ void Protocol1_11::sendKeepAlive()
   writer.writeVarInt(util::getRandomInt32());
   writer.commit();
   
-  mSession->sendPacket(writer, "Send Keep Alive");
+  mSession.sendPacket(writer, "Send Keep Alive");
 }
 
 void Protocol1_11::sendTimeUpdate()
@@ -265,22 +265,17 @@ void Protocol1_11::sendTimeUpdate()
   writer.writeLong(0);
   writer.commit();
   
-  mSession->sendPacket(writer, "Send Time Update");
+  mSession.sendPacket(writer, "Send Time Update");
 }
 
 void Protocol1_11::sendChunk(const Chunk& chunk, Vector2i pos)
 {
-  mSession->sendPacket(ChunkSerializer13(chunk, pos)(), "Send Chunk data");
-}
-
-void Protocol1_11::handlePlayerBlockPlacement(PacketReader& pkt)
-{
-  Vector3i location = pkt.readPosition();
+  mSession.sendPacket(ChunkSerializer13(chunk, pos)(), "Send Chunk data");
 }
 
 void Protocol1_11::handleChatMessage(PacketReader& pkt)
 {
-  mSession->getServer().addEvent(std::make_shared<EventChatMessage>(mSession->getPlayer(), pkt.readString()));
+  mSession.getServer().addEvent(std::make_shared<EventChatMessage>(mSession.getPlayer(), pkt.readString()));
 }
 
 ByteBuffer Protocol1_11::createChatPacket(const std::string& json, ChatPosition position)

@@ -13,8 +13,8 @@ namespace asio = boost::asio;
 namespace redi
 {
 
-Session::Session(boost::asio::ip::tcp::socket&& socket, Server* server)
-      : mSocket(std::move(socket)), mProtocol(std::make_unique<Protocol1_11>(this)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake), mSetCompressionIsSent(false)
+Session::Session(boost::asio::ip::tcp::socket&& socket, Server& server)
+      : mSocket(std::move(socket)), mProtocol(std::make_unique<Protocol1_11>(*this)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake), mSetCompressionIsSent(false)
 {
   readNext();
 }
@@ -86,7 +86,7 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
   }
   else
   {
-    mServer->addPacket(mProtocol.get(), std::move(mReceivingPacket));
+    mServer.addPacket(mProtocol.get(), std::move(mReceivingPacket));
     readNext();
   }
 }
@@ -94,14 +94,14 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 void Session::disconnect()
 {
   EventSharedPtr ptr(new EventSessionDisconnect(*this));
-  mServer->addEvent(ptr);
+  mServer.addEvent(ptr);
 }
 void Session::setPlayer(Player& player)
 {
   mPlayer = std::addressof(player);
 }
 
-void Session::sendPacket(ByteBuffer&& pkt, const char* message)
+void Session::sendPacket(ByteBuffer&& pkt, const char*)
 {
   mSendingQueue.push(std::make_shared<ByteBuffer>(std::move(pkt)));
   writeNext();

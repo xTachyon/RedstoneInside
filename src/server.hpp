@@ -27,7 +27,7 @@ public:
   void addConnectedSession(boost::asio::ip::tcp::socket&& socket)
   {
     std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mConnectedClients.emplace_back(std::move(socket), this);
+    mConnectedClients.emplace_back(std::move(socket), *this);
   }
   void run();
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);
