@@ -8,11 +8,6 @@ namespace asio = boost::asio;
 
 int main(int, char**)
 {
-  auto a = sizeof(redi::Session);
-  auto b = sizeof(redi::Server);
-  auto c = sizeof(redi::Player);
-  auto d = sizeof(redi::ConnectionListener);
-  
   asio::io_service io_service;
 
   try

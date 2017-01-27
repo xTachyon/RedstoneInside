@@ -1,7 +1,10 @@
+#include <chrono>
 #include <boost/format.hpp>
 #include "player.hpp"
 #include "server.hpp"
 #include "logger.hpp"
+
+namespace asio = boost::asio;
 
 namespace redi
 {
@@ -10,13 +13,11 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid, Session* sessio
                World* world, Gamemode gamemode)
     : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(session), mGamemode(gamemode), mDimension(Dimension::Overworld), mSendKeepAlive(session->getIoService()),
       mEntityID(id)
-//  : mEnttyID(id), mNickname(name), mUUID(uuid), mSession(session), mServer(server), mGamemode(gamemode), mSendKeepAlive(session->getIoService()), mDimension(Dimension::Overworld),
-//    mWorld(world)
 {
   Logger::info((boost::format("%1% has joined the game") % mNickname).str());
 
-  mSendKeepAlive.expires_from_now(boost::posix_time::seconds(5));
-  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, std::addressof(mSendKeepAlive), &mSession->getProtocol()));
+  mSendKeepAlive.expires_from_now(std::chrono::seconds(5));
+  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), &mSession->getProtocol()));
 }
 
 Player::~Player()
@@ -25,14 +26,14 @@ Player::~Player()
   Logger::info((boost::format("%1% has left the game") % mNickname).str());
 }
 
-void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::deadline_timer* timer,
+void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer,
                                      Protocol* protocol)
 {
   if (!error)
   {
     protocol->sendKeepAlive();
 
-    timer->expires_from_now(boost::posix_time::seconds(10));
+    timer->expires_from_now(std::chrono::seconds(10));
     timer->async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, timer, protocol));
   }
 

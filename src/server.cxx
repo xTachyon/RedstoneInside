@@ -66,7 +66,7 @@ void Server::addPlayer(const std::string nick, Session* session)
   player.getWorld().addPlayer(&player);
 
   protocol.sendSetCompression();
-  protocol.sendLoginSucces(nick, player.getUUID());
+  protocol.sendLoginSucces(nick, boost::lexical_cast<std::string>(player.getUUID()));
   protocol.sendJoinGame(mPlayers.back());
   protocol.sendSpawnPosition();
   //protocol.sendPlayerAbilities();
@@ -95,7 +95,7 @@ void Server::addWorld(const std::string& worldname, const std::string& worlddir)
   mWorlds.emplace_back(worldname, worlddir, std::make_shared<TerrainGenerator>());
 }
 
-Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, config.port, this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0),
+Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, static_cast<std::uint16_t>(config.port), this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0),
                                                       mChatManager(*this), mEventManager(*this)
 {
   addWorld("world", "world/region");

@@ -108,7 +108,7 @@ void EventManager::handleStatusRequest(EventStatusRequest& event)
   {
     nlohmann::json c;
     
-    c["id"] = player.getUUID();
+    c["id"] = boost::lexical_cast<std::string>(player.getUUID());
     c["name"] = player.getPlayerName();
     
     j["players"]["sample"].push_back(c);

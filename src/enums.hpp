@@ -30,6 +30,12 @@ enum class ProtocolVersion
   V1_11_2 = 316
 };
 
+enum class ChatAction
+{
+  PlayerLeft,
+  PlayerJoined
+};
+
 } // namespace redi
 
 #endif // REDI_ENUMS_HPP

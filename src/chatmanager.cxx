@@ -43,7 +43,26 @@ void ChatManager::operator()(const EventChatMessage& event)
               {"color", "red"}
         }));
   
-  mServer.broadcastPacketToPlayers(std::make_shared<ByteBuffer>(std::move(event.player.getSession().getProtocol().createChatPacket(j.dump(), ChatPosition::ChatBox))), Server::toAllPlayers);
+  broadcastMessage(j, Server::toAllPlayers);
+}
+
+void ChatManager::broadcastMessage(nlohmann::json& j, std::function<bool(const Player&)> comp, ChatPosition position)
+{
+  for (Player& player : mServer.getOnlinePlayers())
+  {
+    if (comp(player))
+    {
+      ByteBuffer buf(player.getSession().getProtocol().createChatPacket(j.dump(), position));
+      ByteBufferSharedPtr ptr(std::make_shared<ByteBuffer>(std::move(buf)));
+      
+      player.sendPacket(ptr);
+    }
+  }
+}
+
+void ChatManager::operator()(const Event&)
+{
+  
 }
   
 } // namespace redi

@@ -1,6 +1,7 @@
 #ifndef REDI_PLAYER
 #define REDI_PLAYER
 
+#include <boost/asio/steady_timer.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -24,23 +25,29 @@ public:
   
   Session& getSession() { return *mSession; }
   const Session& getSession() const { return *mSession; }
+  
   Server& getServer() { return *mServer; }
-  Session* getSessionPtr() const { return mSession; }
   const Server& getServer() const { return *mServer; }
+  
   Gamemode getGamemode() const { return mGamemode; }
   Dimension getDimension() const { return mDimension; }
   Vector3d getPosition() const { return mPosition; }
+  
   World& getWorld() { return *mWorld; }
   const World& getWorld() const { return *mWorld; }
-  void sendPacket(ByteBufferSharedPtr ptr);
+  
   const std::string& getPlayerName() const { return mNickname; }
-  std::string getUUID() const { return boost::lexical_cast<std::string>(mUUID); }
+  
+  boost::uuids::uuid getUUID() const { return mUUID; }
+  
   std::int32_t getEntityID() const { return mEntityID; }
   
-  static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::deadline_timer* timer,
+  void sendPacket(ByteBufferSharedPtr ptr);
+  
+  static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer,
                                         Protocol* protocol);
   
-  private:
+private:
   
   boost::uuids::uuid mUUID;
   std::string mNickname;
@@ -50,7 +57,7 @@ public:
   Gamemode mGamemode;
   Dimension mDimension;
   Vector3d mPosition;
-  boost::asio::deadline_timer mSendKeepAlive;
+  boost::asio::steady_timer mSendKeepAlive;
   const std::int32_t mEntityID;
 };
 
