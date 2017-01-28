@@ -95,7 +95,11 @@ set(SOURCE_FILES
         src/events/statusrequest.hpp
         src/enums.hpp
         src/enums.cxx
-        src/events/playerjoin.hpp)
+        src/events/playerjoin.hpp
+        src/events/playerposition.hpp
+        src/events/playerlook.hpp
+        src/events/playerpositionandlook.hpp
+        src/playerposition.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

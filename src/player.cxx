@@ -11,7 +11,7 @@ namespace redi
 
 Player::Player(const std::string& name, boost::uuids::uuid uuid, std::unique_ptr<Session>&& session, std::int32_t id, Server* server,
                World* world, Gamemode gamemode)
-    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(std::move(session)), mGamemode(gamemode), mDimension(Dimension::Overworld), mSendKeepAlive(mSession->getIoService()),
+    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(std::move(session)), mGamemode(gamemode), mSendKeepAlive(mSession->getIoService()),
       mEntityID(id)
 {
   Logger::info((boost::format("%1% has joined the game") % mNickname).str());

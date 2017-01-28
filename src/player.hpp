@@ -7,6 +7,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include "session.hpp"
 #include "serverconfig.hpp"
+#include "playerposition.hpp"
 
 namespace redi
 {
@@ -16,7 +17,6 @@ class World;
 class Player
 {
 public:
-  
   
   Player(const std::string& name, boost::uuids::uuid uuid, std::unique_ptr<Session>&& session, std::int32_t id, Server* server,
          World* world, Gamemode gamemode = Gamemode::Creative);
@@ -29,8 +29,8 @@ public:
   const Server& getServer() const { return *mServer; }
   
   Gamemode getGamemode() const { return mGamemode; }
-  Dimension getDimension() const { return mDimension; }
-  Vector3d getPosition() const { return mPosition; }
+  Dimension getDimension() const { return mPosition.dimension; }
+  PlayerPosition getPosition() const { return mPosition; }
   
   World& getWorld() { return *mWorld; }
   const World& getWorld() const { return *mWorld; }
@@ -50,14 +50,15 @@ public:
   
 private:
   
+  friend class EventManager;
+  
   boost::uuids::uuid mUUID;
   std::string mNickname;
   Server* mServer;
   World* mWorld;
   std::unique_ptr<Session> mSession;
   Gamemode mGamemode;
-  Dimension mDimension;
-  Vector3d mPosition;
+  PlayerPosition mPosition;
   boost::asio::steady_timer mSendKeepAlive;
   const std::int32_t mEntityID;
 };

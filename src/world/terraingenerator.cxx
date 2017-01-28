@@ -19,15 +19,8 @@ void TerrainGenerator::generate(Chunk& chunk)
         }
         else if (y == 1)
         {
-          chunk(x, y, z).type = BlockType::Glowstone;
-        }
-        else if (y == 2)
-        {
-          chunk(x, y, z).type = BlockType::Leaves2;
-        }
-        else if (y == 30)
-        {
-          chunk(x, y, z).type = BlockType::EmeraldBlock;
+          chunk(x, y, z).type = BlockType::Planks;
+          chunk(x, y, z).data = 2;
         }
       }
         

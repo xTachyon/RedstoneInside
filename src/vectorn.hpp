@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <boost/format.hpp>
+#include "serverconfig.hpp"
 
 namespace redi
 {
