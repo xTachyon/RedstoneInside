@@ -7,8 +7,8 @@
 namespace redi
 {
 
-class Event;
-class EventChatMessage;
+struct Event;
+struct EventChatMessage;
 class Player;
 class Server;
 

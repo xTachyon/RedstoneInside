@@ -27,9 +27,7 @@ class ChunkSerializer13
   static constexpr std::uint8_t SectionX = 16;
   static constexpr std::uint8_t SectionY = 16;
   static constexpr std::uint8_t SectionZ = 16;
-
-  const size_t NumChunkSections = 16;
-  const size_t ChunkSectionDataArraySize = (BlocksPerSection * BitsPerBlock) / 8 / 8;  // Convert from bit count to long count
+  static constexpr std::size_t ChunkSectionDataArraySize = (BlocksPerSection * BitsPerBlock) / 8 / 8;  // Convert from bit count to long count
 
   const Chunk& mChunk;
   Vector2i mPosition;
