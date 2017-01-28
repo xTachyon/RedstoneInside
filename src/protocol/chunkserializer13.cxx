@@ -64,13 +64,13 @@ void ChunkSerializer13::writeChunkSection(PacketWriter& writer, std::uint8_t nth
   std::uint64_t currentlyWrittenIndex = 0;
   
   std::size_t blockindex = 0;
-  for (std::uint8_t x = 0; x < SectionX; ++x)
+  for (std::uint8_t y = 0; y < SectionY; ++y)
   {
-    for (std::uint8_t y = 0; y < SectionY; ++y)
+    for (std::uint8_t z = 0; z < SectionZ; ++z)
     {
-      for (std::uint8_t z = 0; z < SectionZ; ++z)
+      for (std::uint8_t x = 0; x < SectionX; ++x)
       {
-        std::uint64_t blockstate = generateBlockStateID(mChunk(y, x + SectionY * nth, z));
+        std::uint64_t blockstate = generateBlockStateID(mChunk(x, y + SectionY * nth, z));
 
         std::size_t bitPosition = blockindex * BitsPerBlock;
         std::size_t firstIndex = bitPosition / 64;

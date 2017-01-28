@@ -40,8 +40,8 @@ void Server::run()
     n = util::getUnixTimestamp();
     if (n > s + 9)
     {
-      Logger::debug((boost::format("Number of connections: %1% --- Number of players: %2%")
-                     % std::distance(mConnectedClients.begin(), mConnectedClients.end())
+      Logger::debug((boost::format("Number of status connections: %1% --- Number of players: %2%")
+                     % std::distance(mStatusConnections.begin(), mStatusConnections.end())
                      % mOnlinePlayers).str());
       s = n;
     }
@@ -56,8 +56,19 @@ void Server::addPacket(Protocol* ptr, ByteBuffer&& buffer)
 void Server::addPlayer(const std::string nick, Session* session)
 {
   boost::uuids::uuid uuid = boost::uuids::random_generator()();
-
-  mPlayers.emplace_back(nick, uuid, session, getNewEntityID(), this, &mWorlds.back());
+  
+  for (SessionUniquePtr& s : mStatusConnections) // TODO: find a better way
+  {
+    if (*s == *session)
+    {
+      mPlayers.emplace_back(nick, uuid, std::move(s), getNewEntityID(), this, &mWorlds.back());
+      mStatusConnections.remove_if([](const SessionUniquePtr& par) -> bool
+                                  {
+                                    return !static_cast<bool>(par);
+                                  });
+      break;
+    }
+  }
   Player& player = mPlayers.back();
   Protocol& protocol = player.getSession().getProtocol();
   ++mOnlinePlayers;
@@ -74,9 +85,9 @@ void Server::addPlayer(const std::string nick, Session* session)
   protocol.sendPlayerPositionAndLook();
 
   ChunkManager& cm = mWorlds.back().getChunkManager();
-  for (std::int32_t i = -5; i < 5; ++i)
+  for (std::int32_t i = -2; i <= 2; ++i)
   {
-    for (std::int32_t j = -5; j < 5; ++j)
+    for (std::int32_t j = -2; j <= 2; ++j)
     {
       Vector2i r(i, j);
 

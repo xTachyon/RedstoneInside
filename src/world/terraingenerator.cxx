@@ -25,6 +25,10 @@ void TerrainGenerator::generate(Chunk& chunk)
         {
           chunk(x, y, z).type = BlockType::Leaves2;
         }
+        else if (y == 30)
+        {
+          chunk(x, y, z).type = BlockType::EmeraldBlock;
+        }
       }
         
     }

@@ -27,7 +27,7 @@ public:
   void addConnectedSession(boost::asio::ip::tcp::socket&& socket)
   {
     std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mConnectedClients.emplace_back(std::move(socket), *this);
+    mStatusConnections.emplace_back(std::make_unique<Session>(std::move(socket), *this));
   }
   void run();
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);
@@ -46,10 +46,10 @@ private:
   
   friend class EventManager;
   
-  using SessionList = std::list<Session>;
+  using SessionList = std::list<std::unique_ptr<Session>>;
   using WorldList = std::list<World>;
   
-  SessionList mConnectedClients;
+  SessionList mStatusConnections;
   std::mutex mConnectedClientsMutex;
   ConnectionListener mListener;
   boost::asio::io_service& mIoService;

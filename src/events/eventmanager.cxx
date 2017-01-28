@@ -53,10 +53,6 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 {
   Player& player = event.player;
   
-  mServer.mConnectedClients.remove_if([&](const Session& ar)
-                              {
-                                return player.getSession() == ar;
-                              });
   mServer.mPlayers.remove_if([&](const Player& p)
                      {
                        return p == player;
@@ -67,16 +63,9 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 
 void EventManager::handleSessionDisconnect(EventSessionDisconnect& event)
 {
-  bool hasPlayer = false;
-  mServer.mPlayers.remove_if([&](const Player& p)
-                     {
-                       hasPlayer = (event.session == p.getSession());
-                       return hasPlayer;
-                     });
-  if (hasPlayer) --mServer.mOnlinePlayers;
-  mServer.mConnectedClients.remove_if([&](const Session& ar)
+  mServer.mStatusConnections.remove_if([&](const SessionUniquePtr& ar)
                               {
-                                return event.session == ar;
+                                return event.session == *ar;
                               });
 }
 

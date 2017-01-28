@@ -18,7 +18,7 @@ class Player
 public:
   
   
-  Player(const std::string& name, boost::uuids::uuid uuid, Session* session, std::int32_t id, Server* server,
+  Player(const std::string& name, boost::uuids::uuid uuid, std::unique_ptr<Session>&& session, std::int32_t id, Server* server,
          World* world,
          Gamemode gamemode = Gamemode::Creative);
   ~Player();
@@ -53,7 +53,7 @@ private:
   std::string mNickname;
   Server* mServer;
   World* mWorld;
-  Session* mSession;
+  std::unique_ptr<Session> mSession;
   Gamemode mGamemode;
   Dimension mDimension;
   Vector3d mPosition;

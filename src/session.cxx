@@ -93,7 +93,9 @@ void Session::handleRead(const boost::system::error_code& error, bool header)
 
 void Session::disconnect()
 {
-  EventSharedPtr ptr(new EventSessionDisconnect(*this));
+  EventSharedPtr ptr;
+  if (mPlayer == nullptr) ptr = std::make_shared<EventSessionDisconnect>(*this);
+  else ptr = std::make_shared<EventPlayerDisconnect>(*mPlayer);
   mServer.addEvent(ptr);
 }
 void Session::setPlayer(Player& player)

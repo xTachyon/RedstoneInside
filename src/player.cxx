@@ -9,9 +9,9 @@ namespace asio = boost::asio;
 namespace redi
 {
 
-Player::Player(const std::string& name, boost::uuids::uuid uuid, Session* session, std::int32_t id, Server* server,
+Player::Player(const std::string& name, boost::uuids::uuid uuid, std::unique_ptr<Session>&& session, std::int32_t id, Server* server,
                World* world, Gamemode gamemode)
-    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(session), mGamemode(gamemode), mDimension(Dimension::Overworld), mSendKeepAlive(session->getIoService()),
+    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(std::move(session)), mGamemode(gamemode), mDimension(Dimension::Overworld), mSendKeepAlive(mSession->getIoService()),
       mEntityID(id)
 {
   Logger::info((boost::format("%1% has joined the game") % mNickname).str());
@@ -36,8 +36,6 @@ void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, bo
     timer->expires_from_now(std::chrono::seconds(10));
     timer->async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, timer, protocol));
   }
-
-  Logger::debug("Send Keep Alive Timer Ring " + std::to_string(error.value()));
 }
 
 void Player::sendPacket(ByteBufferSharedPtr ptr)

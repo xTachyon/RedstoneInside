@@ -77,6 +77,8 @@ public:
   void writeNext();
 };
 
+using SessionUniquePtr = std::unique_ptr<Session>;
+
 inline bool operator==(const Session& l, const Session& r)
 {
   return &l == &r;
