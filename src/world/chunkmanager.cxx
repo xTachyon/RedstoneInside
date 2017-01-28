@@ -19,7 +19,7 @@ Block ChunkManager::operator()(Vector3i pos)
 void ChunkManager::loadChunk(Vector2i pos)
 {
   Vector2i chunkInRegion(pos.x / Region::ChunksPerRegion, pos.z / Region::ChunksPerRegion);
-  if (mChunks.count(chunkInRegion) == 0)
+  if (mRegions.count(chunkInRegion) == 0)
   {
     // TODO: load chunk
     mGenerator->generate(mChunks[pos]);

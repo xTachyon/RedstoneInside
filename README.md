@@ -3,7 +3,7 @@
 
 A C++ Minecraft server.
 
-Dependicies:
+Dependencies:
 - boost
 - zlib
 - nlohmann.json
