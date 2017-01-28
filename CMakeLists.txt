@@ -94,7 +94,8 @@ set(SOURCE_FILES
         src/exceptions.hpp
         src/events/statusrequest.hpp
         src/enums.hpp
-        src/enums.cxx)
+        src/enums.cxx
+        src/events/playerjoin.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

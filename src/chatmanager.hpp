@@ -7,10 +7,27 @@
 namespace redi
 {
 
-struct Event;
 struct EventChatMessage;
+struct EventPlayerJoin;
+struct EventPlayerDisconnect;
 class Player;
 class Server;
+
+struct ChatMessagePart
+{
+  std::string message;
+  std::string color;
+  bool bold;
+  bool italic;
+  bool underlined;
+  bool strikethrough;
+  bool obfuscated;
+  
+  ChatMessagePart(std::string message = "", std::string color = "white", bool bold = false, bool italic = false, bool underlined = false, bool strikethrough = false, bool obfuscated = false)
+        : message(std::move(message)), color(std::move(color)), bold(bold), italic(italic), underlined(underlined), strikethrough(strikethrough), obfuscated(obfuscated) {}
+};
+
+using ChatComponent = std::vector<ChatMessagePart>;
 
 class ChatManager
 {
@@ -19,9 +36,13 @@ public:
   ChatManager(Server&);
   
   void operator()(const EventChatMessage&);
-  void operator()(const Event&);
+  void operator()(const EventPlayerJoin&);
+  void operator()(const EventPlayerDisconnect&);
   
-  void broadcastMessage(nlohmann::json& j, std::function<bool(const Player&)> comp, ChatPosition position = ChatPosition::ChatBox);
+  void broadcastMessage(const std::string& message, std::function<bool(const Player&)> comp, ChatPosition position = ChatPosition::ChatBox);
+  void broadcastJSONMessage(const std::string& json, std::function<bool(const Player&)> comp, ChatPosition position = ChatPosition::ChatBox);
+  
+  static std::string componentToJson(const ChatComponent& comp);
   
 private:
   

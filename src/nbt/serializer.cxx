@@ -1,6 +1,7 @@
 #include <boost/endian/conversion.hpp>
 #include "serializer.hpp"
 #include "nbt.hpp"
+#include "../util/util.hpp"
 #include <fstream>
 
 namespace redi
@@ -25,13 +26,13 @@ void NBTSerializer::writeNumeric(T number)
 template <>
 void NBTSerializer::writeNumeric<float>(float number)
 {
-  writeNumeric(*reinterpret_cast<std::int32_t*>(&number));
+  writeNumeric(util::binaryTo<float, std::int32_t>(number));
 }
 
 template <>
 void NBTSerializer::writeNumeric<double>(double number)
 {
-  writeNumeric(*reinterpret_cast<std::int64_t*>(&number));
+  writeNumeric(util::binaryTo<double, std::int64_t>(number));
 }
 
 void NBTSerializer::writeString(const std::string& str)

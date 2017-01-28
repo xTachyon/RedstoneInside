@@ -1,3 +1,6 @@
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include <json.hpp>
 #include "eventmanager.hpp"
 #include "../server.hpp"
@@ -18,22 +21,34 @@ void EventManager::operator()()
     
     switch (e->getType())
     {
-    case EventType::PlayerDisconnect:
-      handlePlayerDisconnect(e->get<EventPlayerDisconnect>());
+    case EventType::PlayerJoin:
+    {
+      EventPlayerJoin& event = e->get<EventPlayerJoin>();
+      handlePlayerJoin(event);
+      mServer.mChatManager(event);
+    }
       break;
-      
+    
+    case EventType::PlayerDisconnect:
+    {
+      EventPlayerDisconnect& event = e->get<EventPlayerDisconnect>();
+      mServer.mChatManager(event);
+      handlePlayerDisconnect(event);
+    }
+      break;
+    
     case EventType::SessionDisconnect:
       handleSessionDisconnect(e->get<EventSessionDisconnect>());
       break;
-      
+    
     case EventType::SendKeepAliveRing:
       handleSendKeepAliveRing(e->get<EventSendKeepAliveRing>());
       break;
-      
+    
     case EventType::ChatMessage:
       handleChatMessage(e->get<EventChatMessage>());
       break;
-      
+    
     case EventType::StatusRequest:
       handleStatusRequest(e->get<EventStatusRequest>());
       break;
@@ -49,14 +64,57 @@ void EventManager::addEvent(EventSharedPtr ptr)
   mEvents.push(ptr);
 }
 
+void EventManager::handlePlayerJoin(EventPlayerJoin& event)
+{
+  boost::uuids::uuid uuid = boost::uuids::random_generator()();
+  
+  for (SessionUniquePtr& s : mServer.mStatusConnections) // TODO: find a better way
+  {
+    if (*s == event.session)
+    {
+      mServer.mPlayers.emplace_back(event.nick, uuid, std::move(s), mServer.getNewEntityID(), &mServer, &mServer.mWorlds.back());
+      mServer.mStatusConnections.remove_if([](const SessionUniquePtr& par) -> bool
+                                           {
+                                             return !static_cast<bool>(par);
+                                           });
+      break;
+    }
+  }
+  Player& player = mServer.mPlayers.back();
+  Protocol& protocol = player.getSession().getProtocol();
+  ++mServer.mOnlinePlayers;
+  
+  player.getSession().setPlayer(player);
+  player.getWorld().addPlayer(&player);
+  
+  protocol.sendSetCompression();
+  protocol.sendLoginSucces(event.nick, boost::lexical_cast<std::string>(player.getUUID()));
+  protocol.sendJoinGame(mServer.mPlayers.back());
+  protocol.sendSpawnPosition();
+  //protocol.sendPlayerAbilities();
+  protocol.sendTimeUpdate();
+  protocol.sendPlayerPositionAndLook();
+  
+  ChunkManager& cm = mServer.mWorlds.back().getChunkManager();
+  for (std::int32_t i = -2; i <= 2; ++i)
+  {
+    for (std::int32_t j = -2; j <= 2; ++j)
+    {
+      Vector2i r(i, j);
+      
+      protocol.sendChunk(cm.getChunk(r), r);
+    }
+  }
+}
+
 void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 {
   Player& player = event.player;
   
   mServer.mPlayers.remove_if([&](const Player& p)
-                     {
-                       return p == player;
-                     });
+                             {
+                               return p == player;
+                             });
   player.getWorld().deletePlayer(&player);
   --mServer.mOnlinePlayers;
 }
@@ -64,9 +122,9 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 void EventManager::handleSessionDisconnect(EventSessionDisconnect& event)
 {
   mServer.mStatusConnections.remove_if([&](const SessionUniquePtr& ar)
-                              {
-                                return event.session == *ar;
-                              });
+                                       {
+                                         return event.session == *ar;
+                                       });
 }
 
 void EventManager::handleSendKeepAliveRing(EventSendKeepAliveRing& event)

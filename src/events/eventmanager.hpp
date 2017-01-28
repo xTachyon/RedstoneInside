@@ -21,6 +21,7 @@ public:
   void operator()();
   
   void addEvent(EventSharedPtr ptr);
+  void handlePlayerJoin(EventPlayerJoin& event);
   void handlePlayerDisconnect(EventPlayerDisconnect& event);
   void handleSessionDisconnect(EventSessionDisconnect& event);
   void handleSendKeepAliveRing(EventSendKeepAliveRing& event);

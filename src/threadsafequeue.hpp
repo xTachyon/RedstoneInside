@@ -29,6 +29,7 @@ public:
   T pop()
   {
     std::lock_guard<std::mutex> l(mUtex);
+    if (mData.empty()) return {};
     T ret(std::move(*mData.begin()));
     mData.pop_front();
     return ret;

@@ -6,6 +6,7 @@ namespace redi
 
 enum class EventType
 {
+  PlayerJoin,
   PlayerDisconnect,
   SessionDisconnect,
   SendKeepAliveRing,

@@ -1,6 +1,3 @@
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include <boost/format.hpp>
 #include "util/util.hpp"
 #include "logger.hpp"
@@ -53,49 +50,6 @@ void Server::addPacket(Protocol* ptr, ByteBuffer&& buffer)
   mPacketsToBeHandled.push(std::pair<Protocol*, ByteBuffer>(ptr, std::move(buffer)));
 }
 
-void Server::addPlayer(const std::string nick, Session* session)
-{
-  boost::uuids::uuid uuid = boost::uuids::random_generator()();
-  
-  for (SessionUniquePtr& s : mStatusConnections) // TODO: find a better way
-  {
-    if (*s == *session)
-    {
-      mPlayers.emplace_back(nick, uuid, std::move(s), getNewEntityID(), this, &mWorlds.back());
-      mStatusConnections.remove_if([](const SessionUniquePtr& par) -> bool
-                                  {
-                                    return !static_cast<bool>(par);
-                                  });
-      break;
-    }
-  }
-  Player& player = mPlayers.back();
-  Protocol& protocol = player.getSession().getProtocol();
-  ++mOnlinePlayers;
-
-  player.getSession().setPlayer(player);
-  player.getWorld().addPlayer(&player);
-
-  protocol.sendSetCompression();
-  protocol.sendLoginSucces(nick, boost::lexical_cast<std::string>(player.getUUID()));
-  protocol.sendJoinGame(mPlayers.back());
-  protocol.sendSpawnPosition();
-  //protocol.sendPlayerAbilities();
-  protocol.sendTimeUpdate();
-  protocol.sendPlayerPositionAndLook();
-
-  ChunkManager& cm = mWorlds.back().getChunkManager();
-  for (std::int32_t i = -2; i <= 2; ++i)
-  {
-    for (std::int32_t j = -2; j <= 2; ++j)
-    {
-      Vector2i r(i, j);
-
-      protocol.sendChunk(cm.getChunk(r), r);
-    }
-  }
-}
-
 void Server::addEvent(EventSharedPtr ptr)
 {
   mEventManager.addEvent(ptr);
@@ -123,11 +77,6 @@ void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<boo
 bool Server::toAllPlayersExcept(const Player& player, const Player& except)
 {
   return player != except;
-}
-
-std::size_t Server::getOnlinePlayersNumber() const
-{
-  return static_cast<std::size_t>(std::distance(mPlayers.begin(), mPlayers.end()));
 }
 
 } // namespace redi

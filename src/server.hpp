@@ -31,10 +31,10 @@ public:
   }
   void run();
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);
-  void addPlayer(const std::string nick, Session* session);
+  
   void addEvent(EventSharedPtr ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
-  std::size_t getOnlinePlayersNumber() const;
+  std::int32_t getOnlinePlayersNumber() const { return mOnlinePlayers; }
   PlayerList& getOnlinePlayers() { return mPlayers; }
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
   void broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp);
@@ -57,7 +57,7 @@ private:
   PlayerList mPlayers;
   WorldList mWorlds;
   std::int32_t mEntityCount;
-  std::size_t mOnlinePlayers;
+  std::int32_t mOnlinePlayers;
   ChatManager mChatManager;
   EventManager mEventManager;
 };

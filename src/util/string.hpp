@@ -1,6 +1,7 @@
 #ifndef REDI_UTIL_STRING
 #define REDI_UTIL_STRING
 
+#include <algorithm>
 #include <cctype>
 #include <string>
 #include <sstream>
@@ -66,6 +67,18 @@ inline std::string toString(const T& ref)
   return ss.str();
 }
   
+template <typename From, typename To>
+To binaryTo(const From& val)
+{
+  static_assert(sizeof(From) == sizeof(To), "sizeof(From) == sizeof(To)");
+  To x;
+  auto f = reinterpret_cast<const std::uint8_t*>(std::addressof(val));
+  auto t = reinterpret_cast<std::uint8_t*>(std::addressof(x));
+  std::copy(f, f + sizeof(val), t);
+  
+  return x;
+}
+
 } // namespace util
 } // namespace redi
 

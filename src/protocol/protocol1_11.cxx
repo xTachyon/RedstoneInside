@@ -166,7 +166,8 @@ void Protocol1_11::handleLoginStart(PacketReader& reader)
   Logger::info((boost::format("Received Login start packet: %1%") % nick).str());
   
   mSession.setConnectionState(ConnectionState::Play);
-  mSession.getServer().addPlayer(nick, &mSession);
+//  mSession.getServer().addPlayer(nick, &mSession);
+  mSession.getServer().addEvent(std::make_shared<EventPlayerJoin>(mSession, std::move(nick)));
 }
 
 void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& uuid)
