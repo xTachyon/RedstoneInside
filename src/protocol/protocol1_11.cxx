@@ -72,15 +72,15 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     case 0x04:
       handleClientSettings(pkt);
       break;
-      
+    
     case 0x0C:
       handlePlayerPosition(pkt);
       break;
-      
+    
     case 0x0D:
       handlePlayerPositionAndLook(pkt);
       break;
-      
+    
     case 0x0E:
       handlePlayerLook(pkt);
       break;
@@ -293,18 +293,6 @@ void Protocol1_11::handleChatMessage(PacketReader& pkt)
   mSession.getServer().addEvent(std::make_shared<EventChatMessage>(mSession.getPlayer(), pkt.readString()));
 }
 
-ByteBuffer Protocol1_11::createChatPacket(const std::string& json, ChatPosition position)
-{
-  PacketWriter pkt(0x0F);
-  
-  pkt.writeString(json);
-  pkt.writeByte(static_cast<std::int8_t>(position));
-  
-  pkt.commit();
-  
-  return pkt;
-}
-
 void Protocol1_11::handlePlayerLook(PacketReader& pkt)
 {
   mSession.getServer().addEvent(std::make_shared<EventPlayerLook>(mSession.getPlayer(), pkt.readFloat(), pkt.readFloat(), pkt.readBool()));
@@ -318,7 +306,65 @@ void Protocol1_11::handlePlayerPosition(PacketReader& pkt)
 void Protocol1_11::handlePlayerPositionAndLook(PacketReader& pkt)
 {
   mSession.getServer().addEvent(std::make_shared<EventPlayerPositionAndLook>(mSession.getPlayer(), pkt.readDouble(), pkt.readDouble(), pkt.readDouble(),
-                                                                      pkt.readFloat(), pkt.readFloat(), pkt.readBool()));
+                                                                             pkt.readFloat(), pkt.readFloat(), pkt.readBool()));
+}
+
+ByteBuffer Protocol1_11::createChatPacket(const std::string& json, ChatPosition position)
+{
+  PacketWriter pkt(0x0F);
+  
+  pkt.writeString(json);
+  pkt.writeByte(static_cast<std::int8_t>(position));
+  
+  pkt.commit();
+  
+  return pkt;
+}
+
+ByteBuffer Protocol1_11::createPlayerListItemPacket(Player& player, PlayerListItemAction action)
+{
+  PacketWriter pkt(0x2D);
+  
+  pkt.writeVarInt(action); // action
+  pkt.writeVarInt(1); // number of players
+  pkt.writeUUID(player.getUUID()); // uuid
+  
+  switch (action)
+  {
+  case PlayerListItemAction::AddPlayer:
+  {
+    pkt.writeString(player.getUsername()); // name
+    pkt.writeVarInt(0); // number of properties
+    pkt.writeVarInt(player.getGamemode()); // gamemode
+    pkt.writeVarInt(0); // ping
+    pkt.writeBool(false); // has display name
+  }
+    break;
+  
+  case PlayerListItemAction::UpdateGamemode:
+  {
+    pkt.writeVarInt(player.getGamemode()); // gamemode
+  }
+    break;
+  
+  case PlayerListItemAction::UpdateLantecy:
+  {
+    pkt.writeVarInt(0); // ping
+  }
+    break;
+  
+  case PlayerListItemAction::UpdateDisplayName:
+  {
+    pkt.writeBool(false); // has display name
+  }
+    break;
+  
+  case PlayerListItemAction::RemovePlayer:
+    break;
+  }
+  
+  pkt.commit();
+  return pkt;
 }
   
 } // namespace redi

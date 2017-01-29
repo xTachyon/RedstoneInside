@@ -36,6 +36,15 @@ enum class ChatAction
   PlayerJoined
 };
 
+enum class PlayerListItemAction
+{
+  AddPlayer,
+  UpdateGamemode,
+  UpdateLantecy,
+  UpdateDisplayName,
+  RemovePlayer
+};
+
 } // namespace redi
 
 #endif // REDI_ENUMS_HPP

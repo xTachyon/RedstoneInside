@@ -34,6 +34,7 @@ public:
   virtual void sendChunk(const Chunk&, Vector2i) {}
   
   virtual ByteBuffer createChatPacket(const std::string&, ChatPosition) { return {}; }
+  virtual ByteBuffer createPlayerListItemPacket(Player&, PlayerListItemAction) { return {}; }
   
   ProtocolVersion getProtocolVersion() const { return mProtocolVersion; }
   

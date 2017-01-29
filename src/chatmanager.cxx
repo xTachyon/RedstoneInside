@@ -25,19 +25,19 @@ void ChatManager::operator()(const EventChatMessage& event)
   std::string json = componentToJson(ChatComponent
                                            {
                                                  ChatMessagePart((boost::format("[%1%]") % util::toString(&event.player)).str(), "light_purple"),
-                                                 ChatMessagePart(event.player.getPlayerName(), "aqua"),
+                                                 ChatMessagePart(event.player.getUsername(), "aqua"),
                                                  ChatMessagePart(": ", "yellow"),
                                                  ChatMessagePart(event.message, "red")
                                            });
   
   broadcastJSONMessage(json, Server::toAllPlayers);
-  Logger::info((boost::format("[%3%]%1%: %2%") % event.player.getPlayerName() % event.message % &event.player).str());
+  Logger::info((boost::format("[%3%]%1%: %2%") % event.player.getUsername() % event.message % &event.player).str());
 }
 
 void ChatManager::operator()(const EventPlayerJoin& event)
 {
   Player& player = event.session.getPlayer();
-  std::string message((boost::format("[%2%]%1% has joined the game") % player.getPlayerName() % &player).str());
+  std::string message((boost::format("[%2%]%1% has joined the game") % player.getUsername() % &player).str());
   Logger::info(message);
   broadcastJSONMessage(componentToJson(ChatComponent
                                              {
@@ -47,7 +47,7 @@ void ChatManager::operator()(const EventPlayerJoin& event)
 
 void ChatManager::operator()(const EventPlayerDisconnect& event)
 {
-  std::string message((boost::format("[%2%]%1% has left the game") % event.player.getPlayerName() % &event.player).str());
+  std::string message((boost::format("[%2%]%1% has left the game") % event.player.getUsername() % &event.player).str());
   Logger::info(message);
   broadcastJSONMessage(componentToJson(ChatComponent
                                              {

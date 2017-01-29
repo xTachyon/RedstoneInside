@@ -1,4 +1,5 @@
 #include <chrono>
+#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include "player.hpp"
 #include "server.hpp"
@@ -6,6 +7,7 @@
 #include "util/util.hpp"
 
 namespace asio = boost::asio;
+namespace fs = boost::filesystem;
 
 namespace redi
 {
@@ -72,6 +74,12 @@ std::string Player::getPlayerDataFileName() const
 void Player::loadFromFile()
 try
 {
+  if (!fs::exists(getPlayerDataFileName()))
+  {
+    mPosition.y = 50;
+    return;
+  }
+  
   nlohmann::json j = nlohmann::json::parse(util::readFileToString(getPlayerDataFileName()));
   
   {

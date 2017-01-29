@@ -117,6 +117,11 @@ void PacketWriter::writePosition(std::int64_t x, std::int64_t y, std::int64_t z)
   writeLong(((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF));
 }
 
+void PacketWriter::writeUUID(boost::uuids::uuid uuid)
+{
+  data.append(uuid.data, sizeof(uuid.data));
+}
+
 void PacketWriter::commit(bool)
 {
 //  std::cout << (int)data[0] << " -- " << std::boolalpha << compressed << '\n';

@@ -40,7 +40,7 @@ public:
   World& getWorld() { return *mWorld; }
   const World& getWorld() const { return *mWorld; }
   
-  const std::string& getPlayerName() const { return mNickname; }
+  const std::string& getUsername() const { return mNickname; }
   
   boost::uuids::uuid getUUID() const { return mUUID; }
   std::string getUUIDasString() const { return boost::lexical_cast<std::string>(mUUID); }
