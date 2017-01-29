@@ -18,71 +18,83 @@ namespace redi
 void Protocol1_11::handlePacket(ByteBuffer& buffer)
 {
   PacketReader pkt;
-  
+
 //  if (mSession->mSetCompressionIsSent) pkt = PacketReader::getFromCompressedPacket(buffer);
 //  else
   pkt.data = std::move(buffer);
   
   std::int32_t type = pkt.readVarInt();
-  
+
 //  Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->state) % getIP()).str());
   
   switch (mSession.getConnectionState())
   {
-    case ConnectionState::Login:
+  case ConnectionState::Login:
+  {
+    switch (type)
     {
-      switch (type)
-      {
-      case 0x00:
-        handleLoginStart(pkt);
-        break;
-
-      default:
-        break;
-      }
-    }
+    case 0x00:
+      handleLoginStart(pkt);
       break;
     
-    case ConnectionState::Status:
-    {
-      switch (type)
-      {
-        case 0x00:
-          handleStatusRequest(pkt);
-          break;
-          
-        case 0x01:
-          handleStatusPing(pkt);
-          break;
-
-      default:
-        break;
-      }
-    }
+    default:
       break;
-      
-    case ConnectionState::Play:
-    {
-      switch (type)
-      {
-      case 0x02:
-        handleChatMessage(pkt);
-        break;
-      
-      case 0x04:
-        handleClientSettings(pkt);
-        break;
-        
-      case 0x1C:
-//        handlePlayerBlockPlacement(pkt);
-        break;
-        
-      default:
-        break;
-      }
     }
+  }
     break;
+  
+  case ConnectionState::Status:
+  {
+    switch (type)
+    {
+    case 0x00:
+      handleStatusRequest(pkt);
+      break;
     
+    case 0x01:
+      handleStatusPing(pkt);
+      break;
+    
+    default:
+      break;
+    }
+  }
+    break;
+  
+  case ConnectionState::Play:
+  {
+    switch (type)
+    {
+    case 0x02:
+      handleChatMessage(pkt);
+      break;
+    
+    case 0x04:
+      handleClientSettings(pkt);
+      break;
+      
+    case 0x0C:
+      handlePlayerPosition(pkt);
+      break;
+      
+    case 0x0D:
+      handlePlayerPositionAndLook(pkt);
+      break;
+      
+    case 0x0E:
+      handlePlayerLook(pkt);
+      break;
+    
+    case 0x1C:
+//        handlePlayerBlockPlacement(pkt);
+      break;
+    
+    default:
+      break;
+    }
+  }
+    break;
+  
   case ConnectionState::Handshake:
   {
     switch (type)
@@ -90,7 +102,7 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
     case 0x00:
       handleHandshake(pkt);
       break;
-
+    
     default:
       break;
     }
@@ -109,16 +121,16 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
   
   switch (nextstate)
   {
-    case 1:
-      mSession.setConnectionState(ConnectionState::Status);
-      break;
-    
-    case 2:
-      mSession.setConnectionState(ConnectionState::Login);
-      break;
-    
-    default:
-      Logger::info(std::string("invalid state: ") + std::to_string(nextstate));
+  case 1:
+    mSession.setConnectionState(ConnectionState::Status);
+    break;
+  
+  case 2:
+    mSession.setConnectionState(ConnectionState::Login);
+    break;
+  
+  default:
+    Logger::info(std::string("invalid state: ") + std::to_string(nextstate));
   }
 }
 
@@ -176,7 +188,7 @@ void Protocol1_11::sendLoginSucces(const std::string& nick, const std::string& u
   writer.writeString(uuid);
   writer.writeString(nick);
   writer.commit();
- 
+  
   mSession.sendPacket(writer, "Send Login Success");
 }
 
@@ -221,7 +233,7 @@ void Protocol1_11::sendPlayerAbilities()
   writer.writeFloat(1.0f);
   writer.writeFloat(1.0f);
   writer.commit();
-
+  
   mSession.sendPacket(writer, "Send Player Abilities");
 }
 
@@ -289,6 +301,22 @@ ByteBuffer Protocol1_11::createChatPacket(const std::string& json, ChatPosition 
   pkt.commit();
   
   return pkt;
+}
+
+void Protocol1_11::handlePlayerLook(PacketReader& pkt)
+{
+  mSession.getServer().addEvent(std::make_shared<EventPlayerLook>(mSession.getPlayer(), pkt.readFloat(), pkt.readFloat(), pkt.readBool()));
+}
+
+void Protocol1_11::handlePlayerPosition(PacketReader& pkt)
+{
+  mSession.getServer().addEvent(std::make_shared<EventPlayerPosition>(mSession.getPlayer(), pkt.readDouble(), pkt.readDouble(), pkt.readDouble(), pkt.readBool()));
+}
+
+void Protocol1_11::handlePlayerPositionAndLook(PacketReader& pkt)
+{
+  mSession.getServer().addEvent(std::make_shared<EventPlayerPositionAndLook>(mSession.getPlayer(), pkt.readDouble(), pkt.readDouble(), pkt.readDouble(),
+                                                                      pkt.readFloat(), pkt.readFloat(), pkt.readBool()));
 }
   
 } // namespace redi

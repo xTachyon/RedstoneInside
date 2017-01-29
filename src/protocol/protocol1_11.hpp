@@ -29,6 +29,9 @@ public:
   virtual void handleClientSettings(PacketReader&);
   virtual void handlePlayerBlockPlacement(PacketReader&) = delete;
   virtual void handleChatMessage(PacketReader&);
+  void handlePlayerLook(PacketReader&);
+  void handlePlayerPosition(PacketReader&);
+  void handlePlayerPositionAndLook(PacketReader&);
   
   virtual void sendStatusPong(std::int64_t number) override;
   virtual void sendLoginSucces(const std::string& nick, const std::string& uuid) override;

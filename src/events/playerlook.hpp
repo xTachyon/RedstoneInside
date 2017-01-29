@@ -2,17 +2,18 @@
 #define REDI_PLAYERLOOK_HPP
 
 #include "event.hpp"
+#include "../player.hpp"
+#include "../playerposition.hpp"
 
 namespace redi
 {
 
-struct EventPlayerPosition : public Event
+struct EventPlayerLook : public Event, public PlayerLook
 {
-  float yaw;
-  float pitch;
   bool onGround;
+  Player& player;
   
-  EventPlayerPosition(float yaw, float pitch, bool onGround) : Event(EventType::PlayerLook), yaw(yaw), pitch(pitch), onGround(onGround) {}
+  EventPlayerLook(Player& player, float yaw = 0.0f, float pitch = 0.0f, bool onGround = true) : Event(EventType::PlayerLook), PlayerLook(yaw, pitch), onGround(onGround), player(player) {}
 };
   
 } // namespace redi

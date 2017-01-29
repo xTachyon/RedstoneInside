@@ -6,6 +6,7 @@
 #include "../server.hpp"
 #include "../util/util.hpp"
 #include "../protocol/packetwriter.hpp"
+#include "../player.hpp"
 
 namespace redi
 {
@@ -52,6 +53,18 @@ void EventManager::operator()()
     case EventType::StatusRequest:
       handleStatusRequest(e->get<EventStatusRequest>());
       break;
+      
+    case EventType::PlayerPosition:
+      handlePlayerPosition(e->get<EventPlayerPosition>());
+      break;
+      
+    case EventType::PlayerLook:
+      handlePlayerLook(e->get<EventPlayerLook>());
+      break;
+      
+    case EventType::PlayerPositionAndLook:
+      handlePlayerPositionAndLook(e->get<EventPlayerPositionAndLook>());
+      break;
     
     default:
       break;
@@ -66,7 +79,9 @@ void EventManager::addEvent(EventSharedPtr ptr)
 
 void EventManager::handlePlayerJoin(EventPlayerJoin& event)
 {
-  boost::uuids::uuid uuid = boost::uuids::random_generator()();
+  boost::uuids::uuid namesp = boost::lexical_cast<boost::uuids::uuid>("77e7c416-763c-4967-8291-6698b795e90a");
+  boost::uuids::name_generator gen(namesp);
+  boost::uuids::uuid uuid = gen(util::toLowercase(event.nick));
   
   for (SessionUniquePtr& s : mServer.mStatusConnections) // TODO: find a better way
   {
@@ -166,6 +181,34 @@ void EventManager::handleStatusRequest(EventStatusRequest& event)
   pkt.commit();
   
   event.session.sendPacket(pkt, "Status Request");
+}
+
+void EventManager::handlePlayerLook(EventPlayerLook& event)
+{
+  PlayerPosition& p = event.player.mPosition;
+  p.yaw = event.yaw;
+  p.pitch = event.pitch;
+  p.onGround = event.onGround;
+}
+
+void EventManager::handlePlayerPosition(EventPlayerPosition& event)
+{
+  PlayerPosition& p = event.player.mPosition;
+  p.x = event.x;
+  p.y = event.y;
+  p.z = event.z;
+  p.onGround = event.onGround;
+}
+
+void EventManager::handlePlayerPositionAndLook(EventPlayerPositionAndLook& event)
+{
+  PlayerPosition& p = event.player.mPosition;
+  p.x = event.x;
+  p.y = event.y;
+  p.z = event.z;
+  p.yaw = event.yaw;
+  p.pitch = event.pitch;
+  p.onGround = event.onGround;
 }
   
 } // namespace redi

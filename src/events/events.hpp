@@ -9,5 +9,8 @@
 #include "sendkeepalivering.hpp"
 #include "chatmessage.hpp"
 #include "statusrequest.hpp"
+#include "playerlook.hpp"
+#include "playerposition.hpp"
+#include "playerpositionandlook.hpp"
 
 #endif // REDI_EVENTS_EVENTS_HPP

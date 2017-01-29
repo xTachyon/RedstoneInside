@@ -16,6 +16,11 @@ ChatManager::ChatManager(Server& server) : mServer(server) {}
 void ChatManager::operator()(const EventChatMessage& event)
 {
   if (event.message == "/stop") throw StopServer();
+  else if (event.message == "/uuid")
+  {
+    event.player.sendMessage(event.player.getUUIDasString());
+    return;
+  }
   
   std::string json = componentToJson(ChatComponent
                                            {

@@ -38,6 +38,7 @@ public:
   const std::string& getPlayerName() const { return mNickname; }
   
   boost::uuids::uuid getUUID() const { return mUUID; }
+  std::string getUUIDasString() const { return boost::lexical_cast<std::string>(mUUID); }
   
   std::int32_t getEntityID() const { return mEntityID; }
   

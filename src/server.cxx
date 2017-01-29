@@ -1,11 +1,21 @@
+#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include "util/util.hpp"
 #include "logger.hpp"
 #include "exceptions.hpp"
 #include "server.hpp"
 
+namespace fs = boost::filesystem;
+
 namespace redi
 {
+
+Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, static_cast<std::uint16_t>(config.port), this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0),
+                                                      mChatManager(*this), mEventManager(*this)
+{
+  addWorld("world", "world/region");
+  fs::create_directories("players");
+}
 
 void Server::run()
 {
@@ -58,12 +68,6 @@ void Server::addEvent(EventSharedPtr ptr)
 void Server::addWorld(const std::string& worldname, const std::string& worlddir)
 {
   mWorlds.emplace_back(worldname, worlddir, std::make_shared<TerrainGenerator>());
-}
-
-Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, static_cast<std::uint16_t>(config.port), this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0),
-                                                      mChatManager(*this), mEventManager(*this)
-{
-  addWorld("world", "world/region");
 }
 
 void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp)

@@ -27,6 +27,9 @@ public:
   void handleSendKeepAliveRing(EventSendKeepAliveRing& event);
   void handleChatMessage(EventChatMessage& event);
   void handleStatusRequest(EventStatusRequest& event);
+  void handlePlayerLook(EventPlayerLook&);
+  void handlePlayerPosition(EventPlayerPosition&);
+  void handlePlayerPositionAndLook(EventPlayerPositionAndLook&);
   
 private:
   

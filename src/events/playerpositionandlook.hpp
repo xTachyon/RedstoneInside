@@ -2,17 +2,20 @@
 #define REDI_PLAYERPOSITIONANDLOOK_HPP
 
 #include "event.hpp"
+#include "../player.hpp"
+#include "../playerposition.hpp"
 #include "../vectorn.hpp"
 
 namespace redi
 {
 
-struct EventPlayerPosition : public Event
+struct EventPlayerPositionAndLook : public Event, public Vector3d, public PlayerLook
 {
-  Vector3d position;
   bool onGround;
+  Player& player;
   
-  EventPlayerPosition(float yaw, float pitch, bool onGround) : Event(EventType::PlayerPositionAndLook), yaw(yaw), pitch(pitch), onGround(onGround) {}
+  EventPlayerPositionAndLook(Player& player, double x = 0.0, double y = 0.0, double z = 0.0, float yaw = 0.0f, float pitch = 0.0f, bool onGround = true)
+        : Event(EventType::PlayerPositionAndLook), Vector3d(x, y, z), PlayerLook(yaw, pitch), onGround(onGround), player(player) {}
 };
   
 } // namespace redi
