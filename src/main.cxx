@@ -8,11 +8,9 @@ namespace asio = boost::asio;
 
 int main(int, char**)
 {
-  asio::io_service io_service;
-
   try
   {
-    redi::Server server(io_service);
+    redi::Server server;
     server.run();
   }
   catch (std::exception& e)

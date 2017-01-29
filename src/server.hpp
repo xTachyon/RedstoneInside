@@ -21,7 +21,7 @@ public:
   
   ServerConfig config;
 
-  Server(boost::asio::io_service& io_service);
+  Server();
 
   std::int32_t getNewEntityID() { return mEntityCount++; }
   void addConnectedSession(boost::asio::ip::tcp::socket&& socket)
@@ -49,10 +49,10 @@ private:
   using SessionList = std::list<std::unique_ptr<Session>>;
   using WorldList = std::list<World>;
   
+  boost::asio::io_service mIoService;
   SessionList mStatusConnections;
   std::mutex mConnectedClientsMutex;
   ConnectionListener mListener;
-  boost::asio::io_service& mIoService;
   ThreadSafeQueue<std::pair<Protocol*, ByteBuffer>> mPacketsToBeHandled;
   PlayerList mPlayers;
   WorldList mWorlds;

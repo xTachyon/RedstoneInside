@@ -32,9 +32,12 @@ public:
   virtual void sendKeepAlive() {}
   virtual void sendTimeUpdate() {}
   virtual void sendChunk(const Chunk&, Vector2i) {}
+  virtual void sendPlayerListItem(Player&, PlayerListItemAction) {}
+  virtual void sendSpawnPlayerPacket(Player&) {}
   
   virtual ByteBuffer createChatPacket(const std::string&, ChatPosition) { return {}; }
   virtual ByteBuffer createPlayerListItemPacket(Player&, PlayerListItemAction) { return {}; }
+  virtual ByteBuffer createSpawnPlayerPacket(Player&) { return {}; }
   
   ProtocolVersion getProtocolVersion() const { return mProtocolVersion; }
   

@@ -43,9 +43,12 @@ public:
   virtual void sendKeepAlive() override;
   virtual void sendTimeUpdate() override;
   virtual void sendChunk(const Chunk&, Vector2i pos) override;
+  virtual void sendPlayerListItem(Player&, PlayerListItemAction) override;
+  virtual void sendSpawnPlayerPacket(Player&) override;
   
   virtual ByteBuffer createChatPacket(const std::string& json, ChatPosition position) override;
   virtual ByteBuffer createPlayerListItemPacket(Player& player, PlayerListItemAction action) override;
+  virtual ByteBuffer createSpawnPlayerPacket(Player& player) override;
   
   std::string getIP();
   static std::string getIP(boost::asio::ip::tcp::socket& socket);

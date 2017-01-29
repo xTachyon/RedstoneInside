@@ -34,6 +34,17 @@ void EventManager::operator()()
     {
       EventPlayerDisconnect& event = e->get<EventPlayerDisconnect>();
       mServer.mChatManager(event);
+      
+      {
+        for (Player& player : mServer.mPlayers)
+        {
+          if (player != event.player)
+          {
+            player.getProtocol().sendPlayerListItem(event.player, PlayerListItemAction::RemovePlayer);
+          }
+        }
+      }
+      
       handlePlayerDisconnect(event);
     }
       break;
@@ -118,6 +129,22 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& event)
       Vector2i r(i, j);
       
       protocol.sendChunk(cm.getChunk(r), r);
+    }
+  }
+  
+  for (Player& idx : mServer.mPlayers)
+  {
+    if (idx == player)
+    {
+      for (Player& i : mServer.mPlayers)
+      {
+        player.getProtocol().sendPlayerListItem(i, PlayerListItemAction::AddPlayer);
+      }
+    }
+    else
+    {
+      idx.getProtocol().sendPlayerListItem(player, PlayerListItemAction::AddPlayer);
+      idx.getProtocol().sendSpawnPlayerPacket(player);
     }
   }
 }

@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <boost/format.hpp>
 #include <json.hpp>
+#include <unordered_set>
 #include "protocol1_11.hpp"
 #include "../bytebuffer.hpp"
 #include "../session.hpp"
@@ -250,18 +251,18 @@ void Protocol1_11::handleClientSettings(PacketReader&)
 void Protocol1_11::sendPlayerPositionAndLook(Player& player)
 {
   PlayerPosition position = player.getPosition();
-  PacketWriter writer(0x2E);
+  PacketWriter pkt(0x2E);
   
-  writer.writeDouble(position.x);
-  writer.writeDouble(position.y);
-  writer.writeDouble(position.z);
-  writer.writeFloat(position.yaw);
-  writer.writeFloat(position.pitch);
-  writer.writeByte(0);
-  writer.writeVarInt(player.getNewTeleportID());
-  writer.commit();
+  pkt.writeDouble(position.x);
+  pkt.writeDouble(position.y);
+  pkt.writeDouble(position.z);
+  pkt.writeFloat(position.yaw);
+  pkt.writeFloat(position.pitch);
+  pkt.writeByte(0);
+  pkt.writeVarInt(player.getNewTeleportID());
+  pkt.commit();
   
-  mSession.sendPacket(writer, "Send Player Position And Look");
+  mSession.sendPacket(pkt, "Send Player Position And Look");
 }
 
 void Protocol1_11::sendKeepAlive()
@@ -334,7 +335,14 @@ ByteBuffer Protocol1_11::createPlayerListItemPacket(Player& player, PlayerListIt
   case PlayerListItemAction::AddPlayer:
   {
     pkt.writeString(player.getUsername()); // name
-    pkt.writeVarInt(0); // number of properties
+    
+    pkt.writeVarInt(1); // number of properties
+    pkt.writeString("textures"); // name
+    pkt.writeString("eyJ0aW1lc3RhbXAiOjE0ODU3MTY4Mzk2NTYsInByb2ZpbGVJZCI6ImIwZDRiMjhiYzFkNzQ4ODlhZjBlODY2MWNlZTk2YWFiIiwicHJvZmlsZU5hbWUiOiJZZWxlaGEiLCJzaWduYXR1cmVSZXF1aXJlZCI6dHJ1ZSwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2E4M2ZkNTI0MWJiYTlkMTMxMWU1NDEzMTUwZWY0MjQ1MjI2NWY0MzE2OGRlOGM0ZTE5NDY4ZWYzZjY5MzcyIn19fQ==");
+    // value
+    pkt.writeBool(true); // is signed
+    pkt.writeString("xtzSRLv9iAbWig9GryoTOPp1Jxv2hjolffZaHp6hcX3b0/4SSvErZGOLcHzXIXwDT7f9jcdcEHKdB69WSIZkM3fIAQ8wVtww03KCpkgXkvqixz7MxOdYw0XtPeA0oPFxX3gvVNys/3zvKdgvFYkTh1zIo8D9qA+rP6A+x2ITJnXQNLh+ggHYELAw2QHQAn7x51ivsxs5Y/0Ji9/0wgDKn+DJ1DDzH+JgoRJNQkhhNkGgM/MpTEQZMabONGmwJG6AR0syKgDSVEbSORM1lDmsowbEQ8o3GN56leg3H7YIEFww00PehT5eLRNDRe8RXEykSLj6bs0PaqdUx+IZb7vzT14SJc0kn+h7MCWGHrr2qmldivtGG2alK++PYLyLQ5zs7c82pmwlLlNXZJa3+cbzSihrpywmaIntdITFo/Trtt+ZrvVBk56qihzz/POyow/Zj+Z7lAKv+vm/ZE8nfgLPOOIC7PAIj9/U5fwZTq4L8zXhb0ZRk5wrAJQ3iKDZD8u99t1CSDsUHHmTQmyzngk00Z/Ae5QMTGf2hEnLAcfhgJdS1NZLg1hsacNT8NsxrnQlD0KDLC9goO4QrtTnG50cnpJQggCOiFubMiJCmYq62fajmqVN99RrLN74CVxtLu9hTDeFontZdm2W3I0ks92SMrrEhQuNumcVhyRF4bAz6Qk=");
+    
     pkt.writeVarInt(player.getGamemode()); // gamemode
     pkt.writeVarInt(0); // ping
     pkt.writeBool(false); // has display name
@@ -365,6 +373,36 @@ ByteBuffer Protocol1_11::createPlayerListItemPacket(Player& player, PlayerListIt
   
   pkt.commit();
   return pkt;
+}
+
+void Protocol1_11::sendPlayerListItem(Player& player, PlayerListItemAction action)
+{
+  ByteBufferSharedPtr buffer = std::make_shared<ByteBuffer>(createPlayerListItemPacket(player, action));
+  mSession.sendPacket(buffer);
+}
+
+ByteBuffer Protocol1_11::createSpawnPlayerPacket(Player& player)
+{
+  PlayerPosition position = player.getPosition();
+  PacketWriter pkt(0x05);
+  
+  pkt.writeVarInt(player.getEntityID());
+  pkt.writeUUID(player.getUUID());
+  pkt.writeDouble(position.x);
+  pkt.writeDouble(position.y);
+  pkt.writeDouble(position.z);
+  pkt.writeFloat(position.yaw);
+  pkt.writeFloat(position.pitch);
+  pkt.writeUByte(0xFF);
+  pkt.commit();
+  
+  return pkt;
+}
+
+void Protocol1_11::sendSpawnPlayerPacket(Player& player)
+{
+  ByteBufferSharedPtr buffer = std::make_shared<ByteBuffer>(createSpawnPlayerPacket(player));
+  mSession.sendPacket(buffer);
 }
   
 } // namespace redi

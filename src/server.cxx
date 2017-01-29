@@ -10,8 +10,8 @@ namespace fs = boost::filesystem;
 namespace redi
 {
 
-Server::Server(boost::asio::io_service& io_service) : config("server.properties"), mListener(io_service, static_cast<std::uint16_t>(config.port), this), mIoService(io_service), mEntityCount(0), mOnlinePlayers(0),
-                                                      mChatManager(*this), mEventManager(*this)
+Server::Server() : config("server.properties"), mListener(mIoService, static_cast<std::uint16_t>(config.port), this), mEntityCount(0), mOnlinePlayers(0),
+        mChatManager(*this), mEventManager(*this)
 {
   addWorld("world", "world/region");
   fs::create_directories("players");
