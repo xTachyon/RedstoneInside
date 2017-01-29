@@ -99,24 +99,26 @@ set(SOURCE_FILES
         src/events/playerposition.hpp
         src/events/playerlook.hpp
         src/events/playerpositionandlook.hpp
-        src/playerposition.hpp)
+        src/playerposition.hpp
+        src/util/file.hpp
+        src/util/file.cxx)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 
 add_executable(redi ${SOURCE_FILES})
 
 if("${JSON_REPO_DIR} " STREQUAL " ")
-    message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
+  message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
 else()
-    message(STATUS "JSON found : ${JSON_REPO_DIR}/src")
-    include_directories(${JSON_REPO_DIR}/src)
+  message(STATUS "JSON found : ${JSON_REPO_DIR}/src")
+  include_directories(${JSON_REPO_DIR}/src)
 endif()
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options system thread)
 if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    target_link_libraries(redi ${Boost_LIBRARIES})
+  include_directories(${Boost_INCLUDE_DIRS})
+  target_link_libraries(redi ${Boost_LIBRARIES})
 endif()
 
 #find_package(OpenSSL)
@@ -130,31 +132,31 @@ endif()
 
 find_package(ZLIB REQUIRED)
 if(ZLIB_FOUND)
-    include_directories(${ZLIB_INCLUDE_DIRS})
-    target_link_libraries(redi ${ZLIB_LIBRARIES})
+  include_directories(${ZLIB_INCLUDE_DIRS})
+  target_link_libraries(redi ${ZLIB_LIBRARIES})
 endif()
 
 if(MINGW)
-    target_link_libraries(redi ws2_32)
+  target_link_libraries(redi ws2_32)
 endif()
 
 if (UNIX)
-    target_link_libraries(redi pthread)
+  target_link_libraries(redi pthread)
 endif()
 
 if(MSVC)
-    # http://stackoverflow.com/a/3818084/4091452
-    if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
-        string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    else()
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-    endif()
+  # http://stackoverflow.com/a/3818084/4091452
+  if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+  endif()
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR MINGW)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wdisabled-optimization -Wno-unused-local-typedefs -Wno-overflow -Wno-deprecated-declarations -Wreorder")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wdisabled-optimization -Wno-unused-local-typedefs -Wno-overflow -Wno-deprecated-declarations -Wreorder")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 endif()
 
 if(WIN32)
-    target_link_libraries(redi wsock32)
+  target_link_libraries(redi wsock32)
 endif()

@@ -247,16 +247,18 @@ void Protocol1_11::handleClientSettings(PacketReader&)
 //  std::int32_t mainhand = reader.readVarInt();
 }
 
-void Protocol1_11::sendPlayerPositionAndLook()
+void Protocol1_11::sendPlayerPositionAndLook(Player& player)
 {
+  PlayerPosition position = player.getPosition();
   PacketWriter writer(0x2E);
-  writer.writeDouble(0);
-  writer.writeDouble(70);
-  writer.writeDouble(0);
-  writer.writeFloat(0);
-  writer.writeFloat(0);
+  
+  writer.writeDouble(position.x);
+  writer.writeDouble(position.y);
+  writer.writeDouble(position.z);
+  writer.writeFloat(position.yaw);
+  writer.writeFloat(position.pitch);
   writer.writeByte(0);
-  writer.writeVarInt(6543);
+  writer.writeVarInt(player.getNewTeleportID());
   writer.commit();
   
   mSession.sendPacket(writer, "Send Player Position And Look");

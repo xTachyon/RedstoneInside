@@ -28,7 +28,7 @@ public:
   virtual void sendLoginSucces(const std::string&, const std::string&) {}
   virtual void sendSpawnPosition() {}
   virtual void sendPlayerAbilities() {}
-  virtual void sendPlayerPositionAndLook() {}
+  virtual void sendPlayerPositionAndLook(Player&) {}
   virtual void sendKeepAlive() {}
   virtual void sendTimeUpdate() {}
   virtual void sendChunk(const Chunk&, Vector2i) {}

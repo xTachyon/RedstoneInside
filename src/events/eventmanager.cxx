@@ -108,7 +108,7 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& event)
   protocol.sendSpawnPosition();
   //protocol.sendPlayerAbilities();
   protocol.sendTimeUpdate();
-  protocol.sendPlayerPositionAndLook();
+  protocol.sendPlayerPositionAndLook(player);
   
   ChunkManager& cm = mServer.mWorlds.back().getChunkManager();
   for (std::int32_t i = -2; i <= 2; ++i)

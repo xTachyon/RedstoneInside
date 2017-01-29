@@ -20,7 +20,12 @@ public:
   
   Player(const std::string& name, boost::uuids::uuid uuid, std::unique_ptr<Session>&& session, std::int32_t id, Server* server,
          World* world, Gamemode gamemode = Gamemode::Creative);
+  Player(const Player&) = delete;
+  Player(Player&&) = delete;
   ~Player();
+  
+  Player& operator=(const Player&) = delete;
+  Player& operator=(Player&&) = delete;
   
   Session& getSession() { return *mSession; }
   const Session& getSession() const { return *mSession; }
@@ -41,6 +46,7 @@ public:
   std::string getUUIDasString() const { return boost::lexical_cast<std::string>(mUUID); }
   
   std::int32_t getEntityID() const { return mEntityID; }
+  std::size_t getNewTeleportID() { return mTeleportID++; }
   
   void sendPacket(ByteBufferSharedPtr ptr);
   void sendMessage(const std::string& message, ChatPosition position = ChatPosition::ChatBox);
@@ -61,7 +67,12 @@ private:
   Gamemode mGamemode;
   PlayerPosition mPosition;
   boost::asio::steady_timer mSendKeepAlive;
+  std::size_t mTeleportID;
   const std::int32_t mEntityID;
+  
+  std::string getPlayerDataFileName() const;
+  void saveToFile();
+  void loadFromFile();
 };
 
 bool operator==(const Player& l, const Player& r);

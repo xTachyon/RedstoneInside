@@ -20,9 +20,13 @@ class World
 public:
 
   World(const std::string& worldname, const std::string& worlddir, WorldGenerator ptr, Dimension dim = Dimension::Overworld);
+  
   ChunkManager& getChunkManager() { return mChunkManager; }
+  
   void addPlayer(Player* player);
   void deletePlayer(Player* player);
+  
+  const std::string& getWorldName() const { return mWorldName; }
   
 private:
 

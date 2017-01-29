@@ -39,7 +39,7 @@ public:
   virtual void sendSetCompression() override;
   virtual void sendSpawnPosition() override;
   virtual void sendPlayerAbilities() override;
-  virtual void sendPlayerPositionAndLook() override;
+  virtual void sendPlayerPositionAndLook(Player& player) override;
   virtual void sendKeepAlive() override;
   virtual void sendTimeUpdate() override;
   virtual void sendChunk(const Chunk&, Vector2i pos) override;
