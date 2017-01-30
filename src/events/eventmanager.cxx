@@ -153,11 +153,13 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 {
   Player& player = event.player;
   
+  player.getWorld().deletePlayer(&player);
+  // First remove the player from the world
+  // so we won't SIGSEGV when deferencing it after deleting
   mServer.mPlayers.remove_if([&](const Player& p)
                              {
                                return p == player;
                              });
-  player.getWorld().deletePlayer(&player);
   --mServer.mOnlinePlayers;
 }
 

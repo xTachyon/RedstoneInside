@@ -21,6 +21,11 @@ void ChatManager::operator()(const EventChatMessage& event)
     event.player.sendMessage(event.player.getUUIDasString());
     return;
   }
+  else if (event.message == "/pos")
+  {
+    event.player.sendMessage((boost::format("%1%") % static_cast<Vector3d>(event.player.getPosition())).str());
+    return;
+  }
   
   std::string json = componentToJson(ChatComponent
                                            {
