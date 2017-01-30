@@ -111,7 +111,7 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& event)
   ++mServer.mOnlinePlayers;
   
   player.getSession().setPlayer(player);
-  player.getWorld().addPlayer(&player);
+  player.getWorld().addPlayer(player);
   
   protocol.sendSetCompression();
   protocol.sendLoginSucces(event.nick, boost::lexical_cast<std::string>(player.getUUID()));
@@ -153,7 +153,7 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 {
   Player& player = event.player;
   
-  player.getWorld().deletePlayer(&player);
+  player.getWorld().deletePlayer(player);
   // First remove the player from the world
   // so we won't SIGSEGV when deferencing it after deleting
   mServer.mPlayers.remove_if([&](const Player& p)
