@@ -6,7 +6,6 @@
 #include <boost/optional.hpp>
 #include "block.hpp"
 #include "../bytebuffer.hpp"
-#include "../nbt/nbt.hpp"
 #include "../vectorn.hpp"
 #include "chunkcolumn.hpp"
 #include "terraingenerator.hpp"

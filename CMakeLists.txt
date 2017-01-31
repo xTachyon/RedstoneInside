@@ -5,23 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES
-        src/nbt/compiletimemagic.hpp
-        src/nbt/compound.cxx
-        src/nbt/compound.hpp
-        src/nbt/creator.cxx
-        src/nbt/creator.hpp
-        src/nbt/list.cxx
-        src/nbt/list.hpp
-        src/nbt/nbt.hpp
-        src/nbt/proxyclass.hpp
-        src/nbt/scalar.hpp
-        src/nbt/stdspecializations.hpp
-        src/nbt/string.cxx
-        src/nbt/string.hpp
-        src/nbt/tag.cxx
-        src/nbt/tag.hpp
-        src/nbt/type.cxx
-        src/nbt/type.hpp
         src/util/util.hpp
         src/bytebuffer.hpp
         src/world/block.hpp
@@ -36,15 +19,6 @@ set(SOURCE_FILES
         src/session.hpp
         src/stdafx.cxx
         src/stdafx.hpp
-        src/nbt/vectorial.hpp
-        src/nbt/prettyprint.cxx
-        src/nbt/prettyprint.hpp
-        src/nbt/roottag.hpp
-        src/nbt/deserializer.cxx
-        src/nbt/deserializer.hpp
-        src/nbt/exceptions.hpp
-        src/nbt/serializer.cxx
-        src/nbt/serializer.hpp
         src/world/region.cxx
         src/world/region.hpp
         src/world/chunk.cxx

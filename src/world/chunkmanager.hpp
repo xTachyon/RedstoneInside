@@ -1,6 +1,7 @@
 #ifndef REDI_WORLD_CHUNKMANAGER_HPP
 #define REDI_WORLD_CHUNKMANAGER_HPP
 
+#include <map>
 #include "../vectorn.hpp"
 #include "region.hpp"
 #include "chunk.hpp"
