@@ -144,7 +144,9 @@ ByteBuffer PacketReader::readByteArray(std::size_t size)
 void PacketReader::need(std::size_t bytes)
 {
   if (bytes + offset > data.size())
+  {
     throw std::runtime_error(std::to_string(bytes) + " is out of index");
+  }
 }
 
 void PacketReader::consumeUShort()
