@@ -26,7 +26,15 @@ void Server::run()
     while (!mPacketsToBeHandled.empty())
     {
       auto x = mPacketsToBeHandled.pop();
-      x.first->handlePacket(x.second);
+      try
+      {
+        x.first->handlePacket(x.second);
+      }
+      catch (std::exception&)
+      {
+        // Just ignore everything bad.
+        // Should I disconnect ?
+      }
     }
 
     try

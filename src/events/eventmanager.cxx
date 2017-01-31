@@ -193,7 +193,7 @@ void EventManager::handleStatusRequest(EventStatusRequest& event)
   j["players"]["max"] = config.maxPlayers;
   j["players"]["online"] = mServer.getOnlinePlayersNumber();
   j["players"]["sample"] = nlohmann::json::array();
-  j["favicon"] = config.iconb64;
+  if (config.iconb64.size() != 0) j["favicon"] = config.iconb64;
   
   for (const auto& player: mServer.getOnlinePlayers())
   {

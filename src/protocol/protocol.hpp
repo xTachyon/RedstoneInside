@@ -40,6 +40,8 @@ public:
   virtual ByteBuffer createSpawnPlayerPacket(Player&) { return {}; }
   
   ProtocolVersion getProtocolVersion() const { return mProtocolVersion; }
+
+  Session& getSession() { return mSession;  }
   
 protected:
 

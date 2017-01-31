@@ -62,7 +62,6 @@ struct ServerConfig
   void readConfig();
   void readIcon();
   void writeConfig();
-  void writeIcon();
 };
 
 } // namespace redi

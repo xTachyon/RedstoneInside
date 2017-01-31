@@ -1,4 +1,3 @@
-#include <iostream>
 #include "../compressor.hpp"
 #include "packetwriter.hpp"
 

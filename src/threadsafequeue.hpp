@@ -48,6 +48,9 @@ public:
   {
     while (!empty()) f(pop());
   }
+
+  std::mutex& getMutex() { return mUtex; }
+  std::deque<T>& getUnmutexedData() { return mData; }
   
 private:
   
