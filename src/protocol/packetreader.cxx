@@ -38,12 +38,12 @@ std::uint16_t PacketReader::readUShort()
 
 std::int32_t PacketReader::readInt()
 {
-  return readBNumber<std::uint32_t>();
+  return readBNumber<std::int32_t>();
 }
 
 std::int64_t PacketReader::readLong()
 {
-  return readBNumber<std::uint64_t>();
+  return readBNumber<std::int64_t>();
 }
 
 float PacketReader::readFloat()
