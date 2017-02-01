@@ -12,9 +12,9 @@ namespace fs = boost::filesystem;
 namespace redi
 {
 
-Player::Player(const std::string& name, boost::uuids::uuid uuid, std::unique_ptr<Session>&& session, std::int32_t id, Server* server,
+Player::Player(const std::string& name, boost::uuids::uuid uuid, std::shared_ptr<Session> session, std::int32_t id, Server* server,
                World* world, Gamemode gamemode)
-    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(std::move(session)), mGamemode(gamemode), mSendKeepAlive(mSession->getIoService()),
+    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(session), mGamemode(gamemode), mSendKeepAlive(mSession->getIoService()),
       mTeleportID(0), mEntityID(id)
 {
   Logger::info((boost::format("%1% has joined the game") % mNickname).str());

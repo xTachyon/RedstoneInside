@@ -11,10 +11,18 @@ namespace redi
 {
 
 Server::Server() : config("server.properties"), mListener(mIoService, static_cast<std::uint16_t>(config.port), this), mEntityCount(0), mOnlinePlayers(0),
-        mChatManager(*this), mEventManager(*this)
+        mChatManager(*this), mEventManager(*this), mAcceptConnections(true)
 {
   addWorld("world", "world/region");
   fs::create_directories("players");
+}
+
+Server::~Server()
+{
+  mAcceptConnections = false;
+  mIoService.stop();
+  mStatusConnections.clear();
+  mPlayers.clear();
 }
 
 void Server::run()

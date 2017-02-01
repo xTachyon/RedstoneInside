@@ -60,9 +60,9 @@ private:
   template <typename T>
   T readNumber()
   {
+    static_assert(std::is_fundamental<T>::value, "Not fundamental ?");
     need(sizeof(T));
     T x;
-    //std::copy(std::addressof(data[offset]), std::addressof(data[offset + sizeof(T)]), reinterpret_cast<std::uint8_t*>(std::addressof(x)));
     std::copy(data.begin() + offset, data.begin() + offset + sizeof(T), reinterpret_cast<std::uint8_t*>(&x));
     offset += sizeof(T);
     return x;

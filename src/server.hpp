@@ -22,12 +22,14 @@ public:
   ServerConfig config;
 
   Server();
+  ~Server();
 
   std::int32_t getNewEntityID() { return mEntityCount++; }
   void addConnectedSession(boost::asio::ip::tcp::socket&& socket)
   {
     std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mStatusConnections.emplace_back(std::make_unique<Session>(std::move(socket), *this));
+    mStatusConnections.emplace_back(std::make_shared<Session>(std::move(socket), *this));
+    mStatusConnections.back()->readNext();
   }
   void run();
   void addPacket(Protocol* ptr, ByteBuffer&& buffer);
@@ -38,6 +40,7 @@ public:
   PlayerList& getOnlinePlayers() { return mPlayers; }
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
   void broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp);
+  bool getAcceptConnections() const { return mAcceptConnections; }
   
   static bool toAllPlayers(const Player&) { return true; }
   static bool toAllPlayersExcept(const Player& player, const Player& except);
@@ -46,7 +49,7 @@ private:
   
   friend class EventManager;
   
-  using SessionList = std::list<std::unique_ptr<Session>>;
+  using SessionList = std::list<std::shared_ptr<Session>>;
   using WorldList = std::list<World>;
   
   boost::asio::io_service mIoService;
@@ -60,6 +63,7 @@ private:
   std::int32_t mOnlinePlayers;
   ChatManager mChatManager;
   EventManager mEventManager;
+  std::atomic_bool mAcceptConnections;
 };
   
 } // namespace redi

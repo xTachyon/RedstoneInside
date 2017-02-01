@@ -94,12 +94,12 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& event)
   boost::uuids::name_generator gen(namesp);
   boost::uuids::uuid uuid = gen(util::toLowercase(event.nick));
   
-  for (SessionUniquePtr& s : mServer.mStatusConnections) // TODO: find a better way
+  for (SessionSharedPtr& s : mServer.mStatusConnections) // TODO: find a better way
   {
     if (*s == event.session)
     {
       mServer.mPlayers.emplace_back(event.nick, uuid, std::move(s), mServer.getNewEntityID(), &mServer, &mServer.mWorlds.back());
-      mServer.mStatusConnections.remove_if([](const SessionUniquePtr& par) -> bool
+      mServer.mStatusConnections.remove_if([](const SessionSharedPtr& par) -> bool
                                            {
                                              return !static_cast<bool>(par);
                                            });
@@ -165,7 +165,7 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 
 void EventManager::handleSessionDisconnect(EventSessionDisconnect& event)
 {
-  mServer.mStatusConnections.remove_if([&](const SessionUniquePtr& ar)
+  mServer.mStatusConnections.remove_if([&](const SessionSharedPtr& ar)
                                        {
                                          return event.session == *ar;
                                        });

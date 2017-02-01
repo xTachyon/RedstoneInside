@@ -38,7 +38,8 @@ void ConnectionListener::handleAccept(const boost::system::error_code& error)
   }
   else
   {
-    mServer->addConnectedSession(std::move(mSocket));
+    if (mServer->getAcceptConnections()) mServer->addConnectedSession(std::move(mSocket));
+    else mSocket.close();
   }
   
   listen();
