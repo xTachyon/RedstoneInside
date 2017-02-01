@@ -78,6 +78,8 @@ private:
   std::uint8_t mReceivingPacketSize[5];
   std::uint8_t mReceivingPacketCountSize;
 
+public:
+  
   friend void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& error, bool header);
   void readNext();
   friend void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& error);

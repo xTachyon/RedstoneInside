@@ -13,13 +13,26 @@ namespace asio = boost::asio;
 namespace redi
 {
 
-Session::Session(boost::asio::ip::tcp::socket&& socket, Server& server)
-      : mSocket(std::move(socket)), mProtocol(std::make_unique<Protocol1_11>(*this)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake), mSetCompressionIsSent(false)
-{}
+Session::Session(asio::ip::tcp::socket&& socket, Server& server)
+      : mSocket(std::move(socket)), mProtocol(std::make_unique<Protocol1_11>(*this)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake), mSetCompressionIsSent(false) {}
 
 Session::~Session()
 {
   Logger::info((boost::format("Session %1% destroyed") % this).str());
+}
+
+void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& error)
+{
+  if (error)
+  {
+    ptr->disconnect();
+    Logger::error("Client dc'ed");
+  }
+  else
+  {
+    ptr->mSendingPacket = {};
+    ptr->writeNext();
+  }
 }
 
 void Session::writeNext()
@@ -31,6 +44,39 @@ void Session::writeNext()
   
   asio::async_write(mSocket, asio::buffer(mSendingPacket->data(), mSendingPacket->size()),
                     boost::bind(sessionHandleWrite, shared_from_this(), asio::placeholders::error));
+}
+
+void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& error, bool header)
+{
+  if (error)
+  {
+    ptr->disconnect();
+    Logger::error("Client dc'ed");
+  }
+  else if (header)
+  {
+    ++ptr->mReceivingPacketCountSize;
+    
+    if ((ptr->mReceivingPacketSize[ptr->mReceivingPacketCountSize - 1] & 0b10000000) != 0)
+    {
+      if (ptr->mReceivingPacketCountSize > 5) static_cast<void>(header); // TODO: disconnect connection
+      else asio::async_read(ptr->mSocket, asio::buffer(ptr->mReceivingPacketSize + ptr->mReceivingPacketCountSize, 1),
+                            asio::transfer_exactly(1), boost::bind(sessionHandleRead, ptr, asio::placeholders::error, true));
+    }
+    else
+    {
+      PacketReader reader(ByteBuffer(ptr->mReceivingPacketSize, ptr->mReceivingPacketCountSize));
+      std::size_t len = static_cast<std::size_t>(reader.readVarInt());
+      ptr->mReceivingPacket.resize(len);
+      asio::async_read(ptr->mSocket, asio::buffer(ptr->mReceivingPacket.data(), len),
+                       asio::transfer_exactly(len), boost::bind(sessionHandleRead, ptr, asio::placeholders::error, false));
+    }
+  }
+  else
+  {
+    ptr->mServer.addPacket(ptr->mProtocol.get(), std::move(ptr->mReceivingPacket));
+    ptr->readNext();
+  }
 }
 
 void Session::readNext()
@@ -62,53 +108,6 @@ void Session::sendPacket(ByteBufferSharedPtr ptr)
 {
   mSendingQueue.push(ptr);
   writeNext();
-}
-  
-void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& error, bool header)
-{
-  if (error)
-  {
-    ptr->disconnect();
-    Logger::error("Client dc'ed");
-  }
-  else if (header)
-  {
-    ++ptr->mReceivingPacketCountSize;
-
-    if ((ptr->mReceivingPacketSize[ptr->mReceivingPacketCountSize - 1] & 0b10000000) != 0)
-    {
-      if (ptr->mReceivingPacketCountSize > 5) static_cast<void>(header); // TODO: disconnect connection
-      else asio::async_read(ptr->mSocket, asio::buffer(ptr->mReceivingPacketSize + ptr->mReceivingPacketCountSize, 1),
-        asio::transfer_exactly(1), boost::bind(sessionHandleRead, ptr, asio::placeholders::error, true));
-    }
-    else
-    {
-      PacketReader reader(ByteBuffer(ptr->mReceivingPacketSize, ptr->mReceivingPacketCountSize));
-      std::size_t len = static_cast<std::size_t>(reader.readVarInt());
-      ptr->mReceivingPacket.resize(len);
-      asio::async_read(ptr->mSocket, asio::buffer(ptr->mReceivingPacket.data(), len),
-        asio::transfer_exactly(len), boost::bind(sessionHandleRead, ptr, asio::placeholders::error, false));
-    }
-  }
-  else
-  {
-    ptr->mServer.addPacket(ptr->mProtocol.get(), std::move(ptr->mReceivingPacket));
-    ptr->readNext();
-  }
-}
-
-void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& error)
-{
-  if (error)
-  {
-    ptr->disconnect();
-    Logger::error("Client dc'ed");
-  }
-  else
-  {
-    ptr->mSendingPacket = {};
-    ptr->writeNext();
-  }
 }
 
 } // namespace redi

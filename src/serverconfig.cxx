@@ -47,6 +47,7 @@ void ServerConfig::readConfig()
 
   gamemode = static_cast<Gamemode>(gm);
   difficulty = static_cast<Difficulty>(diff);
+  reducedDebugInfo = false;
   readIcon();
 
   if (notexists)
