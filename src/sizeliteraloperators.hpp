@@ -16,32 +16,32 @@ struct SizeConstants
 
 constexpr std::size_t operator ""_KB(unsigned long long int data)
 {
-  return data * SizeConstants::KB;
+  return static_cast<std::size_t>(data * SizeConstants::KB);
 }
 
 constexpr std::size_t operator ""_MB(unsigned long long int data)
 {
-  return data * SizeConstants::MB;
+  return static_cast<std::size_t>(data * SizeConstants::MB);
 }
 
 constexpr std::size_t operator ""_GB(unsigned long long int data)
 {
-  return data * SizeConstants::GB;
+  return static_cast<std::size_t>(data * SizeConstants::GB);
 }
 
 constexpr std::size_t operator ""_TB(unsigned long long int data)
 {
-  return data * SizeConstants::TB;
+  return static_cast<std::size_t>(data * SizeConstants::TB);
 }
 
 constexpr std::size_t operator ""_PB(unsigned long long int data)
 {
-  return data * SizeConstants::PB;
+  return static_cast<std::size_t>(data * SizeConstants::PB);
 }
 
 constexpr std::size_t operator ""_EB(unsigned long long int data)
 {
-  return data * SizeConstants::EB;
+  return static_cast<std::size_t>(data * SizeConstants::EB);
 }
 
 } // namespace redi

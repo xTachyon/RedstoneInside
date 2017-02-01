@@ -15,7 +15,7 @@ ByteBuffer readFile(const std::string& path)
   
   ByteBuffer buffer;
   auto size = fs::file_size(path);
-  buffer.resize(size);
+  buffer.resize(static_cast<std::size_t>(size));
   
   std::ifstream file(path);
   file.read(buffer.as_char(), size);
@@ -29,7 +29,7 @@ std::string readFileToString(const std::string& path)
   
   std::string str;
   auto size = fs::file_size(path);
-  str.resize(size);
+  str.resize(static_cast<std::size_t>(size));
   
   std::ifstream file(path);
   file.read(&str[0], size);

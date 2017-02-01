@@ -60,7 +60,7 @@ void ServerConfig::readIcon()
   if (fs::exists(iconpath))
   {
     ByteBuffer buffer;
-    buffer.resize(fs::file_size(iconpath));
+    buffer.resize(static_cast<std::size_t>(fs::file_size(iconpath)));
 
     {
       std::ifstream file(iconpath);

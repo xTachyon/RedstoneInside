@@ -31,7 +31,7 @@ void Region::open(const std::string& filepath)
   if (size % 4 != 0 || size < HeaderSize) createNewRegion(filepath);
   mFile.open(filepath, std::ios::in | std::ios::out | std::ios::binary);
   if (!mFile) throw std::invalid_argument("can't open file " + filepath);
-  mFreeSectors.resize(size / SectorSize);
+  mFreeSectors.resize(static_cast<std::size_t>(size / SectorSize));
   std::fill(mFreeSectors.begin(), mFreeSectors.end(), true);
   readHeader();
   hasRegion = true;
