@@ -24,9 +24,6 @@ void ChatManager::operator()(const EventChatMessage& event)
   else if (event.message == "/pos")
   {
     event.player.sendMessage((boost::format("%1%") % static_cast<Vector3d>(event.player.getPosition())).str());
-    double x = event.player.getPosition().x;
-    std::reverse(reinterpret_cast<std::uint8_t*>(&x), reinterpret_cast<std::uint8_t*>(&x) + sizeof(double));
-    event.player.sendMessage(std::to_string(x));
     return;
   }
   

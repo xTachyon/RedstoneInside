@@ -48,7 +48,7 @@ std::int64_t PacketReader::readLong()
 
 float PacketReader::readFloat()
 {
-  std::int32_t i = readBNumber<std::uint32_t>();
+  std::uint32_t i = readBNumber<std::uint32_t>();
   auto ptr = reinterpret_cast<const std::uint8_t*>(std::addressof(i));
   float x;
   std::copy(ptr, ptr + sizeof(float), reinterpret_cast<std::uint8_t*>(std::addressof(x)));
@@ -57,7 +57,7 @@ float PacketReader::readFloat()
 
 double PacketReader::readDouble()
 {
-  std::int64_t i = readBNumber<std::uint64_t>();
+  std::uint64_t i = readBNumber<std::uint64_t>();
   auto ptr = reinterpret_cast<const std::uint8_t*>(std::addressof(i));
   double x;
   std::copy(ptr, ptr + sizeof(double), reinterpret_cast<std::uint8_t*>(std::addressof(x)));
