@@ -296,16 +296,28 @@ void Protocol1_11::handleChatMessage(PacketReader& pkt)
 
 void Protocol1_11::handlePlayerLook(PacketReader& pkt)
 {
+  std::cout << __PRETTY_FUNCTION__ << '\n';
+  for (auto c : pkt.data)
+    std::cout << (int)c << ' ';
+  std::cout << '\n';
   mSession.getServer().addEvent(std::make_shared<EventPlayerLook>(mSession.getPlayer(), pkt.readFloat(), pkt.readFloat(), pkt.readBool()));
 }
 
 void Protocol1_11::handlePlayerPosition(PacketReader& pkt)
 {
+  std::cout << __PRETTY_FUNCTION__ << '\n';
+  for (auto c : pkt.data)
+    std::cout << (int)c << ' ';
+  std::cout << '\n';
   mSession.getServer().addEvent(std::make_shared<EventPlayerPosition>(mSession.getPlayer(), pkt.readDouble(), pkt.readDouble(), pkt.readDouble(), pkt.readBool()));
 }
 
 void Protocol1_11::handlePlayerPositionAndLook(PacketReader& pkt)
 {
+  std::cout << __PRETTY_FUNCTION__ << '\n';
+  for (auto c : pkt.data)
+    std::cout << (int)c << ' ';
+  std::cout << '\n';
   mSession.getServer().addEvent(std::make_shared<EventPlayerPositionAndLook>(mSession.getPlayer(), pkt.readDouble(), pkt.readDouble(), pkt.readDouble(),
                                                                              pkt.readFloat(), pkt.readFloat(), pkt.readBool()));
 }

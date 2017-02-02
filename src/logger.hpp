@@ -41,13 +41,19 @@ public:
   template <typename T>
   static void debug(const T& val)
   {
+    static_cast<void>(val);
+#ifdef REDI_DEBUG
     get().write(val, LoggerLevel::Debug);
+#endif
   }
 
   template <typename T>
   static void debugSync(const T& val)
   {
+    static_cast<void>(val);
+#ifdef REDI_DEBUG
     std::cout << "DEBUGSYNC: " << val << '\n';
+#endif
   }
   
   static void info(const char* ptr)

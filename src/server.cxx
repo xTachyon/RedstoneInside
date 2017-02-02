@@ -38,8 +38,9 @@ void Server::run()
       {
         x.first->handlePacket(x.second);
       }
-      catch (std::exception&)
+      catch (std::exception& e)
       {
+        Logger::error(e.what());
         // Just ignore everything bad.
         // Should I disconnect ?
       }

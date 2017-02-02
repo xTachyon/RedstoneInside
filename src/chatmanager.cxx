@@ -24,6 +24,9 @@ void ChatManager::operator()(const EventChatMessage& event)
   else if (event.message == "/pos")
   {
     event.player.sendMessage((boost::format("%1%") % static_cast<Vector3d>(event.player.getPosition())).str());
+    double x = event.player.getPosition().x;
+    std::reverse(reinterpret_cast<std::uint8_t*>(&x), reinterpret_cast<std::uint8_t*>(&x) + sizeof(double));
+    event.player.sendMessage(std::to_string(x));
     return;
   }
   
@@ -36,13 +39,13 @@ void ChatManager::operator()(const EventChatMessage& event)
                                            });
   
   broadcastJSONMessage(json, Server::toAllPlayers);
-  Logger::info((boost::format("[%3%]%1%: %2%") % event.player.getUsername() % event.message % &event.player).str());
+  Logger::info((boost::format("%1%: %2%") % event.player.getUsername() % event.message).str());
 }
 
 void ChatManager::operator()(const EventPlayerJoin& event)
 {
   Player& player = event.session.getPlayer();
-  std::string message((boost::format("[%2%]%1% has joined the game") % player.getUsername() % &player).str());
+  std::string message((boost::format("%1% has joined the game") % player.getUsername()).str());
   Logger::info(message);
   broadcastJSONMessage(componentToJson(ChatComponent
                                              {

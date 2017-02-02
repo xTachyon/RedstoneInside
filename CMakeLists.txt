@@ -134,3 +134,7 @@ endif()
 if(WIN32)
   target_link_libraries(redi wsock32)
 endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_definitions(-DREDI_DEBUG)
+endif()
