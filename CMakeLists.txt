@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
         "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs")
+  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-  set(warnings "/W4 /EHsc")
+  set(warnings "/W4 /EHsc -D_WIN32_WINNT=0x0501 -D_SCL_SECURE_NO_WARNINGS")
 endif()
 
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
