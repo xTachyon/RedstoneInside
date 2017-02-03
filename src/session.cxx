@@ -14,11 +14,14 @@ namespace redi
 {
 
 Session::Session(asio::ip::tcp::socket&& socket, Server& server)
-      : mSocket(std::move(socket)), mProtocol(std::make_unique<Protocol1_11>(*this)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake), mSetCompressionIsSent(false) {}
+      : mSocket(std::move(socket)), mProtocol(std::make_unique<Protocol1_11>(*this)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake), mSetCompressionIsSent(false)
+{
+  Logger::debug((boost::format("Session %1% created") % this).str());
+}
 
 Session::~Session()
 {
-  Logger::info((boost::format("Session %1% destroyed") % this).str());
+  Logger::debug((boost::format("Session %1% destroyed") % this).str());
 }
 
 void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& error)
@@ -26,7 +29,6 @@ void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& e
   if (error)
   {
     ptr->disconnect();
-    Logger::error("Client dc'ed");
   }
   else
   {
@@ -51,7 +53,6 @@ void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& er
   if (error)
   {
     ptr->disconnect();
-    Logger::error("Client dc'ed");
   }
   else if (header)
   {

@@ -3,6 +3,7 @@
 #include "util/util.hpp"
 #include "logger.hpp"
 #include "exceptions.hpp"
+#include "player.hpp"
 #include "server.hpp"
 
 namespace fs = boost::filesystem;
@@ -43,7 +44,7 @@ void Server::run()
         // Should I disconnect ?
       }
     }
-
+    
     try
     {
       mEventManager();
@@ -56,7 +57,7 @@ void Server::run()
     {
       throw;
     }
-
+    
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
@@ -80,14 +81,33 @@ void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<boo
 {
   std::for_each(mPlayers.begin(), mPlayers.end(), [&](Player& player)
   {
-    if (comp(player)) player.sendPacket(ptr);
+    if (comp(player))
+    {
+      player.sendPacket(ptr);
+    }
   });
+}
+
+Player* Server::findPlayer(const std::string& name)
+{
+  Player* ptr = nullptr;
+  
+  for (auto& index : mPlayers)
+  {
+    if (name == index.getUsername())
+    {
+      ptr = &index;
+      break;
+    }
+  }
+  
+  return ptr;
 }
 
 bool Server::toAllPlayersExcept(const Player& player, const Player& except)
 {
   return player != except;
 }
-
+  
 } // namespace redi
 

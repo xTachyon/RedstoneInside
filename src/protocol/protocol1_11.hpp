@@ -54,10 +54,7 @@ public:
   static std::string getIP(boost::asio::ip::tcp::socket& socket);
 };
 
-inline Protocol1_11::~Protocol1_11()
-{
-  Logger::info((boost::format("Protocol %1% destroyed") % this).str());
-}
+inline Protocol1_11::~Protocol1_11() {}
   
 } // namespace redi
 

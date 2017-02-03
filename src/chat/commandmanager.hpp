@@ -21,8 +21,6 @@ class CommandManager
 {
 public:
   
-  
-  
   CommandManager(Server& server);
   CommandManager(const CommandManager&) = delete;
   CommandManager(CommandManager&&) = delete;
@@ -39,6 +37,9 @@ public:
   void unregisterCommand(CommandListIterator it);
   
   bool commandExists(const std::string& command);
+  
+  Server& getServer() { return mServer; }
+  const Server& getServer() const { return mServer; }
   
 private:
   

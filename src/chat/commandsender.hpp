@@ -34,6 +34,10 @@ public:
   bool isNotServer() const { return mType != CommandSenderType::Server; }
   // umm... why not ?
   
+  std::string getName() const;
+  
+  void sendMessage(const std::string& message);
+  
 private:
   
   void* mPtr;

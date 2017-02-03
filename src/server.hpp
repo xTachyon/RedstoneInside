@@ -11,6 +11,7 @@
 #include "events/eventmanager.hpp"
 #include "chat/commandmanager.hpp"
 #include "chat/redicommands.hpp"
+#include "logger.hpp"
 
 namespace redi
 {
@@ -43,6 +44,8 @@ public:
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
   void broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp);
   bool getAcceptConnections() const { return mAcceptConnections; }
+  void sendMessage(const std::string& str) const { Logger::info(str); }
+  Player* findPlayer(const std::string& name);
   
   static bool toAllPlayers(const Player&) { return true; }
   static bool toAllPlayersExcept(const Player& player, const Player& except);

@@ -17,8 +17,8 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid, std::shared_ptr
     : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(session), mGamemode(gamemode), mSendKeepAlive(mSession->getIoService()),
       mTeleportID(0), mEntityID(id)
 {
-  Logger::info((boost::format("%1% has joined the game") % mNickname).str());
-
+  Logger::debug((boost::format("Player %1% created") % this).str());
+  
   mSendKeepAlive.expires_from_now(std::chrono::seconds(5));
   mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), &mSession->getProtocol()));
   
@@ -28,7 +28,6 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid, std::shared_ptr
 Player::~Player()
 {
   Logger::debug((boost::format("Player %1% destroyed") % this).str());
-  Logger::info((boost::format("%1% has left the game") % mNickname).str());
   
   saveToFile();
 }

@@ -1,8 +1,18 @@
 cmake_minimum_required(VERSION 3.2)
-project(redi)
+project(redi CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+        "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(warnings "-Wall -Wextra -Wpedantic -Wreorder")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  set(warnings "/W4 /WX /EHsc")
+endif()
+
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
 set(SOURCE_FILES
         src/util/util.hpp
@@ -80,7 +90,8 @@ set(SOURCE_FILES
         src/chat/commandmanager.cxx
         src/chat/commandmanager.hpp
         src/chat/redicommands.cxx
-        src/chat/redicommands.hpp)
+        src/chat/redicommands.hpp
+        src/chat/commandsender.cxx)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 
@@ -121,19 +132,6 @@ endif()
 
 if (UNIX)
   target_link_libraries(redi pthread)
-endif()
-
-if(MSVC)
-  # http://stackoverflow.com/a/3818084/4091452
-  if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
-    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-  else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-  endif()
-elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR MINGW)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wdisabled-optimization -Wno-unused-local-typedefs -Wno-overflow -Wno-deprecated-declarations -Wreorder")
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -fno-limit-debug-info")
 endif()
 
 if(WIN32)
