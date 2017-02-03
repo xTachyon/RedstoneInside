@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
         "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  set(warnings "-Wall -Wextra -Wpedantic -Wreorder")
+  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-  set(warnings "/W4 /WX /EHsc")
+  set(warnings "/W4 /EHsc")
 endif()
 
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
@@ -105,7 +105,7 @@ else()
 endif()
 
 set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options system thread)
+find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options system thread zlib)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
   target_link_libraries(redi ${Boost_LIBRARIES})
