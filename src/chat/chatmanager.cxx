@@ -1,4 +1,5 @@
 #include <json.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <boost/format.hpp>
 #include "chatmanager.hpp"
 #include "../server.hpp"
@@ -11,19 +12,18 @@
 namespace redi
 {
 
-ChatManager::ChatManager(Server& server) : mServer(server) {}
+ChatManager::ChatManager(Server& server, CommandManager& cmdmanager) : mServer(server), mCmdManager(cmdmanager) {}
 
-void ChatManager::operator()(const EventChatMessage& event)
+void ChatManager::operator()(EventChatMessage& event)
 {
-  if (event.message == "/stop") throw StopServer();
-  else if (event.message == "/uuid")
+  std::string& message = event.message;
+  boost::algorithm::trim(message);
+  
+  if (message.size() == 0) return;
+  if (message[0] == '/')
   {
-    event.player.sendMessage(event.player.getUUIDasString());
-    return;
-  }
-  else if (event.message == "/pos")
-  {
-    event.player.sendMessage((boost::format("%1%") % static_cast<Vector3d>(event.player.getPosition())).str());
+    mCmdManager(event.player, message);
+    
     return;
   }
   

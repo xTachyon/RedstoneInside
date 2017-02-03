@@ -78,7 +78,9 @@ set(SOURCE_FILES
         src/util/file.cxx
         src/chat/commandsender.hpp
         src/chat/commandmanager.cxx
-        src/chat/commandmanager.hpp)
+        src/chat/commandmanager.hpp
+        src/chat/redicommands.cxx
+        src/chat/redicommands.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

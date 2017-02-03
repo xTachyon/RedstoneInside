@@ -9,6 +9,8 @@
 #include "world.hpp"
 #include "chat/chatmanager.hpp"
 #include "events/eventmanager.hpp"
+#include "chat/commandmanager.hpp"
+#include "chat/redicommands.hpp"
 
 namespace redi
 {
@@ -61,9 +63,11 @@ private:
   WorldList mWorlds;
   std::int32_t mEntityCount;
   std::int32_t mOnlinePlayers;
+  CommandManager mCommandManager;
   ChatManager mChatManager;
   EventManager mEventManager;
   std::atomic_bool mAcceptConnections;
+  RediCommands mRediCommands;
 };
   
 } // namespace redi

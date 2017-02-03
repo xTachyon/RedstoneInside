@@ -3,6 +3,7 @@
 
 #include <json.hpp>
 #include "../enums.hpp"
+#include "commandmanager.hpp"
 
 namespace redi
 {
@@ -33,9 +34,9 @@ class ChatManager
 {
 public:
   
-  ChatManager(Server&);
+  ChatManager(Server& server, CommandManager& cmdmanager);
   
-  void operator()(const EventChatMessage&);
+  void operator()(EventChatMessage&);
   void operator()(const EventPlayerJoin&);
   void operator()(const EventPlayerDisconnect&);
   
@@ -47,6 +48,7 @@ public:
 private:
   
   Server& mServer;
+  CommandManager& mCmdManager;
 };
   
 } // namespace redi

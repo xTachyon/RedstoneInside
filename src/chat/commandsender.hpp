@@ -27,6 +27,13 @@ public:
   
   CommandSenderType getType() const { return mType; }
   
+  bool isPlayer() const { return mType == CommandSenderType::Player; }
+  bool isServer() const { return mType == CommandSenderType::Server; }
+  
+  bool isNotPlayer() const { return mType != CommandSenderType::Player; }
+  bool isNotServer() const { return mType != CommandSenderType::Server; }
+  // umm... why not ?
+  
 private:
   
   void* mPtr;

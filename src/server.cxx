@@ -11,7 +11,7 @@ namespace redi
 {
 
 Server::Server() : config("server.properties"), mListener(mIoService, static_cast<std::uint16_t>(config.port), this), mEntityCount(0), mOnlinePlayers(0),
-        mChatManager(*this), mEventManager(*this), mAcceptConnections(true)
+                   mCommandManager(*this), mChatManager(*this, mCommandManager), mEventManager(*this), mAcceptConnections(true), mRediCommands(mCommandManager)
 {
   addWorld("world", "world/region");
   fs::create_directories("players");
