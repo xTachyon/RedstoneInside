@@ -27,8 +27,6 @@ Server::~Server()
 
 void Server::run()
 {
-  std::int32_t s = 0, n;
-
   while (true)
   {
     while (!mPacketsToBeHandled.empty())
@@ -60,15 +58,6 @@ void Server::run()
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-    n = util::getUnixTimestamp();
-    if (n > s + 9)
-    {
-      Logger::debug((boost::format("Number of status connections: %1% --- Number of players: %2%")
-                     % std::distance(mStatusConnections.begin(), mStatusConnections.end())
-                     % mOnlinePlayers).str());
-      s = n;
-    }
   }
 }
 

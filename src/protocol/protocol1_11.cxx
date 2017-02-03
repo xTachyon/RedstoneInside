@@ -26,8 +26,6 @@ void Protocol1_11::handlePacket(ByteBuffer& buffer)
   
   std::int32_t type = pkt.readVarInt();
 
-//  Logger::info((boost::format("Packet with type %1% on state %2% from %3%") % type % getStateName(mSession->state) % getIP()).str());
-  
   switch (mSession.getConnectionState())
   {
   case ConnectionState::Login:
@@ -118,8 +116,6 @@ void Protocol1_11::handleHandshake(PacketReader& reader)
   reader.consumeUShort();
   std::int32_t nextstate = reader.readVarInt();
   
-  Logger::info((boost::format("Handhake with next state %1% from %2%") % getStateName(static_cast<ConnectionState>(nextstate)) % getIP()).str());
-  
   switch (nextstate)
   {
   case 1:
@@ -142,7 +138,6 @@ void Protocol1_11::handleStatusRequest(PacketReader&)
 
 void Protocol1_11::handleStatusPing(PacketReader& reader)
 {
-  Logger::info("Status ping from " + getIP());
   sendStatusPong(reader.readLong());
 }
 
@@ -176,10 +171,7 @@ void Protocol1_11::handleLoginStart(PacketReader& reader)
 {
   std::string nick = reader.readString();
   
-  Logger::info((boost::format("Received Login start packet: %1%") % nick).str());
-  
   mSession.setConnectionState(ConnectionState::Play);
-//  mSession.getServer().addPlayer(nick, &mSession);
   mSession.getServer().addEvent(std::make_shared<EventPlayerJoin>(mSession, std::move(nick)));
 }
 

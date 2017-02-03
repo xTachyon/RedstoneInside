@@ -62,8 +62,8 @@ set(SOURCE_FILES
         src/events/eventmanager.hpp
         src/events/eventpriority.hpp
         src/serverconfig.cxx src/bytebuffer.cxx
-        src/chatmanager.cxx
-        src/chatmanager.hpp
+        src/chat/chatmanager.cxx
+        src/chat/chatmanager.hpp
         src/events/chatmessage.hpp
         src/exceptions.hpp
         src/events/statusrequest.hpp
@@ -75,7 +75,10 @@ set(SOURCE_FILES
         src/events/playerpositionandlook.hpp
         src/playerposition.hpp
         src/util/file.hpp
-        src/util/file.cxx)
+        src/util/file.cxx
+        src/chat/commandsender.hpp
+        src/chat/commandmanager.cxx
+        src/chat/commandmanager.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

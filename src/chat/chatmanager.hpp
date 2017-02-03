@@ -2,7 +2,7 @@
 #define REDI_CHATMANAGER_HPP
 
 #include <json.hpp>
-#include "enums.hpp"
+#include "../enums.hpp"
 
 namespace redi
 {

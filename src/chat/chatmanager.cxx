@@ -1,12 +1,12 @@
 #include <json.hpp>
 #include <boost/format.hpp>
 #include "chatmanager.hpp"
-#include "server.hpp"
-#include "events/events.hpp"
-#include "protocol/packetwriter.hpp"
-#include "logger.hpp"
-#include "exceptions.hpp"
-#include "util/util.hpp"
+#include "../server.hpp"
+#include "../events/events.hpp"
+#include "../protocol/packetwriter.hpp"
+#include "../logger.hpp"
+#include "../exceptions.hpp"
+#include "../util/util.hpp"
 
 namespace redi
 {

@@ -7,7 +7,7 @@
 #include "serverconfig.hpp"
 #include "events/events.hpp"
 #include "world.hpp"
-#include "chatmanager.hpp"
+#include "chat/chatmanager.hpp"
 #include "events/eventmanager.hpp"
 
 namespace redi
