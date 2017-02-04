@@ -8,6 +8,7 @@ namespace asio = boost::asio;
 
 int main(int, char**)
 {
+  auto a = REDI_FUNCTION;
   try
   {
     redi::Server server;

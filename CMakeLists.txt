@@ -91,7 +91,13 @@ set(SOURCE_FILES
         src/chat/commandmanager.hpp
         src/chat/redicommands.cxx
         src/chat/redicommands.hpp
-        src/chat/commandsender.cxx)
+        src/chat/commandsender.cxx
+        src/protocol/packetwriternocopy.hpp
+        src/protocol/packetwriternocopy.cxx
+        src/protocol/packets/packet.hpp
+        src/protocol/packets/server/handshake/handshake.cxx
+        src/protocol/packets/server/handshake/handshake.hpp
+        src/protocol/packets/packet.cxx src/protocol/packets/server/login/loginstart.cxx src/protocol/packets/server/login/loginstart.hpp src/protocol/packets/server/login/loginsucces.cxx src/protocol/packets/server/login/loginsucces.hpp src/protocol/packets/server/login/setcompression.cxx src/protocol/packets/server/login/setcompression.hpp src/protocol/packets/server/play/spawnposition.cxx src/protocol/packets/server/play/spawnposition.hpp src/protocol/packets/server/play/joingame.cxx src/protocol/packets/server/play/joingame.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 
@@ -143,4 +149,12 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_definitions(-DREDI_DEBUG)
+endif()
+
+if(UNIX OR MINGW)
+  add_definitions(-DREDI_FUNCTION=__PRETTY_FUNCTION__)
+elseif(MSVC)
+  add_definitions(-DREDI_FUNCTION=__FUNCTION__)
+else()
+  add_definitions(-DREDI_FUNCTION="")
 endif()
