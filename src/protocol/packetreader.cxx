@@ -183,7 +183,7 @@ PacketReader PacketReader::getFromCompressedPacket(const ByteBuffer& buf)
   {
     ByteBuffer buffer = compressor::decompressZlib(ByteBuffer(reader.data.begin() + reader.offset, reader.data.end()));
     if (len != buffer.size()) throw std::runtime_error("Uncompressed length is not equal with the one specified");
-  
+    
     return PacketReader(std::move(buffer));
   }
 }

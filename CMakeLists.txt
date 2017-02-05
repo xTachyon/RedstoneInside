@@ -97,7 +97,7 @@ set(SOURCE_FILES
         src/protocol/packets/packet.hpp
         src/protocol/packets/server/handshake/handshake.cxx
         src/protocol/packets/server/handshake/handshake.hpp
-        src/protocol/packets/packet.cxx src/protocol/packets/server/login/loginstart.cxx src/protocol/packets/server/login/loginstart.hpp src/protocol/packets/server/login/loginsucces.cxx src/protocol/packets/server/login/loginsucces.hpp src/protocol/packets/server/login/setcompression.cxx src/protocol/packets/server/login/setcompression.hpp src/protocol/packets/server/play/spawnposition.cxx src/protocol/packets/server/play/spawnposition.hpp src/protocol/packets/server/play/joingame.cxx src/protocol/packets/server/play/joingame.hpp)
+        src/protocol/packets/packet.cxx src/protocol/packets/server/login/loginstart.cxx src/protocol/packets/server/login/loginstart.hpp src/protocol/packets/server/login/loginsucces.cxx src/protocol/packets/server/login/loginsucces.hpp src/protocol/packets/server/login/setcompression.cxx src/protocol/packets/server/login/setcompression.hpp src/protocol/packets/server/play/spawnposition.cxx src/protocol/packets/server/play/spawnposition.hpp src/protocol/packets/server/play/joingame.cxx src/protocol/packets/server/play/joingame.hpp src/protocol/packets/server/play/playerpositionandlook.cxx src/protocol/packets/server/play/playerpositionandlook.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

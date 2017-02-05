@@ -12,11 +12,11 @@ ByteBuffer ChunkSerializer13::operator()()
 {
   writeHeader(); // Header (position, etc.)
   writeChunkSections(packet); // Chunk sections
-	writeBiomes(packet); // Biomes
+  writeBiomes(packet); // Biomes
   writeBlockEntities(packet); // A big 0
   
   packet.commit();
-	return packet;
+  return packet;
 }
 
 void ChunkSerializer13::writeHeader()
@@ -36,13 +36,13 @@ void ChunkSerializer13::writeHeader()
   std::size_t size =
         sectionsize * 16 +
         BiomeDataSize;
-
+  
   packet.writeInt(mPosition.x); // Chunk x
   packet.writeInt(mPosition.z); // Chunk z
   packet.writeBool(true); // Ground-Up Continuous
   packet.writeVarInt(0xFFFF); // Primary Bit Mask - Bitmask with bits set to 1 for every 16×16×16 chunk section whose data is included in Data.
   packet.writeVarInt(size); // Size of Data in bytes, plus size of Biomes in bytes if present
-  
+
 //  Logger::debug((boost::format("Sending chunk %1%") % mPosition).str());
 }
 
@@ -71,7 +71,7 @@ void ChunkSerializer13::writeChunkSection(PacketWriter& writer, std::uint8_t nth
       for (std::uint8_t x = 0; x < SectionX; ++x)
       {
         std::uint64_t blockstate = generateBlockStateID(mChunk(x, y + SectionY * nth, z));
-
+        
         std::size_t bitPosition = blockindex * BitsPerBlock;
         std::size_t firstIndex = bitPosition / 64;
         std::size_t secondIndex = ((blockindex + 1) * BitsPerBlock - 1) / 64;
@@ -93,14 +93,14 @@ void ChunkSerializer13::writeChunkSection(PacketWriter& writer, std::uint8_t nth
           
           temp = (blockstate >> (64 - bitOffset));
         }
-  
+        
         ++blockindex;
       }
     }
   }
   
   packet.writeULong(temp);
-
+  
   writeBlockLight(writer, nth); // Block Light
   if (mDimension == Dimension::Overworld)
   {
@@ -127,7 +127,7 @@ void ChunkSerializer13::writeSkyLight(PacketWriter& writer, std::uint8_t)
 void ChunkSerializer13::writeBiomes(PacketWriter& writer)
 {
   const Chunk::ChunkColumns& c = mChunk.getChunkColumns();
-
+  
   for (std::size_t x = 0; x < 16; ++x)
   {
     for (std::size_t z = 0; z < 16; ++z)
@@ -148,5 +148,5 @@ std::uint64_t ChunkSerializer13::generateBlockStateID(Block b)
   return ((static_cast<std::uint64_t>(b.type) & OverflowMask)
         << 4) | b.data;
 }
-
+  
 } // namespace redi
