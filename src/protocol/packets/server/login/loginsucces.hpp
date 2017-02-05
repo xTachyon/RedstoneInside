@@ -19,7 +19,7 @@ struct LoginSucces : public Packet
   
   void write(ByteBuffer& buffer) override;
   
-  const char* getName() const { return REDI_FUNCTION; }
+  const char* getName() const override { return REDI_FUNCTION; }
 };
   
 } // namespace redi

@@ -2,6 +2,7 @@
 #define REDI_JOINGAME_HPP
 
 #include "../../packet.hpp"
+#include "../../../../player.hpp"
 
 namespace redi
 {
@@ -16,7 +17,7 @@ struct JoinGame : public Packet
   
   void write(ByteBuffer& buffer) override;
   
-  const char* getName() const { return REDI_FUNCTION; }
+  const char* getName() const override { return REDI_FUNCTION; }
 };
 
 } // namespace redi

@@ -11,10 +11,12 @@ struct LoginStart : public Packet
   std::string username;
   
   LoginStart() = default;
+  LoginStart(PacketReader& packet);
   LoginStart(const std::string& username);
   LoginStart(std::string&& username);
   
-  void read(const ByteBuffer& buffer) override;
+  void read(PacketReader& packet) override;
+  virtual void process(PacketHandler& handler) override;
 };
   
 } // namespace redi

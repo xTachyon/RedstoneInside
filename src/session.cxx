@@ -3,8 +3,6 @@
 #include <boost/format.hpp>
 #include "session.hpp"
 #include "logger.hpp"
-#include "protocol/protocol.hpp"
-#include "protocol/protocol1_11.hpp"
 #include "protocol/packetreader.hpp"
 #include "server.hpp"
 
@@ -14,7 +12,8 @@ namespace redi
 {
 
 Session::Session(asio::ip::tcp::socket&& socket, Server& server)
-      : mSocket(std::move(socket)), mProtocol(std::make_unique<Protocol1_11>(*this)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake), mSetCompressionIsSent(false)
+      : mSocket(std::move(socket)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake),
+        mSetCompressionIsSent(false), mPacketHandler(std::make_shared<PacketHandler>(mServer, *this, mServer.getEventManager()))
 {
   Logger::debug((boost::format("Session %1% created") % this).str());
 }
@@ -75,7 +74,10 @@ void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& er
   }
   else
   {
-    ptr->mServer.addPacket(ptr->mProtocol.get(), std::move(ptr->mReceivingPacket));
+//    ptr->mServer.addPacket(ptr->mProtocol.get(), std::move(ptr->mReceivingPacket));
+//    ptr->mServer.addPacket()
+    ptr->mPacketHandler->readRaw(ptr->mReceivingPacket);
+    ptr->mServer.addPacket(ptr->mPacketHandler);
     ptr->readNext();
   }
 }
@@ -94,6 +96,7 @@ void Session::disconnect()
   else ptr = std::make_shared<EventPlayerDisconnect>(*mPlayer);
   mServer.addEvent(ptr);
 }
+
 void Session::setPlayer(Player& player)
 {
   mPlayer = std::addressof(player);

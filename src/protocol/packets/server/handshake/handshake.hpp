@@ -9,18 +9,19 @@ namespace redi
 
 struct Handshake : public Packet
 {
-  
   std::int32_t version;
   std::string hostname;
   std::uint16_t port;
   ConnectionState state;
   
   Handshake() = default;
+  Handshake(PacketReader& packet);
   Handshake(std::int32_t version, std::string hostname, std::uint16_t port, ConnectionState state);
   
-  void read(const ByteBuffer& buffer) override;
+  void read(PacketReader& packet) override;
+  virtual void process(PacketHandler& handler) override;
   
-  const char* getName() const { return REDI_FUNCTION; }
+  const char* getName() const override { return REDI_FUNCTION; }
 };
   
 } // namespace redi

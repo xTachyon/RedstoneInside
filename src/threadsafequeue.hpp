@@ -38,6 +38,13 @@ public:
   bool empty() const { return mData.empty(); }
   
   template <typename Functor>
+  void consumeOne(Functor& f)
+  {
+    T t(pop());
+    f(t);
+  }
+  
+  template <typename Functor>
   void consumeOne(const Functor& f)
   {
     f(pop());

@@ -30,12 +30,11 @@ void Server::run()
 {
   while (true)
   {
-    while (!mPacketsToBeHandled.empty())
+    while (!mPacketHandlersToBe.empty())
     {
-      auto x = mPacketsToBeHandled.pop();
       try
       {
-        x.first->handlePacket(x.second);
+        mPacketHandlersToBe.pop()->handleOne();
       }
       catch (std::exception& e)
       {
@@ -62,9 +61,9 @@ void Server::run()
   }
 }
 
-void Server::addPacket(Protocol* ptr, ByteBuffer&& buffer)
+void Server::addPacket(PacketHandlerSharedPtr ptr)
 {
-  mPacketsToBeHandled.push(std::pair<Protocol*, ByteBuffer>(ptr, std::move(buffer)));
+  mPacketHandlersToBe.push(ptr);
 }
 
 void Server::addEvent(EventSharedPtr ptr)

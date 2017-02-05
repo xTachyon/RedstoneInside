@@ -20,7 +20,7 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid, std::shared_ptr
   Logger::debug((boost::format("Player %1% created") % this).str());
   
   mSendKeepAlive.expires_from_now(std::chrono::seconds(5));
-  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), &mSession->getProtocol()));
+//  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), &mSession->getProtocol()));
   
   loadFromFile();
 }
@@ -59,10 +59,10 @@ void Player::sendMessage(const std::string& message, ChatPosition position)
 
 void Player::sendJSONMessage(const std::string& json, ChatPosition position)
 {
-  ByteBuffer buf(mSession->getProtocol().createChatPacket(json, position));
-  ByteBufferSharedPtr ptr(std::make_shared<ByteBuffer>(std::move(buf)));
+//  ByteBuffer buf(mSession->getProtocol().createChatPacket(json, position));
+//  ByteBufferSharedPtr ptr(std::make_shared<ByteBuffer>(std::move(buf)));
   
-  sendPacket(ptr);
+//  sendPacket(ptr);
 }
 
 std::string Player::getPlayerDataFileName() const

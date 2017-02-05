@@ -35,7 +35,7 @@ public:
     mStatusConnections.back()->readNext();
   }
   void run();
-  void addPacket(Protocol* ptr, ByteBuffer&& buffer);
+  void addPacket(PacketHandlerSharedPtr ptr);
   
   void addEvent(EventSharedPtr ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
@@ -46,6 +46,7 @@ public:
   bool getAcceptConnections() const { return mAcceptConnections; }
   void sendMessage(const std::string& str) const { Logger::info(str); }
   Player* findPlayer(const std::string& name);
+  EventManager& getEventManager() { return mEventManager; }
   
   static bool toAllPlayers(const Player&) { return true; }
   static bool toAllPlayersExcept(const Player& player, const Player& except);
@@ -53,6 +54,7 @@ public:
 private:
   
   friend class EventManager;
+  friend class PacketHandler;
   
   using SessionList = std::list<std::shared_ptr<Session>>;
   using WorldList = std::list<World>;
@@ -61,7 +63,6 @@ private:
   SessionList mStatusConnections;
   std::mutex mConnectedClientsMutex;
   ConnectionListener mListener;
-  ThreadSafeQueue<std::pair<Protocol*, ByteBuffer>> mPacketsToBeHandled;
   PlayerList mPlayers;
   WorldList mWorlds;
   std::int32_t mEntityCount;
@@ -71,6 +72,7 @@ private:
   EventManager mEventManager;
   std::atomic_bool mAcceptConnections;
   RediCommands mRediCommands;
+  ThreadSafeQueue<PacketHandlerSharedPtr> mPacketHandlersToBe;
 };
   
 } // namespace redi

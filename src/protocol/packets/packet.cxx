@@ -1,3 +1,4 @@
+#include "../../session.hpp"
 #include "packet.hpp"
 
 namespace redi

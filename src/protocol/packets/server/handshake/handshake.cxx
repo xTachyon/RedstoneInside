@@ -1,22 +1,25 @@
 #include "handshake.hpp"
 #include "../../../../logger.hpp"
 #include "../../../packetwriternocopy.hpp"
+#include "../../packethandler.hpp"
 
 namespace redi
 {
 
+Handshake::Handshake(PacketReader& packet)
+{
+  read(packet);
+}
 
 Handshake::Handshake(std::int32_t version, std::string hostname, std::uint16_t port, ConnectionState state)
   : version(version), hostname(hostname), port(port), state(state) {}
 
-void Handshake::read(const ByteBuffer& buffer)
+void Handshake::read(PacketReader& packet)
 {
-  PacketReader pkt(buffer);
-  
-  version = pkt.readVarInt();
-  hostname = pkt.readString();
-  port = pkt.readUShort();
-  std::int32_t nextstate = pkt.readVarInt();
+  version = packet.readVarInt();
+  hostname = packet.readString();
+  port = packet.readUShort();
+  std::int32_t nextstate = packet.readVarInt();
   
   switch (nextstate)
   {
@@ -31,6 +34,11 @@ void Handshake::read(const ByteBuffer& buffer)
   default:
     Logger::info(std::string("Invalid state: ") + std::to_string(nextstate));
   }
+}
+
+void Handshake::process(PacketHandler& handler)
+{
+  handler.handleHandshake(*this);
 }
   
 } // namespace redi

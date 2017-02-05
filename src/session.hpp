@@ -9,6 +9,7 @@
 #include "bytebuffer.hpp"
 #include "protocol/protocol.hpp"
 #include "enums.hpp"
+#include "protocol/packets/packethandler.hpp"
 
 namespace redi
 {
@@ -24,6 +25,7 @@ class Session : public std::enable_shared_from_this<Session>
 public:
 
   friend class Server;
+  friend class PacketHandler;
 
   Session(boost::asio::ip::tcp::socket&& socket, Server& server);
   Session(const Session&) = delete;
@@ -46,9 +48,6 @@ public:
   Server& getServer() { return mServer; }
   const Server& getServer() const { return mServer; }
 
-  Protocol& getProtocol() { return *mProtocol; }
-  const Protocol& getProtocol() const { return *mProtocol; }
-
   Player& getPlayer() { return *mPlayer; }
   void setPlayer(Player& player);
 
@@ -64,19 +63,18 @@ private:
 
   using PacketPtr = std::shared_ptr<ByteBuffer>;
   using PacketQueue = ThreadSafeQueue<PacketPtr>;
-  using ProtocolUniquePtr = std::unique_ptr<Protocol>;
 
   boost::asio::ip::tcp::socket mSocket;
   PacketQueue mSendingQueue;
   PacketPtr mSendingPacket;
   ByteBuffer mReceivingPacket;
-  ProtocolUniquePtr mProtocol;
   Server& mServer;
   Player* mPlayer;
   ConnectionState mConnectionState;
   std::atomic_bool mSetCompressionIsSent;
   std::uint8_t mReceivingPacketSize[5];
   std::uint8_t mReceivingPacketCountSize;
+  PacketHandlerSharedPtr mPacketHandler;
 
 public:
   

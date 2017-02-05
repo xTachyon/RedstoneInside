@@ -30,9 +30,6 @@ public:
   Session& getSession() { return *mSession; }
   const Session& getSession() const { return *mSession; }
   
-  Protocol& getProtocol() { return mSession->getProtocol(); }
-  const Protocol& getProtocol() const { return mSession->getProtocol(); }
-  
   Server& getServer() { return *mServer; }
   const Server& getServer() const { return *mServer; }
   
