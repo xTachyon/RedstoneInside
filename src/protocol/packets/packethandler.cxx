@@ -12,6 +12,10 @@
 #include "server/login/loginsucces.hpp"
 #include "server/status/response.hpp"
 #include "server/status/pong.hpp"
+#include "server/play/joingame.hpp"
+#include "server/play/spawnposition.hpp"
+#include "server/play/playerpositionandlook.hpp"
+#include "server/play/chunkdata.hpp"
 
 namespace redi
 {
@@ -55,7 +59,11 @@ void PacketHandler::readRaw(ByteBuffer buffer)
     switch (type)
     {
     case 0x00:
-      ptr = std::make_unique<LoginStart>(packet);
+    {
+      LoginStart ls(packet);
+      handleLoginStart(ls);
+      return;
+    }
       break;
     
     default:
@@ -118,7 +126,7 @@ void PacketHandler::handleHandshake(Handshake& p)
   mSession.mConnectionState = p.state;
 }
 
-void PacketHandler::handleStatusRequest(Request& packet)
+void PacketHandler::handleStatusRequest(Request&)
 {
   Response(mServer).send(mSession);
 }
@@ -131,6 +139,8 @@ void PacketHandler::handleStatusPing(Ping& packet)
 
 void PacketHandler::handleLoginStart(LoginStart& packet)
 {
+  mSession.mConnectionState = ConnectionState::Play;
+  
   boost::uuids::uuid namesp = boost::lexical_cast<boost::uuids::uuid>("77e7c416-763c-4967-8291-6698b795e90a");
   boost::uuids::name_generator gen(namesp);
   boost::uuids::uuid uuid = gen(util::toLowercase(packet.username));
@@ -155,26 +165,21 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   
   SetCompression(-1).send(mSession);
   LoginSucces(player.getUUIDasString(), player.getUsername()).send(mSession);
+  JoinGame(&player).send(mSession);
+  SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
+  PlayerPositionAndLook(player.getPosition(), player.getNewTeleportID()).send(mSession);
 
-//
-//  protocol.sendSetCompression();
-//  protocol.sendLoginSucces(event.nick, boost::lexical_cast<std::string>(player.getUUID()));
-//  protocol.sendJoinGame(mServer.mPlayers.back());
-//  protocol.sendSpawnPosition();
-//  //protocol.sendPlayerAbilities();
-//  protocol.sendTimeUpdate();
-//  protocol.sendPlayerPositionAndLook(player);
-//
-//  ChunkManager& cm = mServer.mWorlds.back().getChunkManager();
-//  for (std::int32_t i = -2; i <= 2; ++i)
-//  {
-//    for (std::int32_t j = -2; j <= 2; ++j)
-//    {
-//      Vector2i r(i, j);
-//
-//      protocol.sendChunk(cm.getChunk(r), r);
-//    }
-//  }
+
+  ChunkManager& cm = mServer.mWorlds.back().getChunkManager();
+  for (std::int32_t i = -2; i <= 2; ++i)
+  {
+    for (std::int32_t j = -2; j <= 2; ++j)
+    {
+      Vector2i r(i, j);
+
+      packets::ChunkData(cm.getChunk(r), r).send(mSession);
+    }
+  }
 
 //  for (Player& idx : mServer.mPlayers)
 //  {

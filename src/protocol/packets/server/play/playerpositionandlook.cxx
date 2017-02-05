@@ -7,6 +7,10 @@ namespace redi
 PlayerPositionAndLook::PlayerPositionAndLook(double x, double y, double z, float yaw, float pitch, bool onGround, std::int32_t teleportID)
   : x(x), y(y), z(z), yaw(yaw), pitch(pitch), onGround(onGround), teleportID(teleportID) {}
 
+PlayerPositionAndLook::PlayerPositionAndLook(PlayerPosition position, std::int32_t teleportID)
+  : PlayerPositionAndLook(position.x, position.y, position.z, position.yaw, position.pitch, position.onGround) {}
+
+
 void PlayerPositionAndLook::write(ByteBuffer& buffer)
 {
   PacketWriterNoCopy packet(buffer, SendID);
@@ -19,6 +23,5 @@ void PlayerPositionAndLook::write(ByteBuffer& buffer)
   packet.writeByte(0);
   packet.writeVarInt(teleportID);
 }
-  
   
 } // namespace redi

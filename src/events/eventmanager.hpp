@@ -2,7 +2,6 @@
 #define REDI_EVENTS_EVENTMANAGER_HPP
 
 #include <map>
-#include <boost/signals2.hpp>
 #include "eventtype.hpp"
 #include "event.hpp"
 #include "../threadsafequeue.hpp"

@@ -74,8 +74,6 @@ void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& er
   }
   else
   {
-//    ptr->mServer.addPacket(ptr->mProtocol.get(), std::move(ptr->mReceivingPacket));
-//    ptr->mServer.addPacket()
     ptr->mPacketHandler->readRaw(ptr->mReceivingPacket);
     ptr->mServer.addPacket(ptr->mPacketHandler);
     ptr->readNext();

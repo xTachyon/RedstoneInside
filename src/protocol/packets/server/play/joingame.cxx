@@ -11,9 +11,9 @@ JoinGame::JoinGame(Player* ptr) : player(ptr) {}
 void JoinGame::write(ByteBuffer& buffer)
 {
   using namespace std::string_literals;
-  if (!player) throw std::runtime_error("Player can't be null in "s + REDI_FUNCTION);
+  if (!player) throw std::runtime_error("Player can't be null - "s + REDI_FUNCTION);
   
-  PacketWriterNoCopy writer(buffer, 0x23);
+  PacketWriterNoCopy writer(buffer, SendID);
   
   writer.writeInt(player->getEntityID());
   writer.writeUByte(static_cast<std::uint8_t>(player->getGamemode()));

@@ -7,13 +7,13 @@
 #include "threadsafequeue.hpp"
 #include "sizeliteraloperators.hpp"
 #include "bytebuffer.hpp"
-#include "protocol/protocol.hpp"
 #include "enums.hpp"
 #include "protocol/packets/packethandler.hpp"
 
 namespace redi
 {
 
+class Player;
 class Server;
 class Session;
 

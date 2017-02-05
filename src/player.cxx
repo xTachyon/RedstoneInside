@@ -20,7 +20,7 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid, std::shared_ptr
   Logger::debug((boost::format("Player %1% created") % this).str());
   
   mSendKeepAlive.expires_from_now(std::chrono::seconds(5));
-//  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), &mSession->getProtocol()));
+  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), mSession));
   
   loadFromFile();
 }
@@ -32,16 +32,15 @@ Player::~Player()
   saveToFile();
 }
 
-void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer,
-                                     Protocol* protocol)
+void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session)
 {
-  if (!error)
-  {
-    protocol->sendKeepAlive();
-
-    timer->expires_from_now(std::chrono::seconds(10));
-    timer->async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, timer, protocol));
-  }
+//  if (!error)
+//  {
+//    protocol->sendKeepAlive();
+//
+//    timer->expires_from_now(std::chrono::seconds(10));
+//    timer->async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, timer, protocol));
+//  }
 }
 
 void Player::sendPacket(ByteBufferSharedPtr ptr)

@@ -42,9 +42,6 @@ set(SOURCE_FILES
         src/server.hpp
         src/player.cxx
         src/player.hpp
-        src/protocol/protocol.hpp
-        src/protocol/protocol1_11.cxx
-        src/protocol/protocol1_11.hpp
         src/protocol/packetreader.cxx
         src/protocol/packetreader.hpp
         src/protocol/packetwriter.cxx
@@ -97,7 +94,7 @@ set(SOURCE_FILES
         src/protocol/packets/packet.hpp
         src/protocol/packets/server/handshake/handshake.cxx
         src/protocol/packets/server/handshake/handshake.hpp
-        src/protocol/packets/packet.cxx src/protocol/packets/server/login/loginstart.cxx src/protocol/packets/server/login/loginstart.hpp src/protocol/packets/server/login/loginsucces.cxx src/protocol/packets/server/login/loginsucces.hpp src/protocol/packets/server/login/setcompression.cxx src/protocol/packets/server/login/setcompression.hpp src/protocol/packets/server/play/spawnposition.cxx src/protocol/packets/server/play/spawnposition.hpp src/protocol/packets/server/play/joingame.cxx src/protocol/packets/server/play/joingame.hpp src/protocol/packets/server/play/playerpositionandlook.cxx src/protocol/packets/server/play/playerpositionandlook.hpp src/protocol/packets/packethandler.cxx src/protocol/packets/packethandler.hpp src/protocol/packets/server/status/request.cxx src/protocol/packets/server/status/request.hpp src/protocol/packets/server/status/response.cxx src/protocol/packets/server/status/response.hpp src/protocol/packets/server/status/ping.cxx src/protocol/packets/server/status/ping.hpp src/protocol/packets/server/status/pong.cxx src/protocol/packets/server/status/pong.hpp)
+        src/protocol/packets/packet.cxx src/protocol/packets/server/login/loginstart.cxx src/protocol/packets/server/login/loginstart.hpp src/protocol/packets/server/login/loginsucces.cxx src/protocol/packets/server/login/loginsucces.hpp src/protocol/packets/server/login/setcompression.cxx src/protocol/packets/server/login/setcompression.hpp src/protocol/packets/server/play/spawnposition.cxx src/protocol/packets/server/play/spawnposition.hpp src/protocol/packets/server/play/joingame.cxx src/protocol/packets/server/play/joingame.hpp src/protocol/packets/server/play/playerpositionandlook.cxx src/protocol/packets/server/play/playerpositionandlook.hpp src/protocol/packets/packethandler.cxx src/protocol/packets/packethandler.hpp src/protocol/packets/server/status/request.cxx src/protocol/packets/server/status/request.hpp src/protocol/packets/server/status/response.cxx src/protocol/packets/server/status/response.hpp src/protocol/packets/server/status/ping.cxx src/protocol/packets/server/status/ping.hpp src/protocol/packets/server/status/pong.cxx src/protocol/packets/server/status/pong.hpp src/protocol/packets/server/play/chunkdata.cxx src/protocol/packets/server/play/chunkdata.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

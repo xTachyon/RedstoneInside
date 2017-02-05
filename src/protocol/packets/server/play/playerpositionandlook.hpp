@@ -1,7 +1,8 @@
-#ifndef REDI_PLAYERPOSITIONANDLOOK_HPP
-#define REDI_PLAYERPOSITIONANDLOOK_HPP
+#ifndef REDI_PACKET_PLAYERPOSITIONANDLOOK_HPP
+#define REDI_PACKET_PLAYERPOSITIONANDLOOK_HPP
 
 #include "../../packet.hpp"
+#include "../../../../playerposition.hpp"
 
 namespace redi
 {
@@ -19,6 +20,7 @@ struct PlayerPositionAndLook : public Packet
   std::int32_t teleportID;
   
   PlayerPositionAndLook(double x = 0.0, double y = 0.0, double z = 0.0, float yaw = 0.0f, float pitch = 0.0f, bool onGround = true, std::int32_t teleportID = 0);
+  PlayerPositionAndLook(PlayerPosition position, std::int32_t teleportID);
   
   void write(ByteBuffer& buffer) override;
   
@@ -27,4 +29,4 @@ struct PlayerPositionAndLook : public Packet
   
 } // namespace redi
 
-#endif // REDI_PLAYERPOSITIONANDLOOK_HPP
+#endif // REDI_PACKET_PLAYERPOSITIONANDLOOK_HPP
