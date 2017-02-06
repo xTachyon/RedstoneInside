@@ -52,6 +52,11 @@ public:
   void sendMessage(const std::string& message, ChatPosition position = ChatPosition::ChatBox);
   void sendJSONMessage(const std::string& json, ChatPosition position = ChatPosition::ChatBox);
   
+  void kickJSONmessage(const std::string& json);
+  void kickJSONmessage(std::string&& json);
+  void kick(const std::string& message);
+  void kick(std::string&& message);
+  
   static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session);
   
 private:

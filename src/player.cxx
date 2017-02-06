@@ -6,6 +6,7 @@
 #include "logger.hpp"
 #include "util/util.hpp"
 #include "protocol/packets/server/play/keepalive.hpp"
+#include "protocol/packets/server/play/disconnect.hpp"
 
 namespace asio = boost::asio;
 namespace fs = boost::filesystem;
@@ -60,6 +61,30 @@ void Player::sendMessage(const std::string& message, ChatPosition position)
 void Player::sendJSONMessage(const std::string& json, ChatPosition position)
 {
   packets::ChatMessage(json, position).send(*&*mSession);
+}
+
+void Player::kickJSONmessage(const std::string& json)
+{
+  kickJSONmessage(std::string(json));
+}
+
+void Player::kickJSONmessage(std::string&& json)
+{
+  packets::Disconnect(std::move(json)).send(*mSession);
+  mSession->disconnect();
+}
+
+void Player::kick(std::string&& message)
+{
+  kickJSONmessage(ChatManager::componentToJson(ChatComponent(
+        {
+              ChatMessagePart(std::move(message))
+        })));
+}
+
+void Player::kick(const std::string& message)
+{
+  kick(std::string(message));
 }
 
 std::string Player::getPlayerDataFileName() const

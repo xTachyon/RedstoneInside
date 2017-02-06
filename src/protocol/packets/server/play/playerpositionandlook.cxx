@@ -8,7 +8,7 @@ PlayerPositionAndLook::PlayerPositionAndLook(double x, double y, double z, float
   : x(x), y(y), z(z), yaw(yaw), pitch(pitch), onGround(onGround), teleportID(teleportID) {}
 
 PlayerPositionAndLook::PlayerPositionAndLook(PlayerPosition position, std::int32_t teleportID)
-  : PlayerPositionAndLook(position.x, position.y, position.z, position.yaw, position.pitch, position.onGround) {}
+  : PlayerPositionAndLook(position.x, position.y, position.z, position.yaw, position.pitch, position.onGround, teleportID) {}
 
 
 void PlayerPositionAndLook::write(ByteBuffer& buffer)

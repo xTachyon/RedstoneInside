@@ -88,7 +88,7 @@ void EventManager::addEvent(EventSharedPtr ptr)
   mEvents.push(ptr);
 }
 
-void EventManager::handlePlayerJoin(EventPlayerJoin& event)
+void EventManager::handlePlayerJoin(EventPlayerJoin&)
 {
 //  boost::uuids::uuid namesp = boost::lexical_cast<boost::uuids::uuid>("77e7c416-763c-4967-8291-6698b795e90a");
 //  boost::uuids::name_generator gen(namesp);

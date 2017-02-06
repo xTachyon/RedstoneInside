@@ -66,6 +66,19 @@ inline std::string toString(const T& ref)
   ss << ref;
   return ss.str();
 }
+
+template <typename T>
+inline bool noCaseCompareEqual(const std::basic_string<T>& l, const std::basic_string<T>& r)
+{
+  if (l.size() != r.size()) return false;
+  
+  for (std::size_t i = 0; i < l.size(); ++i)
+  {
+    if (std::tolower(l[i]) != std::tolower(r[i])) return false;
+  }
+  
+  return true;
+}
   
 template <typename From, typename To>
 To binaryTo(const From& val)

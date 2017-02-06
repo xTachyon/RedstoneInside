@@ -35,7 +35,7 @@ private:
   ThreadSafeQueue<EventSharedPtr> mEvents;
   Server& mServer;
 };
-
+  
 } // namespace redi
 
 #endif // REDI_EVENTS_EVENTMANAGER_HPP

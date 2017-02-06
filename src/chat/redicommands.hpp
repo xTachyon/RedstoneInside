@@ -21,6 +21,7 @@ public:
   static void uuidCommand(CommandSender sender, CommandArguments& args);
   static void stopCommand(CommandSender sender, CommandArguments& args);
   void whisperCommand(CommandSender sender, CommandArguments& args);
+  void kickCommand(CommandSender sender, CommandArguments& args);
   
 private:
   

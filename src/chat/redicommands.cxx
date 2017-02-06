@@ -4,6 +4,7 @@
 #include "redicommands.hpp"
 #include "../exceptions.hpp"
 #include "../player.hpp"
+#include "../util/util.hpp"
 
 namespace redi
 {
@@ -30,6 +31,10 @@ RediCommands::RediCommands(CommandManager& manager) : mCommandManager(manager)
   
   data.command = "w";
   data.callback = std::bind(&RediCommands::whisperCommand, this, std::placeholders::_1, std::placeholders::_2);
+  mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
+  
+  data.command = "kick";
+  data.callback = std::bind(&RediCommands::kickCommand, this, std::placeholders::_1, std::placeholders::_2);
   mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
 }
 
@@ -87,6 +92,43 @@ void RediCommands::whisperCommand(CommandSender sender, CommandArguments& args)
   else
   {
     sender.sendMessage("No player named " + args[0]);
+  }
+}
+
+void RediCommands::kickCommand(CommandSender sender, CommandArguments& args)
+{
+  if (args.size() == 0)
+  {
+    sender.sendMessage("Usage: /kick [player] <message>");
+    return;
+  }
+  
+  auto getMessage = [&]()
+  {
+    std::string message;
+    
+    for (auto it = args.begin() + 1; it != args.end(); ++it)
+    {
+      message += *it;
+    }
+    
+    return message;
+  };
+  
+  if (sender.isPlayer() && (util::noCaseCompareEqual(sender.getName(), args[0]) || args[0] == "myself"))
+  {
+    sender.getPlayer().kick(getMessage());
+  }
+  
+  Player* player = mCommandManager.getServer().findPlayer(args[0]);
+  
+  if (player)
+  {
+    player->kick(getMessage());
+  }
+  else
+  {
+    sender.sendMessage((boost::format("No player name \"%1%\"") % args[0]).str());
   }
 }
   
