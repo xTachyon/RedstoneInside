@@ -5,6 +5,7 @@
 #include "server.hpp"
 #include "logger.hpp"
 #include "util/util.hpp"
+#include "protocol/packets/server/play/keepalive.hpp"
 
 namespace asio = boost::asio;
 namespace fs = boost::filesystem;
@@ -34,13 +35,13 @@ Player::~Player()
 
 void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session)
 {
-//  if (!error)
-//  {
-//    protocol->sendKeepAlive();
-//
-//    timer->expires_from_now(std::chrono::seconds(10));
-//    timer->async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, timer, protocol));
-//  }
+  if (!error)
+  {
+    packets::KeepAlive(3).send(*session);
+
+    timer->expires_from_now(std::chrono::seconds(15));
+    timer->async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, timer, session));
+  }
 }
 
 void Player::sendPacket(ByteBufferSharedPtr ptr)
