@@ -59,10 +59,7 @@ void Player::sendMessage(const std::string& message, ChatPosition position)
 
 void Player::sendJSONMessage(const std::string& json, ChatPosition position)
 {
-//  ByteBuffer buf(mSession->getProtocol().createChatPacket(json, position));
-//  ByteBufferSharedPtr ptr(std::make_shared<ByteBuffer>(std::move(buf)));
-  
-//  sendPacket(ptr);
+  packets::ChatMessage(json, position).send(*&*mSession);
 }
 
 std::string Player::getPlayerDataFileName() const

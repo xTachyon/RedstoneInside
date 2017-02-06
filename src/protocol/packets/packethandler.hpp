@@ -6,6 +6,7 @@
 #include "server/login/loginstart.hpp"
 #include "server/status/request.hpp"
 #include "server/status/ping.hpp"
+#include "server/play/chatmessage.hpp"
 
 namespace redi
 {
@@ -29,6 +30,7 @@ public:
   void handleStatusPing(Ping& packet);
   
   void handleLoginStart(LoginStart& packet);
+  void handleChatMessage(packets::ChatMessage& packet);
   
 private:
   

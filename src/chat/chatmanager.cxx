@@ -74,9 +74,6 @@ void ChatManager::broadcastJSONMessage(const std::string& json, std::function<bo
   {
     if (comp(player))
     {
-//      ByteBuffer buf(player.getSession().getProtocol().createChatPacket(json, position));
-//      ByteBufferSharedPtr ptr(std::make_shared<ByteBuffer>(std::move(buf)));
-      
       player.sendJSONMessage(json, position);
     }
   }

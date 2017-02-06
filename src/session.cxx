@@ -102,7 +102,7 @@ void Session::setPlayer(Player& player)
 
 void Session::sendPacket(ByteBuffer&& pkt, const char* message)
 {
-  Logger::debug(message);
+//  Logger::debug(message);
   mSendingQueue.push(std::make_shared<ByteBuffer>(std::move(pkt)));
   writeNext();
 }

@@ -57,9 +57,9 @@ void EventManager::operator()()
 //      handleSendKeepAliveRing(e->get<EventSendKeepAliveRing>());
 //      break;
 //
-//    case EventType::ChatMessage:
-//      handleChatMessage(e->get<EventChatMessage>());
-//      break;
+    case EventType::ChatMessage:
+      handleChatMessage(e->get<EventChatMessage>());
+      break;
 //
 //    case EventType::StatusRequest:
 //      handleStatusRequest(e->get<EventStatusRequest>());
@@ -177,10 +177,10 @@ void EventManager::handleSessionDisconnect(EventSessionDisconnect& event)
 //  p.sendKeepAlive();
 //}
 //
-//void EventManager::handleChatMessage(EventChatMessage& event)
-//{
-//  mServer.mChatManager(event);
-//}
+void EventManager::handleChatMessage(EventChatMessage& event)
+{
+  mServer.mChatManager(event);
+}
 //
 //void EventManager::handleStatusRequest(EventStatusRequest& event)
 //{

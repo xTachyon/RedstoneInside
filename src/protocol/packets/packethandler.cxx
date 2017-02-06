@@ -94,7 +94,9 @@ void PacketHandler::readRaw(ByteBuffer buffer)
   {
     switch (type)
     {
-    
+    case 0x02:
+      ptr = std::make_unique<packets::ChatMessage>(packet);
+      break;
     
     default:
       break;
@@ -196,6 +198,11 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
 //      idx.getProtocol().sendSpawnPlayerPacket(player);
 //    }
 //  }
+}
+
+void PacketHandler::handleChatMessage(packets::ChatMessage& packet)
+{
+  mServer.addEvent(std::make_shared<EventChatMessage>(mSession.getPlayer(), std::move(packet.message)));
 }
   
 } // namespace redi
