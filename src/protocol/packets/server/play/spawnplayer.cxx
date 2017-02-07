@@ -12,7 +12,7 @@ SpawnPlayer::SpawnPlayer(Player& player) : player(player) {}
 void SpawnPlayer::write(ByteBuffer& buffer)
 {
   PacketWriterNoCopy packet(buffer, SendID);
-  redi::PlayerPosition position = player.getPosition();
+  auto position = player.getPosition();
   
   packet.writeVarInt(player.getEntityID());
   packet.writeUUID(player.getUUID());

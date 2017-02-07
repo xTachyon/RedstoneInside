@@ -8,8 +8,6 @@ namespace redi
 namespace packets
 {
 
-class Player;
-
 struct SpawnPlayer : public Packet
 {
   static constexpr std::int32_t SendID = 0x05;
