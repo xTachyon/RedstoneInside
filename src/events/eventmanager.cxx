@@ -7,6 +7,7 @@
 #include "../util/util.hpp"
 #include "../protocol/packetwriter.hpp"
 #include "../player.hpp"
+#include "../protocol/packets/server/play/playerlistitem.hpp"
 
 namespace redi
 {
@@ -40,7 +41,7 @@ void EventManager::operator()()
         {
           if (player != event.player)
           {
-//            player.getProtocol().sendPlayerListItem(event.player, PlayerListItemAction::RemovePlayer);
+            packets::PlayerListItem(event.player, PlayerListItemAction::RemovePlayer).send(player);
           }
         }
       }
@@ -88,66 +89,7 @@ void EventManager::addEvent(EventSharedPtr ptr)
   mEvents.push(ptr);
 }
 
-void EventManager::handlePlayerJoin(EventPlayerJoin&)
-{
-//  boost::uuids::uuid namesp = boost::lexical_cast<boost::uuids::uuid>("77e7c416-763c-4967-8291-6698b795e90a");
-//  boost::uuids::name_generator gen(namesp);
-//  boost::uuids::uuid uuid = gen(util::toLowercase(event.nick));
-//
-//  for (SessionSharedPtr& s : mServer.mStatusConnections) // TODO: find a better way
-//  {
-//    if (*s == event.session)
-//    {
-//      mServer.mPlayers.emplace_back(event.nick, uuid, std::move(s), mServer.getNewEntityID(), &mServer, &mServer.mWorlds.back());
-//      mServer.mStatusConnections.remove_if([](const SessionSharedPtr& par) -> bool
-//                                           {
-//                                             return !static_cast<bool>(par);
-//                                           });
-//      break;
-//    }
-//  }
-//  Player& player = mServer.mPlayers.back();
-//  Protocol& protocol = player.getSession().getProtocol();
-//  ++mServer.mOnlinePlayers;
-//
-//  player.getSession().setPlayer(player);
-//  player.getWorld().addPlayer(player);
-//
-//  protocol.sendSetCompression();
-//  protocol.sendLoginSucces(event.nick, boost::lexical_cast<std::string>(player.getUUID()));
-//  protocol.sendJoinGame(mServer.mPlayers.back());
-//  protocol.sendSpawnPosition();
-//  //protocol.sendPlayerAbilities();
-//  protocol.sendTimeUpdate();
-//  protocol.sendPlayerPositionAndLook(player);
-//
-//  ChunkManager& cm = mServer.mWorlds.back().getChunkManager();
-//  for (std::int32_t i = -2; i <= 2; ++i)
-//  {
-//    for (std::int32_t j = -2; j <= 2; ++j)
-//    {
-//      Vector2i r(i, j);
-//
-//      protocol.sendChunk(cm.getChunk(r), r);
-//    }
-//  }
-  
-//  for (Player& idx : mServer.mPlayers)
-//  {
-//    if (idx == player)
-//    {
-//      for (Player& i : mServer.mPlayers)
-//      {
-//        player.getProtocol().sendPlayerListItem(i, PlayerListItemAction::AddPlayer);
-//      }
-//    }
-//    else
-//    {
-//      idx.getProtocol().sendPlayerListItem(player, PlayerListItemAction::AddPlayer);
-//      idx.getProtocol().sendSpawnPlayerPacket(player);
-//    }
-//  }
-}
+void EventManager::handlePlayerJoin(EventPlayerJoin&) {}
 
 void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 {
@@ -170,74 +112,10 @@ void EventManager::handleSessionDisconnect(EventSessionDisconnect& event)
                                          return event.session == *ar;
                                        });
 }
-//
-//void EventManager::handleSendKeepAliveRing(EventSendKeepAliveRing& event)
-//{
-//  Protocol& p = event.session.getProtocol();
-//  p.sendKeepAlive();
-//}
-//
+
 void EventManager::handleChatMessage(EventChatMessage& event)
 {
   mServer.mChatManager(event);
 }
-//
-//void EventManager::handleStatusRequest(EventStatusRequest& event)
-//{
-//  const ServerConfig& config = mServer.config;
-//  nlohmann::json j;
-//
-//  j["description"]["text"] = config.motd;
-//  j["version"]["name"] = "RedstoneInside";
-//  j["version"]["protocol"] = 316;
-//  j["players"]["max"] = config.maxPlayers;
-//  j["players"]["online"] = mServer.getOnlinePlayersNumber();
-//  j["players"]["sample"] = nlohmann::json::array();
-//  if (config.iconb64.size() != 0) j["favicon"] = config.iconb64;
-//
-//  for (const auto& player: mServer.getOnlinePlayers())
-//  {
-//    nlohmann::json c;
-//
-//    c["id"] = boost::lexical_cast<std::string>(player.getUUID());
-//    c["name"] = player.getUsername();
-//
-//    j["players"]["sample"].push_back(c);
-//  }
-//
-//  PacketWriter pkt(0x00);
-//  pkt.writeString(j.dump());
-//  pkt.commit();
-//
-//  event.session.sendPacket(pkt, "Status Request");
-//}
-//
-//void EventManager::handlePlayerLook(EventPlayerLook& event)
-//{
-//  PlayerPosition& p = event.player.mPosition;
-//  p.yaw = event.yaw;
-//  p.pitch = event.pitch;
-//  p.onGround = event.onGround;
-//}
-//
-//void EventManager::handlePlayerPosition(EventPlayerPosition& event)
-//{
-//  PlayerPosition& p = event.player.mPosition;
-//  p.x = event.x;
-//  p.y = event.y;
-//  p.z = event.z;
-//  p.onGround = event.onGround;
-//}
-//
-//void EventManager::handlePlayerPositionAndLook(EventPlayerPositionAndLook& event)
-//{
-//  PlayerPosition& p = event.player.mPosition;
-//  p.x = event.x;
-//  p.y = event.y;
-//  p.z = event.z;
-//  p.yaw = event.yaw;
-//  p.pitch = event.pitch;
-//  p.onGround = event.onGround;
-//}
   
 } // namespace redi

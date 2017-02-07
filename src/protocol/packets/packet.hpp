@@ -9,6 +9,7 @@ namespace redi
 {
 
 class PacketHandler;
+class Player;
 class Session;
 
 struct Packet
@@ -24,6 +25,7 @@ struct Packet
   virtual const char* getName() const { return ""; }
   
   void send(Session& session);
+  void send(Player& player);
 };
 
 using PacketUniquePtr = std::unique_ptr<Packet>;

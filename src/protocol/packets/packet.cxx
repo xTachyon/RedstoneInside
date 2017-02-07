@@ -1,4 +1,5 @@
 #include "../../session.hpp"
+#include "../../player.hpp"
 #include "packet.hpp"
 
 namespace redi
@@ -13,4 +14,9 @@ void Packet::send(Session& session)
   session.sendPacket(std::move(buffer), getName());
 }
 
+void Packet::send(Player& player)
+{
+  send(player.getSession());
+}
+  
 } // namespace redi

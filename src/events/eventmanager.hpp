@@ -23,12 +23,7 @@ public:
   void handlePlayerJoin(EventPlayerJoin& event);
   void handlePlayerDisconnect(EventPlayerDisconnect& event);
   void handleSessionDisconnect(EventSessionDisconnect& event);
-  void handleSendKeepAliveRing(EventSendKeepAliveRing& event);
   void handleChatMessage(EventChatMessage& event);
-  void handleStatusRequest(EventStatusRequest& event);
-  void handlePlayerLook(EventPlayerLook&);
-  void handlePlayerPosition(EventPlayerPosition&);
-  void handlePlayerPositionAndLook(EventPlayerPositionAndLook&);
   
 private:
   
