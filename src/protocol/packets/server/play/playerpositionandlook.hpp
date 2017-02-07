@@ -6,6 +6,8 @@
 
 namespace redi
 {
+namespace packets
+{
 
 struct PlayerPositionAndLook : public Packet
 {
@@ -19,14 +21,21 @@ struct PlayerPositionAndLook : public Packet
   bool onGround;
   std::int32_t teleportID;
   
-  PlayerPositionAndLook(double x = 0.0, double y = 0.0, double z = 0.0, float yaw = 0.0f, float pitch = 0.0f, bool onGround = true, std::int32_t teleportID = 0);
-  PlayerPositionAndLook(PlayerPosition position, std::int32_t teleportID);
+  PlayerPositionAndLook(PacketReader& packet);
+  PlayerPositionAndLook(double x = 0.0, double y = 0.0, double z = 0.0, float yaw = 0.0f, float pitch = 0.0f,
+                        bool onGround = true, std::int32_t teleportID = 0);
   
+  PlayerPositionAndLook(redi::PlayerPosition position, std::int32_t teleportID);
+  
+  void read(PacketReader& packet) override;
   void write(ByteBuffer& buffer) override;
+  void process(PacketHandler& handler) override;
   
-  const char* getName() const override { return REDI_FUNCTION; }
+  const char* getName() const override
+  { return REDI_FUNCTION; }
 };
   
+} // namespace packets
 } // namespace redi
 
 #endif // REDI_PACKET_PLAYERPOSITIONANDLOOK_HPP

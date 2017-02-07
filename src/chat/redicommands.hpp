@@ -18,6 +18,7 @@ public:
   ~RediCommands();
   
   static void positionCommand(CommandSender sender, CommandArguments& args);
+  static void rotationCommand(CommandSender sender, CommandArguments& args);
   static void uuidCommand(CommandSender sender, CommandArguments& args);
   void stopCommand(CommandSender sender, CommandArguments& args);
   void whisperCommand(CommandSender sender, CommandArguments& args);

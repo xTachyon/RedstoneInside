@@ -21,6 +21,14 @@ RediCommands::RediCommands(CommandManager& manager) : mCommandManager(manager)
   data.callback = positionCommand;
   mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
   
+  data.command = "rotation";
+  data.callback = rotationCommand;
+  mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
+  
+  data.command = "rot";
+  data.callback = rotationCommand;
+  mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
+  
   data.command = "uuid";
   data.callback = uuidCommand;
   mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
@@ -46,14 +54,20 @@ RediCommands::~RediCommands()
   }
 }
 
-void RediCommands::positionCommand(CommandSender sender, CommandArguments& args)
+void RediCommands::positionCommand(CommandSender sender, CommandArguments&)
 {
   if (sender.isNotPlayer()) return;
   Player& player = sender.getPlayer();
   
   player.sendMessage((boost::format("Position: %1%") % static_cast<Vector3d>(player.getPosition())).str());
+}
+
+void RediCommands::rotationCommand(CommandSender sender, CommandArguments&)
+{
+  if (sender.isNotPlayer()) return;
+  Player& player = sender.getPlayer();
   
-  static_cast<void>(args);
+  player.sendMessage((boost::format("Rotation: %1%") % static_cast<redi::PlayerLook>(player.getPosition())).str());
 }
 
 void RediCommands::uuidCommand(CommandSender sender, CommandArguments&)
@@ -133,5 +147,5 @@ void RediCommands::kickCommand(CommandSender sender, CommandArguments& args)
     sender.sendMessage((boost::format("No player named \"%1%\"") % args[0]).str());
   }
 }
-  
+
 } // namespace redi

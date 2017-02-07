@@ -64,6 +64,7 @@ public:
 private:
   
   friend class EventManager;
+  friend class PacketHandler;
   
   boost::uuids::uuid mUUID;
   std::string mNickname;

@@ -7,6 +7,9 @@
 #include "server/status/request.hpp"
 #include "server/status/ping.hpp"
 #include "server/play/chatmessage.hpp"
+#include "server/play/playerpositionandlook.hpp"
+#include "server/play/playerposition.hpp"
+#include "server/play/playerlook.hpp"
 
 namespace redi
 {
@@ -31,6 +34,9 @@ public:
   
   void handleLoginStart(LoginStart& packet);
   void handleChatMessage(packets::ChatMessage& packet);
+  void handlePlayerPositionAndLook(packets::PlayerPositionAndLook& packet);
+  void handlePlayerPosition(packets::PlayerPosition& packet);
+  void handlePlayerLook(packets::PlayerLook& packet);
   
   Session& getSession() { return mSession; }
   

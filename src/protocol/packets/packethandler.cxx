@@ -16,6 +16,7 @@
 #include "server/play/spawnposition.hpp"
 #include "server/play/playerpositionandlook.hpp"
 #include "server/play/chunkdata.hpp"
+#include "server/play/playerlistitem.hpp"
 
 namespace redi
 {
@@ -98,6 +99,18 @@ void PacketHandler::readRaw(ByteBuffer buffer)
       ptr = std::make_unique<packets::ChatMessage>(packet);
       break;
     
+    case 0x0D:
+      ptr = std::make_unique<packets::PlayerPositionAndLook>(packet);
+      break;
+      
+    case 0x0C:
+      ptr = std::make_unique<packets::PlayerPosition>(packet);
+      break;
+      
+    case 0x0E:
+      ptr = std::make_unique<packets::PlayerLook>(packet);
+      break;
+      
     default:
       break;
     }
@@ -169,7 +182,7 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   LoginSucces(player.getUUIDasString(), player.getUsername()).send(mSession);
   JoinGame(&player).send(mSession);
   SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
-  PlayerPositionAndLook(player.getPosition(), player.getNewTeleportID()).send(mSession);
+  packets::PlayerPositionAndLook(player.getPosition(), player.getNewTeleportID()).send(mSession);
 
 
   ChunkManager& cm = mServer.mWorlds.back().getChunkManager();
@@ -185,26 +198,59 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   
   mServer.addEvent(std::make_shared<EventPlayerJoin>(mSession, std::move(packet.username)));
 
-//  for (Player& idx : mServer.mPlayers)
-//  {
-//    if (idx == player)
-//    {
-//      for (Player& i : mServer.mPlayers)
-//      {
+  for (Player& idx : mServer.mPlayers)
+  {
+    if (idx == player)
+    {
+      for (Player& i : mServer.mPlayers)
+      {
 //        player.getProtocol().sendPlayerListItem(i, PlayerListItemAction::AddPlayer);
-//      }
-//    }
-//    else
-//    {
+        packets::PlayerListItem(i, PlayerListItemAction::AddPlayer).send(player.getSession());
+      }
+    }
+    else
+    {
+      packets::PlayerListItem(player, PlayerListItemAction::AddPlayer).send(idx.getSession());
 //      idx.getProtocol().sendPlayerListItem(player, PlayerListItemAction::AddPlayer);
 //      idx.getProtocol().sendSpawnPlayerPacket(player);
-//    }
-//  }
+    }
+  }
 }
 
 void PacketHandler::handleChatMessage(packets::ChatMessage& packet)
 {
   mServer.addEvent(std::make_shared<EventChatMessage>(mSession.getPlayer(), std::move(packet.message)));
+}
+
+void PacketHandler::handlePlayerPositionAndLook(packets::PlayerPositionAndLook& packet)
+{
+  PlayerPosition& position = mSession.getPlayer().mPosition;
+  
+  position.x = packet.x;
+  position.y = packet.y;
+  position.z = packet.z;
+  position.yaw = packet.yaw;
+  position.pitch = packet.pitch;
+  position.onGround = packet.onGround;
+}
+
+void PacketHandler::handlePlayerPosition(packets::PlayerPosition& packet)
+{
+  PlayerPosition& position = mSession.getPlayer().mPosition;
+  
+  position.x = packet.x;
+  position.y = packet.y;
+  position.z = packet.z;
+  position.onGround = packet.onGround;
+}
+
+void PacketHandler::handlePlayerLook(packets::PlayerLook& packet)
+{
+  PlayerPosition& position = mSession.getPlayer().mPosition;
+  
+  position.yaw = packet.yaw;
+  position.pitch = packet.pitch;
+  position.onGround = packet.onGround;
 }
   
 } // namespace redi

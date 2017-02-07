@@ -15,6 +15,12 @@ struct PlayerLook
   PlayerLook(float yaw = 0.0f, float pitch = 0.0f) : yaw(yaw), pitch(pitch) {}
 };
 
+inline std::ostream& operator<<(std::ostream& stream, const PlayerLook& obj)
+{
+  stream << boost::format("(%1%, %2%)") % obj.yaw % obj.pitch;
+  return stream;
+}
+
 struct PlayerPosition : Vector3d, PlayerLook
 {
   bool onGround;
