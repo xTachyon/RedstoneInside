@@ -2,6 +2,7 @@
 #define REDI_SERVER
 
 #include <list>
+#include <condition_variable>
 #include "player.hpp"
 #include "connectionlistener.hpp"
 #include "serverconfig.hpp"
@@ -78,6 +79,9 @@ private:
   RediCommands mRediCommands;
   ThreadSafeQueue<PacketHandlerSharedPtr> mPacketHandlersToBe;
   std::vector<std::thread> mAsioThreads;
+  std::condition_variable mCondVar;
+  std::mutex mCondVarMutex;
+  std::unique_lock<std::mutex> mUniqueLock;
 };
   
 } // namespace redi

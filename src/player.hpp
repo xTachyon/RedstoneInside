@@ -59,6 +59,8 @@ public:
   
   bool isDisconnecting() const { return mSession->isDisconnecting(); }
   
+  void onTick();
+  
   static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session);
   
 private:

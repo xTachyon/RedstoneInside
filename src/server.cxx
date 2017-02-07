@@ -13,7 +13,7 @@ namespace redi
 
 Server::Server() : config("server.properties"), mListener(std::make_shared<ConnectionListener>(mIoService, static_cast<std::uint16_t>(config.port), *this)),
                    mEntityCount(0), mOnlinePlayers(0), mCommandManager(*this), mChatManager(*this, mCommandManager), mEventManager(*this),
-                   mRediCommands(mCommandManager)
+                   mRediCommands(mCommandManager), mUniqueLock(mCondVarMutex), mReady(false)
 {
   addWorld("world", "world/region");
   fs::create_directories("players");
@@ -77,18 +77,20 @@ void Server::run()
       throw;
     }
     
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    mCondVar.wait(mUniqueLock);
   }
 }
 
 void Server::addPacket(PacketHandlerSharedPtr ptr)
 {
   mPacketHandlersToBe.push(ptr);
+  mCondVar.notify_one();
 }
 
 void Server::addEvent(EventSharedPtr ptr)
 {
   mEventManager.addEvent(ptr);
+  mCondVar.notify_one();
 }
 
 void Server::addWorld(const std::string& worldname, const std::string& worlddir)
