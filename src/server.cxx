@@ -41,6 +41,8 @@ Server::~Server()
 
 void Server::run()
 {
+  using namespace std::chrono_literals;
+
   while (true)
   {
     while (!mPacketHandlersToBe.empty())
@@ -67,6 +69,7 @@ void Server::run()
     catch (StopServer&)
     {
       closeServer("Server is closing");
+      mEventManager();
       return;
     }
     catch (std::exception&)
@@ -124,8 +127,7 @@ void Server::closeServer(const std::string& reason)
 {
   mListener->mIsStopping = true;
   
-  auto& players = mCommandManager.getServer().getOnlinePlayers();
-  for (auto& i : players)
+  for (auto& i : mPlayers)
   {
     i.kick(reason);
   }

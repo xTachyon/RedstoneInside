@@ -98,8 +98,6 @@ void Session::disconnect()
     if (mPlayer == nullptr) ptr = std::make_shared<EventSessionDisconnect>(*this);
     else ptr = std::make_shared<EventPlayerDisconnect>(*mPlayer);
     mServer.addEvent(ptr);
-    
-    mSocket.close();
   }
 }
 
