@@ -25,6 +25,7 @@ class Session : public std::enable_shared_from_this<Session>
 public:
 
   friend class Server;
+  friend class Player;
   friend class PacketHandler;
 
   Session(boost::asio::ip::tcp::socket&& socket, Server& server);
@@ -58,6 +59,8 @@ public:
   void setCompressionIsSent(bool b) { mSetCompressionIsSent = b; }
 
   void disconnect();
+  
+  bool isDisconnecting() const { return mIsDisconnecting; }
 
 private:
 
@@ -75,6 +78,7 @@ private:
   std::uint8_t mReceivingPacketSize[5];
   std::uint8_t mReceivingPacketCountSize;
   PacketHandlerSharedPtr mPacketHandler;
+  std::atomic_bool mIsDisconnecting;
 
 public:
   

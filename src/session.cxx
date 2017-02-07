@@ -13,7 +13,8 @@ namespace redi
 
 Session::Session(asio::ip::tcp::socket&& socket, Server& server)
       : mSocket(std::move(socket)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake),
-        mSetCompressionIsSent(false), mPacketHandler(std::make_shared<PacketHandler>(mServer, *this, mServer.getEventManager()))
+        mSetCompressionIsSent(false), mPacketHandler(std::make_shared<PacketHandler>(mServer, *this, mServer.getEventManager())),
+        mIsDisconnecting(false)
 {
   Logger::debug((boost::format("Session %1% created") % this).str());
 }
@@ -89,10 +90,17 @@ void Session::readNext()
 
 void Session::disconnect()
 {
-  EventSharedPtr ptr;
-  if (mPlayer == nullptr) ptr = std::make_shared<EventSessionDisconnect>(*this);
-  else ptr = std::make_shared<EventPlayerDisconnect>(*mPlayer);
-  mServer.addEvent(ptr);
+  if (!mIsDisconnecting)
+  {
+    mIsDisconnecting = true;
+    
+    EventSharedPtr ptr;
+    if (mPlayer == nullptr) ptr = std::make_shared<EventSessionDisconnect>(*this);
+    else ptr = std::make_shared<EventPlayerDisconnect>(*mPlayer);
+    mServer.addEvent(ptr);
+    
+    mSocket.close();
+  }
 }
 
 void Session::setPlayer(Player& player)

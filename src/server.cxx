@@ -93,7 +93,7 @@ Player* Server::findPlayer(const std::string& name)
   
   for (auto& index : mPlayers)
   {
-    if (name == index.getUsername())
+    if (util::noCaseCompareEqual(name, index.getUsername()))
     {
       ptr = &index;
       break;

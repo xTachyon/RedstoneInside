@@ -57,6 +57,8 @@ public:
   void kick(const std::string& message);
   void kick(std::string&& message);
   
+  bool isDisconnecting() const { return mSession->isDisconnecting(); }
+  
   static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session);
   
 private:
@@ -67,7 +69,7 @@ private:
   std::string mNickname;
   Server* mServer;
   World* mWorld;
-  std::shared_ptr<Session> mSession;
+  SessionSharedPtr mSession;
   Gamemode mGamemode;
   PlayerPosition mPosition;
   boost::asio::steady_timer mSendKeepAlive;

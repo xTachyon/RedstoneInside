@@ -109,7 +109,7 @@ void RediCommands::kickCommand(CommandSender sender, CommandArguments& args)
     
     for (auto it = args.begin() + 1; it != args.end(); ++it)
     {
-      message += *it;
+      message += *it + ' ';
     }
     
     return message;
@@ -128,7 +128,7 @@ void RediCommands::kickCommand(CommandSender sender, CommandArguments& args)
   }
   else
   {
-    sender.sendMessage((boost::format("No player name \"%1%\"") % args[0]).str());
+    sender.sendMessage((boost::format("No player named \"%1%\"") % args[0]).str());
   }
 }
   

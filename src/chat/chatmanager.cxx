@@ -52,7 +52,7 @@ void ChatManager::operator()(const EventPlayerJoin& event)
 
 void ChatManager::operator()(const EventPlayerDisconnect& event)
 {
-  std::string message((boost::format("[%2%]%1% has left the game") % event.player.getUsername() % &event.player).str());
+  std::string message((boost::format("%1% has left the game") % event.player.getUsername()).str());
   Logger::info(message);
   broadcastJSONMessage(componentToJson(ChatComponent
                                              {

@@ -182,6 +182,8 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
       packets::ChunkData(cm.getChunk(r), r).send(mSession);
     }
   }
+  
+  mServer.addEvent(std::make_shared<EventPlayerJoin>(mSession, std::move(packet.username)));
 
 //  for (Player& idx : mServer.mPlayers)
 //  {
