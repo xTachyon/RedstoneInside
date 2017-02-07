@@ -11,19 +11,32 @@ namespace fs = boost::filesystem;
 namespace redi
 {
 
-Server::Server() : config("server.properties"), mListener(mIoService, static_cast<std::uint16_t>(config.port), this), mEntityCount(0), mOnlinePlayers(0),
-                   mCommandManager(*this), mChatManager(*this, mCommandManager), mEventManager(*this), mAcceptConnections(true), mRediCommands(mCommandManager)
+Server::Server() : config("server.properties"), mListener(std::make_shared<ConnectionListener>(mIoService, static_cast<std::uint16_t>(config.port), *this)),
+                   mEntityCount(0), mOnlinePlayers(0), mCommandManager(*this), mChatManager(*this, mCommandManager), mEventManager(*this),
+                   mRediCommands(mCommandManager)
 {
   addWorld("world", "world/region");
   fs::create_directories("players");
+  
+  mListener->listen();
+  for (std::size_t i = 0; i < AsioThreadsNumber; ++i)
+  {
+    mAsioThreads.emplace_back([&]()
+                              {
+                                mIoService.run();
+                              });
+  }
+  
 }
 
 Server::~Server()
 {
-  mAcceptConnections = false;
   mIoService.stop();
-  mStatusConnections.clear();
-  mPlayers.clear();
+  
+  for (auto& index : mAsioThreads)
+  {
+    index.join();
+  }
 }
 
 void Server::run()
@@ -32,15 +45,18 @@ void Server::run()
   {
     while (!mPacketHandlersToBe.empty())
     {
+      PacketHandlerSharedPtr x = mPacketHandlersToBe.pop();
       try
       {
-        mPacketHandlersToBe.pop()->handleOne();
+        x->handleOne();
       }
       catch (std::exception& e)
       {
         Logger::error(e.what());
         // Just ignore everything bad.
-        // Should I disconnect ?
+        x->getSession().disconnect();
+        // and disconnect
+        // TODO: add message
       }
     }
     
@@ -50,6 +66,7 @@ void Server::run()
     }
     catch (StopServer&)
     {
+      closeServer("Server is closing");
       return;
     }
     catch (std::exception&)
@@ -101,6 +118,17 @@ Player* Server::findPlayer(const std::string& name)
   }
   
   return ptr;
+}
+
+void Server::closeServer(const std::string& reason)
+{
+  mListener->mIsStopping = true;
+  
+  auto& players = mCommandManager.getServer().getOnlinePlayers();
+  for (auto& i : players)
+  {
+    i.kick(reason);
+  }
 }
 
 bool Server::toAllPlayersExcept(const Player& player, const Player& except)

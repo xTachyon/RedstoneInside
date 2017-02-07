@@ -26,7 +26,7 @@ RediCommands::RediCommands(CommandManager& manager) : mCommandManager(manager)
   mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
   
   data.command = "stop";
-  data.callback = stopCommand;
+  data.callback = std::bind(&RediCommands::stopCommand, this, std::placeholders::_1, std::placeholders::_2);
   mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
   
   data.command = "w";
@@ -66,6 +66,8 @@ void RediCommands::uuidCommand(CommandSender sender, CommandArguments&)
 
 void RediCommands::stopCommand(CommandSender, CommandArguments&)
 {
+  
+  
   throw StopServer();
 }
 

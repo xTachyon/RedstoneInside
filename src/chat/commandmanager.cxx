@@ -11,14 +11,14 @@ CommandManager::CommandManager(Server& server) : mServer(server) {}
 
 void CommandManager::operator()(Player& player, std::string& command)
 {
+  Logger::info((boost::format("%1% issued server command \"%2%\"") % player.getUsername() % command));
+  
   command.erase(command.begin());
   
   std::vector<std::string> splited = po::split_unix(command);
   if (splited.size() == 0) return;
   command = splited[0];
   splited.erase(splited.begin());
-  
-  Logger::info((boost::format("%1% issued server command \"/%2%\"") % player.getUsername() % command));
   
   for (auto& index : mCommands)
   {

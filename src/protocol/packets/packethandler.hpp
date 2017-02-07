@@ -32,6 +32,8 @@ public:
   void handleLoginStart(LoginStart& packet);
   void handleChatMessage(packets::ChatMessage& packet);
   
+  Session& getSession() { return mSession; }
+  
 private:
   
   Server& mServer;

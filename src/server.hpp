@@ -22,6 +22,11 @@ public:
   
   using PlayerList = std::list<Player>;
   
+  static constexpr std::size_t AsioThreadsNumber = 2;
+  /*
+   * Minimum 1
+  */
+  
   ServerConfig config;
 
   Server();
@@ -43,10 +48,10 @@ public:
   PlayerList& getOnlinePlayers() { return mPlayers; }
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
   void broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp);
-  bool getAcceptConnections() const { return mAcceptConnections; }
   void sendMessage(const std::string& str) const { Logger::info(str); }
   Player* findPlayer(const std::string& name);
   EventManager& getEventManager() { return mEventManager; }
+  void closeServer(const std::string& reason);
   
   static bool toAllPlayers(const Player&) { return true; }
   static bool toAllPlayersExcept(const Player& player, const Player& except);
@@ -62,7 +67,7 @@ private:
   boost::asio::io_service mIoService;
   SessionList mStatusConnections;
   std::mutex mConnectedClientsMutex;
-  ConnectionListener mListener;
+  ConnectionListenerSharedPtr mListener;
   PlayerList mPlayers;
   WorldList mWorlds;
   std::int32_t mEntityCount;
@@ -70,9 +75,9 @@ private:
   CommandManager mCommandManager;
   ChatManager mChatManager;
   EventManager mEventManager;
-  std::atomic_bool mAcceptConnections;
   RediCommands mRediCommands;
   ThreadSafeQueue<PacketHandlerSharedPtr> mPacketHandlersToBe;
+  std::vector<std::thread> mAsioThreads;
 };
   
 } // namespace redi

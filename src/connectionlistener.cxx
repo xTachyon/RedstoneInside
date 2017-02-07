@@ -9,24 +9,23 @@ namespace asio = boost::asio;
 namespace redi
 {
 
-ConnectionListener::ConnectionListener(asio::io_service& io, std::uint16_t port, Server* ptr)
+ConnectionListener::ConnectionListener(asio::io_service& io, std::uint16_t port, Server& server)
       : mIoService(io), mSocket(mIoService),
         mAcceptor(mIoService, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
-        mServer(ptr)
+        mServer(server), mIsStopping(false)
 {
-  mThread = std::thread(&ConnectionListener::serverThread, this);
+  Logger::debug((boost::format("ConnectionListener %1% created") % this).str());
 }
 
 ConnectionListener::~ConnectionListener()
 {
-  mIoService.stop();
-  mThread.join();
+  Logger::debug((boost::format("ConnectionListener %1% destroyed") % this).str());
 }
 
 void ConnectionListener::listen()
 {
   mAcceptor.async_accept(mSocket,
-                        boost::bind(&ConnectionListener::handleAccept, this,
+                        boost::bind(&ConnectionListener::handleAccept, shared_from_this(),
                                     asio::placeholders::error));
 }
 
@@ -36,19 +35,11 @@ void ConnectionListener::handleAccept(const boost::system::error_code& error)
   {
     Logger::error(error.message());
   }
-  else
+  else if (!mIsStopping)
   {
-    if (mServer->getAcceptConnections()) mServer->addConnectedSession(std::move(mSocket));
-    else mSocket.close();
+    mServer.addConnectedSession(std::move(mSocket));
+    listen();
   }
-  
-  listen();
-}
-
-void ConnectionListener::serverThread()
-{
-  listen();
-  mIoService.run();
 }
   
 } // namespace redi

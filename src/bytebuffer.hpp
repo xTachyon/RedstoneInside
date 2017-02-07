@@ -2,8 +2,8 @@
 #define REDI_BINARYDATA
 
 #include <cstdint>
+#include <memory>
 #include <vector>
-#include <boost/asio/detail/shared_ptr.hpp>
 
 namespace redi
 {

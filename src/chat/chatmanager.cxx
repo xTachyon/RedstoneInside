@@ -29,7 +29,6 @@ void ChatManager::operator()(EventChatMessage& event)
   
   std::string json = componentToJson(ChatComponent
                                            {
-                                                 ChatMessagePart((boost::format("[%1%]") % util::toString(&event.player)).str(), "light_purple"),
                                                  ChatMessagePart(event.player.getUsername(), "aqua"),
                                                  ChatMessagePart(": ", "yellow"),
                                                  ChatMessagePart(event.message, "red")
