@@ -13,8 +13,6 @@ struct Request : public Packet
   
   void read(PacketReader& packet) override;
   virtual void process(PacketHandler& handler) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
 
 } // namespace redi

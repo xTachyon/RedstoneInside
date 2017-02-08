@@ -3,7 +3,7 @@
 
 #include "../world/chunk.hpp"
 #include "../serverconfig.hpp"
-#include "packetwriter.hpp"
+#include "packetwriternocopy.hpp"
 
 namespace redi
 {
@@ -32,15 +32,16 @@ class ChunkSerializer13
   const Chunk& mChunk;
   Vector2i mPosition;
   Dimension mDimension;
-  PacketWriter packet;
+  ByteBuffer mBuffer;
+  PacketWriterNoCopy packet;
   
   void writeHeader();
-  void writeChunkSections(PacketWriter& writer);
-  void writeChunkSection(PacketWriter& writer, std::uint8_t nth);
-  void writeBlockLight(PacketWriter& writer, std::uint8_t nth);
-  void writeSkyLight(PacketWriter& writer, std::uint8_t nth);
-  void writeBiomes(PacketWriter& writer);
-  void writeBlockEntities(PacketWriter& writer);
+  void writeChunkSections();
+  void writeChunkSection(std::uint8_t nth);
+  void writeBlockLight(std::uint8_t nth);
+  void writeSkyLight(std::uint8_t nth);
+  void writeBiomes();
+  void writeBlockEntities();
   
   static uint64_t generateBlockStateID(Block b);
 };

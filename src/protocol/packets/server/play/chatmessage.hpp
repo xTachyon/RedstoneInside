@@ -23,8 +23,6 @@ struct ChatMessage : public Packet
   void read(PacketReader& packet) override;
   void write(ByteBuffer& buffer) override;
   virtual void process(PacketHandler& handler) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
 
 }

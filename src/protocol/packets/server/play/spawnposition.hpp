@@ -17,8 +17,6 @@ struct SpawnPosition : public Packet
   SpawnPosition(Vector3i position);
   
   void write(ByteBuffer& buffer) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
   
 } // namespace redi

@@ -7,6 +7,7 @@
 #include "util/util.hpp"
 #include "protocol/packets/server/play/keepalive.hpp"
 #include "protocol/packets/server/play/disconnect.hpp"
+#include "protocol/packets/server/play/spawnplayer.hpp"
 
 namespace asio = boost::asio;
 namespace fs = boost::filesystem;
@@ -82,6 +83,12 @@ void Player::kick(std::string&& message)
         })));
 }
 
+void Player::normalizeRotation()
+{
+  mPosition.yaw = static_cast<float>(util::normalizeAngleDegrees(mPosition.yaw));
+  mPosition.pitch = static_cast<float>(util::normalizeAngleDegrees(mPosition.pitch));
+}
+
 void Player::kick(const std::string& message)
 {
   kick(std::string(message));
@@ -153,6 +160,69 @@ bool operator==(const Player& l, const Player& r)
 bool operator!=(const Player& l, const Player& r)
 {
   return !(l == r);
+}
+
+void Player::onEntityMovedWithLook(PlayerPosition newpos)
+{
+  using PlayerPtrVector = std::vector<Player*>;
+  PlayerPtrVector create;
+  PlayerPtrVector update;
+  PlayerPtrVector destroy;
+  PlayerPtrVector nextEntitiesInSight;
+  
+  for (Player& player : mServer->getOnlinePlayers())
+  {
+    if (player != *this)
+    {
+      auto distance = player.getPosition().distance(mPosition);
+    
+      if (distance <= InRange)
+      {
+        auto it = std::find(mEntitiesInSight.begin(), mEntitiesInSight.end(), &player);
+      
+        if (it == mEntitiesInSight.end())
+        {
+          create.push_back(&player);
+          nextEntitiesInSight.push_back(&player);
+        }
+        else
+        {
+          update.push_back(&player);
+          nextEntitiesInSight.push_back(&player);
+        }
+      }
+      else
+      {
+        destroy.push_back(&player);
+      }
+    }
+  }
+  
+  if (create.size() > 0)
+  {
+    packets::SpawnPlayer packet(*this);
+    
+    for (Player* player : create)
+    {
+      packet.send(*player);
+    }
+  }
+  
+  if (update.size() > 0)
+  {
+    std::int16_t dx = (util::floorAndCast(newpos.x * 32.0) - util::floorAndCast(mPosition.x * 32.0)) * 128;
+    std::int16_t dy = (util::floorAndCast(newpos.y * 32.0) - util::floorAndCast(mPosition.y * 32.0)) * 128;
+    std::int16_t dz = (util::floorAndCast(newpos.z * 32.0) - util::floorAndCast(mPosition.z * 32.0)) * 128;
+
+    packets::EntityLookAndRelativeMove packet(mEntityID, dx, dy, dz, mPosition.yaw, mPosition.pitch, mPosition.onGround);
+
+    for (Player* player : update)
+    {
+      packet.send(*player);
+    }
+  }
+  
+  mEntitiesInSight = nextEntitiesInSight;
 }
 
 } // namespace red

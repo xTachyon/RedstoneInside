@@ -224,7 +224,7 @@ void PacketHandler::handleChatMessage(packets::ChatMessage& packet)
 
 void PacketHandler::handlePlayerPositionAndLook(packets::PlayerPositionAndLook& packet)
 {
-  PlayerPosition& position = mSession.getPlayer().mPosition;
+  PlayerPosition position = mSession.getPlayer().mPosition;
   
   position.x = packet.x;
   position.y = packet.y;
@@ -232,6 +232,9 @@ void PacketHandler::handlePlayerPositionAndLook(packets::PlayerPositionAndLook& 
   position.yaw = packet.yaw;
   position.pitch = packet.pitch;
   position.onGround = packet.onGround;
+  mSession.getPlayer().onEntityMovedWithLook(position);
+  mSession.getPlayer().mPosition = position;
+  mSession.getPlayer().normalizeRotation();
 }
 
 void PacketHandler::handlePlayerPosition(packets::PlayerPosition& packet)
@@ -251,6 +254,7 @@ void PacketHandler::handlePlayerLook(packets::PlayerLook& packet)
   position.yaw = packet.yaw;
   position.pitch = packet.pitch;
   position.onGround = packet.onGround;
+  mSession.getPlayer().normalizeRotation();
 }
   
 } // namespace redi

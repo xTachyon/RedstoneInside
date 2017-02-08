@@ -7,6 +7,7 @@
 #include "../threadsafequeue.hpp"
 #include "eventpriority.hpp"
 #include "events.hpp"
+#include "../protocol/packets/server/play/entitylookandrelativemove.hpp"
 
 namespace redi
 {

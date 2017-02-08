@@ -19,8 +19,6 @@ struct ChunkData : public Packet
   ChunkData(const Chunk& chunk, Vector2i position);
   
   void write(ByteBuffer& buffer) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
 
 } // namespace packets

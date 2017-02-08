@@ -37,6 +37,7 @@ public:
   void writeVarULong(std::uint64_t v);
   void writePosition(std::int64_t x, std::int64_t y, std::int64_t z);
   void writeUUID(boost::uuids::uuid uuid);
+  void writeAngle(double angle);
   void commit(bool compressed = false);
   
   template <typename T>

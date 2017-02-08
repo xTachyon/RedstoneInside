@@ -30,9 +30,6 @@ struct PlayerPositionAndLook : public Packet
   void read(PacketReader& packet) override;
   void write(ByteBuffer& buffer) override;
   void process(PacketHandler& handler) override;
-  
-  const char* getName() const override
-  { return REDI_FUNCTION; }
 };
   
 } // namespace packets

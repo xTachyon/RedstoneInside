@@ -22,7 +22,10 @@ struct Packet
   virtual void write(ByteBuffer&) {}
   virtual void process(PacketHandler&) {}
   
-  virtual const char* getName() const { return ""; }
+  const char* getName() const
+  {
+    return typeid(*this).name();
+  }
   
   void send(Session& session);
   void send(Player& player);

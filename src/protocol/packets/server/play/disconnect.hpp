@@ -20,8 +20,6 @@ struct Disconnect : public Packet
   Disconnect(std::string&& json, bool play = true);
   
   void write(ByteBuffer& buffer) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
   
 } // namespace packets

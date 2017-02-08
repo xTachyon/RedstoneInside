@@ -6,17 +6,17 @@ namespace redi
 {
 
 ChunkSerializer13::ChunkSerializer13(const Chunk& chunk, Vector2i pos, Dimension dimension)
-      : mChunk(chunk), mPosition(pos), mDimension(dimension), packet(0x20) {}
+      : mChunk(chunk), mPosition(pos), mDimension(dimension), packet(mBuffer, 0x20) {}
 
 ByteBuffer ChunkSerializer13::operator()()
 {
   writeHeader(); // Header (position, etc.)
-  writeChunkSections(packet); // Chunk sections
-  writeBiomes(packet); // Biomes
-  writeBlockEntities(packet); // A big 0
+  writeChunkSections(); // Chunk sections
+  writeBiomes(); // Biomes
+  writeBlockEntities(); // A big 0
   
   packet.commit();
-  return packet;
+  return mBuffer;
 }
 
 void ChunkSerializer13::writeHeader()
@@ -46,19 +46,19 @@ void ChunkSerializer13::writeHeader()
 //  Logger::debug((boost::format("Sending chunk %1%") % mPosition).str());
 }
 
-void ChunkSerializer13::writeChunkSections(PacketWriter& writer)
+void ChunkSerializer13::writeChunkSections()
 {
   for (std::uint8_t i = 0; i < 16; ++i)
   {
-    writeChunkSection(writer, i);
+    writeChunkSection(i);
   }
 }
 
-void ChunkSerializer13::writeChunkSection(PacketWriter& writer, std::uint8_t nth)
+void ChunkSerializer13::writeChunkSection(std::uint8_t nth)
 {
-  writer.writeUByte(BitsPerBlock); // Bits Per Block
-  writer.writeUByte(0); // Palette length
-  writer.writeVarInt(ChunkSectionDataArraySize); // Data Array Length
+  packet.writeUByte(BitsPerBlock); // Bits Per Block
+  packet.writeUByte(0); // Palette length
+  packet.writeVarInt(ChunkSectionDataArraySize); // Data Array Length
   
   std::uint64_t temp = 0;
   std::uint64_t currentlyWrittenIndex = 0;
@@ -101,30 +101,30 @@ void ChunkSerializer13::writeChunkSection(PacketWriter& writer, std::uint8_t nth
   
   packet.writeULong(temp);
   
-  writeBlockLight(writer, nth); // Block Light
+  writeBlockLight(nth); // Block Light
   if (mDimension == Dimension::Overworld)
   {
-    writeSkyLight(writer, nth); // Sky Light
+    writeSkyLight(nth); // Sky Light
   }
 }
 
-void ChunkSerializer13::writeBlockLight(PacketWriter& writer, std::uint8_t)
+void ChunkSerializer13::writeBlockLight(std::uint8_t)
 {
   for (std::size_t i = 0; i < 2048; ++i)
   {
-    writer.writeUByte(0xFF);
+    packet.writeUByte(0xFF);
   }
 }
 
-void ChunkSerializer13::writeSkyLight(PacketWriter& writer, std::uint8_t)
+void ChunkSerializer13::writeSkyLight(std::uint8_t)
 {
   for (std::size_t i = 0; i < 2048; ++i)
   {
-    writer.writeUByte(0xFF);
+    packet.writeUByte(0xFF);
   }
 }
 
-void ChunkSerializer13::writeBiomes(PacketWriter& writer)
+void ChunkSerializer13::writeBiomes()
 {
   const Chunk::ChunkColumns& c = mChunk.getChunkColumns();
   
@@ -132,14 +132,14 @@ void ChunkSerializer13::writeBiomes(PacketWriter& writer)
   {
     for (std::size_t z = 0; z < 16; ++z)
     {
-      writer.writeUByte(static_cast<std::uint8_t>(static_cast<const ChunkColumn&>(c[x][z]).biome));
+      packet.writeUByte(static_cast<std::uint8_t>(static_cast<const ChunkColumn&>(c[x][z]).biome));
     }
   }
 }
 
-void ChunkSerializer13::writeBlockEntities(PacketWriter& writer)
+void ChunkSerializer13::writeBlockEntities()
 {
-  writer.writeVarInt(0);
+  packet.writeVarInt(0);
 }
 
 std::uint64_t ChunkSerializer13::generateBlockStateID(Block b)

@@ -19,8 +19,8 @@ void SpawnPlayer::write(ByteBuffer& buffer)
   packet.writeDouble(position.x);
   packet.writeDouble(position.y);
   packet.writeDouble(position.z);
-  packet.writeFloat(position.yaw);
-  packet.writeFloat(position.yaw);
+  packet.writeAngle(position.yaw);
+  packet.writeAngle(position.pitch);
   packet.writeUByte(0xFF);
 }
   

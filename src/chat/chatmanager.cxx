@@ -4,7 +4,6 @@
 #include "chatmanager.hpp"
 #include "../server.hpp"
 #include "../events/events.hpp"
-#include "../protocol/packetwriter.hpp"
 #include "../logger.hpp"
 #include "../exceptions.hpp"
 #include "../util/util.hpp"

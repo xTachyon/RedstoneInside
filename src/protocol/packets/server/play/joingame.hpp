@@ -16,8 +16,6 @@ struct JoinGame : public Packet
   JoinGame(Player* ptr = nullptr);
   
   void write(ByteBuffer& buffer) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
 
 } // namespace redi

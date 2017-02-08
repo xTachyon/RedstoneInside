@@ -126,6 +126,11 @@ void PacketWriterNoCopy::writeUUID(boost::uuids::uuid uuid)
   data.append(uuid.data, sizeof(uuid.data));
 }
 
+void PacketWriterNoCopy::writeAngle(double angle)
+{
+  writeByte(static_cast<std::int8_t>(255 * angle / 360));
+}
+
 void PacketWriterNoCopy::commit(bool)
 {
 //  std::cout << (int)data[0] << " -- " << std::boolalpha << compressed << '\n';
@@ -153,5 +158,5 @@ void PacketWriterNoCopy::commit(bool)
     data.append(d.data(), d.size());
 //  }
 }
-  
+
 } // namespace redi

@@ -5,5 +5,6 @@
 #include "file.hpp"
 #include "string.hpp"
 #include "time.hpp"
+#include "maths.hpp"
 
 #endif // REDI_UTIL_UTIL

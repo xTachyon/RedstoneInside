@@ -18,8 +18,6 @@ struct LoginSucces : public Packet
   LoginSucces(std::string&& uuid, std::string&& username);
   
   void write(ByteBuffer& buffer) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
   
 } // namespace redi

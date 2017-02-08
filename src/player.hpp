@@ -60,6 +60,9 @@ public:
   bool isDisconnecting() const { return mSession->isDisconnecting(); }
   
   void onTick();
+  void onEntityMovedWithLook(PlayerPosition newpos);
+  
+  void normalizeRotation();
   
   static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session);
   
@@ -67,6 +70,10 @@ private:
   
   friend class EventManager;
   friend class PacketHandler;
+  
+  static constexpr double InRange = 16 * 10.0;
+  
+  std::vector<Player*> mEntitiesInSight;
   
   boost::uuids::uuid mUUID;
   std::string mNickname;

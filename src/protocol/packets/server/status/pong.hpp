@@ -15,8 +15,6 @@ struct Pong : public Packet
   Pong(std::int64_t payload);
   
   void write(ByteBuffer& buffer) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
   
 } // namespace redi

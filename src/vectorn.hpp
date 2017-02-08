@@ -1,6 +1,7 @@
 #ifndef REDI_POSITION
 #define REDI_POSITION
 
+#include <cmath>
 #include <cstdint>
 #include <boost/format.hpp>
 #include "serverconfig.hpp"
@@ -70,6 +71,20 @@ struct Vector3
   std::string toString() const
   {
     return (boost::format("(%1%, %2%, %3%)") % x % y % z).str();
+  }
+  
+  std::int64_t distanceSquared(const Vector3& r)
+  {
+    std::int64_t xx = static_cast<std::int64_t>(x) - r.x;
+    std::int64_t yy = static_cast<std::int64_t>(y) - r.y;
+    std::int64_t zz = static_cast<std::int64_t>(z) - r.z;
+    
+    return xx * xx + yy * yy + zz * zz;
+  }
+  
+  double distance(const Vector3& r)
+  {
+    return std::sqrt(distanceSquared(r));
   }
 };
 

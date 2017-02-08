@@ -17,8 +17,6 @@ struct KeepAlive : public Packet
   KeepAlive(std::int32_t keepAliveID);
   
   void write(ByteBuffer& buffer) override;
-  
-  const char* getName() const override { return REDI_FUNCTION; }
 };
   
 } // namespace packets

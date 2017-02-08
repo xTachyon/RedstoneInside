@@ -5,7 +5,6 @@
 #include "eventmanager.hpp"
 #include "../server.hpp"
 #include "../util/util.hpp"
-#include "../protocol/packetwriter.hpp"
 #include "../player.hpp"
 #include "../protocol/packets/server/play/playerlistitem.hpp"
 
