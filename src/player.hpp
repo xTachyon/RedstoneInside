@@ -1,6 +1,7 @@
 #ifndef REDI_PLAYER
 #define REDI_PLAYER
 
+#include <list>
 #include <boost/asio/steady_timer.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>
@@ -60,14 +61,14 @@ public:
   void kick(const std::string& message);
   void kick(std::string&& message);
   
+  void disconnect();
   bool isDisconnecting() const { return mSession->isDisconnecting(); }
   
   void onTick();
+
   void onEntityMovedWithLook(PlayerPosition newpos);
   
   void normalizeRotation();
-  
-  static void onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session);
   
 private:
   
@@ -78,6 +79,7 @@ private:
   static constexpr double InRange = 16 * 10.0;
   
   std::vector<Player*> mEntitiesInSight;
+  std::list<Vector2i> mChunksInUse;
   
   boost::uuids::uuid mUUID;
   std::string mNickname;
@@ -86,9 +88,11 @@ private:
   SessionSharedPtr mSession;
   Gamemode mGamemode;
   PlayerPosition mPosition;
-  boost::asio::steady_timer mSendKeepAlive;
+  boost::asio::steady_timer mSendKeepAliveTimer;
+  boost::asio::steady_timer mUpdateChunksTimer;
   std::size_t mTeleportID;
   const std::int32_t mEntityID;
+  std::atomic_bool mHasSavedToDisk;
   
   std::string getPlayerDataFileName() const;
   void saveToFile();
@@ -96,6 +100,11 @@ private:
   
   void onSendKeepAliveTimer(const boost::system::error_code& error);
   void keepAliveNext();
+  
+  void updateChunks(const boost::system::error_code& error);
+  void updateChunksNext();
+  
+  void timersNext();
 };
 
 bool operator==(const Player& l, const Player& r);

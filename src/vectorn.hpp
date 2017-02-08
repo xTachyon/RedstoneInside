@@ -32,10 +32,10 @@ struct Vector2
   Vector2(T x = 0, T z = 0)
         : x(x), z(z) {}
   
-  bool operator==(const Vector2& r) const
-  {
-    return x == r.x && z = r.z;
-  }
+//  bool operator==(const Vector2& r) const
+//  {
+//    return x == r.x && z = r.z;
+//  }
   
   bool operator<(const Vector2& r) const
   {
@@ -47,6 +47,12 @@ struct Vector2
     return (boost::format("(%1%, %2%)") % x % z).str();
   }
 };
+
+template <typename T>
+bool operator==(const Vector2<T>& l, const Vector2<T>& r)
+{
+  return l.x == r.x && l.z == r.z;
+}
 
 template <typename T>
 std::ostream& operator<<(std::ostream& stream, const Vector2<T>& val)

@@ -44,7 +44,6 @@ private:
   
   Server& mServer;
   Session& mSession;
-  EventManager& mEventManager;
   std::deque<PacketUniquePtr> mPackets;
   std::mutex mMutex;
 };

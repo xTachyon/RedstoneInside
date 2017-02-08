@@ -8,6 +8,8 @@
 #include "protocol/packets/server/play/keepalive.hpp"
 #include "protocol/packets/server/play/disconnect.hpp"
 #include "protocol/packets/server/play/spawnplayer.hpp"
+#include "protocol/packets/server/play/chunkdata.hpp"
+#include "protocol/packets/server/play/unloadchunk.hpp"
 
 namespace asio = boost::asio;
 namespace fs = boost::filesystem;
@@ -17,13 +19,10 @@ namespace redi
 
 Player::Player(const std::string& name, boost::uuids::uuid uuid, std::shared_ptr<Session> session, std::int32_t id, Server* server,
                World* world, Gamemode gamemode)
-    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(session), mGamemode(gamemode), mSendKeepAlive(mSession->getIoService()),
-      mTeleportID(0), mEntityID(id)
+    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(session), mGamemode(gamemode), mSendKeepAliveTimer(mSession->getIoService()),
+      mUpdateChunksTimer(mSession->getIoService()), mTeleportID(0), mEntityID(id), mHasSavedToDisk(false)
 {
   Logger::debug((boost::format("Player %1% created") % this).str());
-  
-//  mSendKeepAlive.expires_from_now(std::chrono::seconds(5));
-//  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), mSession));
   
   loadFromFile();
 }
@@ -32,7 +31,11 @@ Player::~Player()
 {
   Logger::debug((boost::format("Player %1% destroyed") % this).str());
   
-  saveToFile();
+  if (!mHasSavedToDisk)
+  {
+    mHasSavedToDisk = true;
+    saveToFile();
+  }
 }
 
 void Player::onSendKeepAliveTimer(const boost::system::error_code& error)
@@ -43,25 +46,14 @@ void Player::onSendKeepAliveTimer(const boost::system::error_code& error)
   {
     packets::KeepAlive(5).send(*mSession);
     
-    mSendKeepAlive.expires_from_now(15s);
+    mSendKeepAliveTimer.expires_from_now(15s);
     keepAliveNext();
   }
 }
 
 void Player::keepAliveNext()
 {
-  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimer, shared_from_this(), asio::placeholders::error));
-}
-
-void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session)
-{
-  if (!error)
-  {
-    packets::KeepAlive(3).send(*session);
-
-    timer->expires_from_now(std::chrono::seconds(15));
-    timer->async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, boost::asio::placeholders::error, timer, session));
-  }
+  mSendKeepAliveTimer.async_wait(boost::bind(&Player::onSendKeepAliveTimer, shared_from_this(), asio::placeholders::error));
 }
 
 void Player::sendPacket(ByteBufferSharedPtr ptr)
@@ -90,7 +82,7 @@ void Player::kickJSONmessage(const std::string& json)
 void Player::kickJSONmessage(std::string&& json)
 {
   packets::Disconnect(std::move(json)).send(*mSession);
-  mSession->disconnect();
+  disconnect();
 }
 
 void Player::kick(std::string&& message)
@@ -99,6 +91,20 @@ void Player::kick(std::string&& message)
         {
               ChatMessagePart(std::move(message))
         })));
+}
+
+void Player::disconnect()
+{
+  mSendKeepAliveTimer.cancel();
+  mUpdateChunksTimer.cancel();
+  
+  mSession->disconnect();
+  
+  if (!mHasSavedToDisk)
+  {
+    mHasSavedToDisk = true;
+    saveToFile();
+  }
 }
 
 void Player::normalizeRotation()
@@ -142,6 +148,8 @@ try
   }
   
   mPosition.onGround = j["onground"];
+  
+  Logger::debug((boost::format("Player %1% loaded from file") % this).str());
 }
 catch (std::exception&) {}
 
@@ -168,6 +176,7 @@ void Player::saveToFile()
   j["name"] = mNickname;
   
   std::ofstream(getPlayerDataFileName()) << j.dump(2);
+  Logger::debug((boost::format("Player %1% saved to file") % this).str());
 }
 
 bool operator==(const Player& l, const Player& r)
@@ -241,6 +250,72 @@ void Player::onEntityMovedWithLook(PlayerPosition newpos)
   }
   
   mEntitiesInSight = nextEntitiesInSight;
+}
+
+void Player::updateChunks(const boost::system::error_code& error)
+{
+  using namespace std::chrono_literals;
+  
+  if (!error && !mSession->isDisconnecting())
+  {
+    ChunkManager& cm = mWorld->getChunkManager();
+    
+    std::list<Vector2i> current;
+    
+    Vector2i playerchunk(static_cast<std::int32_t>(mPosition.x / 16), static_cast<std::int32_t>(mPosition.z / 16));
+    
+    Vector2i start(playerchunk.x - 5, playerchunk.z - 5);
+    Vector2i end(playerchunk.x + 5, playerchunk.z + 5);
+    
+    for (std::int32_t x = start.x; x <= end.x; ++x)
+    {
+      for (std::int32_t z = start.z; z <= end.z; ++z)
+      {
+        Vector2i th(x, z);
+        current.push_back(th);
+        
+        auto it = mChunksInUse.end();
+        for (auto i = mChunksInUse.begin(); i != it; ++i)
+        {
+          if (th == *i)
+          {
+            it = i;
+            break;
+          }
+        }
+        
+        if (it == mChunksInUse.end())
+        {
+          packets::ChunkData(cm.getChunk(th), th).send(*mSession);
+        }
+        else
+        {
+          mChunksInUse.erase(it);
+        }
+      }
+    }
+    
+    for (auto& i : mChunksInUse)
+    {
+      packets::UnloadChunk(i).send(*mSession);
+    }
+    
+    mChunksInUse = std::move(current);
+    
+    mUpdateChunksTimer.expires_from_now(500ms);
+    updateChunksNext();
+  }
+}
+
+void Player::updateChunksNext()
+{
+  mUpdateChunksTimer.async_wait(boost::bind(&Player::updateChunks, shared_from_this(), asio::placeholders::error));
+}
+
+void Player::timersNext()
+{
+  keepAliveNext();
+  updateChunksNext();
 }
 
 } // namespace red

@@ -21,8 +21,8 @@
 namespace redi
 {
 
-PacketHandler::PacketHandler(Server& server, Session& session, EventManager& eventh)
-      : mServer(server), mSession(session), mEventManager(eventh) {}
+PacketHandler::PacketHandler(Server& server, Session& session, EventManager&)
+      : mServer(server), mSession(session) {}
 
 void PacketHandler::addPacket(PacketUniquePtr&& packet)
 {
@@ -183,18 +183,7 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   JoinGame(&player).send(mSession);
   SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
   packets::PlayerPositionAndLook(player.getPosition(), player.getNewTeleportID()).send(mSession);
-  player.keepAliveNext();
-
-  ChunkManager& cm = mServer.mWorlds.back().getChunkManager();
-  for (std::int32_t i = -2; i <= 2; ++i)
-  {
-    for (std::int32_t j = -2; j <= 2; ++j)
-    {
-      Vector2i r(i, j);
-
-      packets::ChunkData(cm.getChunk(r), r).send(mSession);
-    }
-  }
+  player.timersNext();
   
   mServer.addEvent(std::make_shared<EventPlayerJoin>(mSession, std::move(packet.username)));
 
