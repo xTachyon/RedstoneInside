@@ -12,9 +12,12 @@
 namespace redi
 {
 
+class Player;
 class World;
 
-class Player
+using PlayerSharedPtr = std::shared_ptr<Player>;
+
+class Player : public std::enable_shared_from_this<Player>
 {
 public:
   
@@ -70,6 +73,7 @@ private:
   
   friend class EventManager;
   friend class PacketHandler;
+  friend class Session;
   
   static constexpr double InRange = 16 * 10.0;
   
@@ -89,6 +93,9 @@ private:
   std::string getPlayerDataFileName() const;
   void saveToFile();
   void loadFromFile();
+  
+  void onSendKeepAliveTimer(const boost::system::error_code& error);
+  void keepAliveNext();
 };
 
 bool operator==(const Player& l, const Player& r);

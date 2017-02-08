@@ -21,7 +21,7 @@ class Server
 {
 public:
   
-  using PlayerList = std::list<Player>;
+  using PlayerList = std::list<PlayerSharedPtr>;
   
   static constexpr std::size_t AsioThreadsNumber = 2;
   /*
@@ -53,6 +53,7 @@ public:
   Player* findPlayer(const std::string& name);
   EventManager& getEventManager() { return mEventManager; }
   void closeServer(const std::string& reason);
+  ChatManager& getChatManager() { return mChatManager; }
   
   static bool toAllPlayers(const Player&) { return true; }
   static bool toAllPlayersExcept(const Player& player, const Player& except);

@@ -36,6 +36,7 @@ public:
   
   ChatManager(Server& server, CommandManager& cmdmanager);
   
+  void operator()(const std::string& message);
   void operator()(EventChatMessage&);
   void operator()(const EventPlayerJoin&);
   void operator()(const EventPlayerDisconnect&);

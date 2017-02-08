@@ -100,11 +100,11 @@ void Server::addWorld(const std::string& worldname, const std::string& worlddir)
 
 void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp)
 {
-  std::for_each(mPlayers.begin(), mPlayers.end(), [&](Player& player)
+  std::for_each(mPlayers.begin(), mPlayers.end(), [&](PlayerSharedPtr& player)
   {
-    if (comp(player))
+    if (comp(*player))
     {
-      player.sendPacket(ptr);
+      player->sendPacket(ptr);
     }
   });
 }
@@ -115,9 +115,9 @@ Player* Server::findPlayer(const std::string& name)
   
   for (auto& index : mPlayers)
   {
-    if (util::noCaseCompareEqual(name, index.getUsername()))
+    if (util::noCaseCompareEqual(name, index->getUsername()))
     {
-      ptr = &index;
+      ptr = index.get();
       break;
     }
   }
@@ -131,7 +131,7 @@ void Server::closeServer(const std::string& reason)
   
   for (auto& i : mPlayers)
   {
-    i.kick(reason);
+    i->kick(reason);
   }
 }
 

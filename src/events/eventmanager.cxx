@@ -36,11 +36,11 @@ void EventManager::operator()()
       mServer.mChatManager(event);
       
       {
-        for (Player& player : mServer.mPlayers)
+        for (PlayerSharedPtr& player : mServer.mPlayers)
         {
-          if (player != event.player)
+          if (*player != event.player)
           {
-            packets::PlayerListItem(event.player, PlayerListItemAction::RemovePlayer).send(player);
+            packets::PlayerListItem(event.player, PlayerListItemAction::RemovePlayer).send(*player);
           }
         }
       }
@@ -97,9 +97,9 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
   player.getWorld().deletePlayer(player);
   // First remove the player from the world
   // so we won't SIGSEGV when deferencing it after deleting
-  mServer.mPlayers.remove_if([&](const Player& p)
+  mServer.mPlayers.remove_if([&](const PlayerSharedPtr& p)
                              {
-                               return p == player;
+                               return *p == player;
                              });
   --mServer.mOnlinePlayers;
 }

@@ -164,7 +164,7 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   {
     if (*s == mSession)
     {
-      mServer.mPlayers.emplace_back(packet.username, uuid, std::move(s), mServer.getNewEntityID(), &mServer, &mServer.mWorlds.back());
+      mServer.mPlayers.emplace_back(std::make_shared<Player>(packet.username, uuid, std::move(s), mServer.getNewEntityID(), &mServer, &mServer.mWorlds.back()));
       mServer.mStatusConnections.remove_if([](const SessionSharedPtr& par) -> bool
                                            {
                                              return !static_cast<bool>(par);
@@ -172,7 +172,7 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
       break;
     }
   }
-  Player& player = mServer.mPlayers.back();
+  Player& player = *mServer.mPlayers.back();
   ++mServer.mOnlinePlayers;
   
   player.getSession().setPlayer(player);
@@ -183,7 +183,7 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   JoinGame(&player).send(mSession);
   SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
   packets::PlayerPositionAndLook(player.getPosition(), player.getNewTeleportID()).send(mSession);
-
+  player.keepAliveNext();
 
   ChunkManager& cm = mServer.mWorlds.back().getChunkManager();
   for (std::int32_t i = -2; i <= 2; ++i)
@@ -198,19 +198,19 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   
   mServer.addEvent(std::make_shared<EventPlayerJoin>(mSession, std::move(packet.username)));
 
-  for (Player& idx : mServer.mPlayers)
+  for (PlayerSharedPtr& idx : mServer.mPlayers)
   {
-    if (idx == player)
+    if (*idx == player)
     {
-      for (Player& i : mServer.mPlayers)
+      for (PlayerSharedPtr& i : mServer.mPlayers)
       {
 //        player.getProtocol().sendPlayerListItem(i, PlayerListItemAction::AddPlayer);
-        packets::PlayerListItem(i, PlayerListItemAction::AddPlayer).send(player.getSession());
+        packets::PlayerListItem(*i, PlayerListItemAction::AddPlayer).send(player.getSession());
       }
     }
     else
     {
-      packets::PlayerListItem(player, PlayerListItemAction::AddPlayer).send(idx.getSession());
+      packets::PlayerListItem(player, PlayerListItemAction::AddPlayer).send(idx->getSession());
 //      idx.getProtocol().sendPlayerListItem(player, PlayerListItemAction::AddPlayer);
 //      idx.getProtocol().sendSpawnPlayerPacket(player);
     }

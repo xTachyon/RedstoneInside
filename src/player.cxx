@@ -22,8 +22,8 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid, std::shared_ptr
 {
   Logger::debug((boost::format("Player %1% created") % this).str());
   
-  mSendKeepAlive.expires_from_now(std::chrono::seconds(5));
-  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), mSession));
+//  mSendKeepAlive.expires_from_now(std::chrono::seconds(5));
+//  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimerRing, asio::placeholders::error, std::addressof(mSendKeepAlive), mSession));
   
   loadFromFile();
 }
@@ -33,6 +33,24 @@ Player::~Player()
   Logger::debug((boost::format("Player %1% destroyed") % this).str());
   
   saveToFile();
+}
+
+void Player::onSendKeepAliveTimer(const boost::system::error_code& error)
+{
+  using namespace std::chrono_literals;
+  
+  if (!error && !mSession->isDisconnecting())
+  {
+    packets::KeepAlive(5).send(*mSession);
+    
+    mSendKeepAlive.expires_from_now(15s);
+    keepAliveNext();
+  }
+}
+
+void Player::keepAliveNext()
+{
+  mSendKeepAlive.async_wait(boost::bind(&Player::onSendKeepAliveTimer, shared_from_this(), asio::placeholders::error));
 }
 
 void Player::onSendKeepAliveTimerRing(const boost::system::error_code& error, boost::asio::steady_timer* timer, SessionSharedPtr session)
@@ -170,30 +188,30 @@ void Player::onEntityMovedWithLook(PlayerPosition newpos)
   PlayerPtrVector destroy;
   PlayerPtrVector nextEntitiesInSight;
   
-  for (Player& player : mServer->getOnlinePlayers())
+  for (PlayerSharedPtr& player : mServer->getOnlinePlayers())
   {
-    if (player != *this)
+    if (*player != *this)
     {
-      auto distance = player.getPosition().distance(mPosition);
+      auto distance = player->getPosition().distance(mPosition);
     
       if (distance <= InRange)
       {
-        auto it = std::find(mEntitiesInSight.begin(), mEntitiesInSight.end(), &player);
+        auto it = std::find(mEntitiesInSight.begin(), mEntitiesInSight.end(), player.get());
       
         if (it == mEntitiesInSight.end())
         {
-          create.push_back(&player);
-          nextEntitiesInSight.push_back(&player);
+          create.push_back(player.get());
+          nextEntitiesInSight.push_back(player.get());
         }
         else
         {
-          update.push_back(&player);
-          nextEntitiesInSight.push_back(&player);
+          update.push_back(player.get());
+          nextEntitiesInSight.push_back(player.get());
         }
       }
       else
       {
-        destroy.push_back(&player);
+        destroy.push_back(player.get());
       }
     }
   }

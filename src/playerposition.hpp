@@ -1,6 +1,7 @@
 #ifndef REDI_PLAYERPOSITION_HPP
 #define REDI_PLAYERPOSITION_HPP
 
+#include "util/util.hpp"
 #include "enums.hpp"
 #include "vectorn.hpp"
 
@@ -13,6 +14,12 @@ struct PlayerLook
   float pitch;
   
   PlayerLook(float yaw = 0.0f, float pitch = 0.0f) : yaw(yaw), pitch(pitch) {}
+  
+  void normalize()
+  {
+    yaw = static_cast<float>(util::normalizeAngleDegrees(yaw));
+    pitch = static_cast<float>(util::normalizeAngleDegrees(pitch));
+  }
 };
 
 inline std::ostream& operator<<(std::ostream& stream, const PlayerLook& obj)

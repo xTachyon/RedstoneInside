@@ -93,7 +93,8 @@ void Session::disconnect()
   if (!mIsDisconnecting)
   {
     mIsDisconnecting = true;
-    
+    if (mPlayer) mPlayer->mSendKeepAlive.cancel();
+  
     EventSharedPtr ptr;
     if (mPlayer == nullptr) ptr = std::make_shared<EventSessionDisconnect>(*this);
     else ptr = std::make_shared<EventPlayerDisconnect>(*mPlayer);

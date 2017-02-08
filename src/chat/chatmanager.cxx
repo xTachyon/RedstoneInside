@@ -13,6 +13,12 @@ namespace redi
 
 ChatManager::ChatManager(Server& server, CommandManager& cmdmanager) : mServer(server), mCmdManager(cmdmanager) {}
 
+void ChatManager::operator()(const std::string& message)
+{
+  broadcastMessage(message, Server::toAllPlayers);
+  Logger::info(message);
+}
+
 void ChatManager::operator()(EventChatMessage& event)
 {
   std::string& message = event.message;
@@ -68,11 +74,11 @@ void ChatManager::broadcastMessage(const std::string& message, std::function<boo
 
 void ChatManager::broadcastJSONMessage(const std::string& json, std::function<bool(const Player&)> comp, ChatPosition position)
 {
-  for (Player& player : mServer.getOnlinePlayers())
+  for (PlayerSharedPtr& player : mServer.getOnlinePlayers())
   {
-    if (comp(player))
+    if (comp(*player))
     {
-      player.sendJSONMessage(json, position);
+      player->sendJSONMessage(json, position);
     }
   }
 }

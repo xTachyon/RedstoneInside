@@ -25,8 +25,8 @@ void Response::write(ByteBuffer& buffer)
   {
     nlohmann::json c;
 
-    c["id"] = boost::lexical_cast<std::string>(player.getUUID());
-    c["name"] = player.getUsername();
+    c["id"] = boost::lexical_cast<std::string>(player->getUUID());
+    c["name"] = player->getUsername();
 
     j["players"]["sample"].push_back(c);
   }

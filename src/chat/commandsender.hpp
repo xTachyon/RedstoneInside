@@ -22,8 +22,16 @@ public:
   Player& getPlayer() { return get<Player, CommandSenderType::Player>(); }
   const Player& getPlayer() const { return get<Player, CommandSenderType::Player>(); }
   
-  Server& getServer() { return get<Server, CommandSenderType::Server>(); }
-  const Server& getServer() const { return get<Server, CommandSenderType::Server>(); }
+  Server& getServer()
+  {
+    if (isServer()) return get<Server, CommandSenderType::Server>();
+    return getPlayer().getServer();
+  }
+  const Server& getServer() const
+  {
+    if (isServer()) return get<Server, CommandSenderType::Server>();
+    return getPlayer().getServer();
+  }
   
   CommandSenderType getType() const { return mType; }
   

@@ -44,6 +44,10 @@ RediCommands::RediCommands(CommandManager& manager) : mCommandManager(manager)
   data.command = "kick";
   data.callback = std::bind(&RediCommands::kickCommand, this, std::placeholders::_1, std::placeholders::_2);
   mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
+  
+  data.command = "doesntwork";
+  data.callback = doesntWork;
+  mIterators.push_back(mCommandManager.registerCommand(std::move(data)));
 }
 
 RediCommands::~RediCommands()
@@ -148,4 +152,25 @@ void RediCommands::kickCommand(CommandSender sender, CommandArguments& args)
   }
 }
 
+void RediCommands::doesntWork(CommandSender sender, CommandArguments& args)
+{
+  std::string message;
+  
+  for (const std::string& index : args)
+  {
+    message += index + ' ';
+  }
+  
+  if (args.size() != 0)
+  {
+    message.pop_back();
+    message += ": ";
+  }
+  message += "Look buddy, doesn't work is a vague statement. Does it sit on the couch all day long? "
+        "Does it procrastinate doing the dishes? Does it beg on the street for change? Please be specific! "
+        "Define 'it' and what it isn't doing. Give us more details so we can help you without needing to ask basic questions like what's the error message?";
+  
+  sender.getServer().getChatManager()(message);
+}
+  
 } // namespace redi
