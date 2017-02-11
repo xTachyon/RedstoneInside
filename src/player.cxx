@@ -256,6 +256,8 @@ void Player::updateChunks(const boost::system::error_code& error)
 {
   using namespace std::chrono_literals;
   
+  static constexpr std::int32_t Range = 5;
+  
   if (!error && !mSession->isDisconnecting())
   {
     ChunkManager& cm = mWorld->getChunkManager();
@@ -264,12 +266,12 @@ void Player::updateChunks(const boost::system::error_code& error)
     
     Vector2i playerchunk(static_cast<std::int32_t>(mPosition.x / 16), static_cast<std::int32_t>(mPosition.z / 16));
     
-    Vector2i start(playerchunk.x - 5, playerchunk.z - 5);
-    Vector2i end(playerchunk.x + 5, playerchunk.z + 5);
+    Vector2i start(playerchunk.x - Range, playerchunk.z - Range - 1);
+    Vector2i end(playerchunk.x + Range + 1, playerchunk.z + Range);
     
-    for (std::int32_t x = start.x; x <= end.x; ++x)
+    for (std::int32_t x = start.x; x < end.x; ++x)
     {
-      for (std::int32_t z = start.z; z <= end.z; ++z)
+      for (std::int32_t z = start.z; z < end.z; ++z)
       {
         Vector2i th(x, z);
         current.push_back(th);

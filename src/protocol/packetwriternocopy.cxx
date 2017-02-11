@@ -85,16 +85,12 @@ void PacketWriterNoCopy::writeVarInt(std::uint32_t v)
 {
   do
   {
-    std::int8_t temp = static_cast<std::uint8_t>(v & 0b01111111);
+    auto temp = std::uint8_t(v & 0b01111111);
     v >>= 7;
-    if (v != 0)
-    {
-      temp |= 0b10000000;
-    }
-    writeByte(temp);
-  } while (v != 0);
+    temp |= v ? 0b10000000 : 0;
+    writeUByte(temp);
+  } while(v);
 }
-
 
 void PacketWriterNoCopy::writeVarLong(std::int64_t v)
 {
@@ -152,11 +148,11 @@ void PacketWriterNoCopy::commit(bool)
 //  }
 //  else
 //  {
-    ByteBuffer d(std::move(data));
+  ByteBuffer d(std::move(data));
   
-    writeVarInt(d.size());
-    data.append(d.data(), d.size());
+  writeVarInt(d.size());
+  data.append(d.data(), d.size());
 //  }
 }
-
+  
 } // namespace redi

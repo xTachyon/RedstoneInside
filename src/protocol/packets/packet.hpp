@@ -4,6 +4,7 @@
 #include <memory>
 #include "../../bytebuffer.hpp"
 #include "../packetreader.hpp"
+#include "../../util/util.hpp"
 
 namespace redi
 {
@@ -22,9 +23,9 @@ struct Packet
   virtual void write(ByteBuffer&) {}
   virtual void process(PacketHandler&) {}
   
-  const char* getName() const
+  std::string getName() const
   {
-    return typeid(*this).name();
+    return util::demangleTypeName(typeid(*this).name());
   }
   
   void send(Session& session);

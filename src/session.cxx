@@ -107,10 +107,17 @@ void Session::setPlayer(Player& player)
   mPlayer = std::addressof(player);
 }
 
-void Session::sendPacket(ByteBuffer&& pkt, const char* message)
+void Session::sendPacket(ByteBuffer&& pkt, const std::string& message)
 {
-  Logger::debug(message);
-  static_cast<void>(message);
+//  Logger::debug(message);
+//  static_cast<void>(message);
+//
+//  std::ostringstream ss;
+//  ss << '\n' << message << '\n';
+//  for (auto& c : pkt) ss << (int)c << ' ';
+//  ss << '\n';
+//  Logger::debug(ss.str());
+  
   mSendingQueue.push(std::make_shared<ByteBuffer>(std::move(pkt)));
   writeNext();
 }
