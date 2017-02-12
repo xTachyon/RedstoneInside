@@ -1,7 +1,7 @@
 #include <json.hpp>
 #include "../../../../server.hpp"
 #include "response.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 
 namespace redi
 {
@@ -31,7 +31,7 @@ void Response::write(ByteBuffer& buffer)
     j["players"]["sample"].push_back(c);
   }
 
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   
   packet.writeString(j.dump());
 }

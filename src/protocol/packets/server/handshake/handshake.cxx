@@ -1,6 +1,6 @@
 #include "handshake.hpp"
 #include "../../../../logger.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 #include "../../packethandler.hpp"
 
 namespace redi

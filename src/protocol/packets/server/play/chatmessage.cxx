@@ -1,5 +1,5 @@
 #include "chatmessage.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 #include "../../packethandler.hpp"
 
 namespace redi
@@ -23,7 +23,7 @@ void ChatMessage::read(PacketReader& packet)
 
 void ChatMessage::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   
   packet.writeString(message);
   packet.writeByte(static_cast<std::int8_t>(position));

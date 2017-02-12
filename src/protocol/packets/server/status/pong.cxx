@@ -1,5 +1,5 @@
 #include "pong.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 
 namespace redi
 {
@@ -8,7 +8,7 @@ Pong::Pong(std::int64_t payload) : payload(payload) {}
 
 void Pong::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   
   packet.writeLong(payload);
 }

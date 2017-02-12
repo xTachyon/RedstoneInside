@@ -1,5 +1,5 @@
 #include "playerpositionandlook.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 #include "../../packethandler.hpp"
 
 namespace redi
@@ -30,7 +30,7 @@ void PlayerPositionAndLook::read(PacketReader& packet)
 
 void PlayerPositionAndLook::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   
   packet.writeDouble(x);
   packet.writeDouble(y);

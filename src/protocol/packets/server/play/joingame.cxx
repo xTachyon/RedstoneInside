@@ -1,5 +1,5 @@
 #include "joingame.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 #include "../../../../player.hpp"
 #include "../../../../server.hpp"
 
@@ -13,7 +13,7 @@ void JoinGame::write(ByteBuffer& buffer)
   using namespace std::string_literals;
   if (!player) throw std::runtime_error("Player can't be null - "s + REDI_FUNCTION);
   
-  PacketWriterNoCopy writer(buffer, SendID);
+  PacketWriter writer(buffer, SendID);
   
   writer.writeInt(player->getEntityID());
   writer.writeUByte(static_cast<std::uint8_t>(player->getGamemode()));

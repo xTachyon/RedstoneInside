@@ -1,5 +1,5 @@
 #include "keepalive.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 
 namespace redi
 {
@@ -10,7 +10,7 @@ KeepAlive::KeepAlive(std::int32_t keepAliveID) : keepAliveID(keepAliveID) {}
 
 void KeepAlive::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   
   packet.writeVarInt(keepAliveID);
 }

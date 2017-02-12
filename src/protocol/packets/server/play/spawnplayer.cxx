@@ -1,6 +1,6 @@
 #include "spawnplayer.hpp"
 #include "../../../../player.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 
 namespace redi
 {
@@ -11,7 +11,7 @@ SpawnPlayer::SpawnPlayer(Player& player) : player(player) {}
 
 void SpawnPlayer::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   auto position = player.getPosition();
   
   packet.writeVarInt(player.getEntityID());

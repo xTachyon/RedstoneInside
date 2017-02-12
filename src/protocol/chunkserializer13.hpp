@@ -3,7 +3,7 @@
 
 #include "../world/chunk.hpp"
 #include "../serverconfig.hpp"
-#include "packetwriternocopy.hpp"
+#include "packetwriter.hpp"
 
 namespace redi
 {
@@ -33,7 +33,7 @@ class ChunkSerializer13
   Vector2i mPosition;
   Dimension mDimension;
   ByteBuffer mBuffer;
-  PacketWriterNoCopy packet;
+  PacketWriter packet;
   
   void writeHeader();
   void writeChunkSections();

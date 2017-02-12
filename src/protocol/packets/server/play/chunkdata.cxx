@@ -1,5 +1,5 @@
 #include "chunkdata.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 #include "../../../chunkserializer13.hpp"
 
 namespace redi

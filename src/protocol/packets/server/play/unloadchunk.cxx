@@ -1,5 +1,5 @@
 #include "unloadchunk.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 #include "../../../../logger.hpp"
 
 namespace redi
@@ -11,7 +11,7 @@ UnloadChunk::UnloadChunk(Vector2i position) : position(position) {}
 
 void UnloadChunk::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   
   packet.writeInt(position.x);
   packet.writeInt(position.z);

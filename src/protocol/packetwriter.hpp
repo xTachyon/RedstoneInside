@@ -9,14 +9,14 @@
 namespace redi
 {
 
-class PacketWriterNoCopy
+class PacketWriter
 {
 public:
   
   ByteBuffer& data;
   
-  PacketWriterNoCopy(ByteBuffer& data, std::int32_t packetid);
-  ~PacketWriterNoCopy();
+  PacketWriter(ByteBuffer& data, std::int32_t packetid);
+  ~PacketWriter();
   
   operator ByteBuffer&&() { return std::move(data); }
   
@@ -60,7 +60,7 @@ public:
   
 private:
   
-  PacketWriterNoCopy() = default;
+  PacketWriter() = default;
   
   template <typename T>
   void writeNumber(T number)

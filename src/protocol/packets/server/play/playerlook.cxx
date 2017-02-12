@@ -1,5 +1,5 @@
 #include "playerlook.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 #include "../../packethandler.hpp"
 
 namespace redi

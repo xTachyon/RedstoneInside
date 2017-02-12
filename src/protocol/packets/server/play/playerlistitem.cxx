@@ -1,5 +1,5 @@
 #include "playerlistitem.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 
 namespace redi
 {
@@ -10,7 +10,7 @@ PlayerListItem::PlayerListItem(Player& player, PlayerListItemAction action) : pl
 
 void PlayerListItem::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   
   packet.writeVarInt(action);
   packet.writeVarInt(1);

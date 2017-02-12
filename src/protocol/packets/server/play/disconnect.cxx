@@ -1,5 +1,5 @@
 #include "disconnect.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 
 namespace redi
 {
@@ -12,7 +12,7 @@ Disconnect::Disconnect(std::string&& json, bool play) : json(std::move(json)), p
 
 void Disconnect::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, play ? SendIDplay : SendIDlogin);
+  PacketWriter packet(buffer, play ? SendIDplay : SendIDlogin);
   
   packet.writeString(json);
 }

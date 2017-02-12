@@ -87,8 +87,8 @@ set(SOURCE_FILES
         src/chat/redicommands.cxx
         src/chat/redicommands.hpp
         src/chat/commandsender.cxx
-        src/protocol/packetwriternocopy.hpp
-        src/protocol/packetwriternocopy.cxx
+        src/protocol/packetwriter.hpp
+        src/protocol/packetwriter.cxx
         src/protocol/packets/packet.hpp
         src/protocol/packets/server/handshake/handshake.cxx
         src/protocol/packets/server/handshake/handshake.hpp

@@ -1,5 +1,5 @@
 #include "entitylookandrelativemove.hpp"
-#include "../../../packetwriternocopy.hpp"
+#include "../../../packetwriter.hpp"
 
 namespace redi
 {
@@ -13,7 +13,7 @@ EntityLookAndRelativeMove::EntityLookAndRelativeMove(std::int32_t EID, std::int1
 
 void EntityLookAndRelativeMove::write(ByteBuffer& buffer)
 {
-  PacketWriterNoCopy packet(buffer, SendID);
+  PacketWriter packet(buffer, SendID);
   
   packet.writeVarInt(EID);
   packet.writeShort(deltax);
