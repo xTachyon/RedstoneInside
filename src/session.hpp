@@ -69,7 +69,7 @@ private:
 
   boost::asio::ip::tcp::socket mSocket;
   PacketQueue mSendingQueue;
-  PacketPtr mSendingPacket;
+  ByteBuffer mSendingPacket;
   ByteBuffer mReceivingPacket;
   Server& mServer;
   Player* mPlayer;
@@ -79,6 +79,9 @@ private:
   std::uint8_t mReceivingPacketCountSize;
   PacketHandlerSharedPtr mPacketHandler;
   std::atomic_bool mIsDisconnecting;
+  std::atomic_bool mIsWritting;
+  std::mutex mMutex;
+  std::deque<ByteBuffer> mDeque;
 
 public:
   
