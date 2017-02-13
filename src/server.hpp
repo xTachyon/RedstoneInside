@@ -79,6 +79,7 @@ private:
   EventManager mEventManager;
   RediCommands mRediCommands;
   ThreadSafeQueue<PacketHandlerSharedPtr> mPacketHandlersToBe;
+  lockfree::Queue<PacketHandlerSharedPtr> mPacketsToBeHandle;
   std::vector<std::thread> mAsioThreads;
   std::condition_variable mCondVar;
   std::mutex mCondVarMutex;

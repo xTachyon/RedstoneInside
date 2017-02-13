@@ -52,7 +52,8 @@ public:
   std::int32_t getEntityID() const { return mEntityID; }
   std::size_t getNewTeleportID() { return mTeleportID++; }
   
-  void sendPacket(ByteBufferSharedPtr ptr);
+  void sendPacket(const ByteBuffer& packet);
+  void sendPacket(ByteBuffer&& packet);
   void sendMessage(const std::string& message, ChatPosition position = ChatPosition::ChatBox);
   void sendJSONMessage(const std::string& json, ChatPosition position = ChatPosition::ChatBox);
   

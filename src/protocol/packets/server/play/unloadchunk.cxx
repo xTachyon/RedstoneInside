@@ -15,7 +15,7 @@ void UnloadChunk::write(ByteBuffer& buffer)
   
   packet.writeInt(position.x);
   packet.writeInt(position.z);
-  Logger::debug((boost::format("Send unload chunk %1%") % position).str());
+//  Logger::debug((boost::format("Send unload chunk %1%") % position).str());
 }
   
 } // namespace packets

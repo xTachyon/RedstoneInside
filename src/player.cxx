@@ -56,9 +56,14 @@ void Player::keepAliveNext()
   mSendKeepAliveTimer.async_wait(boost::bind(&Player::onSendKeepAliveTimer, shared_from_this(), asio::placeholders::error));
 }
 
-void Player::sendPacket(ByteBufferSharedPtr ptr)
+void Player::sendPacket(const ByteBuffer& packet)
 {
-  mSession->sendPacket(ptr);
+  mSession->sendPacket(packet);
+}
+
+void Player::sendPacket(ByteBuffer&& packet)
+{
+  mSession->sendPacket(std::move(packet));
 }
 
 void Player::sendMessage(const std::string& message, ChatPosition position)

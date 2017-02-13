@@ -9,6 +9,7 @@
 #include "bytebuffer.hpp"
 #include "enums.hpp"
 #include "protocol/packets/packethandler.hpp"
+#include "lockfree/queue.hpp"
 
 namespace redi
 {
@@ -36,8 +37,8 @@ public:
   Session& operator=(const Session&) = delete;
   Session& operator=(Session&&) = delete;
 
-  void sendPacket(ByteBuffer&& pkt, const std::string& message);
-  void sendPacket(ByteBufferSharedPtr ptr);
+  void sendPacket(ByteBuffer&& packet, const std::string& message = "");
+  void sendPacket(const ByteBuffer& packet, const std::string& message = "");
 
   boost::asio::ip::tcp::socket& getSocket() { return mSocket; }
   const boost::asio::ip::tcp::socket& getSocket() const { return mSocket; }
@@ -80,8 +81,7 @@ private:
   PacketHandlerSharedPtr mPacketHandler;
   std::atomic_bool mIsDisconnecting;
   std::atomic_bool mIsWritting;
-  std::mutex mMutex;
-  std::deque<ByteBuffer> mDeque;
+  lockfree::ByteBufferQueue mPacketsToBeSend;
 
 public:
   

@@ -15,6 +15,7 @@ Server::Server() : config("server.properties"), mListener(std::make_shared<Conne
                    mEntityCount(0), mOnlinePlayers(0), mCommandManager(*this), mChatManager(*this, mCommandManager), mEventManager(*this),
                    mRediCommands(mCommandManager), mUniqueLock(mCondVarMutex)
 {
+  
   addWorld("world", "world/region");
   fs::create_directories("players");
   
@@ -24,13 +25,18 @@ Server::Server() : config("server.properties"), mListener(std::make_shared<Conne
     mAsioThreads.emplace_back([&]()
                               {
                                 mIoService.run();
+                                Logger::debug((boost::format("Asio thread id %1% stopped") % std::this_thread::get_id()).str());
                               });
+    Logger::debug((boost::format("Asio thread id %1% started") % mAsioThreads[i].get_id()).str());
   }
   
+  Logger::info("Redi has started");
 }
 
 Server::~Server()
 {
+  Logger::debug("Redi is stopping");
+  
   mIoService.stop();
   
   for (auto& index : mAsioThreads)
@@ -42,12 +48,14 @@ Server::~Server()
 void Server::run()
 {
   using namespace std::chrono_literals;
-
+  
   while (true)
   {
-    while (!mPacketHandlersToBe.empty())
+    while (true)
     {
-      PacketHandlerSharedPtr x = mPacketHandlersToBe.pop();
+      PacketHandlerSharedPtr x;
+      if (!mPacketsToBeHandle.pop(x) || !x) break;
+      
       try
       {
         x->handleOne();
@@ -84,6 +92,7 @@ void Server::run()
 void Server::addPacket(PacketHandlerSharedPtr ptr)
 {
   mPacketHandlersToBe.push(ptr);
+  mPacketsToBeHandle.push(ptr);
   mCondVar.notify_one();
 }
 
@@ -104,7 +113,7 @@ void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<boo
   {
     if (comp(*player))
     {
-      player->sendPacket(ptr);
+      player->sendPacket(ByteBuffer(*ptr));
     }
   });
 }

@@ -37,28 +37,6 @@ public:
   
   bool empty() const { return mData.empty(); }
   
-  template <typename Functor>
-  void consumeOne(Functor& f)
-  {
-    T t(pop());
-    f(t);
-  }
-  
-  template <typename Functor>
-  void consumeOne(const Functor& f)
-  {
-    f(pop());
-  }
-  
-  template <typename Functor>
-  void consumeAll(const Functor& f)
-  {
-    while (!empty()) f(pop());
-  }
-
-  std::mutex& getMutex() { return mUtex; }
-  std::deque<T>& getUnmutexedData() { return mData; }
-  
 private:
   
   std::deque<T> mData;

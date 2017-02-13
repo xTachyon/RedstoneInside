@@ -8,9 +8,7 @@ namespace asio = boost::asio;
 
 int main(int, char**)
 {
-  redi::nbt::TagInt i;
-  i = 654;
-  auto a = i.getType();
+  redi::Logger::debug("Redi is starting");
   
   try
   {
@@ -21,6 +19,8 @@ int main(int, char**)
   {
     redi::Logger::error(e.what());
   }
+  
+  redi::Logger::info("Redi has stopped");
 
   return 0;
 }

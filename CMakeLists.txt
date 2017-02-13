@@ -136,6 +136,7 @@ set(SOURCE_FILES
         src/util/maths.hpp src/util/maths.cxx
         src/protocol/packets/server/play/unloadchunk.cxx
         src/protocol/packets/server/play/unloadchunk.hpp
+        src/lockfree/queue.hpp
         src/nbt/tag.hpp
         src/nbt/tag.cxx
         src/nbt/type.hpp

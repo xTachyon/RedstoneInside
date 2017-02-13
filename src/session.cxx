@@ -43,37 +43,17 @@ void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& e
 
 void Session::writeNext()
 {
-//  if (mSendingPacket || mSendingQueue.empty()) return;
-//
-//  mSendingPacket = mSendingQueue.pop();
-//  if (!mSendingPacket) return;
-  if (mIsWritting) return;
-  
+  if (mIsWritting || !mPacketsToBeSend.pop(mSendingPacket))
   {
-    std::lock_guard<std::mutex> l(mMutex);
-    
-    if (mDeque.empty()) return;
-    mSendingPacket = std::move(mDeque.front());
-    mDeque.pop_front();
-    
-    mIsWritting = true;
+    return;
   }
+  
+  assert(!mIsWritting);
+  mIsWritting = true;
   
   assert(mIsWritting);
   asio::async_write(mSocket, asio::buffer(mSendingPacket.data(), mSendingPacket.size()),
                     boost::bind(sessionHandleWrite, shared_from_this(), asio::placeholders::error));
-  
-  {
-//    ByteBuffer* ptr = mSendingPacket.get();
-//    std::ostringstream ss;
-//    for (auto c : *mSendingPacket) ss << (int)c << ' ';
-//    ss << '\n';
-//    std::string str = ss.str();
-//
-//    std::string dir = std::to_string(std::uint64_t(this));
-//    boost::filesystem::create_directories(dir);
-//    std::ofstream(dir + "/" + std::to_string(mIsWritting++), std::ios::app) << str;
-  }
 }
 
 void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& error, bool header)
@@ -135,7 +115,7 @@ void Session::setPlayer(Player& player)
   mPlayer = std::addressof(player);
 }
 
-void Session::sendPacket(ByteBuffer&& pkt, const std::string& message)
+void Session::sendPacket(ByteBuffer&& packet, const std::string& message)
 {
 //  Logger::debug(message);
 //  static_cast<void>(message);
@@ -145,19 +125,17 @@ void Session::sendPacket(ByteBuffer&& pkt, const std::string& message)
 //  for (auto& c : pkt) ss << (int)c << ' ';
 //  ss << '\n';
 //  Logger::debug(ss.str());
+  static_cast<void>(message);
   
-//  mSendingQueue.push(std::make_shared<ByteBuffer>(std::move(pkt)));
-  {
-    std::lock_guard<std::mutex> l(mMutex);
-    mDeque.emplace_back(std::move(pkt));
-  }
-  
+  mPacketsToBeSend.push(std::move(packet));
   writeNext();
 }
 
-void Session::sendPacket(ByteBufferSharedPtr ptr)
+void Session::sendPacket(const ByteBuffer& packet, const std::string& message)
 {
-  mSendingQueue.push(ptr);
+  static_cast<void>(message);
+  
+  mPacketsToBeSend.push(std::move(packet));
   writeNext();
 }
 
