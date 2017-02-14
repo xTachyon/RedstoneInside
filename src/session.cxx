@@ -9,13 +9,19 @@
 
 namespace asio = boost::asio;
 
+enum class Items
+{
+  IronShovel = 256,
+  IronPickaxe = 257
+};
+
 namespace redi
 {
 
 Session::Session(asio::ip::tcp::socket&& socket, Server& server)
       : mSocket(std::move(socket)), mServer(server), mPlayer(nullptr), mConnectionState(ConnectionState::Handshake),
         mSetCompressionIsSent(false), mPacketHandler(std::make_shared<PacketHandler>(mServer, *this, mServer.getEventManager())),
-        mIsDisconnecting(false), mIsWritting(false)
+        mIsDisconnecting(false), mIsWritting(false), mStrand(mSocket.get_io_service())
 {
   Logger::debug((boost::format("Session %1% created") % this).str());
 }
@@ -35,7 +41,7 @@ void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& e
   {
 //    ptr->mSendingPacket = {};
     ptr->mIsWritting = false;
-    assert(!ptr->mIsWritting);
+    //assert(!ptr->mIsWritting);
     
     ptr->writeNext();
   }
@@ -48,10 +54,10 @@ void Session::writeNext()
     return;
   }
   
-  assert(!mIsWritting);
+  //assert(!mIsWritting);
   mIsWritting = true;
   
-  assert(mIsWritting);
+  //assert(mIsWritting);
   asio::async_write(mSocket, asio::buffer(mSendingPacket.data(), mSendingPacket.size()),
                     boost::bind(sessionHandleWrite, shared_from_this(), asio::placeholders::error));
 }

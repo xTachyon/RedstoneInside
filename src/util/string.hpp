@@ -79,6 +79,14 @@ inline bool noCaseCompareEqual(const std::basic_string<T>& l, const std::basic_s
   
   return true;
 }
+
+#ifdef _MSC_VER
+template <>
+inline bool noCaseCompareEqual<char>(const std::string& l, const std::string& r)
+{
+	return _stricmp(l.c_str(), r.c_str()) == 0;
+}
+#endif
   
 template <typename From, typename To>
 To binaryTo(const From& val)

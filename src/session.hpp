@@ -82,6 +82,7 @@ private:
   std::atomic_bool mIsDisconnecting;
   std::atomic_bool mIsWritting;
   lockfree::ByteBufferQueue mPacketsToBeSend;
+	boost::asio::io_service::strand mStrand;
 
 public:
   
@@ -89,6 +90,7 @@ public:
   void readNext();
   friend void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& error);
   void writeNext();
+	void postWrite();
 };
 
 inline bool operator==(const Session& l, const Session& r)
