@@ -101,11 +101,18 @@ void RediCommands::whisperCommand(CommandSender sender, CommandArguments& args)
   if (player)
   {
     std::string message;
-    for (CommandArguments::const_iterator it = args.begin() + 1, end; it != end; ++it)
+    for (CommandArguments::const_iterator it = args.begin() + 1; it != args.end(); ++it)
     {
       message += *it + ' ';
     }
-    message.pop_back();
+    if (message.size() == 0)
+    {
+      return;
+    }
+    else
+    {
+      message.pop_back();
+    }
     
     player->sendMessage((boost::format("%1% -> %2%: %3%") % sender.getName() % player->getUsername() % message).str());
   }

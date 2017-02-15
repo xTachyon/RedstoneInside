@@ -6,5 +6,6 @@
 #include "string.hpp"
 #include "time.hpp"
 #include "maths.hpp"
+#include "random.hpp"
 
 #endif // REDI_UTIL_UTIL

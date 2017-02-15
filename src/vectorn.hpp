@@ -46,6 +46,19 @@ struct Vector2
   {
     return (boost::format("(%1%, %2%)") % x % z).str();
   }
+  
+  std::int64_t distanceSquared(const Vector2& r)
+  {
+    std::int64_t xx = static_cast<std::int64_t>(x) - r.x;
+    std::int64_t zz = static_cast<std::int64_t>(z) - r.z;
+    
+    return xx * xx + zz * zz;
+  }
+  
+  double distance(const Vector2& r)
+  {
+    return std::sqrt(distanceSquared(r));
+  }
 };
 
 template <typename T>

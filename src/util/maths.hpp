@@ -9,7 +9,7 @@ namespace redi
 namespace util
 {
 
-double normalizeAngleDegrees(double degrees);
+float normalizeAngleDegrees(float degrees);
 
 template <typename To = std::int16_t, typename From>
 To floorAndCast(From x)

@@ -6,6 +6,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
+#include <set>
 #include "session.hpp"
 #include "serverconfig.hpp"
 #include "playerposition.hpp"
@@ -71,7 +72,10 @@ public:
   
   void normalizeRotation();
   
-private:
+  void updateChunksNew();
+  void onPositionChanged();
+  
+  private:
   
   friend class EventManager;
   friend class PacketHandler;
@@ -80,7 +84,9 @@ private:
   static constexpr double InRange = 16 * 10.0;
   
   std::vector<Player*> mEntitiesInSight;
-  std::list<Vector2i> mChunksInUse;
+  Vector2i mLastPositionWhenChunksWasSent;
+  std::set<Vector2i> mLoadedChunks;
+  std::set<Vector2i> mChunksToBeLoaded;
   
   boost::uuids::uuid mUUID;
   std::string mNickname;
@@ -90,7 +96,6 @@ private:
   Gamemode mGamemode;
   PlayerPosition mPosition;
   boost::asio::steady_timer mSendKeepAliveTimer;
-  boost::asio::steady_timer mUpdateChunksTimer;
   std::size_t mTeleportID;
   const std::int32_t mEntityID;
   std::atomic_bool mHasSavedToDisk;
@@ -101,9 +106,6 @@ private:
   
   void onSendKeepAliveTimer(const boost::system::error_code& error);
   void keepAliveNext();
-  
-  void updateChunks(const boost::system::error_code& error);
-  void updateChunksNext();
   
   void timersNext();
 };

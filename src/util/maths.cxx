@@ -6,9 +6,9 @@ namespace redi
 namespace util
 {
 
-double normalizeAngleDegrees(double degrees)
+float normalizeAngleDegrees(float degrees)
 {
-  double result = std::fmod(degrees + 180, 360);
+  float result = std::fmod(degrees + 180, 360);
   if (result < 0)
   {
     result += 360;

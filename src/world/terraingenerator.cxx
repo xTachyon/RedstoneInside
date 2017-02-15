@@ -1,6 +1,7 @@
 #include <cstdint>
 #include "chunk.hpp"
 #include "terraingenerator.hpp"
+#include "../util/util.hpp"
 
 namespace redi
 {
@@ -17,10 +18,9 @@ void TerrainGenerator::generate(Chunk& chunk)
         {
           chunk(x, y, z).type = BlockType::Bedrock;
         }
-        else if (y == 1)
+        else if (y < 5)
         {
-          chunk(x, y, z).type = BlockType::Planks;
-          chunk(x, y, z).data = 2;
+          chunk(x, y, z).type = static_cast<BlockType>(util::generateRandom(1, 217));
         }
       }
         

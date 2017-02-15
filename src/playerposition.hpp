@@ -35,6 +35,11 @@ struct PlayerPosition : Vector3d, PlayerLook
   
   PlayerPosition(double x = 0.0, double y = 0.0, double z = 0.0, float yaw = 0.0f, float pitch = 0.0f, bool onGround = true, Dimension dimension = Dimension::Overworld)
         : Vector3d(x, y, z), PlayerLook(yaw, pitch), onGround(onGround), dimension(dimension) {}
+  
+  Vector2i getChunkPosition() const
+  {
+    return Vector2i(static_cast<std::int32_t>(x / 16), static_cast<std::int32_t>(z / 16));
+  }
 };
 
 } // namespace redi

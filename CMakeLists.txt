@@ -150,7 +150,8 @@ set(SOURCE_FILES
         src/nbt/basic.hpp
         src/nbt/string.hpp
         src/nbt/value.cxx
-        src/nbt/value.hpp)
+        src/nbt/value.hpp
+        src/util/random.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

@@ -224,6 +224,7 @@ void PacketHandler::handlePlayerPositionAndLook(packets::PlayerPositionAndLook& 
   mSession.getPlayer().onEntityMovedWithLook(position);
   mSession.getPlayer().mPosition = position;
   mSession.getPlayer().normalizeRotation();
+  mSession.getPlayer().onPositionChanged();
 }
 
 void PacketHandler::handlePlayerPosition(packets::PlayerPosition& packet)
@@ -234,6 +235,7 @@ void PacketHandler::handlePlayerPosition(packets::PlayerPosition& packet)
   position.y = packet.y;
   position.z = packet.z;
   position.onGround = packet.onGround;
+  mSession.getPlayer().onPositionChanged();
 }
 
 void PacketHandler::handlePlayerLook(packets::PlayerLook& packet)

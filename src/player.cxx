@@ -20,11 +20,14 @@ namespace redi
 Player::Player(const std::string& name, boost::uuids::uuid uuid, std::shared_ptr<Session> session, std::int32_t id, Server* server,
                World* world, Gamemode gamemode)
     : mUUID(uuid), mNickname(name), mServer(server), mWorld(world), mSession(session), mGamemode(gamemode), mSendKeepAliveTimer(mSession->getIoService()),
-      mUpdateChunksTimer(mSession->getIoService()), mTeleportID(0), mEntityID(id), mHasSavedToDisk(false)
+      mTeleportID(0), mEntityID(id), mHasSavedToDisk(false)
 {
   Logger::debug((boost::format("Player %1% created") % this).str());
   
   loadFromFile();
+  
+  mLastPositionWhenChunksWasSent.x = std::numeric_limits<std::int32_t>::max();
+  mLastPositionWhenChunksWasSent.z = std::numeric_limits<std::int32_t>::max();
 }
 
 Player::~Player()
@@ -101,7 +104,6 @@ void Player::kick(std::string&& message)
 void Player::disconnect()
 {
   mSendKeepAliveTimer.cancel();
-  mUpdateChunksTimer.cancel();
   
   mSession->disconnect();
   
@@ -114,8 +116,8 @@ void Player::disconnect()
 
 void Player::normalizeRotation()
 {
-  mPosition.yaw = static_cast<float>(util::normalizeAngleDegrees(mPosition.yaw));
-  mPosition.pitch = static_cast<float>(util::normalizeAngleDegrees(mPosition.pitch));
+  mPosition.yaw = util::normalizeAngleDegrees(mPosition.yaw);
+  mPosition.pitch = util::normalizeAngleDegrees(mPosition.pitch);
 }
 
 void Player::kick(const std::string& message)
@@ -208,7 +210,7 @@ void Player::onEntityMovedWithLook(PlayerPosition newpos)
     {
       auto distance = player->getPosition().distance(mPosition);
     
-      if (distance <= InRange)
+      if (distance <= 32 * 10.0)
       {
         auto it = std::find(mEntitiesInSight.begin(), mEntitiesInSight.end(), player.get());
       
@@ -257,72 +259,60 @@ void Player::onEntityMovedWithLook(PlayerPosition newpos)
   mEntitiesInSight = nextEntitiesInSight;
 }
 
-void Player::updateChunks(const boost::system::error_code& error)
+void Player::updateChunksNew()
 {
-  using namespace std::chrono_literals;
-  
   static constexpr std::int32_t Range = 5;
   
-  if (!error && !mSession->isDisconnecting())
+  ChunkManager& cm = mWorld->getChunkManager();
+  
+  mChunksToBeLoaded.clear();
+  
+  Vector2i playerchunk(static_cast<std::int32_t>(mPosition.x / 16), static_cast<std::int32_t>(mPosition.z / 16));
+  
+  Vector2i start(playerchunk.x - Range, playerchunk.z - Range - 1);
+  Vector2i end(playerchunk.x + Range + 1, playerchunk.z + Range);
+  
+  for (std::int32_t x = start.x; x < end.x; ++x)
   {
-    ChunkManager& cm = mWorld->getChunkManager();
-    
-    std::list<Vector2i> current;
-    
-    Vector2i playerchunk(static_cast<std::int32_t>(mPosition.x / 16), static_cast<std::int32_t>(mPosition.z / 16));
-    
-    Vector2i start(playerchunk.x - Range, playerchunk.z - Range - 1);
-    Vector2i end(playerchunk.x + Range + 1, playerchunk.z + Range);
-    
-    for (std::int32_t x = start.x; x < end.x; ++x)
+    for (std::int32_t z = start.z; z < end.z; ++z)
     {
-      for (std::int32_t z = start.z; z < end.z; ++z)
+      Vector2i th(x, z);
+      mChunksToBeLoaded.insert(th);
+      
+      auto it = mLoadedChunks.find(th);
+      
+      if (it == mLoadedChunks.end())
       {
-        Vector2i th(x, z);
-        current.push_back(th);
-        
-        auto it = mChunksInUse.end();
-        for (auto i = mChunksInUse.begin(); i != it; ++i)
-        {
-          if (th == *i)
-          {
-            it = i;
-            break;
-          }
-        }
-        
-        if (it == mChunksInUse.end())
-        {
-          packets::ChunkData(cm.getChunk(th), th).send(*mSession);
-        }
-        else
-        {
-          mChunksInUse.erase(it);
-        }
+        packets::ChunkData(cm.getChunk(th), th).send(*mSession);
+      }
+      else
+      {
+        mLoadedChunks.erase(it);
       }
     }
-    
-    for (auto& i : mChunksInUse)
-    {
-      packets::UnloadChunk(i).send(*mSession);
-    }
-    
-    mChunksInUse = std::move(current);
-    
-    mUpdateChunksTimer.expires_from_now(500ms);
-    updateChunksNext();
   }
-}
-
-void Player::updateChunksNext()
-{
-  mUpdateChunksTimer.async_wait(boost::bind(&Player::updateChunks, shared_from_this(), asio::placeholders::error));
+  
+  for (auto& i : mLoadedChunks)
+  {
+    packets::UnloadChunk(i).send(*mSession);
+  }
+  
+  mLoadedChunks.swap(mChunksToBeLoaded);
+  mLastPositionWhenChunksWasSent = mPosition.getChunkPosition();
 }
 
 void Player::timersNext()
 {
   keepAliveNext();
-  updateChunksNext();
 }
 
+void Player::onPositionChanged()
+{
+  if (Vector2i(static_cast<std::int32_t>(mPosition.x / 16), static_cast<std::int32_t>(mPosition.z / 16))
+            .distanceSquared(mLastPositionWhenChunksWasSent) > 1)
+  {
+    updateChunksNew();
+  }
+}
+  
 } // namespace red
