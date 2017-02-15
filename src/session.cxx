@@ -39,27 +39,31 @@ void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& e
   }
   else
   {
-//    ptr->mSendingPacket = {};
     ptr->mIsWritting = false;
-    //assert(!ptr->mIsWritting);
     
     ptr->writeNext();
   }
 }
 
-void Session::writeNext()
+void Session::postWrite()
 {
   if (mIsWritting || !mPacketsToBeSend.pop(mSendingPacket))
   {
     return;
   }
   
-  //assert(!mIsWritting);
   mIsWritting = true;
   
-  //assert(mIsWritting);
   asio::async_write(mSocket, asio::buffer(mSendingPacket.data(), mSendingPacket.size()),
                     boost::bind(sessionHandleWrite, shared_from_this(), asio::placeholders::error));
+}
+
+void Session::writeNext()
+{
+  mSocket.get_io_service().post(mStrand.wrap([me = shared_from_this()]
+  {
+    me->postWrite();
+  }));
 }
 
 void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& error, bool header)

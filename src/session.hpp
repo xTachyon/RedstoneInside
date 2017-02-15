@@ -83,8 +83,6 @@ private:
   std::atomic_bool mIsWritting;
   lockfree::ByteBufferQueue mPacketsToBeSend;
 	boost::asio::io_service::strand mStrand;
-
-public:
   
   friend void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& error, bool header);
   void readNext();

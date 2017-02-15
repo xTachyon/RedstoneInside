@@ -30,3 +30,4 @@
 
 .idea/*
 cmake-build-debug/*
+CmakeFiles/*
