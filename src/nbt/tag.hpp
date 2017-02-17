@@ -21,12 +21,20 @@ public:
   bool isVector() const;
   bool isContainer() const;
   
+  virtual Tag& assign(Tag&& tag) = 0;
+  
   virtual Type getType() const { return Type::End; }
+  
+  virtual std::unique_ptr<Tag> clone() const & = 0;
+  virtual std::unique_ptr<Tag> move() && = 0;
 
 protected:
 
   virtual bool equals(const Tag&) const { return  false; }
 };
+
+
+using TagUniquePtr = std::unique_ptr<Tag>;
 
 } // namespace nbt
 } // namespace redi

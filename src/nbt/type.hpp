@@ -2,6 +2,7 @@
 # define REDI_NBT_TYPE
 
 #include <boost/format.hpp>
+#include "forward.hpp"
 
 namespace redi
 {
@@ -48,16 +49,12 @@ struct TypeToNumber<float> : public std::integral_constant<Type, Type::Float> {}
 template <>
 struct TypeToNumber<double> : public std::integral_constant<Type, Type::Double> {};
 
-/*
- *
-    template<> struct get_primitive_type<int8_t>  : public std::integral_constant<tag_type, tag_type::Byte> {};
-    template<> struct get_primitive_type<int16_t> : public std::integral_constant<tag_type, tag_type::Short> {};
-    template<> struct get_primitive_type<int32_t> : public std::integral_constant<tag_type, tag_type::Int> {};
-    template<> struct get_primitive_type<int64_t> : public std::integral_constant<tag_type, tag_type::Long> {};
-    template<> struct get_primitive_type<float>   : public std::integral_constant<tag_type, tag_type::Float> {};
-    template<> struct get_primitive_type<double>  : public std::integral_constant<tag_type, tag_type::Double> {};
-}
- */
+template <>
+struct TypeToNumber<Array<std::int8_t>> : public std::integral_constant<Type, Type::ByteArray> {};
+
+template <>
+struct TypeToNumber<Array<std::int32_t>> : public std::integral_constant<Type, Type::IntArray> {};
+
 
 } // namespace nbt
 } // namespace redi

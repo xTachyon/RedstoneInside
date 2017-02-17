@@ -37,6 +37,9 @@ struct TagString : public BasicTag<TagString>
     data = str;
     return *this;
   }
+  
+  operator std::string&() { return data; }
+  operator const std::string&() const { return data; }
 };
 
 } // namespace nbt

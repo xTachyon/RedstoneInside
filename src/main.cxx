@@ -2,12 +2,25 @@
 #include <boost/filesystem.hpp>
 #include "server.hpp"
 #include "nbt/primitive.hpp"
+#include "nbt/nbt.hpp"
 
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;
 
 int main(int, char**)
 {
+  using namespace redi::nbt;
+  
+//  redi::nbt::TagCompound c;
+//
+//  c["123"] = 7635.4321;
+//  c["123"] = 13.54;
+//  c["123"] = 7635;
+  
+  Value v("abc");
+  Value c = v;
+  Value m = std::move(v);
+  
   redi::Logger::debug("Redi is starting");
   
   try

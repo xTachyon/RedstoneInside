@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
         "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow")
+  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow -fno-limit-debug-info")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set(warnings_level "/W4")
@@ -151,7 +151,7 @@ set(SOURCE_FILES
         src/nbt/string.hpp
         src/nbt/value.cxx
         src/nbt/value.hpp
-        src/util/random.hpp)
+        src/util/random.hpp src/nbt/compound.cxx src/nbt/compound.hpp src/nbt/nbt.hpp src/nbt/array.hpp src/nbt/forward.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 
