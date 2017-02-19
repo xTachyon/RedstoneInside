@@ -43,13 +43,13 @@ struct Array : public BasicTag<Array<T>>
   
   Array& operator=(const VectorType& other)
   {
-    data = other.data;
+    data = other;
     return *this;
   }
   
   Array& operator=(VectorType&& other)
   {
-    data = std::move(other.data);
+    data = std::move(other);
     return *this;
   }
   
@@ -97,6 +97,28 @@ struct Array : public BasicTag<Array<T>>
   const_reference back() const
   {
     return data.back();
+  }
+  
+  std::size_t size() const { return data.size(); }
+  
+  void write(Serializer& s) const override
+  {
+    s.writeNumber<std::int32_t>(static_cast<std::int32_t>(size()));
+    for (const T& index : data)
+    {
+      s.writeNumber(index);
+    }
+  }
+  
+  void read(Deserializer& s) override
+  {
+    std::size_t siz = static_cast<std::size_t>(s.readNumber<std::int32_t>());
+    data.reserve(size() + siz);
+    
+    for (std::size_t i = 0; i < siz; ++i)
+    {
+      data.emplace_back(s.readNumber<T>());
+    }
   }
 };
 

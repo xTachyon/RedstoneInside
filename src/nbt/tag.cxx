@@ -55,5 +55,12 @@ bool Tag::isContainer() const
   }
 }
 
+std::string Tag::toString() const
+{
+  std::string str;
+  toString(str);
+  return str;
+}
+  
 } // namespace nbt
 } // namespace redi

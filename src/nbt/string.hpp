@@ -2,6 +2,7 @@
 #define REDI_NBT_STRING_HPP
 
 #include "basic.hpp"
+#include "deserializer.hpp"
 
 namespace redi
 {
@@ -33,13 +34,27 @@ struct TagString : public BasicTag<TagString>
   
   TagString& operator=(const char* str)
   {
-    
     data = str;
     return *this;
   }
   
   operator std::string&() { return data; }
   operator const std::string&() const { return data; }
+  
+  void write(Serializer& s) const override
+  {
+    s.writeString(data);
+  }
+  
+  void read(Deserializer& s) override
+  {
+    data = s.readString();
+  }
+  
+  void toString(std::string& str) const override
+  {
+    str += data;
+  }
 };
 
 } // namespace nbt

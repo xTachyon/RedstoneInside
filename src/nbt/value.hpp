@@ -27,8 +27,10 @@ public:
   Value(const std::string& x);
   Value(std::string&& x);
   Value(const char* x);
+  Value(TagUniquePtr&& ptr);
   Value(std::nullptr_t x);
   
+  Value& operator=(const Value& other);
   Value& operator=(const Tag& tag);
   Value& operator=(Tag&& tag);
   Value& operator=(TagUniquePtr&& ptr);
@@ -50,6 +52,7 @@ public:
   void assign(Tag&& tag);
   Type getType() const;
   static Type getType(const TagUniquePtr& ptr);
+  void write(Serializer& s) const;
   
 private:
   

@@ -32,7 +32,11 @@ using TagIntArray = Array<std::int32_t>;
 struct TagString;
 class TagCompound;
 class TagList;
-  
+
+struct Serializer;
+struct Deserializer;
+class Value;
+
 } // namespace nbt
 } // namespace redi
 

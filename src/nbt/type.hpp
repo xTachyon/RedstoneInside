@@ -1,7 +1,9 @@
-#ifndef REDI_NBT_TYPE
-# define REDI_NBT_TYPE
+#ifndef REDI_NBT_TYPEE
+#define REDI_NBT_TYPEE
 
-#include <boost/format.hpp>
+#include <ostream>
+#include <type_traits>
+//#include <boost/format.hpp>
 #include "forward.hpp"
 
 namespace redi
@@ -25,7 +27,7 @@ enum class Type : std::uint8_t
   IntArray
 };
 
-const char* getNBTTypeName();
+const char* getNBTTypeName(Type type);
 std::ostream& operator<<(std::ostream& stream, Type type);
 
 template <typename T>
@@ -55,9 +57,7 @@ struct TypeToNumber<Array<std::int8_t>> : public std::integral_constant<Type, Ty
 template <>
 struct TypeToNumber<Array<std::int32_t>> : public std::integral_constant<Type, Type::IntArray> {};
 
-
 } // namespace nbt
 } // namespace redi
 
-
-#endif // REDI_NBT_TYPE
+#endif // REDI_NBT_TYPEE

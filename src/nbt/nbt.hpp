@@ -10,4 +10,8 @@
 #include "value.hpp"
 #include "array.hpp"
 
+#include "serializer.hpp"
+#include "deserializer.hpp"
+#include "creator.hpp"
+
 #endif // REDI_NBT_NBT_HPP

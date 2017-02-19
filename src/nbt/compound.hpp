@@ -70,6 +70,9 @@ public:
   const_reverse_iterator rend() const { return map.rend(); }
   const_reverse_iterator crend() const { return map.crend(); }
   
+  void write(Serializer& s) const override;
+  void read(Deserializer& s) override;
+  
 private:
   
   MapType map;

@@ -30,7 +30,23 @@ Value::Value(std::string&& x) : Value(TagString(std::move(x))) {}
 
 Value::Value(const char* x) : Value(TagString(x)) {}
 
+Value::Value(TagUniquePtr&& ptr) : data(std::move(ptr)) {}
+
 Value::Value(std::nullptr_t ) : Value(){}
+
+Value& Value::operator=(const Value& other)
+{
+  if (data)
+  {
+    data->assign(*other.data);
+  }
+  else
+  {
+    data = other.data->clone();
+  }
+  
+  return *this;
+}
 
 Value& Value::operator=(const Tag& tag)
 {
@@ -159,6 +175,11 @@ void Value::throwIfNot(Type type)
   {
     throw std::bad_cast();
   }
+}
+
+void Value::write(Serializer& s) const
+{
+  data->write(s);
 }
   
 } // namespace nbt

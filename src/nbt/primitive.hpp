@@ -2,6 +2,8 @@
 #define REDI_NBT_PRIMITIVE_HPP
 
 #include "basic.hpp"
+#include "serializer.hpp"
+#include "deserializer.hpp"
 
 namespace redi
 {
@@ -25,7 +27,34 @@ struct Primitive : public BasicTag<Primitive<T>>
   
   operator T&() { return data; }
   operator T() const { return data; }
+  
+  void write(Serializer& s) const override
+  {
+    s.writeNumber(data);
+  }
+  
+  void read(Deserializer& s) override
+  {
+    data = s.readNumber<T>();
+  }
+  
+  void toString(std::string& str) const override
+  {
+    str += std::to_string(data);
+  }
 };
+
+template <>
+inline void Primitive<std::int8_t>::toString(std::string& str) const
+{
+  str += std::to_string(static_cast<int>(data));
+}
+
+template <typename T>
+std::ostream& operator<<(std::ostream& stream, const Primitive<T>& obj)
+{
+  stream << obj.toString();
+}
 
 using TagByte = Primitive<std::int8_t>;
 using TagShort = Primitive<std::int16_t>;

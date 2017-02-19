@@ -16,6 +16,7 @@ public:
   virtual ~BasicTag() {}
   
   Tag& assign(Tag&& tag) override { return der() = dynamic_cast<T&&>(tag); }
+  Tag& assign(const Tag& tag) override { return der() = dynamic_cast<const T&>(tag); }
   
   Type getType() const override { return T::type; }
   

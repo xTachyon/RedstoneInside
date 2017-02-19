@@ -31,6 +31,12 @@ public:
   {
     append(ptr, size);
   }
+  
+  template <typename T, std::size_t size = sizeof(T)>
+  void append(const T& obj)
+  {
+    append(reinterpret_cast<const std::uint8_t*>(std::addressof(obj)), size);
+  }
 
   void append(const std::uint8_t* ptr, base::size_type size)
   {

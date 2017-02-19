@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include "type.hpp"
+#include "forward.hpp"
 
 namespace redi
 {
@@ -22,15 +23,20 @@ public:
   bool isContainer() const;
   
   virtual Tag& assign(Tag&& tag) = 0;
+  virtual Tag& assign(const Tag& tag) = 0;
   
   virtual Type getType() const { return Type::End; }
   
   virtual std::unique_ptr<Tag> clone() const & = 0;
   virtual std::unique_ptr<Tag> move() && = 0;
 
-protected:
-
-  virtual bool equals(const Tag&) const { return  false; }
+  virtual bool equals(const Tag&) const { return false; }
+  
+  virtual void write(Serializer&) const = 0;
+  virtual void read(Deserializer&) {}
+  
+  std::string toString() const;
+  virtual void toString(std::string&) const {}
 };
 
 
