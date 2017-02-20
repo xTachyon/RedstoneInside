@@ -17,6 +17,7 @@
 #include "server/play/playerpositionandlook.hpp"
 #include "server/play/chunkdata.hpp"
 #include "server/play/playerlistitem.hpp"
+#include "server/play/timeupdate.hpp"
 
 namespace redi
 {
@@ -183,6 +184,7 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   JoinGame(&player).send(mSession);
   SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
   packets::PlayerPositionAndLook(player.getPosition(), player.getNewTeleportID()).send(mSession);
+  packets::TimeUpdate(player.getWorld()).send(mSession);
   player.timersNext();
   
   mServer.addEvent(std::make_shared<EventPlayerJoin>(mSession, std::move(packet.username)));

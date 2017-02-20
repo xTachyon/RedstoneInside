@@ -84,8 +84,6 @@ void RediCommands::uuidCommand(CommandSender sender, CommandArguments&)
 
 void RediCommands::stopCommand(CommandSender, CommandArguments&)
 {
-  
-  
   throw StopServer();
 }
 
@@ -105,11 +103,8 @@ void RediCommands::whisperCommand(CommandSender sender, CommandArguments& args)
     {
       message += *it + ' ';
     }
-    if (message.size() == 0)
-    {
-      return;
-    }
-    else
+    
+    if (message.size() != 0)
     {
       message.pop_back();
     }

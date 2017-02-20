@@ -27,6 +27,7 @@ public:
   void deletePlayer(Player& player);
   
   const std::string& getWorldName() const { return mWorldName; }
+  std::int64_t getWorldTime() const { return worldTime; }
   
 private:
 
@@ -36,6 +37,7 @@ private:
   ChunkManager mChunkManager;
   Dimension mDimension;
   std::list<Player*> mPlayers;
+  std::int64_t worldTime;
 };
   
 } // namespace redi
