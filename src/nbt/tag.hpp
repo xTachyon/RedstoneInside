@@ -38,6 +38,7 @@ public:
   virtual void writePretty(PrettyPrint&) const {}
 };
 
+std::ostream& operator<<(std::ostream& stream, const Tag& tag);
 
 using TagUniquePtr = std::unique_ptr<Tag>;
 

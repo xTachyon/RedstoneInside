@@ -18,7 +18,7 @@ Block ChunkManager::operator()(Vector3i pos)
 
 void ChunkManager::loadChunk(Vector2i pos)
 {
-  Vector2i chunkInRegion(pos.x / Region::ChunksPerRegion, pos.z / Region::ChunksPerRegion);
+  Vector2i chunkInRegion(pos.x / world::AnvilRegion::ChunksPerRegion, pos.z / world::AnvilRegion::ChunksPerRegion);
   if (mRegions.count(chunkInRegion) == 0)
   {
     // TODO: load chunk

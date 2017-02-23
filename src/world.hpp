@@ -5,7 +5,7 @@
 #include <list>
 #include <string>
 #include "world/chunk.hpp"
-#include "world/region.hpp"
+#include "world/anvilregion.hpp"
 #include "vectorn.hpp"
 #include "world/chunkmanager.hpp"
 #include "serverconfig.hpp"

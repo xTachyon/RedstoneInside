@@ -10,6 +10,8 @@
 
 namespace redi
 {
+namespace world
+{
 
 struct ChunkInfo
 {
@@ -20,7 +22,7 @@ struct ChunkInfo
       : offset(offset), time(time), sectors(sectors) {}
 };
 
-class Region
+class AnvilRegion
 {
 public:
 
@@ -29,9 +31,9 @@ public:
   static constexpr std::size_t SectorSize = 4_KB; // uhh, sectors. Earth is on Sector 2814
   static constexpr std::size_t ChunkHeaderSize = 5;
 
-  Region() = default;
-  Region(const std::string& filepath);
-  ~Region();
+  AnvilRegion() = default;
+  AnvilRegion(const std::string& filepath);
+  ~AnvilRegion();
 
   void clear();
   void close();
@@ -54,6 +56,7 @@ private:
   void saveHeader();
 };
 
+} // namespace world
 } // namespace redi
 
 

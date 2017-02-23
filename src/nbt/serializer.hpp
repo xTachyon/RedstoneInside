@@ -31,6 +31,7 @@ struct Serializer
   void writeType(const Value& value);
   void writeType(Type type);
   void write(const std::string& name, const TagCompound& root);
+  void write(const RootTag& root);
 };
 
 template <>

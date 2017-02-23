@@ -1,4 +1,5 @@
 #include "tag.hpp"
+#include "nbt.hpp"
 
 namespace redi
 {
@@ -54,6 +55,16 @@ bool Tag::isContainer() const
       return false;
   }
 }
+
+std::ostream& operator<<(std::ostream& stream, const Tag& tag)
+{
+  PrettyPrint p;
+  tag.writePretty(p);
   
+  stream << p.string;
+  
+  return stream;
+}
+
 } // namespace nbt
 } // namespace redi

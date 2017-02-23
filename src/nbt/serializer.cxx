@@ -1,6 +1,7 @@
 #include "value.hpp"
 #include "compound.hpp"
 #include "serializer.hpp"
+#include "nbt.hpp"
 
 namespace redi
 {
@@ -33,10 +34,15 @@ void Serializer::writeType(const Value& value)
   writeType(value.getType());
 }
 
+void Serializer::write(const RootTag& root)
+{
+  write(root.name, root);
+}
+
 void Serializer::writeType(Type type)
 {
   writeNumber(static_cast<std::uint8_t>(type));
 }
-  
+
 } // namespace nbt
 } // namespace redi

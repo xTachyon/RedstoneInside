@@ -20,145 +20,167 @@ set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
 set(SOURCE_FILES
-        src/util/util.hpp
+
+        src/bytebuffer.cxx
         src/bytebuffer.hpp
-        src/world/block.hpp
-        src/compressor.cxx
-        src/compressor.hpp
-        src/sizeliteraloperators.hpp
+        src/connectionlistener.cxx
+        src/connectionlistener.hpp
+        src/enums.cxx
+        src/enums.hpp
+        src/exceptions.hpp
         src/logger.cxx
         src/logger.hpp
         src/main.cxx
-        src/vectorn.hpp
-        src/session.cxx
-        src/session.hpp
-        src/stdafx.cxx
-        src/stdafx.hpp
-        src/world/region.cxx
-        src/world/region.hpp
-        src/world/chunk.cxx
-        src/world/chunk.hpp
-        src/world.cxx
-        src/world.hpp
-        src/threadsafequeue.hpp
-        src/connectionlistener.cxx
-        src/connectionlistener.hpp
-        src/server.cxx
-        src/server.hpp
         src/player.cxx
         src/player.hpp
-        src/protocol/packetreader.cxx
-        src/protocol/packetreader.hpp
-        src/util/base64.hpp
-        src/util/time.hpp
-        src/util/time.cxx
-        src/util/string.hpp
+        src/playerposition.hpp
+        src/server.cxx
+        src/server.hpp
+        src/serverconfig.cxx
         src/serverconfig.hpp
-        src/events/event.hpp
+        src/session.cxx
+        src/session.hpp
+        src/sizeliteraloperators.hpp
+        src/threadsafequeue.hpp
+        src/vectorn.hpp
+
+        src/util/base64.hpp
+        src/util/file.cxx
+        src/util/file.hpp
+        src/util/maths.cxx
+        src/util/maths.hpp
+        src/util/random.hpp
+        src/util/string.hpp
+        src/util/time.cxx
+        src/util/time.hpp
+        src/util/util.hpp
+
+        src/compressor.hpp
+        src/compressor.cxx
+
+        src/world.cxx
+        src/world.hpp
+        src/world/anvilregion.cxx
+        src/world/anvilregion.hpp
         src/world/biome.hpp
+        src/world/chunk.cxx
+        src/world/chunk.hpp
         src/world/chunkcolumn.hpp
-        src/world/terraingenerator.cxx
-        src/world/terraingenerator.hpp
         src/world/chunkmanager.cxx
         src/world/chunkmanager.hpp
-        src/protocol/chunkserializer13.cxx
+        src/world/terraingenerator.cxx
+        src/world/terraingenerator.hpp
+        src/world/block.hpp
+
         src/protocol/chunkserializer13.hpp
-        src/events/eventtype.hpp
-        src/events/events.hpp
-        src/events/playerdisconnected.hpp
-        src/events/sessiondisconnected.hpp
-        src/events/sendkeepalivering.hpp
-        src/events/eventmanager.cxx
-        src/events/eventmanager.hpp
-        src/events/eventpriority.hpp
-        src/serverconfig.cxx src/bytebuffer.cxx
-        src/chat/chatmanager.cxx
-        src/chat/chatmanager.hpp
-        src/events/chatmessage.hpp
-        src/exceptions.hpp
-        src/events/statusrequest.hpp
-        src/enums.hpp
-        src/enums.cxx
-        src/events/playerjoin.hpp
-        src/events/playerposition.hpp
-        src/events/playerlook.hpp
-        src/events/playerpositionandlook.hpp
-        src/playerposition.hpp
-        src/util/file.hpp
-        src/util/file.cxx
-        src/chat/commandsender.hpp
-        src/chat/commandmanager.cxx
-        src/chat/commandmanager.hpp
-        src/chat/redicommands.cxx
-        src/chat/redicommands.hpp
-        src/chat/commandsender.cxx
-        src/protocol/packetwriter.hpp
-        src/protocol/packetwriter.cxx
+        src/protocol/packetreader.cxx
+        src/protocol/packetreader.hpp
+        src/protocol/packets/packet.cxx
         src/protocol/packets/packet.hpp
+        src/protocol/packets/packethandler.cxx
+        src/protocol/packets/packethandler.hpp
         src/protocol/packets/server/handshake/handshake.cxx
         src/protocol/packets/server/handshake/handshake.hpp
-        src/protocol/packets/packet.cxx
         src/protocol/packets/server/login/loginstart.cxx
         src/protocol/packets/server/login/loginstart.hpp
         src/protocol/packets/server/login/loginsucces.cxx
         src/protocol/packets/server/login/loginsucces.hpp
         src/protocol/packets/server/login/setcompression.cxx
         src/protocol/packets/server/login/setcompression.hpp
-        src/protocol/packets/server/play/spawnposition.cxx
-        src/protocol/packets/server/play/spawnposition.hpp
+        src/protocol/packets/server/play/chatmessage.cxx
+        src/protocol/packets/server/play/chatmessage.hpp
+        src/protocol/packets/server/play/chunkdata.cxx
+        src/protocol/packets/server/play/chunkdata.hpp
+        src/protocol/packets/server/play/disconnect.cxx
+        src/protocol/packets/server/play/disconnect.hpp
+        src/protocol/packets/server/play/entitylookandrelativemove.cxx
+        src/protocol/packets/server/play/entitylookandrelativemove.hpp
         src/protocol/packets/server/play/joingame.cxx
         src/protocol/packets/server/play/joingame.hpp
+        src/protocol/packets/server/play/keepalive.cxx
+        src/protocol/packets/server/play/keepalive.hpp
+        src/protocol/packets/server/play/playerlistitem.cxx
+        src/protocol/packets/server/play/playerlistitem.hpp
+        src/protocol/packets/server/play/playerlook.cxx
+        src/protocol/packets/server/play/playerlook.hpp
+        src/protocol/packets/server/play/playerposition.cxx
+        src/protocol/packets/server/play/playerposition.hpp
         src/protocol/packets/server/play/playerpositionandlook.cxx
         src/protocol/packets/server/play/playerpositionandlook.hpp
-        src/protocol/packets/packethandler.cxx
-        src/protocol/packets/packethandler.hpp
-        src/protocol/packets/server/status/request.cxx
-        src/protocol/packets/server/status/request.hpp
-        src/protocol/packets/server/status/response.cxx
-        src/protocol/packets/server/status/response.hpp
+        src/protocol/packets/server/play/spawnplayer.cxx
+        src/protocol/packets/server/play/spawnplayer.hpp
+        src/protocol/packets/server/play/spawnposition.cxx
+        src/protocol/packets/server/play/spawnposition.hpp
+        src/protocol/packets/server/play/timeupdate.hpp
+        src/protocol/packets/server/play/unloadchunk.cxx
+        src/protocol/packets/server/play/unloadchunk.hpp
         src/protocol/packets/server/status/ping.cxx
         src/protocol/packets/server/status/ping.hpp
         src/protocol/packets/server/status/pong.cxx
         src/protocol/packets/server/status/pong.hpp
-        src/protocol/packets/server/play/chunkdata.cxx
-        src/protocol/packets/server/play/chunkdata.hpp
-        src/protocol/packets/server/play/keepalive.cxx
-        src/protocol/packets/server/play/keepalive.hpp
-        src/protocol/packets/server/play/chatmessage.cxx
-        src/protocol/packets/server/play/chatmessage.hpp
-        src/protocol/packets/server/play/disconnect.cxx
-        src/protocol/packets/server/play/disconnect.hpp
-        src/protocol/packets/server/play/playerposition.cxx
-        src/protocol/packets/server/play/playerposition.hpp
-        src/protocol/packets/server/play/playerlook.cxx
-        src/protocol/packets/server/play/playerlook.hpp
-        src/protocol/packets/server/play/playerlistitem.cxx
-        src/protocol/packets/server/play/playerlistitem.hpp
-        src/events/tick.hpp src/protocol/packets/server/play/spawnplayer.cxx
-        src/protocol/packets/server/play/spawnplayer.hpp
-        src/protocol/packets/server/play/entitylookandrelativemove.cxx
-        src/protocol/packets/server/play/entitylookandrelativemove.hpp
-        src/util/maths.hpp src/util/maths.cxx
-        src/protocol/packets/server/play/unloadchunk.cxx
-        src/protocol/packets/server/play/unloadchunk.hpp
+        src/protocol/packets/server/status/request.cxx
+        src/protocol/packets/server/status/request.hpp
+        src/protocol/packets/server/status/response.cxx
+        src/protocol/packets/server/status/response.hpp
+        src/protocol/packetwriter.cxx
+        src/protocol/packetwriter.hpp
+        src/protocol/chunkserializer13.cxx
+
+        src/events/event.hpp
+        src/events/eventmanager.cxx
+        src/events/eventmanager.hpp
+        src/events/eventpriority.hpp
+        src/events/events.hpp
+        src/events/eventtype.hpp
+        src/events/playerdisconnected.hpp
+        src/events/playerjoin.hpp
+        src/events/playerlook.hpp
+        src/events/playerposition.hpp
+        src/events/playerpositionandlook.hpp
+        src/events/sendkeepalivering.hpp
+        src/events/sessiondisconnected.hpp
+        src/events/statusrequest.hpp
+        src/events/tick.hpp
+        src/events/chatmessage.hpp
+
+        src/chat/chatmanager.hpp
+        src/chat/commandmanager.cxx
+        src/chat/commandmanager.hpp
+        src/chat/commandsender.cxx
+        src/chat/commandsender.hpp
+        src/chat/redicommands.cxx
+        src/chat/redicommands.hpp
+        src/chat/chatmanager.cxx
+
         src/lockfree/queue.hpp
-        src/nbt/tag.hpp
-        src/nbt/tag.cxx
-        src/nbt/type.hpp
-        src/nbt/type.cxx
-        src/nbt/primitive.hpp
+
+        src/nbt/array.hpp
         src/nbt/basic.hpp
-        src/nbt/string.hpp
-        src/nbt/value.cxx
-        src/nbt/value.hpp
-        src/util/random.hpp
         src/nbt/compound.cxx
         src/nbt/compound.hpp
-        src/nbt/nbt.hpp
-        src/nbt/array.hpp
+        src/nbt/creator.cxx
+        src/nbt/creator.hpp
+        src/nbt/deserializer.cxx
+        src/nbt/deserializer.hpp
         src/nbt/forward.hpp
+        src/nbt/list.cxx
+        src/nbt/list.hpp
+        src/nbt/nbt.hpp
+        src/nbt/prettyprinter.cxx
+        src/nbt/prettyprinter.hpp
+        src/nbt/primitive.hpp
+        src/nbt/roottag.cxx
+        src/nbt/roottag.hpp
         src/nbt/serializer.cxx
-        src/nbt/serializer.hpp src/nbt/list.cxx src/nbt/list.hpp src/nbt/deserializer.cxx src/nbt/deserializer.hpp src/nbt/creator.hpp src/nbt/creator.cxx src/nbt/prettyprinter.cxx src/nbt/prettyprinter.hpp src/protocol/packets/server/play/timeupdate.hpp src/nbt/roottag.cxx src/nbt/roottag.hpp)
+        src/nbt/serializer.hpp
+        src/nbt/string.hpp
+        src/nbt/tag.cxx
+        src/nbt/type.cxx
+        src/nbt/type.hpp
+        src/nbt/value.cxx
+        src/nbt/value.hpp
+        src/nbt/tag.hpp
+        )
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

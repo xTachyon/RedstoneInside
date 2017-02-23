@@ -3,7 +3,7 @@
 
 #include <map>
 #include "../vectorn.hpp"
-#include "region.hpp"
+#include "anvilregion.hpp"
 #include "chunk.hpp"
 
 namespace redi
@@ -22,7 +22,7 @@ public:
   
 private:
   
-  std::map<Vector2i, Region> mRegions;
+  std::map<Vector2i, world::AnvilRegion> mRegions;
   std::map<Vector2i, Chunk> mChunks;
   std::string mRegionDirectory;
   WorldGenerator mGenerator;
