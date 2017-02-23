@@ -158,7 +158,7 @@ set(SOURCE_FILES
         src/nbt/array.hpp
         src/nbt/forward.hpp
         src/nbt/serializer.cxx
-        src/nbt/serializer.hpp src/nbt/list.cxx src/nbt/list.hpp src/nbt/deserializer.cxx src/nbt/deserializer.hpp src/nbt/creator.hpp src/nbt/creator.cxx src/nbt/prettyprinter.cxx src/nbt/prettyprinter.hpp src/protocol/packets/server/play/timeupdate.hpp)
+        src/nbt/serializer.hpp src/nbt/list.cxx src/nbt/list.hpp src/nbt/deserializer.cxx src/nbt/deserializer.hpp src/nbt/creator.hpp src/nbt/creator.cxx src/nbt/prettyprinter.cxx src/nbt/prettyprinter.hpp src/protocol/packets/server/play/timeupdate.hpp src/nbt/roottag.cxx src/nbt/roottag.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

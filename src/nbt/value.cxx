@@ -181,6 +181,18 @@ void Value::write(Serializer& s) const
 {
   data->write(s);
 }
+
+void Value::writePretty(PrettyPrint& p) const
+{
+  if (data)
+  {
+    data->writePretty(p);
+  }
+  else
+  {
+    p.string += "null";
+  }
+}
   
 } // namespace nbt
 } // namespace redi

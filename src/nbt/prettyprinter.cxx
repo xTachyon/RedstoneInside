@@ -1,5 +1,6 @@
 #include <boost/format.hpp>
 #include "prettyprinter.hpp"
+#include "tag.hpp"
 
 namespace redi
 {
@@ -20,11 +21,61 @@ void PrettyPrint::writeVectorSize(std::size_t size, const char* name)
 void PrettyPrint::writeType(Type t, const std::string& name)
 {
   string += getNBTTypeName(t);
-  if (name.size() > 0)
+  string += (boost::format("(\"%1%\")") % name).str();
+  string += " : ";
+}
+
+void PrettyPrint::writeType(Type t)
+{
+  string += getNBTTypeName(t);
+  string += " : ";
+}
+
+void PrettyPrint::writeIndent(std::int32_t i)
+{
+  if (i > 0)
   {
-    string += (boost::format("(\"%1%\")") % name).str();
+    for (; i > 0; --i)
+    {
+      indent += ' ';
+    }
   }
-  string += ": ";
+  else if (i < 0)
+  {
+    for (; i < 0; ++i)
+    {
+      indent.pop_back();
+    }
+  }
+  
+  string += indent;
+}
+
+void PrettyPrint::writeNewline(std::int32_t)
+{
+  string += '\n';
+}
+
+void PrettyPrint::writeBeggining()
+{
+  writeNewline(0);
+  writeIndent();
+  string += '{';
+}
+
+void PrettyPrint::writeEnding()
+{
+  writeNewline(0);
+  writeIndent();
+  string += '}';
+}
+
+void PrettyPrint::writeOne(const Tag& tag)
+{
+  if (tag.isContainer())
+  {
+    writeEntry(tag.size());
+  }
 }
   
 } // namespace nbt

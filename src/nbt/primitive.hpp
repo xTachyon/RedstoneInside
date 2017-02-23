@@ -4,6 +4,7 @@
 #include "basic.hpp"
 #include "serializer.hpp"
 #include "deserializer.hpp"
+#include "prettyprinter.hpp"
 
 namespace redi
 {
@@ -38,16 +39,16 @@ struct Primitive : public BasicTag<Primitive<T>>
     data = s.readNumber<T>();
   }
   
-  void toString(std::string& str) const override
+  void writePretty(PrettyPrint& p) const override
   {
-    str += std::to_string(data);
+    p.string += std::to_string(data);
   }
 };
 
 template <>
-inline void Primitive<std::int8_t>::toString(std::string& str) const
+inline void Primitive<std::int8_t>::writePretty(PrettyPrint& p) const
 {
-  str += std::to_string(static_cast<int>(data));
+  p.string += std::to_string(static_cast<int>(data));
 }
 
 template <typename T>

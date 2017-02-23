@@ -51,9 +51,10 @@ struct TagString : public BasicTag<TagString>
     data = s.readString();
   }
   
-  void toString(std::string& str) const override
+  void writePretty(PrettyPrint& p) const override
   {
-    str += data;
+    p.string += '\"';
+    p.string += data + '\"';
   }
 };
 

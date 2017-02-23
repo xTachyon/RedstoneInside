@@ -30,12 +30,13 @@ public:
   
   void pop_back() { data.pop_back(); }
   
-  std::size_t size() const { return data.size(); }
+  std::size_t size() const override { return data.size(); }
   bool empty() const { return data.empty(); }
   
   void write(Serializer& s) const override;
   void read(Deserializer& s) override;
   Type getListType() const;
+  void writePretty(PrettyPrint& p) const override;
   
 private:
   

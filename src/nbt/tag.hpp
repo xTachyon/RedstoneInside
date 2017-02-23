@@ -21,6 +21,7 @@ public:
   bool isScalar() const;
   bool isVector() const;
   bool isContainer() const;
+  virtual std::size_t size() const { return 1; }
   
   virtual Tag& assign(Tag&& tag) = 0;
   virtual Tag& assign(const Tag& tag) = 0;
@@ -33,10 +34,8 @@ public:
   virtual bool equals(const Tag&) const { return false; }
   
   virtual void write(Serializer&) const = 0;
-  virtual void read(Deserializer&) {}
-  
-  std::string toString() const;
-  virtual void toString(std::string&) const {}
+  virtual void read(Deserializer&) = 0;
+  virtual void writePretty(PrettyPrint&) const {}
 };
 
 

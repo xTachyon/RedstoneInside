@@ -37,6 +37,7 @@ struct Deserializer
   Type readType();
   void read(std::string& name, TagCompound& root);
   void read(TagCompound& root);
+  void read(RootTag& root);
   
   void need(std::size_t bytes);
 };

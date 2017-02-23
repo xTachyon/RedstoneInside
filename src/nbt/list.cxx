@@ -2,6 +2,7 @@
 #include "serializer.hpp"
 #include "deserializer.hpp"
 #include "creator.hpp"
+#include "prettyprinter.hpp"
 #include "list.hpp"
 
 namespace redi
@@ -52,6 +53,27 @@ void TagList::read(Deserializer& s)
       tag->read(s);
     }
     data.emplace_back(std::move(tag));
+  }
+}
+
+void TagList::writePretty(PrettyPrint& p) const
+{
+  PrettyPrint::Block b(p);
+  PrettyPrint::Indent i(p);
+  Type t = getListType();
+  
+  for (const auto& index : data)
+  {
+    p.writeNewline();
+    p.writeIndent();
+    
+    p.writeType(t);
+    if (index)
+    {
+      p.writeOne(index.get());
+    }
+    
+    index.writePretty(p);
   }
 }
   

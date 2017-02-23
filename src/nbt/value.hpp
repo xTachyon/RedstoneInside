@@ -49,10 +49,16 @@ public:
   Value& operator[](std::string&& key);
   Value& operator[](const char* key);
   
+  operator bool() const { return static_cast<bool>(data); }
+  
+  const Tag& get() const { return *data; }
+  Tag& get() { return *data; }
+  
   void assign(Tag&& tag);
   Type getType() const;
   static Type getType(const TagUniquePtr& ptr);
   void write(Serializer& s) const;
+  void writePretty(PrettyPrint& p) const;
   
 private:
   

@@ -87,6 +87,12 @@ TagUniquePtr create(Type t)
     ptr = std::make_unique<TagIntArray>();
   }
     break;
+
+  case Type::ShortArray:
+  {
+    ptr = std::make_unique<TagShortArray>();
+  }
+    break;
   }
   
   return ptr;

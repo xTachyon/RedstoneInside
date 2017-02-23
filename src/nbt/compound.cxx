@@ -42,7 +42,7 @@ void TagCompound::write(Serializer& s) const
   for (const auto& index : map)
   {
     Type t = index.second.getType();
-  
+    
     s.writeType(t);
     s.writeString(index.first);
     if (t != Type::End)
@@ -68,6 +68,28 @@ void TagCompound::read(Deserializer& s)
       tag->read(s);
     }
     map[std::move(name)] = std::move(tag);
+  }
+}
+
+void TagCompound::writePretty(PrettyPrint& p) const
+{
+  PrettyPrint::Block b(p);
+  PrettyPrint::Indent i(p);
+  
+  for (const auto& index : map)
+  {
+    p.writeNewline();
+    p.writeIndent();
+    
+    Type t = index.second.getType();
+    p.writeType(t, index.first);
+    
+    if (index.second)
+    {
+      p.writeOne(index.second.get());
+    }
+    
+    index.second.writePretty(p);
   }
 }
   

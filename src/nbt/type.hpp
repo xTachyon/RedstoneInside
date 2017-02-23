@@ -24,7 +24,8 @@ enum class Type : std::uint8_t
   String,
   List,
   Compound,
-  IntArray
+  IntArray,
+  ShortArray
 };
 
 const char* getNBTTypeName(Type type);
@@ -53,6 +54,9 @@ struct TypeToNumber<double> : public std::integral_constant<Type, Type::Double> 
 
 template <>
 struct TypeToNumber<Array<std::int8_t>> : public std::integral_constant<Type, Type::ByteArray> {};
+
+template <>
+struct TypeToNumber<Array<std::int16_t>>: public std::integral_constant<Type, Type::ShortArray> {};
 
 template <>
 struct TypeToNumber<Array<std::int32_t>> : public std::integral_constant<Type, Type::IntArray> {};

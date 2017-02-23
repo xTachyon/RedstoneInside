@@ -1,4 +1,5 @@
 #include "compound.hpp"
+#include "roottag.hpp"
 #include "deserializer.hpp"
 
 namespace redi
@@ -62,6 +63,11 @@ void Deserializer::read(TagCompound& root)
 {
   std::string name;
   read(name, root);
+}
+
+void Deserializer::read(RootTag& root)
+{
+  read(root.name, root);
 }
   
 } // namespace nbt

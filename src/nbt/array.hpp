@@ -15,7 +15,7 @@ struct Array : public BasicTag<Array<T>>
   
   using reference = typename VectorType::reference;
   using const_reference = typename VectorType::const_reference;
-
+  
   static constexpr Type type = TypeToNumber<Array<T>>::value;
   
   std::vector<T> data;
@@ -99,7 +99,7 @@ struct Array : public BasicTag<Array<T>>
     return data.back();
   }
   
-  std::size_t size() const { return data.size(); }
+  std::size_t size() const override { return data.size(); }
   
   void write(Serializer& s) const override
   {
@@ -120,9 +120,43 @@ struct Array : public BasicTag<Array<T>>
       data.emplace_back(s.readNumber<T>());
     }
   }
+  
+  void writePretty(PrettyPrint& p) const override
+  {
+    Type t = BasicTag<Array<T>>::getType();
+    const char* str;
+    
+    if (t == Type::ByteArray)
+    {
+      str = "byte";
+    }
+    else if (t == Type::ShortArray)
+    {
+      str = "short";
+    }
+    else if (t == Type::IntArray)
+    {
+      str = "int";
+    }
+    else
+    {
+      throw "If this is happen, something went terribly wrong";
+    }
+    
+    // Why isn't boost.format working here ?
+    // error: use of undeclared identifier 'abi'
+    p.string += '[' + std::to_string(size()) + ' ';
+    p.string += str;
+    if (size() != 1)
+    {
+      p.string += 's';
+    }
+    p.string += ']';
+  }
 };
 
 using TagByteArray = Array<std::int8_t>;
+using TagShortArray = Array<std::int16_t>;
 using TagIntArray = Array<std::int32_t>;
   
 } // namespace nbt

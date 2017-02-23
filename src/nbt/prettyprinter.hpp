@@ -16,8 +16,43 @@ struct PrettyPrint
   
   void writeEntry(std::size_t size);
   void writeVectorSize(std::size_t size, const char* name);
-  void writeType(Type t, const std::string& name = "");
-  void writeIndent();
+  void writeType(Type t, const std::string& name);
+  void writeType(Type t);
+  void writeIndent(std::int32_t i = 0);
+  void writeNewline(std::int32_t i = 0);
+  void writeBeggining();
+  void writeEnding();
+  void writeOne(const Tag& tag);
+  
+  struct Block
+  {
+    PrettyPrint& pr;
+    
+    Block(PrettyPrint& pr) : pr(pr)
+    {
+      pr.writeBeggining();
+    }
+    
+    ~Block()
+    {
+      pr.writeEnding();
+    }
+  };
+  
+  struct Indent
+  {
+    PrettyPrint& pr;
+    
+    Indent(PrettyPrint& pr) : pr(pr)
+    {
+      pr.writeIndent(2);
+    }
+    
+    ~Indent()
+    {
+      pr.writeIndent(-2);
+    }
+  };
 };
 
 } // namespace nbt

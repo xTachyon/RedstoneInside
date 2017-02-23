@@ -4,6 +4,7 @@
 #include <map>
 #include "basic.hpp"
 #include "value.hpp"
+#include "prettyprinter.hpp"
 
 namespace redi
 {
@@ -34,6 +35,8 @@ public:
   TagCompound(TagCompound&&) = default;
   TagCompound(std::initializer_list<value_type> list);
   
+  virtual ~TagCompound() {}
+  
   TagCompound& operator=(const TagCompound&);
   TagCompound& operator=(TagCompound&&) = default;
   
@@ -44,7 +47,7 @@ public:
   const Value& at(const std::string& key) const { return map.at(key); }
   
   void clear() { map.clear(); }
-  std::size_t size() const { return map.size(); }
+  std::size_t size() const override { return map.size(); }
   bool empty() const { return map.empty(); }
   void swap(TagCompound& other) { map.swap(other.map); }
   
@@ -72,6 +75,7 @@ public:
   
   void write(Serializer& s) const override;
   void read(Deserializer& s) override;
+  virtual void writePretty(PrettyPrint& p) const override;
   
 private:
   

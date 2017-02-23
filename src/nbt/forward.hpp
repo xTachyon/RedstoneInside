@@ -32,9 +32,11 @@ using TagIntArray = Array<std::int32_t>;
 struct TagString;
 class TagCompound;
 class TagList;
+struct RootTag;
 
 struct Serializer;
 struct Deserializer;
+struct PrettyPrint;
 class Value;
 
 } // namespace nbt
