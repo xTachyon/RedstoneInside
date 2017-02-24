@@ -15,30 +15,30 @@ template <typename T>
 struct Primitive : public BasicTag<Primitive<T>>
 {
   static constexpr Type type = TypeToNumber<T>::value;
-  
+
   T data;
-  
+
   Primitive(T value = 0) : data(value) {}
-  
+
   Primitive& operator=(T value)
   {
     data = value;
     return *this;
   }
-  
+
   operator T&() { return data; }
   operator T() const { return data; }
-  
+
   void write(Serializer& s) const override
   {
     s.writeNumber(data);
   }
-  
+
   void read(Deserializer& s) override
   {
     data = s.readNumber<T>();
   }
-  
+
   void writePretty(PrettyPrint& p) const override
   {
     p.string += std::to_string(data);
@@ -55,6 +55,7 @@ template <typename T>
 std::ostream& operator<<(std::ostream& stream, const Primitive<T>& obj)
 {
   stream << obj.toString();
+  return stream;
 }
 
 using TagByte = Primitive<std::int8_t>;
@@ -63,7 +64,7 @@ using TagInt = Primitive<std::int32_t>;
 using TagLong = Primitive<std::int64_t>;
 using TagFloat = Primitive<float>;
 using TagDouble = Primitive<double>;
-  
+
 } // namespace nbt
 } // namespace redi
 
