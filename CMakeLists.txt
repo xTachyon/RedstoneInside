@@ -49,6 +49,8 @@ set(SOURCE_FILES
         src/util/file.hpp
         src/util/maths.cxx
         src/util/maths.hpp
+        src/world/memoryregion.cxx
+        src/world/memoryregion.hpp
         src/util/random.hpp
         src/util/string.hpp
         src/util/time.cxx
