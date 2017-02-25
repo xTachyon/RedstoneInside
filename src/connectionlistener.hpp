@@ -1,6 +1,7 @@
 #ifndef REDI_CONNECTIONLISTENER
 #define REDI_CONNECTIONLISTENER
 
+#include <atomic>
 #include <thread>
 #include <boost/asio.hpp>
 
