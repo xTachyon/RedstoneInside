@@ -1,3 +1,4 @@
+#include <boost/format.hpp>
 #include "unloadchunk.hpp"
 #include "../../../packetwriter.hpp"
 #include "../../../../logger.hpp"

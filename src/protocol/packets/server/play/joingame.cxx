@@ -1,3 +1,4 @@
+#include <boost/format.hpp>
 #include "joingame.hpp"
 #include "../../../packetwriter.hpp"
 #include "../../../../player.hpp"

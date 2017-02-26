@@ -66,7 +66,8 @@ private:
   using SessionList = std::list<std::shared_ptr<Session>>;
   using WorldList = std::list<World>;
   
-  boost::asio::io_service mIoService;
+  boost::asio::io_service networkIoService;
+  boost::asio::io_service workIoService;
   SessionList mStatusConnections;
   std::mutex mConnectedClientsMutex;
   ConnectionListenerSharedPtr mListener;
@@ -78,7 +79,6 @@ private:
   ChatManager mChatManager;
   EventManager mEventManager;
   RediCommands mRediCommands;
-  ThreadSafeQueue<PacketHandlerSharedPtr> mPacketHandlersToBe;
   lockfree::Queue<PacketHandlerSharedPtr> mPacketsToBeHandle;
   std::vector<std::thread> mAsioThreads;
   std::condition_variable mCondVar;

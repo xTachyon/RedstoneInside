@@ -36,8 +36,9 @@ private:
 
   ChunkColumns mBlocks;
   std::uint64_t mInhabitedTime;
-  std::unique_ptr<TerrainGenerator> mGenerator;
 };
+
+using ChunkUniquePtr = std::unique_ptr<Chunk>;
 
 } // namespace redi
 

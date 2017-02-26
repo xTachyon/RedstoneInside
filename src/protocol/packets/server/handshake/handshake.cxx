@@ -1,3 +1,4 @@
+#include <boost/format.hpp>
 #include "handshake.hpp"
 #include "../../../../logger.hpp"
 #include "../../../packetwriter.hpp"

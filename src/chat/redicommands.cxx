@@ -1,4 +1,5 @@
 #include <functional>
+#include <boost/format.hpp>
 #include "../server.hpp"
 #include "commandmanager.hpp"
 #include "redicommands.hpp"

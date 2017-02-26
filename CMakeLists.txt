@@ -49,8 +49,6 @@ set(SOURCE_FILES
         src/util/file.hpp
         src/util/maths.cxx
         src/util/maths.hpp
-        src/world/memoryregion.cxx
-        src/world/memoryregion.hpp
         src/util/random.hpp
         src/util/string.hpp
         src/util/time.cxx
@@ -70,6 +68,8 @@ set(SOURCE_FILES
         src/world/chunkcolumn.hpp
         src/world/chunkmanager.cxx
         src/world/chunkmanager.hpp
+        src/world/memoryregion.cxx
+        src/world/memoryregion.hpp
         src/world/terraingenerator.cxx
         src/world/terraingenerator.hpp
         src/world/block.hpp
@@ -182,7 +182,7 @@ set(SOURCE_FILES
         src/nbt/value.cxx
         src/nbt/value.hpp
         src/nbt/tag.hpp
-        )
+        src/world/chunkdeseriazer.cxx src/world/chunkdeseriazer.hpp)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

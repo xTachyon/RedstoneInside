@@ -19,7 +19,7 @@ struct ChunkColumn
   ChunkColumn(Biome b = Biome::Ocean) : biome(b) {}
   
   Block& operator[](std::int32_t y) { return blocks[y]; }
-  Block operator[](std::int32_t y) const { return blocks[y]; }
+  const Block& operator[](std::int32_t y) const { return blocks[y]; }
 };
 
   

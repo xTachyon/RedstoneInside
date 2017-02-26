@@ -1,4 +1,5 @@
 #include <boost/program_options/parsers.hpp>
+#include <boost/format.hpp>
 #include "commandmanager.hpp"
 #include "../logger.hpp"
 

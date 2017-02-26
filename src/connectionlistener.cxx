@@ -1,5 +1,6 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
+#include <boost/format.hpp>
 #include "connectionlistener.hpp"
 #include "logger.hpp"
 #include "server.hpp"

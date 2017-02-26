@@ -93,8 +93,22 @@ void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& er
   }
   else
   {
-    ptr->mPacketHandler->readRaw(ptr->mReceivingPacket);
-    ptr->mServer.addPacket(ptr->mPacketHandler);
+    try
+    {
+      ptr->mPacketHandler->readRaw(ptr->mReceivingPacket);
+      ptr->mServer.addPacket(ptr->mPacketHandler);
+    }
+    catch (std::exception& e)
+    {
+      if (ptr->mPlayer)
+      {
+        ptr->mPlayer->kick(e.what());
+      }
+      else
+      {
+        ptr->disconnect();
+      }
+    }
     ptr->readNext();
   }
 }

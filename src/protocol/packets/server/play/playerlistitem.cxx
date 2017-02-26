@@ -1,3 +1,4 @@
+#include <boost/format.hpp>
 #include "playerlistitem.hpp"
 #include "../../../packetwriter.hpp"
 

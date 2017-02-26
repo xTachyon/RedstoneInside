@@ -1,3 +1,4 @@
+#include <boost/format.hpp>
 #include "spawnplayer.hpp"
 #include "../../../../player.hpp"
 #include "../../../packetwriter.hpp"

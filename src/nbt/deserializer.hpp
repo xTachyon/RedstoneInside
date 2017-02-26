@@ -3,8 +3,15 @@
 
 #include <boost/endian/conversion.hpp>
 #include "../bytebuffer.hpp"
-#include "../util/util.hpp"
+//#include "../util/util.hpp"
 #include "type.hpp"
+
+//#include "../util/base64.hpp"
+//#include "../util/file.hpp"
+#include "../util/string.hpp"
+//#include "../util/time.hpp"
+//#include "../util/maths.hpp"
+//#include "../util/random.hpp"
 
 namespace redi
 {

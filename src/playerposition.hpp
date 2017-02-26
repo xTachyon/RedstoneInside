@@ -4,6 +4,7 @@
 #include "util/util.hpp"
 #include "enums.hpp"
 #include "vectorn.hpp"
+#include "serverconfig.hpp"
 
 namespace redi
 {
@@ -24,7 +25,8 @@ struct PlayerLook
 
 inline std::ostream& operator<<(std::ostream& stream, const PlayerLook& obj)
 {
-  stream << boost::format("(%1%, %2%)") % obj.yaw % obj.pitch;
+//  stream << boost::format("(%1%, %2%)") % obj.yaw % obj.pitch;
+  stream << obj.yaw << ", " << obj.pitch;
   return stream;
 }
 

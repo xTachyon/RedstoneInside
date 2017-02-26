@@ -263,7 +263,7 @@ void Player::updateChunksNew()
 {
   static constexpr std::int32_t Range = 5;
   
-  ChunkManager& cm = mWorld->getChunkManager();
+  world::ChunkManager& cm = mWorld->getChunkManager();
   
   mChunksToBeLoaded.clear();
   

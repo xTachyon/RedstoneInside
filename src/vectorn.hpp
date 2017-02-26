@@ -1,10 +1,9 @@
-#ifndef REDI_POSITION
-#define REDI_POSITION
+#ifndef REDI_VECTORN_HPP
+#define REDI_VECTORN_HPP
 
 #include <cmath>
 #include <cstdint>
 #include <boost/format.hpp>
-#include "serverconfig.hpp"
 
 namespace redi
 {
@@ -44,7 +43,8 @@ struct Vector2
   
   std::string toString() const
   {
-    return (boost::format("(%1%, %2%)") % x % z).str();
+//    return (boost::format("(%1%, %2%)") % x % z).str();
+    return std::to_string(x) + ", " + std::to_string(z);
   }
   
   std::int64_t distanceSquared(const Vector2& r)
@@ -89,7 +89,8 @@ struct Vector3
   
   std::string toString() const
   {
-    return (boost::format("(%1%, %2%, %3%)") % x % y % z).str();
+//    return (boost::format("(%1%, %2%, %3%)") % x % y % z).str();
+    return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
   }
   
   std::int64_t distanceSquared(const Vector3& r)
@@ -120,4 +121,4 @@ using Vector3d = Vector3<double>;
   
 } // namespace redi
 
-#endif // REDI_POSITION
+#endif // REDI_VECTORN_HPP

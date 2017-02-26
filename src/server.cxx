@@ -11,20 +11,21 @@ namespace fs = boost::filesystem;
 namespace redi
 {
 
-Server::Server() : config("server.properties"), mListener(std::make_shared<ConnectionListener>(mIoService, static_cast<std::uint16_t>(config.port), *this)),
+Server::Server() : config("server.properties"), mListener(std::make_shared<ConnectionListener>(networkIoService, static_cast<std::uint16_t>(config.port), *this)),
                    mEntityCount(0), mOnlinePlayers(0), mCommandManager(*this), mChatManager(*this, mCommandManager), mEventManager(*this),
                    mRediCommands(mCommandManager), mUniqueLock(mCondVarMutex)
 {
-  
-  addWorld("world", "world/region");
   fs::create_directories("players");
+  fs::create_directories("worlds");
+  
+  addWorld("world", "worlds/world/region");
   
   mListener->listen();
   for (std::size_t i = 0; i < AsioThreadsNumber; ++i)
   {
     mAsioThreads.emplace_back([&]()
                               {
-                                mIoService.run();
+                                networkIoService.run();
                                 Logger::debug((boost::format("Asio thread id %1% stopped") % std::this_thread::get_id()).str());
                               });
     Logger::debug((boost::format("Asio thread id %1% started") % mAsioThreads[i].get_id()).str());
@@ -37,7 +38,7 @@ Server::~Server()
 {
   Logger::debug("Redi is stopping");
   
-  mIoService.stop();
+  networkIoService.stop();
   
   for (auto& index : mAsioThreads)
   {
@@ -91,7 +92,6 @@ void Server::run()
 
 void Server::addPacket(PacketHandlerSharedPtr ptr)
 {
-  mPacketHandlersToBe.push(ptr);
   mPacketsToBeHandle.push(ptr);
   mCondVar.notify_one();
 }

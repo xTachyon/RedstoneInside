@@ -1,9 +1,18 @@
+#include <boost/filesystem.hpp>
 #include "chunkmanager.hpp"
+
+namespace fs = boost::filesystem;
 
 namespace redi
 {
+namespace world
+{
 
-ChunkManager::ChunkManager(const std::string& regiondir, WorldGenerator generator) : mRegionDirectory(regiondir), mGenerator(generator) {}
+ChunkManager::ChunkManager(const std::string& regiondir, WorldGenerator generator)
+      : mRegionDirectory(regiondir + "/region"), mGenerator(generator)
+{
+  fs::create_directories(mRegionDirectory);
+}
 
 Block ChunkManager::operator()(Vector3i pos)
 {
@@ -35,5 +44,11 @@ const Chunk& ChunkManager::getChunk(Vector2i c)
   
   return mChunks[c];
 }
-  
+
+void ChunkManager::unloadRegion(const Vector2i& pos)
+{
+  regions.erase(pos);
+}
+
+} // namespace world
 } // namespace redi

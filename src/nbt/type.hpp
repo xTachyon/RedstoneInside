@@ -3,7 +3,6 @@
 
 #include <ostream>
 #include <type_traits>
-//#include <boost/format.hpp>
 #include "forward.hpp"
 
 namespace redi
