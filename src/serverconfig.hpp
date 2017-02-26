@@ -53,6 +53,7 @@ struct ServerConfig
   bool reducedDebugInfo;
   std::string iconb64;
   int port;
+  std::uint16_t rangeView;
 
   std::string configpath;
   std::string iconpath;

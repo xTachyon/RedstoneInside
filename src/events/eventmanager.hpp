@@ -25,6 +25,7 @@ public:
   void handlePlayerDisconnect(EventPlayerDisconnect& event);
   void handleSessionDisconnect(EventSessionDisconnect& event);
   void handleChatMessage(EventChatMessage& event);
+  void handleChunkLoaded(events::EventChunkLoaded& event);
   
 private:
   

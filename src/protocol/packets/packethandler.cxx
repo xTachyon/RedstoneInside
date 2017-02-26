@@ -206,6 +206,8 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
 //      idx.getProtocol().sendSpawnPlayerPacket(player);
     }
   }
+  
+  player.onUpdateChunks();
 }
 
 void PacketHandler::handleChatMessage(packets::ChatMessage& packet)

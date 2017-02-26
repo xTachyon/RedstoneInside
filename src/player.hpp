@@ -73,9 +73,10 @@ public:
   
   void normalizeRotation();
   
-  void updateChunksNew();
+//  void updateChunksNew();
   void onPositionChanged();
   void onChunkLoaded(world::ChunkHolder& chunk);
+  void onUpdateChunks();
   
   private:
   
@@ -87,8 +88,9 @@ public:
   
   std::vector<Player*> mEntitiesInSight;
   Vector2i mLastPositionWhenChunksWasSent;
-  std::set<Vector2i> mLoadedChunks;
-  std::set<Vector2i> mChunksToBeLoaded;
+//  std::set<Vector2i> mLoadedChunksOld;
+//  std::set<Vector2i> mChunksToBeLoadedOld;
+  std::list<world::ChunkHolder> loadedChunks;
   
   boost::uuids::uuid mUUID;
   std::string mNickname;

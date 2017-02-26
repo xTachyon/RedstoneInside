@@ -54,6 +54,7 @@ public:
   EventManager& getEventManager() { return mEventManager; }
   void closeServer(const std::string& reason);
   ChatManager& getChatManager() { return mChatManager; }
+  boost::asio::io_service& getWorkIO() { return workIoService; }
   
   static bool toAllPlayers(const Player&) { return true; }
   static bool toAllPlayersExcept(const Player& player, const Player& except);
@@ -68,6 +69,7 @@ private:
   
   boost::asio::io_service networkIoService;
   boost::asio::io_service workIoService;
+  boost::asio::io_service::work workIoServiceWork;
   SessionList mStatusConnections;
   std::mutex mConnectedClientsMutex;
   ConnectionListenerSharedPtr mListener;

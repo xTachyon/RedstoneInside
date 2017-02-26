@@ -44,6 +44,7 @@ public:
 
   static void createNewRegion(const std::string& filepath);
   static std::int32_t getChunkNumberInRegion(Vector2i other);
+  static Vector2i getRegionCoordsFromChunkCoords(const Vector2i& chcoords);
 
 private:
   

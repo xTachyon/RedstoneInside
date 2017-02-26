@@ -18,5 +18,10 @@ void Packet::send(Player& player)
 {
   send(player.getSession());
 }
+
+void Packet::send(SessionSharedPtr& session)
+{
+  send(*session);
+}
   
 } // namespace redi

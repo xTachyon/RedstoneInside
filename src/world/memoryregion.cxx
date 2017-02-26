@@ -7,18 +7,25 @@
 #include "chunkserializer.hpp"
 #include "../events/events.hpp"
 #include "../server.hpp"
+#include "../player.hpp"
 
 namespace redi
 {
 namespace world
 {
 
-MemoryRegion::MemoryRegion(ChunkManager& manager, boost::asio::io_service& io)
-      : workIO(io), manager(manager), strand(io), count(0) {}
+MemoryRegion::MemoryRegion(ChunkManager& manager, boost::asio::io_service& io,
+                           const Vector2i& coords)
+      : workIO(io), manager(manager),
+        regionCoordinates(coords), strand(io), count(0)
+{
+  region.open((boost::format("%1%/r.%2%.%3%.mca") % manager.getRegionDirectory()
+              % regionCoordinates.x % regionCoordinates.z).str());
+}
 
 void MemoryRegion::increaseCount(const Vector2i& v)
 {
-  assert(chunks.count(v));
+//  assert(chunks.count(v));
   ++chunks[v].second;
   ++count;
 }
@@ -35,12 +42,18 @@ void MemoryRegion::decreaseCount(const Vector2i& v)
   --count;
   if (count == 0)
   {
-    manager.unloadRegion(regionCoordinates);
+//    manager.unloadRegion(regionCoordinates);
+    // TODO: what happens when no chunk is used anymore ?
   }
 }
 
-void MemoryRegion::loadChunk(const Vector2i& coordinates, Player* player)
+void MemoryRegion::loadChunk(const Vector2i& coordinates, PlayerSharedPtr player)
 {
+  if (player)
+  {
+    playersWhoWants[coordinates].insert(player);
+  }
+  
   workIO.post(strand.wrap([me = shared_from_this(), coordinates]
   {
     me->readChunk(coordinates);
@@ -54,23 +67,23 @@ void MemoryRegion::unloadChunk(const Vector2i& v)
   ChunkUniquePtr ptr = std::move(chunks[v].first);
   chunks.erase(v);
   
-  workIO.post(strand.wrap([me = shared_from_this(), v, &ptr]
+  workIO.post(strand.wrap([me = shared_from_this(), v,
+        chunk = std::shared_ptr<Chunk>(std::move(ptr))]
   {
-    me->writeChunk(v, std::move(ptr));
+    me->writeChunk(v, std::move(*chunk));
   }));
 }
 
-void MemoryRegion::writeChunk(const Vector2i& l, const ChunkUniquePtr& chunk)
+void MemoryRegion::writeChunk(const Vector2i& l, const Chunk& chunk)
 {
   try
   {
     nbt::RootTag root;
     
-    ChunkSerializer(root, *chunk)();
+    ChunkSerializer(root, chunk)();
     
     ByteBuffer buffer;
     nbt::Serializer(buffer).write(root);
-    region.flush();
   
     region.writeChunk(l, buffer);
   }
@@ -78,28 +91,59 @@ void MemoryRegion::writeChunk(const Vector2i& l, const ChunkUniquePtr& chunk)
   {
     Logger::error(e.what());
   }
+  
+  region.flush();
 }
 
 void MemoryRegion::readChunk(const Vector2i& v)
 {
   try
   {
+    ChunkUniquePtr chunk = std::make_unique<Chunk>();
     ByteBuffer buffer = region.readChunk(v);
     
-    ChunkUniquePtr ptr = std::make_unique<Chunk>();
-    nbt::RootTag root;
-    
-    nbt::Deserializer(buffer).read(root);
-    ChunkDeserializer(*ptr, root)();
-    region.flush();
+    if (buffer.size() == 0)
+    {
+      manager.getWorldGenerator()->generate(*chunk);
+    }
+    else
+    {
+      nbt::RootTag root;
+  
+      nbt::Deserializer(buffer).read(root);
+      ChunkDeserializer(*chunk, root)();
+    }
   
     manager.getServer()
-          .addEvent(std::make_unique<events::EventChunkLoaded>(std::move(ptr), *this, v));
+          .addEvent(std::make_unique<events::EventChunkLoaded>(std::move(chunk), *this, v));
   }
   catch (std::exception& e)
   {
     Logger::error(e.what());
   }
+  
+  region.flush();
+}
+
+ChunkHolder MemoryRegion::addChunk(const Vector2i& coords, ChunkUniquePtr&& chunk)
+{
+  ChunksMapValueType pair(std::move(chunk), 0);
+  chunks[coords] = std::move(pair);
+  
+  ChunkHolder c(*this, coords);
+  return c;
+}
+
+void MemoryRegion::addChunkAndNotifyPlayers(const Vector2i& coords, ChunkUniquePtr&& chunk)
+{
+  ChunkHolder holder(static_cast<const ChunkHolder&>(addChunk(coords, std::move(chunk))));
+  
+  for (PlayerSharedPtr player : playersWhoWants[coords])
+  {
+    player->onChunkLoaded(holder);
+  }
+  
+  playersWhoWants.erase(coords);
 }
   
 } // namespace world

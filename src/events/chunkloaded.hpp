@@ -19,13 +19,6 @@ struct EventChunkLoaded : public Event
   EventChunkLoaded(ChunkUniquePtr&& chunk, world::MemoryRegion& region, const Vector2i& coords)
         : Event(EventType::ChunkLoaded), chunk(std::move(chunk)), region(region), coordinates(coords) {}
   
-  void informPlayers()
-  {
-//    for (PlayerSharedPtr& player : players)
-//    {
-//      player->onChunkLoaded(chunk);
-//    }
-  }
 };
 
 } // namespace events

@@ -45,7 +45,7 @@ ByteBuffer AnvilRegion::readChunk(Vector2i ch)
   std::int32_t chunknumber = getChunkNumberInRegion(ch);
   ChunkInfo& th = mChunks[chunknumber];
   
-  if (th.offset == 0) return result;
+  if (th.offset == 0) return ByteBuffer();
   
   mFile.seekg(th.offset * SectorSize);
   mFile.read(reinterpret_cast<char*>(&result[0]), ChunkHeaderSize);
@@ -231,6 +231,21 @@ void AnvilRegion::saveHeader()
   
   mFile.seekp(0, mFile.beg);
   mFile.write(reinterpret_cast<const char*>(buffer), buf.size());
+}
+
+Vector2i AnvilRegion::getRegionCoordsFromChunkCoords(const Vector2i& chcoords)
+{
+  Vector2i x(chcoords.x / 32, chcoords.z / 32);
+  if (chcoords.x < 0)
+  {
+    --x.x;
+  }
+  if (chcoords.z < 0)
+  {
+    --x.z;
+  }
+  
+  return x;
 }
   
 } // namespace world

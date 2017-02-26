@@ -12,6 +12,7 @@ namespace redi
 class PacketHandler;
 class Player;
 class Session;
+using SessionSharedPtr = std::shared_ptr<Session>;
 
 struct Packet
 {
@@ -29,6 +30,7 @@ struct Packet
   }
   
   void send(Session& session);
+  void send(SessionSharedPtr& session);
   void send(Player& player);
 };
 

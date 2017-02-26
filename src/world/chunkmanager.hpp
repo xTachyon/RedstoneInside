@@ -22,16 +22,22 @@ public:
   ChunkManager(Server& server, const std::string& regiondir, WorldGenerator generator);
   
   Block operator()(Vector3i pos);
+  ChunkHolder operator()(const Vector2i& coords) const;
   const Chunk& getChunk(Vector2i pos);
   
-  void loadChunk(Vector2i pos);
+  void loadChunk(const Vector2i& pos, PlayerSharedPtr player = nullptr);
   void unloadRegion(const Vector2i& pos);
+  bool isChunkLoaded(const Vector2i& coords) const;
   
   Server& getServer() { return server; }
+  const std::string& getRegionDirectory() const { return mRegionDirectory; }
   
-private:
+  WorldGenerator& getWorldGenerator() { return mGenerator; }
+  
+  private:
   
   Server& server;
+  boost::asio::io_service& workIO;
   std::map<Vector2i, world::MemoryRegionSharedPtr> regions;
   std::map<Vector2i, world::AnvilRegion> mRegions;
   std::map<Vector2i, Chunk> mChunks;

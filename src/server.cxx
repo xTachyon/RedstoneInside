@@ -11,14 +11,16 @@ namespace fs = boost::filesystem;
 namespace redi
 {
 
-Server::Server() : config("server.properties"), mListener(std::make_shared<ConnectionListener>(networkIoService, static_cast<std::uint16_t>(config.port), *this)),
-                   mEntityCount(0), mOnlinePlayers(0), mCommandManager(*this), mChatManager(*this, mCommandManager), mEventManager(*this),
+Server::Server() : config("server.properties"), workIoServiceWork(workIoService),
+                   mListener(std::make_shared<ConnectionListener>(networkIoService, static_cast<std::uint16_t>(config.port), *this)),
+                   mEntityCount(0), mOnlinePlayers(0), mCommandManager(*this),
+                   mChatManager(*this, mCommandManager), mEventManager(*this),
                    mRediCommands(mCommandManager), mUniqueLock(mCondVarMutex)
 {
   fs::create_directories("players");
   fs::create_directories("worlds");
   
-  addWorld("world", "worlds/world/region");
+  addWorld("world", "worlds/world");
   
   mListener->listen();
   for (std::size_t i = 0; i < AsioThreadsNumber; ++i)
@@ -26,9 +28,19 @@ Server::Server() : config("server.properties"), mListener(std::make_shared<Conne
     mAsioThreads.emplace_back([&]()
                               {
                                 networkIoService.run();
-                                Logger::debug((boost::format("Asio thread id %1% stopped") % std::this_thread::get_id()).str());
+                                Logger::debug((boost::format("Asio network thread id %1% stopped") % std::this_thread::get_id()).str());
                               });
-    Logger::debug((boost::format("Asio thread id %1% started") % mAsioThreads[i].get_id()).str());
+    Logger::debug((boost::format("Asio network thread id %1% started") % mAsioThreads[i].get_id()).str());
+  }
+  
+  for (std::size_t i = 0; i < 1; ++i)
+  {
+    mAsioThreads.emplace_back([&]()
+                              {
+                                workIoService.run();
+                                Logger::debug((boost::format("Asio work thread id %1% stopped") % std::this_thread::get_id()).str());
+                              });
+    Logger::debug((boost::format("Asio work thread id %1% started") % mAsioThreads[i].get_id()).str());
   }
   
   Logger::info("Redi has started");
@@ -39,6 +51,7 @@ Server::~Server()
   Logger::debug("Redi is stopping");
   
   networkIoService.stop();
+  workIoService.stop();
   
   for (auto& index : mAsioThreads)
   {

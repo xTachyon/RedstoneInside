@@ -26,6 +26,7 @@ public:
   void addPlayer(Player& player);
   void deletePlayer(Player& player);
   
+  Server& getServer() { return server; }
   const std::string& getWorldName() const { return mWorldName; }
   std::int64_t getWorldTime() const { return worldTime; }
   

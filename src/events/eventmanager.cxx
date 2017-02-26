@@ -52,30 +52,16 @@ void EventManager::operator()()
     case EventType::SessionDisconnect:
       handleSessionDisconnect(e->get<EventSessionDisconnect>());
       break;
-//
-//    case EventType::SendKeepAliveRing:
-//      handleSendKeepAliveRing(e->get<EventSendKeepAliveRing>());
-//      break;
-//
+    
     case EventType::ChatMessage:
       handleChatMessage(e->get<EventChatMessage>());
       break;
-//
-//    case EventType::StatusRequest:
-//      handleStatusRequest(e->get<EventStatusRequest>());
-//      break;
-//
-//    case EventType::PlayerPosition:
-//      handlePlayerPosition(e->get<EventPlayerPosition>());
-//      break;
-//
-//    case EventType::PlayerLook:
-//      handlePlayerLook(e->get<EventPlayerLook>());
-//      break;
-//
-//    case EventType::PlayerPositionAndLook:
-//      handlePlayerPositionAndLook(e->get<EventPlayerPositionAndLook>());
-//      break;
+    
+    case EventType::ChunkLoaded:
+    {
+      handleChunkLoaded(e->get<events::EventChunkLoaded>());
+    }
+      break;
     
     default:
       break;
@@ -93,7 +79,7 @@ void EventManager::handlePlayerJoin(EventPlayerJoin&) {}
 void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event)
 {
   Player& player = event.player;
-
+  
   player.getWorld().deletePlayer(player);
   // First remove the player from the world
   // so we won't SIGSEGV when deferencing it after deleting
@@ -115,6 +101,11 @@ void EventManager::handleSessionDisconnect(EventSessionDisconnect& event)
 void EventManager::handleChatMessage(EventChatMessage& event)
 {
   mServer.mChatManager(event);
+}
+
+void EventManager::handleChunkLoaded(events::EventChunkLoaded& event)
+{
+  event.region.addChunkAndNotifyPlayers(event.coordinates, std::move(event.chunk));
 }
   
 } // namespace redi

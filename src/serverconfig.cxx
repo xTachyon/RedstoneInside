@@ -37,7 +37,8 @@ void ServerConfig::readConfig()
         ("level-type", po::value<std::string>(&levelType)->default_value("default"), "Level type")
         ("difficulty", po::value<int>(&diff)->default_value(0), "Difficulty")
         ("server-icon", po::value<std::string>(&iconpath)->default_value("icon.png"), "Server icon path")
-        ("port", po::value<int>(&port)->default_value(25565), "Port");
+        ("port", po::value<int>(&port)->default_value(25565), "Port")
+        ("rangeview", po::value<std::uint16_t>(&rangeView)->default_value(5), "Range view");
 
   po::variables_map vm;
   std::ifstream file(configpath);
@@ -86,6 +87,7 @@ void ServerConfig::writeConfig()
   root.put("level-type", levelType);
   root.put("port", port);
   root.put("server-icon", "icon.png");
+  root.put("rangeview", rangeView);
 
   write_ini(configpath, root);
 }
