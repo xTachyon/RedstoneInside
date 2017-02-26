@@ -43,7 +43,7 @@ public:
   void run();
   void addPacket(PacketHandlerSharedPtr ptr);
   
-  void addEvent(EventSharedPtr ptr);
+  void addEvent(EventUniquePtr&& ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
   std::int32_t getOnlinePlayersNumber() const { return mOnlinePlayers; }
   PlayerList& getOnlinePlayers() { return mPlayers; }

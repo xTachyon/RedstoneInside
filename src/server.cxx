@@ -96,15 +96,15 @@ void Server::addPacket(PacketHandlerSharedPtr ptr)
   mCondVar.notify_one();
 }
 
-void Server::addEvent(EventSharedPtr ptr)
+void Server::addEvent(EventUniquePtr&& ptr)
 {
-  mEventManager.addEvent(ptr);
+  mEventManager.addEvent(std::move(ptr));
   mCondVar.notify_one();
 }
 
 void Server::addWorld(const std::string& worldname, const std::string& worlddir)
 {
-  mWorlds.emplace_back(worldname, worlddir, std::make_shared<TerrainGenerator>());
+  mWorlds.emplace_back(*this, worldname, worlddir, std::make_shared<TerrainGenerator>());
 }
 
 void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp)

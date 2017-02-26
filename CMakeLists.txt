@@ -73,6 +73,10 @@ set(SOURCE_FILES
         src/world/terraingenerator.cxx
         src/world/terraingenerator.hpp
         src/world/block.hpp
+        src/world/chunkdeseriazer.cxx
+        src/world/chunkdeseriazer.hpp
+        src/world/chunkserializer.cxx
+        src/world/chunkserializer.hpp
 
         src/protocol/chunkserializer13.hpp
         src/protocol/packetreader.cxx
@@ -144,6 +148,7 @@ set(SOURCE_FILES
         src/events/statusrequest.hpp
         src/events/tick.hpp
         src/events/chatmessage.hpp
+        src/events/chunkloaded.hpp
 
         src/chat/chatmanager.hpp
         src/chat/commandmanager.cxx
@@ -182,7 +187,7 @@ set(SOURCE_FILES
         src/nbt/value.cxx
         src/nbt/value.hpp
         src/nbt/tag.hpp
-        src/world/chunkdeseriazer.cxx src/world/chunkdeseriazer.hpp)
+        )
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

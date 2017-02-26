@@ -7,9 +7,9 @@ namespace fs = boost::filesystem;
 namespace redi
 {
 
-World::World(const std::string& worldname, const std::string& worlddir, WorldGenerator ptr, Dimension dim)
-  : mWorldName(worldname), mDirectory(worlddir), mGenerator(ptr),
-    mChunkManager(mDirectory, redi::WorldGenerator()),
+World::World(Server& server, const std::string& worldname, const std::string& worlddir, WorldGenerator ptr, Dimension dim)
+  : server(server), mWorldName(worldname), mDirectory(worlddir), mGenerator(ptr),
+    mChunkManager(server, mDirectory, redi::WorldGenerator()),
     mDimension(dim), worldTime(8000)
 {
   fs::create_directories(mDirectory);

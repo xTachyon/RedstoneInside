@@ -187,7 +187,7 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
   packets::TimeUpdate(player.getWorld()).send(mSession);
   player.timersNext();
   
-  mServer.addEvent(std::make_shared<EventPlayerJoin>(mSession, std::move(packet.username)));
+  mServer.addEvent(std::make_unique<EventPlayerJoin>(mSession, std::move(packet.username)));
 
   for (PlayerSharedPtr& idx : mServer.mPlayers)
   {
@@ -210,7 +210,7 @@ void PacketHandler::handleLoginStart(LoginStart& packet)
 
 void PacketHandler::handleChatMessage(packets::ChatMessage& packet)
 {
-  mServer.addEvent(std::make_shared<EventChatMessage>(mSession.getPlayer(), std::move(packet.message)));
+  mServer.addEvent(std::make_unique<EventChatMessage>(mSession.getPlayer(), std::move(packet.message)));
 }
 
 void PacketHandler::handlePlayerPositionAndLook(packets::PlayerPositionAndLook& packet)

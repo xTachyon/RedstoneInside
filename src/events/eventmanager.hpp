@@ -20,7 +20,7 @@ public:
   
   void operator()();
   
-  void addEvent(EventSharedPtr ptr);
+  void addEvent(EventUniquePtr&& ptr);
   void handlePlayerJoin(EventPlayerJoin& event);
   void handlePlayerDisconnect(EventPlayerDisconnect& event);
   void handleSessionDisconnect(EventSessionDisconnect& event);
@@ -28,7 +28,7 @@ public:
   
 private:
   
-  ThreadSafeQueue<EventSharedPtr> mEvents;
+  ThreadSafeQueue<EventUniquePtr> mEvents;
   Server& mServer;
 };
   

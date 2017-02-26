@@ -127,10 +127,10 @@ void Session::disconnect()
     mIsDisconnecting = true;
     if (mPlayer) mPlayer->disconnect();
   
-    EventSharedPtr ptr;
-    if (mPlayer == nullptr) ptr = std::make_shared<EventSessionDisconnect>(*this);
-    else ptr = std::make_shared<EventPlayerDisconnect>(*mPlayer);
-    mServer.addEvent(ptr);
+    EventUniquePtr ptr;
+    if (mPlayer == nullptr) ptr = std::make_unique<EventSessionDisconnect>(*this);
+    else ptr = std::make_unique<EventPlayerDisconnect>(*mPlayer);
+    mServer.addEvent(std::move(ptr));
   }
 }
 

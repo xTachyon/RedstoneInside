@@ -12,11 +12,10 @@ namespace world
 
 struct ChunkDeserializer
 {
-  const ByteBuffer& buffer;
   const Chunk& chunk;
-//  nbt::RootTag root;
+  nbt::RootTag& root;
 
-  ChunkDeserializer(const ByteBuffer& buffer, const Chunk& chunk);
+  ChunkDeserializer(const Chunk& chunk, nbt::RootTag& root);
 
   void operator()();
 };

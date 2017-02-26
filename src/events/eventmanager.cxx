@@ -17,7 +17,7 @@ void EventManager::operator()()
 {
   while (!mEvents.empty())
   {
-    EventSharedPtr e = mEvents.pop();
+    EventUniquePtr e = mEvents.pop();
     if (!e) continue;
     
     switch (e->getType())
@@ -83,9 +83,9 @@ void EventManager::operator()()
   }
 }
 
-void EventManager::addEvent(EventSharedPtr ptr)
+void EventManager::addEvent(EventUniquePtr&& ptr)
 {
-  mEvents.push(ptr);
+  mEvents.push(std::move(ptr));
 }
 
 void EventManager::handlePlayerJoin(EventPlayerJoin&) {}

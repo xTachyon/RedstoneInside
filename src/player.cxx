@@ -314,5 +314,10 @@ void Player::onPositionChanged()
     updateChunksNew();
   }
 }
+
+void Player::onChunkLoaded(world::ChunkHolder& chunk)
+{
+  
+}
   
 } // namespace red

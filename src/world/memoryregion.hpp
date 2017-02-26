@@ -31,6 +31,7 @@ public:
   void unloadChunk(const Vector2i& v);
   void loadChunk(const Vector2i& coordinates, Player* player);
   bool isLoaded(const Vector2i& coordinates) const { return chunks.count(coordinates) != 0; }
+  void addChunk();
   
 private:
   
@@ -54,7 +55,25 @@ using MemoryRegionSharedPtr = std::shared_ptr<MemoryRegion>;
 
 struct ChunkHolder
 {
-  const MemoryRegion& ref;
+  MemoryRegion& ref;
+  const Vector2i coords;
+  
+  ChunkHolder(MemoryRegion& ref, const Vector2i& coords)
+        : ref(ref), coords(coords)
+  {
+    ref.increaseCount(coords);
+  }
+  
+  ChunkHolder(const ChunkHolder& chunk) : ChunkHolder(chunk.ref, chunk.coords) {}
+  ChunkHolder(ChunkHolder&&) = delete;
+  
+  ChunkHolder& operator=(const ChunkHolder&) = delete;
+  ChunkHolder& operator=(ChunkHolder&&) = delete;
+  
+  ~ChunkHolder()
+  {
+    ref.decreaseCount(coords);
+  }
 };
 
 } // namespace world

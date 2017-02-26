@@ -9,6 +9,9 @@
 
 namespace redi
 {
+
+class Server;
+
 namespace world
 {
 
@@ -16,7 +19,7 @@ class ChunkManager
 {
 public:
   
-  ChunkManager(const std::string& regiondir, WorldGenerator generator);
+  ChunkManager(Server& server, const std::string& regiondir, WorldGenerator generator);
   
   Block operator()(Vector3i pos);
   const Chunk& getChunk(Vector2i pos);
@@ -24,8 +27,11 @@ public:
   void loadChunk(Vector2i pos);
   void unloadRegion(const Vector2i& pos);
   
+  Server& getServer() { return server; }
+  
 private:
   
+  Server& server;
   std::map<Vector2i, world::MemoryRegionSharedPtr> regions;
   std::map<Vector2i, world::AnvilRegion> mRegions;
   std::map<Vector2i, Chunk> mChunks;

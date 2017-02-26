@@ -12,5 +12,6 @@
 #include "playerlook.hpp"
 #include "playerposition.hpp"
 #include "playerpositionandlook.hpp"
+#include "chunkloaded.hpp"
 
 #endif // REDI_EVENTS_EVENTS_HPP

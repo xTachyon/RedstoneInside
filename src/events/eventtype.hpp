@@ -14,7 +14,11 @@ enum class EventType
   StatusRequest,
   PlayerPosition,
   PlayerLook,
-  PlayerPositionAndLook
+  PlayerPositionAndLook,
+  ChunkLoaded,
+  ChunkUnloaded,
+  RegionLoaded,
+  RegionUnloaded
 };
 
 } // namespace redi

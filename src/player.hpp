@@ -10,6 +10,7 @@
 #include "session.hpp"
 #include "serverconfig.hpp"
 #include "playerposition.hpp"
+#include "world/memoryregion.hpp"
 
 namespace redi
 {
@@ -74,6 +75,7 @@ public:
   
   void updateChunksNew();
   void onPositionChanged();
+  void onChunkLoaded(world::ChunkHolder& chunk);
   
   private:
   

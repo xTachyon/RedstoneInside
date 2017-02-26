@@ -8,7 +8,7 @@ namespace redi
 
 struct Event
 {
-  const  EventType type;
+  const EventType type;
   
   Event(EventType type) : type(type) {}
   
@@ -27,7 +27,7 @@ struct Event
 
 inline Event::~Event() {}
 
-using EventSharedPtr = std::shared_ptr<Event>;
+using EventUniquePtr = std::unique_ptr<Event>;
 
 } // namespace redi
 

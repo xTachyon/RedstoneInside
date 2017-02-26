@@ -19,7 +19,7 @@ class World
 {
 public:
 
-  World(const std::string& worldname, const std::string& worlddir, WorldGenerator ptr, Dimension dim = Dimension::Overworld);
+  World(Server& server, const std::string& worldname, const std::string& worlddir, WorldGenerator ptr, Dimension dim = Dimension::Overworld);
   
   world::ChunkManager& getChunkManager() { return mChunkManager; }
   
@@ -31,6 +31,7 @@ public:
   
 private:
 
+  Server& server;
   std::string mWorldName;
   std::string mDirectory;
   WorldGenerator mGenerator;

@@ -8,8 +8,8 @@ namespace redi
 namespace world
 {
 
-ChunkManager::ChunkManager(const std::string& regiondir, WorldGenerator generator)
-      : mRegionDirectory(regiondir + "/region"), mGenerator(generator)
+ChunkManager::ChunkManager(Server& server, const std::string& regiondir, WorldGenerator generator)
+      : server(server), mRegionDirectory(regiondir + "/region"), mGenerator(generator)
 {
   fs::create_directories(mRegionDirectory);
 }

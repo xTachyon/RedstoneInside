@@ -1,5 +1,12 @@
 #include "memoryregion.hpp"
 #include "chunkmanager.hpp"
+#include "../logger.hpp"
+#include "../nbt/roottag.hpp"
+#include "../nbt/serializer.hpp"
+#include "chunkdeseriazer.hpp"
+#include "chunkserializer.hpp"
+#include "../events/events.hpp"
+#include "../server.hpp"
 
 namespace redi
 {
@@ -55,12 +62,44 @@ void MemoryRegion::unloadChunk(const Vector2i& v)
 
 void MemoryRegion::writeChunk(const Vector2i& l, const ChunkUniquePtr& chunk)
 {
+  try
+  {
+    nbt::RootTag root;
+    
+    ChunkSerializer(root, *chunk)();
+    
+    ByteBuffer buffer;
+    nbt::Serializer(buffer).write(root);
+    region.flush();
   
+    region.writeChunk(l, buffer);
+  }
+  catch (std::exception& e)
+  {
+    Logger::error(e.what());
+  }
 }
 
 void MemoryRegion::readChunk(const Vector2i& v)
 {
-  ChunkUniquePtr ptr = std::make_unique<Chunk>();
+  try
+  {
+    ByteBuffer buffer = region.readChunk(v);
+    
+    ChunkUniquePtr ptr = std::make_unique<Chunk>();
+    nbt::RootTag root;
+    
+    nbt::Deserializer(buffer).read(root);
+    ChunkDeserializer(*ptr, root)();
+    region.flush();
+  
+    manager.getServer()
+          .addEvent(std::make_unique<events::EventChunkLoaded>(std::move(ptr), *this, v));
+  }
+  catch (std::exception& e)
+  {
+    Logger::error(e.what());
+  }
 }
   
 } // namespace world
