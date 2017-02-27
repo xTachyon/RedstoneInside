@@ -52,7 +52,7 @@ public:
   std::string getUUIDasString() const { return boost::lexical_cast<std::string>(mUUID); }
   
   std::int32_t getEntityID() const { return mEntityID; }
-  std::size_t getNewTeleportID() { return mTeleportID++; }
+  std::int32_t getNewTeleportID() { return mTeleportID++; }
   
   void sendPacket(const ByteBuffer& packet);
   void sendPacket(ByteBuffer&& packet);
@@ -100,7 +100,7 @@ public:
   Gamemode mGamemode;
   PlayerPosition mPosition;
   boost::asio::steady_timer mSendKeepAliveTimer;
-  std::size_t mTeleportID;
+  std::int32_t mTeleportID;
   const std::int32_t mEntityID;
   std::atomic_bool mHasSavedToDisk;
   

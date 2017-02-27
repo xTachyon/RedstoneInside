@@ -259,48 +259,6 @@ void Player::onEntityMovedWithLook(PlayerPosition newpos)
   mEntitiesInSight = nextEntitiesInSight;
 }
 
-//void Player::updateChunksNew()
-//{
-//  static constexpr std::int32_t Range = 5;
-//
-//  world::ChunkManager& cm = mWorld->getChunkManager();
-//
-//  mChunksToBeLoadedOld.clear();
-//
-//  Vector2i playerchunk(static_cast<std::int32_t>(mPosition.x / 16), static_cast<std::int32_t>(mPosition.z / 16));
-//
-//  Vector2i start(playerchunk.x - Range, playerchunk.z - Range - 1);
-//  Vector2i end(playerchunk.x + Range + 1, playerchunk.z + Range);
-//
-//  for (std::int32_t x = start.x; x < end.x; ++x)
-//  {
-//    for (std::int32_t z = start.z; z < end.z; ++z)
-//    {
-//      Vector2i th(x, z);
-//      mChunksToBeLoadedOld.insert(th);
-//
-//      auto it = mLoadedChunksOld.find(th);
-//
-//      if (it == mLoadedChunksOld.end())
-//      {
-//        packets::ChunkData(cm.getChunk(th), th).send(*mSession);
-//      }
-//      else
-//      {
-//        mLoadedChunksOld.erase(it);
-//      }
-//    }
-//  }
-//
-//  for (auto& i : mLoadedChunksOld)
-//  {
-//    packets::UnloadChunk(i).send(*mSession);
-//  }
-//
-//  mLoadedChunksOld.swap(mChunksToBeLoadedOld);
-//  mLastPositionWhenChunksWasSent = mPosition.getChunkPosition();
-//}
-
 void Player::timersNext()
 {
   keepAliveNext();
@@ -308,8 +266,6 @@ void Player::timersNext()
 
 void Player::onPositionChanged()
 {
-//  auto x = Vector2i(static_cast<std::int32_t>(mPosition.x / 16), static_cast<std::int32_t>(mPosition.z / 16))
-//        .distanceSquared(mLastPositionWhenChunksWasSent);
   if (Vector2i(static_cast<std::int32_t>(mPosition.x / 16), static_cast<std::int32_t>(mPosition.z / 16))
             .distanceSquared(mLastPositionWhenChunksWasSent) > 1)
   {

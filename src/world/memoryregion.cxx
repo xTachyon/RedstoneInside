@@ -136,7 +136,7 @@ ChunkHolder MemoryRegion::addChunk(const Vector2i& coords, ChunkUniquePtr&& chun
 
 void MemoryRegion::addChunkAndNotifyPlayers(const Vector2i& coords, ChunkUniquePtr&& chunk)
 {
-  ChunkHolder holder(static_cast<const ChunkHolder&>(addChunk(coords, std::move(chunk))));
+  ChunkHolder holder(addChunk(coords, std::move(chunk)));
   
   for (PlayerSharedPtr player : playersWhoWants[coords])
   {

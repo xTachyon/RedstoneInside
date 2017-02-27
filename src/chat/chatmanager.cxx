@@ -45,7 +45,7 @@ void ChatManager::operator()(EventChatMessage& event)
 
 void ChatManager::operator()(const EventPlayerJoin& event)
 {
-  Player& player = event.session.getPlayer();
+  Player& player = event.session->getPlayer();
   std::string message((boost::format("%1% has joined the game") % player.getUsername()).str());
   Logger::info(message);
   broadcastJSONMessage(componentToJson(ChatComponent

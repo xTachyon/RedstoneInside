@@ -54,6 +54,11 @@ ByteBuffer AnvilRegion::readChunk(Vector2i ch)
   std::memcpy(&size, &result[0], sizeof(std::int32_t));
   endian::big_to_native_inplace(size);
   
+  if (size < 5)
+  {
+    return {};
+  }
+  
   result.resize(--size);
   std::uint8_t compressionFormat = result[4];
   mFile.read(reinterpret_cast<char*>(&result[0]), size);

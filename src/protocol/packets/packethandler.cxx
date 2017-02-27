@@ -155,59 +155,7 @@ void PacketHandler::handleStatusPing(Ping& packet)
 
 void PacketHandler::handleLoginStart(LoginStart& packet)
 {
-  mSession.mConnectionState = ConnectionState::Play;
-  
-  boost::uuids::uuid namesp = boost::lexical_cast<boost::uuids::uuid>("77e7c416-763c-4967-8291-6698b795e90a");
-  boost::uuids::name_generator gen(namesp);
-  boost::uuids::uuid uuid = gen(util::toLowercase(packet.username));
-  
-  for (SessionSharedPtr& s : mServer.mStatusConnections) // TODO: find a better way
-  {
-    if (*s == mSession)
-    {
-      mServer.mPlayers.emplace_back(std::make_shared<Player>(packet.username, uuid, std::move(s), mServer.getNewEntityID(), &mServer, &mServer.mWorlds.back()));
-      mServer.mStatusConnections.remove_if([](const SessionSharedPtr& par) -> bool
-                                           {
-                                             return !static_cast<bool>(par);
-                                           });
-      break;
-    }
-  }
-  Player& player = *mServer.mPlayers.back();
-  ++mServer.mOnlinePlayers;
-  
-  player.getSession().setPlayer(player);
-  player.getWorld().addPlayer(player);
-  
-  SetCompression(-1).send(mSession);
-  LoginSucces(player.getUUIDasString(), player.getUsername()).send(mSession);
-  JoinGame(&player).send(mSession);
-  SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
-  packets::PlayerPositionAndLook(player.getPosition(), player.getNewTeleportID()).send(mSession);
-  packets::TimeUpdate(player.getWorld()).send(mSession);
-  player.timersNext();
-  
-  mServer.addEvent(std::make_unique<EventPlayerJoin>(mSession, std::move(packet.username)));
-
-  for (PlayerSharedPtr& idx : mServer.mPlayers)
-  {
-    if (*idx == player)
-    {
-      for (PlayerSharedPtr& i : mServer.mPlayers)
-      {
-//        player.getProtocol().sendPlayerListItem(i, PlayerListItemAction::AddPlayer);
-        packets::PlayerListItem(*i, PlayerListItemAction::AddPlayer).send(player.getSession());
-      }
-    }
-    else
-    {
-      packets::PlayerListItem(player, PlayerListItemAction::AddPlayer).send(idx->getSession());
-//      idx.getProtocol().sendPlayerListItem(player, PlayerListItemAction::AddPlayer);
-//      idx.getProtocol().sendSpawnPlayerPacket(player);
-    }
-  }
-  
-  player.onUpdateChunks();
+  mServer.addEvent(std::make_unique<EventPlayerJoin>(mSession.shared_from_this(), std::move(packet.username)));
 }
 
 void PacketHandler::handleChatMessage(packets::ChatMessage& packet)

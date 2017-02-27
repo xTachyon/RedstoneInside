@@ -10,10 +10,10 @@ namespace redi
 
 struct EventPlayerJoin : public Event
 {
-  Session& session;
-  std::string nick;
+  SessionSharedPtr session;
+  std::string username;
   
-  EventPlayerJoin(Session& session, std::string&& nick) : Event(EventType::PlayerJoin),session(session), nick(std::move(nick)) {}
+  EventPlayerJoin(SessionSharedPtr session, std::string&& nick) : Event(EventType::PlayerJoin), session(session), username(std::move(nick)) {}
 };
 
 } // namespace redi

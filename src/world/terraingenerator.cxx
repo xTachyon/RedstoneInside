@@ -18,9 +18,9 @@ void TerrainGenerator::generate(Chunk& chunk)
         {
           chunk(x, y, z).type = BlockType::Bedrock;
         }
-        else if (y < 5)
+        else if (y < 2)
         {
-          chunk(x, y, z).type = static_cast<BlockType>(util::generateRandom(1, 217));
+          chunk(x, y, z).type = BlockType::GrassPath;
         }
       }
         

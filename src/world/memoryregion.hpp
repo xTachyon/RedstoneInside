@@ -64,7 +64,7 @@ using MemoryRegionSharedPtr = std::shared_ptr<MemoryRegion>;
 
 struct ChunkHolder
 {
-  
+  ChunkHolder() : ref(nullptr) {}
   
   ChunkHolder(MemoryRegion* ref, const Vector2i& coords)
         : ref(ref), coords(coords)
@@ -77,8 +77,11 @@ struct ChunkHolder
   
   ChunkHolder(const ChunkHolder& chunk) : ChunkHolder(chunk.ref, chunk.coords) {}
   
-  ChunkHolder(ChunkHolder&& chunk) : ChunkHolder(chunk.ref, chunk.coords)
+  ChunkHolder(ChunkHolder&& chunk)
   {
+    ref = chunk.ref;
+    coords = chunk.coords;
+    
     chunk.ref = nullptr;
   }
   
