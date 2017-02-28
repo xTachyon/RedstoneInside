@@ -134,7 +134,17 @@ void PacketHandler::handleOne()
     mPackets.pop_front();
   }
   
-  if (ptr) ptr->process(*this);
+  try
+  {
+    if (ptr)
+    {
+      ptr->process(*this);
+    }
+  }
+  catch (std::exception& e)
+  {
+    mSession.kick(e.what());
+  }
 }
 
 void PacketHandler::handleHandshake(Handshake& p)

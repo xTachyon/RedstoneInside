@@ -9,7 +9,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
   set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow")
 elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	set(warnings_level "/W4")
+	set(warnings_level "/W3")
   else()
     set(warnings_level "/W3")
   endif()

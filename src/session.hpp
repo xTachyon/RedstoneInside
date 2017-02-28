@@ -60,6 +60,7 @@ public:
   void setCompressionIsSent(bool b) { mSetCompressionIsSent = b; }
 
   void disconnect();
+  void kick(const std::string& message);
   
   bool isDisconnecting() const { return mIsDisconnecting; }
 

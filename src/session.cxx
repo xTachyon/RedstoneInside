@@ -6,6 +6,7 @@
 #include "logger.hpp"
 #include "protocol/packetreader.hpp"
 #include "server.hpp"
+#include "protocol/packets/server/play/disconnect.hpp"
 
 namespace asio = boost::asio;
 
@@ -132,6 +133,15 @@ void Session::disconnect()
     else ptr = std::make_unique<EventPlayerDisconnect>(*mPlayer);
     mServer.addEvent(std::move(ptr));
   }
+}
+
+void Session::kick(const std::string& message)
+{
+  packets::Disconnect(ChatManager::componentToJson(ChatComponent(
+    {
+      ChatMessagePart(std::move(message))
+    })), mConnectionState == ConnectionState::Play).send(*this);
+  disconnect();
 }
 
 void Session::setPlayer(Player& player)
