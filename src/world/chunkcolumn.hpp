@@ -22,7 +22,6 @@ struct ChunkColumn
   const Block& operator[](std::int32_t y) const { return blocks[y]; }
 };
 
-  
 } // namespace redi
 
 #endif // REDI_WORLD_CHUNKCOLUMN_HPP

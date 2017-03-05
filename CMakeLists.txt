@@ -16,6 +16,11 @@ elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set(warnings "${warnings_level} /EHsc -D_WIN32_WINNT=0x0501 -D_SCL_SECURE_NO_WARNINGS")
 endif()
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(warnings "${warnings} -fno-limit-debug-info")
+  message(STATUS "${warnings}")
+endif()
+
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
@@ -60,6 +65,8 @@ set(SOURCE_FILES
 
         src/world.cxx
         src/world.hpp
+        src/world/anvil.cxx
+        src/world/anvil.hpp
         src/world/anvilregion.cxx
         src/world/anvilregion.hpp
         src/world/biome.hpp
