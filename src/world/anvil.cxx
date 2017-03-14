@@ -88,8 +88,11 @@ void Anvil::openFile(const std::string& path)
 
 void Anvil::createNewRegionAndOpen(const std::string& filepath)
 {
-  openFile(filepath);
+  file.open(filepath, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
+  file.exceptions(std::ios::failbit | std::ios::badbit);
+//  openFile(filepath);
   flush();
+  file.close();
 }
 
 std::int32_t Anvil::getChunkNumberInRegion(const Vector2i& other)
@@ -247,13 +250,6 @@ Anvil::ChunkReadResult Anvil::readChunk(std::int32_t number, ByteBuffer& buffer)
   std::copy(buffer.data(), buffer.data() + sizeof(size), reinterpret_cast<std::uint8_t*>(&size));
   endian::big_to_native_inplace(size);
   
-  union
-  {
-    std::uint32_t i;
-    unsigned char c[sizeof(std::uint32_t)];
-  } jj;
-  jj.i = size;
-  
   if (size < 5)
   {
     Logger::error(std::to_string(size) + " bytes marked in chunk in Anvil.read. Expected at least 5");
@@ -295,7 +291,7 @@ void Anvil::writeChunk(std::int32_t number, const ByteBuffer& uncompresseddata)
     buffer.resize(5);
   }
   
-  compressor::compressZlib(uncompresseddata, buffer, compressor::CompressionLevel::BestCompression, 5);
+  compressor::compressZlib(uncompresseddata, buffer, compressor::CompressionLevel::BestCompression);
   std::size_t datasize = buffer.size();
   
   ChunkInfo info = getChunkInfo(number);
@@ -360,13 +356,6 @@ void Anvil::writeChunk(std::int32_t number, const ByteBuffer& uncompresseddata)
   
   {
     std::uint32_t x = endian::native_to_big(static_cast<std::uint32_t>(datasize - 4));
-    
-    union
-    {
-      std::uint32_t i;
-      char c[sizeof(std::uint32_t)];
-    } jj;
-    jj.i = x;
     
     auto ptr = reinterpret_cast<const std::uint8_t*>(&x);
     std::copy(ptr, ptr + sizeof(x), buffer.data());
