@@ -12,12 +12,24 @@ namespace world
 
 struct ChunkDeserializer
 {
-  const Chunk& chunk;
-  nbt::RootTag& root;
+  Chunk& chunk;
+  const nbt::TagCompound& root;
 
-  ChunkDeserializer(const Chunk& chunk, nbt::RootTag& root);
+  ChunkDeserializer(Chunk& chunk, const nbt::RootTag& root);
 
   void operator()();
+  
+private:
+  
+  void readMisc();
+  
+  void readSections();
+  void readSection(const nbt::TagCompound& section);
+  void readBlocks(const std::vector<std::int8_t>& buffer, std::int16_t yy);
+  void readAdd(const std::vector<std::int8_t>& buffer, std::int16_t yy);
+  void readData(const std::vector<std::int8_t>& buffer, std::int16_t yy);
+  void readBlockLight(const std::vector<std::int8_t>& buffer, std::int16_t yy);
+  void readSkyLight(const std::vector<std::int8_t>& buffer, std::int16_t yy);
 };
 
 } // namespace world

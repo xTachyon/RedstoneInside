@@ -91,6 +91,7 @@ void Anvil::createNewRegionAndOpen(const std::string& filepath)
   file.open(filepath, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
   file.exceptions(std::ios::failbit | std::ios::badbit);
 //  openFile(filepath);
+  std::fill(header.begin(), header.end(), 0);
   flush();
   file.close();
 }
@@ -236,7 +237,6 @@ Anvil::ChunkReadResult Anvil::readChunk(std::int32_t number, ByteBuffer& buffer)
   }
   
   buffer.resize(SectorSize * info.sectors);
-  auto a = info.offset * SectorSize;
   file.seekg(info.offset * SectorSize);
   file.read(buffer.as_char(), buffer.size());
   

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <array>
 #include <vector>
+#include <boost/filesystem.hpp>
 #include "../vectorn.hpp"
 #include "../sizeliteraloperators.hpp"
 #include "../bytebuffer.hpp"

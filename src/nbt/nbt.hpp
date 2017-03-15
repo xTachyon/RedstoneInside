@@ -10,6 +10,7 @@
 #include "value.hpp"
 #include "array.hpp"
 #include "roottag.hpp"
+#include "list.hpp"
 
 #include "serializer.hpp"
 #include "deserializer.hpp"

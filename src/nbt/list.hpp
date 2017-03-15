@@ -38,6 +38,8 @@ public:
   Type getListType() const;
   void writePretty(PrettyPrint& p) const override;
   
+  const std::vector<Value>& get() const { return data; }
+  
 private:
   
   std::vector<Value> data;

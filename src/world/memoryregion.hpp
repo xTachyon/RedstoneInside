@@ -6,6 +6,7 @@
 #include <boost/asio.hpp>
 #include "anvilregion.hpp"
 #include "chunk.hpp"
+#include "anvil.hpp"
 
 namespace redi
 {
@@ -46,7 +47,7 @@ private:
   
   boost::asio::io_service& workIO;
   ChunkManager& manager;
-  AnvilRegion region;
+  Anvil region;
   Vector2i regionCoordinates;
   boost::asio::io_service::strand strand;
   std::map<Vector2i, ChunksMapValueType> chunks;

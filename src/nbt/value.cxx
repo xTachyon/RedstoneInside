@@ -2,6 +2,12 @@
 #include "string.hpp"
 #include "compound.hpp"
 #include "value.hpp"
+#include "basic.hpp"
+#include "primitive.hpp"
+#include "string.hpp"
+#include "compound.hpp"
+#include "list.hpp"
+#include "array.hpp"
 
 namespace redi
 {
@@ -169,14 +175,6 @@ Type Value::getType(const TagUniquePtr& ptr)
   return ptr ? ptr->getType() : Type::End;
 }
 
-void Value::throwIfNot(Type type)
-{
-  if (getType() != type)
-  {
-    throw std::bad_cast();
-  }
-}
-
 void Value::write(Serializer& s) const
 {
   data->write(s);
@@ -192,6 +190,168 @@ void Value::writePretty(PrettyPrint& p) const
   {
     p.string += "null";
   }
+}
+
+void Value::throwIfNot(Type type) const
+{
+  if (getType() != type)
+  {
+    throw std::bad_cast();
+  }
+}
+
+void Value::throwIfNullOrIsNot(Type type) const
+{
+  if (!data)
+  {
+    throw std::runtime_error("Tag is null");
+  }
+  
+  throwIfNot(type);
+}
+
+std::int8_t& Value::getByte()
+{
+  throwIfNot(Type::Byte);
+  return static_cast<TagByte&>(*data).data;
+}
+
+std::int16_t& Value::getShort()
+{
+  throwIfNot(Type::Short);
+  return static_cast<TagShort&>(*data).data;
+}
+
+std::int32_t& Value::getInt()
+{
+  throwIfNot(Type::Int);
+  return static_cast<TagInt&>(*data).data;
+}
+
+std::int64_t& Value::getLong()
+{
+  throwIfNot(Type::Long);
+  return static_cast<TagLong&>(*data).data;
+}
+
+float& Value::getFloat()
+{
+  throwIfNot(Type::Float);
+  return static_cast<TagFloat&>(*data).data;
+}
+
+double& Value::getDouble()
+{
+  throwIfNot(Type::Double);
+  return static_cast<TagDouble&>(*data).data;
+}
+
+std::vector<std::int8_t>& Value::getByteArray()
+{
+  throwIfNot(Type::ByteArray);
+  return static_cast<TagByteArray&>(*data).data;
+}
+
+std::string& Value::getString()
+{
+  throwIfNot(Type::String);
+  return static_cast<TagString&>(*data).data;
+}
+
+TagList& Value::getList()
+{
+  throwIfNot(Type::List);
+  return static_cast<TagList&>(*data);
+}
+
+TagCompound& Value::getCompound()
+{
+  throwIfNot(Type::Compound);
+  return static_cast<TagCompound&>(*data);
+}
+
+std::vector<std::int32_t>& Value::getIntArray()
+{
+  throwIfNot(Type::IntArray);
+  return static_cast<TagIntArray&>(*data).data;
+}
+
+std::vector<std::int16_t>& Value::getShortArray()
+{
+  throwIfNot(Type::ShortArray);
+  return static_cast<TagShortArray&>(*data).data;
+}
+
+const std::int8_t& Value::getByte() const
+{
+  throwIfNot(Type::Byte);
+  return static_cast<const TagByte&>(*data).data;
+}
+
+const std::int16_t& Value::getShort() const
+{
+  throwIfNot(Type::Short);
+  return static_cast<const TagShort&>(*data).data;
+}
+
+const std::int32_t& Value::getInt() const
+{
+  throwIfNot(Type::Int);
+  return static_cast<const TagInt&>(*data).data;
+}
+
+const std::int64_t& Value::getLong() const
+{
+  throwIfNot(Type::Long);
+  return static_cast<const TagLong&>(*data).data;
+}
+
+const float& Value::getFloat() const
+{
+  throwIfNot(Type::Float);
+  return static_cast<const TagFloat&>(*data).data;
+}
+
+const double& Value::getDouble() const
+{
+  throwIfNot(Type::Double);
+  return static_cast<const TagDouble&>(*data).data;
+}
+
+const std::vector<std::int8_t>& Value::getByteArray() const
+{
+  throwIfNot(Type::ByteArray);
+  return static_cast<const TagByteArray&>(*data).data;
+}
+
+const std::string& Value::getString() const
+{
+  throwIfNot(Type::String);
+  return static_cast<const TagString&>(*data).data;
+}
+
+const TagList& Value::getList() const
+{
+  throwIfNot(Type::List);
+  return static_cast<const TagList&>(*data);
+}
+
+const TagCompound& Value::getCompound() const
+{
+  throwIfNot(Type::Compound);
+  return static_cast<const TagCompound&>(*data);
+}
+
+const std::vector<std::int32_t>& Value::getIntArray() const
+{
+  throwIfNot(Type::IntArray);
+  return static_cast<const TagIntArray&>(*data).data;
+}
+
+const std::vector<std::int16_t>& Value::getShortArray() const
+{
+  throwIfNot(Type::ShortArray);
+  return static_cast<const TagShortArray&>(*data).data;
 }
   
 } // namespace nbt

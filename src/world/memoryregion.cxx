@@ -20,7 +20,7 @@ MemoryRegion::MemoryRegion(ChunkManager& manager, boost::asio::io_service& io,
         regionCoordinates(coords), strand(io), count(0)
 {
   region.open((boost::format("%1%/r.%2%.%3%.mca") % manager.getRegionDirectory()
-              % regionCoordinates.x % regionCoordinates.z).str());
+              % regionCoordinates.x % regionCoordinates.z).str(), coords);
 }
 
 void MemoryRegion::increaseCount(const Vector2i& v)
@@ -97,30 +97,46 @@ void MemoryRegion::writeChunk(const Vector2i& l, const Chunk& chunk)
 
 void MemoryRegion::readChunk(const Vector2i& v)
 {
+  ChunkUniquePtr chunk = std::make_unique<Chunk>();
+  
   try
   {
-    ChunkUniquePtr chunk = std::make_unique<Chunk>();
-    ByteBuffer buffer = region.readChunk(v);
+    ByteBuffer buffer;
     
-    if (buffer.size() == 0)
+    Anvil::ChunkReadResult result = region.readChunk(v, buffer);
+      
+    switch (result)
     {
-      manager.getWorldGenerator()->generate(*chunk);
-    }
-    else
+    case Anvil::ChunkReadResult::OK:
     {
       nbt::RootTag root;
   
       nbt::Deserializer(buffer).read(root);
       ChunkDeserializer(*chunk, root)();
     }
-  
-    manager.getServer()
-          .addEvent(std::make_unique<events::EventChunkLoaded>(std::move(chunk), *this, v));
+      break;
+      
+    case Anvil::ChunkReadResult::Error:
+    {
+      Logger::error("Error reading chunk " + v.toString());
+    }
+
+    case Anvil::ChunkReadResult::DoesntExists:
+    {
+      manager.getWorldGenerator()->generate(*chunk);
+    }
+      break;
+    }
+    
   }
   catch (std::exception& e)
   {
     Logger::error(e.what());
+    manager.getWorldGenerator()->generate(*chunk);
   }
+  
+  manager.getServer()
+        .addEvent(std::make_unique<events::EventChunkLoaded>(std::move(chunk), *this, v));
   
   region.flush();
 }

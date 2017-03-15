@@ -44,12 +44,22 @@ public:
   Value& operator[](std::string&& key);
   
   Value& at(const std::string& key) { return map.at(key); }
-  const Value& at(const std::string& key) const { return map.at(key); }
+  const Value& at(const std::string& key) const
+  {
+#ifdef REDI_DEBUG
+    if (!exists(key))
+    {
+      throw std::runtime_error("map.at(" + key + ')');
+    }
+ #endif
+    return map.at(key);
+  }
   
   void clear() { map.clear(); }
   std::size_t size() const override { return map.size(); }
   bool empty() const { return map.empty(); }
   void swap(TagCompound& other) { map.swap(other.map); }
+  bool exists(const std::string& key) const { return map.count(key) == 1; }
   
   template <typename ... Args>
   std::pair<iterator, bool> emplace(Args&&... args)

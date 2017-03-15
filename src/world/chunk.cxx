@@ -6,7 +6,7 @@
 namespace redi
 {
 
-Chunk::Chunk() : mBlocks(boost::extents[16][16]), mInhabitedTime(0)
+Chunk::Chunk() : blocks(boost::extents[16][16])
 {
 }
 
