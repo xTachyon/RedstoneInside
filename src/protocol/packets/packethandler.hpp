@@ -11,37 +11,33 @@
 #include "server/play/playerposition.hpp"
 #include "server/play/playerlook.hpp"
 
-namespace redi
-{
+namespace redi {
 
 class Server;
 class EventManager;
 
-class PacketHandler
-{
+class PacketHandler {
 public:
-  
   PacketHandler(Server& server, Session& session, EventManager& eventh);
-  
+
   void addPacket(PacketUniquePtr&& packet);
   void handleOne();
   void readRaw(ByteBuffer buffer);
-  
+
   void handleHandshake(Handshake& packet);
-  
+
   void handleStatusRequest(Request& packet);
   void handleStatusPing(Ping& packet);
-  
+
   void handleLoginStart(LoginStart& packet);
   void handleChatMessage(packets::ChatMessage& packet);
   void handlePlayerPositionAndLook(packets::PlayerPositionAndLook& packet);
   void handlePlayerPosition(packets::PlayerPosition& packet);
   void handlePlayerLook(packets::PlayerLook& packet);
-  
+
   Session& getSession() { return mSession; }
-  
+
 private:
-  
   Server& mServer;
   Session& mSession;
   std::deque<PacketUniquePtr> mPackets;
@@ -49,7 +45,7 @@ private:
 };
 
 using PacketHandlerSharedPtr = std::shared_ptr<PacketHandler>;
-  
+
 } // namespace redi
 
 #endif // REDI_PACKETHANDLER_HPP

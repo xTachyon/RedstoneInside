@@ -4,41 +4,35 @@
 #include <deque>
 #include <mutex>
 
-namespace redi
-{
+namespace redi {
 
 template <typename T>
-class ThreadSafeQueue
-{
+class ThreadSafeQueue {
 public:
-  
   ThreadSafeQueue() = default;
-  
-  void push(const T& obj)
-  {
+
+  void push(const T& obj) {
     std::lock_guard<std::mutex> l(mUtex);
     mData.push_back(obj);
   }
-  
-  void push(T&& obj)
-  {
+
+  void push(T&& obj) {
     std::lock_guard<std::mutex> l(mUtex);
     mData.push_back(std::move(obj));
   }
-  
-  T pop()
-  {
+
+  T pop() {
     std::lock_guard<std::mutex> l(mUtex);
-    if (mData.empty()) return {};
+    if (mData.empty())
+      return {};
     T ret(std::move(*mData.begin()));
     mData.pop_front();
     return ret;
   }
-  
+
   bool empty() const { return mData.empty(); }
-  
+
 private:
-  
   std::deque<T> mData;
   std::mutex mUtex;
 };

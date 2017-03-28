@@ -3,18 +3,15 @@
 #include "../../../../player.hpp"
 #include "../../../packetwriter.hpp"
 
-namespace redi
-{
-namespace packets
-{
+namespace redi {
+namespace packets {
 
 SpawnPlayer::SpawnPlayer(Player& player) : player(player) {}
 
-void SpawnPlayer::write(ByteBuffer& buffer)
-{
+void SpawnPlayer::write(ByteBuffer& buffer) {
   PacketWriter packet(buffer, SendID);
   auto position = player.getPosition();
-  
+
   packet.writeVarInt(player.getEntityID());
   packet.writeUUID(player.getUUID());
   packet.writeDouble(position.x);
@@ -24,6 +21,6 @@ void SpawnPlayer::write(ByteBuffer& buffer)
   packet.writeAngle(position.pitch);
   packet.writeUByte(0xFF);
 }
-  
+
 } // namespace packets
 } // namespace redi

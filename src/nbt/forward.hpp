@@ -3,10 +3,8 @@
 
 #include <cstdint>
 
-namespace redi
-{
-namespace nbt
-{
+namespace redi {
+namespace nbt {
 
 class Tag;
 

@@ -10,28 +10,26 @@
 #include "world/chunkmanager.hpp"
 #include "serverconfig.hpp"
 
-namespace redi
-{
+namespace redi {
 
 class Player;
 
-class World
-{
+class World {
 public:
+  World(Server& server, const std::string& worldname,
+        const std::string& worlddir, WorldGenerator ptr,
+        Dimension dim = Dimension::Overworld);
 
-  World(Server& server, const std::string& worldname, const std::string& worlddir, WorldGenerator ptr, Dimension dim = Dimension::Overworld);
-  
   world::ChunkManager& getChunkManager() { return mChunkManager; }
-  
+
   void addPlayer(Player& player);
   void deletePlayer(Player& player);
-  
+
   Server& getServer() { return server; }
   const std::string& getWorldName() const { return mWorldName; }
   std::int64_t getWorldTime() const { return worldTime; }
-  
-private:
 
+private:
   Server& server;
   std::string mWorldName;
   std::string mDirectory;
@@ -41,7 +39,7 @@ private:
   std::list<Player*> mPlayers;
   std::int64_t worldTime;
 };
-  
+
 } // namespace redi
 
 #endif // REDI_WORLD

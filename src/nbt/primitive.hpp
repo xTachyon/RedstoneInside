@@ -6,22 +6,18 @@
 #include "deserializer.hpp"
 #include "prettyprinter.hpp"
 
-namespace redi
-{
-namespace nbt
-{
+namespace redi {
+namespace nbt {
 
 template <typename T>
-struct Primitive : public BasicTag<Primitive<T>>
-{
+struct Primitive : public BasicTag<Primitive<T>> {
   static constexpr Type type = TypeToNumber<T>::value;
 
   T data;
 
   Primitive(T value = 0) : data(value) {}
 
-  Primitive& operator=(T value)
-  {
+  Primitive& operator=(T value) {
     data = value;
     return *this;
   }
@@ -29,31 +25,22 @@ struct Primitive : public BasicTag<Primitive<T>>
   operator T&() { return data; }
   operator T() const { return data; }
 
-  void write(Serializer& s) const override
-  {
-    s.writeNumber(data);
-  }
+  void write(Serializer& s) const override { s.writeNumber(data); }
 
-  void read(Deserializer& s) override
-  {
-    data = s.readNumber<T>();
-  }
+  void read(Deserializer& s) override { data = s.readNumber<T>(); }
 
-  void writePretty(PrettyPrint& p) const override
-  {
+  void writePretty(PrettyPrint& p) const override {
     p.string += std::to_string(data);
   }
 };
 
 template <>
-inline void Primitive<std::int8_t>::writePretty(PrettyPrint& p) const
-{
+inline void Primitive<std::int8_t>::writePretty(PrettyPrint& p) const {
   p.string += std::to_string(static_cast<int>(data));
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& stream, const Primitive<T>& obj)
-{
+std::ostream& operator<<(std::ostream& stream, const Primitive<T>& obj) {
   stream << obj.toString();
   return stream;
 }

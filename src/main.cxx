@@ -9,24 +9,20 @@
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;
 
-int main(int, char**)
-{
+int main(int, char**) {
   using namespace redi;
   using namespace redi::nbt;
   using namespace std::string_literals;
-  
+
   redi::Logger::debug("Redi is starting");
-  
-  try
-  {
+
+  try {
     redi::Server server;
     server.run();
-  }
-  catch (std::exception& e)
-  {
+  } catch (std::exception& e) {
     redi::Logger::error(e.what());
   }
-  
+
   redi::Logger::info("Redi has stopped");
 
   return 0;

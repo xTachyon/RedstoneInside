@@ -3,22 +3,19 @@
 
 #include "../../packet.hpp"
 
-namespace redi
-{
-namespace packets
-{
+namespace redi {
+namespace packets {
 
-struct KeepAlive : public Packet
-{
+struct KeepAlive : public Packet {
   static constexpr std::int32_t SendID = 0x1F;
-  
+
   std::int32_t keepAliveID;
-  
+
   KeepAlive(std::int32_t keepAliveID);
-  
+
   void write(ByteBuffer& buffer) override;
 };
-  
+
 } // namespace packets
 } // namespace redi
 

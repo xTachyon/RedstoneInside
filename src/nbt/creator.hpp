@@ -4,10 +4,8 @@
 #include "tag.hpp"
 #include "value.hpp"
 
-namespace redi
-{
-namespace nbt
-{
+namespace redi {
+namespace nbt {
 
 TagUniquePtr create(Type t);
 Value createValue(Type t);

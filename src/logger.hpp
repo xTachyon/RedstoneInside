@@ -1,5 +1,5 @@
 #ifndef REDI_LOGGER
-# define REDI_LOGGER
+#define REDI_LOGGER
 
 #include <deque>
 #include <fstream>
@@ -10,37 +10,26 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
 
-namespace redi
-{
+namespace redi {
 
-enum class LoggerLevel
-{
-  Debug,
-  Info,
-  Warn,
-  Error,
-  Fatal
-};
+enum class LoggerLevel { Debug, Info, Warn, Error, Fatal };
 
-class Logger
-{
+class Logger {
 public:
-
   Logger();
   ~Logger();
 
   template <typename T>
-  void write(const T& val, LoggerLevel level = LoggerLevel::Info)
-  {
+  void write(const T& val, LoggerLevel level = LoggerLevel::Info) {
     std::lock_guard<std::mutex> guard(mMutex);
     mSstream.str("");
     mSstream << val;
-    mQueue.push_back(std::make_tuple(mSstream.str(), boost::posix_time::second_clock::local_time(), level));
+    mQueue.push_back(std::make_tuple(
+        mSstream.str(), boost::posix_time::second_clock::local_time(), level));
   }
 
   template <typename T>
-  static void debug(const T& val)
-  {
+  static void debug(const T& val) {
     static_cast<void>(val);
 #ifdef REDI_DEBUG
     get().write(val, LoggerLevel::Debug);
@@ -48,47 +37,39 @@ public:
   }
 
   template <typename T>
-  static void debugSync(const T& val)
-  {
+  static void debugSync(const T& val) {
     static_cast<void>(val);
 #ifdef REDI_DEBUG
     std::cout << "DEBUGSYNC: " << val << '\n';
 #endif
   }
-  
-  static void info(const char* ptr)
-  {
-    get().write(ptr, LoggerLevel::Info);
-  }
-  
+
+  static void info(const char* ptr) { get().write(ptr, LoggerLevel::Info); }
+
   template <typename T>
-  static void info(const T& val)
-  {
+  static void info(const T& val) {
     get().write(val, LoggerLevel::Info);
   }
 
   template <typename T>
-  static void warn(const T& val)
-  {
+  static void warn(const T& val) {
     get().write(val, LoggerLevel::Warn);
   }
 
   template <typename T>
-  static void error(const T& val)
-  {
+  static void error(const T& val) {
     get().write(val, LoggerLevel::Error);
   }
 
   template <typename T>
-  static void fatal(const T& val)
-  {
+  static void fatal(const T& val) {
     get().write(val, LoggerLevel::Fatal);
   }
 
 private:
+  using Container = std::deque<
+      std::tuple<std::string, boost::posix_time::ptime, LoggerLevel>>;
 
-  using Container = std::deque<std::tuple<std::string, boost::posix_time::ptime, LoggerLevel>>;
-  
   Container mQueue;
   std::thread mThread;
   std::ofstream mFile;

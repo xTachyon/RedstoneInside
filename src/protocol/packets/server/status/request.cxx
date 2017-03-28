@@ -1,18 +1,13 @@
 #include "../../packethandler.hpp"
 #include "request.hpp"
 
-namespace redi
-{
+namespace redi {
 
-Request::Request(PacketReader& packet)
-{
-  read(packet);
-}
+Request::Request(PacketReader& packet) { read(packet); }
 
 void Request::read(PacketReader&) {}
 
-void Request::process(PacketHandler& handler)
-{
+void Request::process(PacketHandler& handler) {
   handler.handleStatusRequest(*this);
 }
 

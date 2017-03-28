@@ -11,8 +11,7 @@
 #include "protocol/packets/packethandler.hpp"
 #include "lockfree/queue.hpp"
 
-namespace redi
-{
+namespace redi {
 
 class Player;
 class Server;
@@ -21,10 +20,8 @@ class Session;
 using SessionUniquePtr = std::unique_ptr<Session>;
 using SessionSharedPtr = std::shared_ptr<Session>;
 
-class Session : public std::enable_shared_from_this<Session>
-{
+class Session : public std::enable_shared_from_this<Session> {
 public:
-
   friend class Server;
   friend class Player;
   friend class PacketHandler;
@@ -61,11 +58,10 @@ public:
 
   void disconnect();
   void kick(const std::string& message);
-  
+
   bool isDisconnecting() const { return mIsDisconnecting; }
 
 private:
-
   using PacketPtr = std::shared_ptr<ByteBuffer>;
   using PacketQueue = ThreadSafeQueue<PacketPtr>;
 
@@ -83,24 +79,21 @@ private:
   std::atomic_bool mIsDisconnecting;
   std::atomic_bool mIsWritting;
   lockfree::ByteBufferQueue mPacketsToBeSend;
-	boost::asio::io_service::strand mStrand;
-  
-  friend void sessionHandleRead(SessionSharedPtr ptr, const boost::system::error_code& error, bool header);
+  boost::asio::io_service::strand mStrand;
+
+  friend void sessionHandleRead(SessionSharedPtr ptr,
+                                const boost::system::error_code& error,
+                                bool header);
   void readNext();
-  friend void sessionHandleWrite(SessionSharedPtr ptr, const boost::system::error_code& error);
+  friend void sessionHandleWrite(SessionSharedPtr ptr,
+                                 const boost::system::error_code& error);
   void writeNext();
-	void postWrite();
+  void postWrite();
 };
 
-inline bool operator==(const Session& l, const Session& r)
-{
-  return &l == &r;
-}
+inline bool operator==(const Session& l, const Session& r) { return &l == &r; }
 
-inline bool operator!=(const Session& l, const Session& r)
-{
-  return !(l == r);
-}
+inline bool operator!=(const Session& l, const Session& r) { return !(l == r); }
 
 } // namespace redi
 

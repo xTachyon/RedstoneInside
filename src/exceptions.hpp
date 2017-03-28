@@ -3,17 +3,12 @@
 
 #include <stdexcept>
 
-namespace redi
-{
+namespace redi {
 
-struct StopServer : public std::exception
-{
-  virtual const char* what() const throw() override
-  {
-    return "Server stop";
-  }
+struct StopServer : public std::exception {
+  virtual const char* what() const throw() override { return "Server stop"; }
 };
-  
+
 } // namespace redi
 
-#endif //REDI_EXCEPTIONS_HPP
+#endif // REDI_EXCEPTIONS_HPP

@@ -3,24 +3,22 @@
 
 #include "eventtype.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct Event
-{
+struct Event {
   const EventType type;
-  
+
   Event(EventType type) : type(type) {}
-  
+
   virtual ~Event() = 0;
-  
+
   EventType getType() const { return type; }
-  
+
   template <typename T>
-  T& get()
-  {
+  T& get() {
     T* ptr = dynamic_cast<T*>(this);
-    if (ptr) return *ptr;
+    if (ptr)
+      return *ptr;
     throw std::runtime_error("Event dynamic cast failed");
   }
 };
@@ -31,4 +29,4 @@ using EventUniquePtr = std::unique_ptr<Event>;
 
 } // namespace redi
 
-#endif //REDI_EVENT_HPP
+#endif // REDI_EVENT_HPP

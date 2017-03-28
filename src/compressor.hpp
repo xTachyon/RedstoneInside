@@ -4,13 +4,10 @@
 #include <limits>
 #include "bytebuffer.hpp"
 
-namespace redi
-{
-namespace compressor
-{
+namespace redi {
+namespace compressor {
 
-enum class CompressionLevel
-{
+enum class CompressionLevel {
   /*
   * Not a very good idea
   * but I don't want to include
@@ -23,13 +20,21 @@ enum class CompressionLevel
   BestCompression = 9
 };
 
-ByteBuffer compressZlib(const ByteBuffer& data, CompressionLevel level = CompressionLevel::BestCompression);
-void compressZlib(const ByteBuffer& in, ByteBuffer& out, CompressionLevel level = CompressionLevel::BestCompression,
-                  std::size_t start = 0, std::size_t len = std::numeric_limits<std::size_t>::max());
-//ByteBuffer decompressZlib(const ByteBuffer& data);
-ByteBuffer decompressZlib(const ByteBuffer& data, std::size_t start = 0, std::size_t len = std::numeric_limits<std::size_t>::max());
+ByteBuffer
+compressZlib(const ByteBuffer& data,
+             CompressionLevel level = CompressionLevel::BestCompression);
+void compressZlib(const ByteBuffer& in, ByteBuffer& out,
+                  CompressionLevel level = CompressionLevel::BestCompression,
+                  std::size_t start = 0,
+                  std::size_t len = std::numeric_limits<std::size_t>::max());
+// ByteBuffer decompressZlib(const ByteBuffer& data);
+ByteBuffer
+decompressZlib(const ByteBuffer& data, std::size_t start = 0,
+               std::size_t len = std::numeric_limits<std::size_t>::max());
 
-ByteBuffer compressGzip(const ByteBuffer& data, CompressionLevel level = CompressionLevel::BestCompression);
+ByteBuffer
+compressGzip(const ByteBuffer& data,
+             CompressionLevel level = CompressionLevel::BestCompression);
 ByteBuffer decompressGzip(const ByteBuffer& data);
 
 } // namespace compressor

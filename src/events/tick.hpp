@@ -3,13 +3,10 @@
 
 #include "event.hpp"
 
-namespace redi
-{
-namespace events
-{
+namespace redi {
+namespace events {
 
-struct EventTick : public Event
-{
+struct EventTick : public Event {
   EventTick() = default;
 };
 

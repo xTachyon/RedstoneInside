@@ -1,11 +1,9 @@
 #ifndef REDI_EVENT_EVENTTYPE_HPP
 #define REDI_EVENT_EVENTTYPE_HPP
 
-namespace redi
-{
+namespace redi {
 
-enum class EventType
-{
+enum class EventType {
   PlayerJoin,
   PlayerDisconnect,
   SessionDisconnect,

@@ -6,20 +6,17 @@
 #include <boost/uuid/uuid.hpp>
 #include "../bytebuffer.hpp"
 
-namespace redi
-{
+namespace redi {
 
-class PacketWriter
-{
+class PacketWriter {
 public:
-  
   ByteBuffer& data;
-  
+
   PacketWriter(ByteBuffer& data, std::int32_t packetid);
   ~PacketWriter();
-  
-  operator ByteBuffer&&() { return std::move(data); }
-  
+
+  operator ByteBuffer &&() { return std::move(data); }
+
   void writeBool(bool v);
   void writeByte(std::int8_t v);
   void writeUByte(std::uint8_t v);
@@ -39,42 +36,38 @@ public:
   void writeUUID(boost::uuids::uuid uuid);
   void writeAngle(double angle);
   void commit(bool compressed = false);
-  
+
   template <typename T>
-  void writeVarInt(T number)
-  {
+  void writeVarInt(T number) {
     writeVarInt(static_cast<std::int32_t>(number));
   }
-  
+
   template <typename T>
-  void writeVarLong(T number)
-  {
+  void writeVarLong(T number) {
     writeVarLong(static_cast<std::int64_t>(number));
   }
-  
+
   template <typename T, typename K, typename L>
-  void writePosition(T x, K y, L z)
-  {
-    writePosition(static_cast<std::int64_t>(x), static_cast<std::int64_t>(y), static_cast<std::int64_t>(z));
+  void writePosition(T x, K y, L z) {
+    writePosition(static_cast<std::int64_t>(x), static_cast<std::int64_t>(y),
+                  static_cast<std::int64_t>(z));
   }
-  
+
 private:
-  
   PacketWriter() = default;
-  
+
   template <typename T>
-  void writeNumber(T number)
-  {
-    data.append(reinterpret_cast<const std::uint8_t*>(std::addressof(number)), sizeof(T));
+  void writeNumber(T number) {
+    data.append(reinterpret_cast<const std::uint8_t*>(std::addressof(number)),
+                sizeof(T));
   }
-  
+
   template <typename T>
-  void writeBNumber(T number)
-  {
+  void writeBNumber(T number) {
     writeNumber(boost::endian::native_to_big(number));
   }
 };
-  
+
 } // namespace redi
 
 #endif // #define REDI_PACKETWRITERNOCOPY_HPP

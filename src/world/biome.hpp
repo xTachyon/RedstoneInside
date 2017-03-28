@@ -3,11 +3,9 @@
 
 #include <cstdint>
 
-namespace redi
-{
+namespace redi {
 
-enum class Biome : std::uint8_t
-{
+enum class Biome : std::uint8_t {
   Ocean = 0,
   Plains = 1,
   Desert = 2,
@@ -71,7 +69,7 @@ enum class Biome : std::uint8_t
   MutatedMesaRock = 166,
   MutatedMesaClearRock = 167
 };
-  
+
 } // namespace redi
 
 #endif // REDI_WORLD_BIOME_HPP

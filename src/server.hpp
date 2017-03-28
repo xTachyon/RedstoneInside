@@ -14,59 +14,56 @@
 #include "chat/redicommands.hpp"
 #include "logger.hpp"
 
-namespace redi
-{
+namespace redi {
 
-class Server
-{
+class Server {
 public:
-  
   using PlayerList = std::list<PlayerSharedPtr>;
-  
+
   static constexpr std::size_t AsioThreadsNumber = 2;
   /*
    * Minimum 1
   */
-  
+
   ServerConfig config;
 
   Server();
   ~Server();
 
   std::int32_t getNewEntityID() { return mEntityCount++; }
-  void addConnectedSession(boost::asio::ip::tcp::socket&& socket)
-  {
+  void addConnectedSession(boost::asio::ip::tcp::socket&& socket) {
     std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mStatusConnections.emplace_back(std::make_shared<Session>(std::move(socket), *this));
+    mStatusConnections.emplace_back(
+        std::make_shared<Session>(std::move(socket), *this));
     mStatusConnections.back()->readNext();
   }
   void run();
   void addPacket(PacketHandlerSharedPtr ptr);
-  
+
   void addEvent(EventUniquePtr&& ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
   std::int32_t getOnlinePlayersNumber() const { return mOnlinePlayers; }
   PlayerList& getOnlinePlayers() { return mPlayers; }
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
-  void broadcastPacketToPlayers(ByteBufferSharedPtr ptr, std::function<bool(const Player&)> comp);
+  void broadcastPacketToPlayers(ByteBufferSharedPtr ptr,
+                                std::function<bool(const Player&)> comp);
   void sendMessage(const std::string& str) const { Logger::info(str); }
   Player* findPlayer(const std::string& name);
   EventManager& getEventManager() { return mEventManager; }
   void closeServer(const std::string& reason);
   ChatManager& getChatManager() { return mChatManager; }
   boost::asio::io_service& getWorkIO() { return workIoService; }
-  
+
   static bool toAllPlayers(const Player&) { return true; }
   static bool toAllPlayersExcept(const Player& player, const Player& except);
-  
+
 private:
-  
   friend class EventManager;
   friend class PacketHandler;
-  
+
   using SessionList = std::list<std::shared_ptr<Session>>;
   using WorldList = std::list<World>;
-  
+
   boost::asio::io_service networkIoService;
   boost::asio::io_service workIoService;
   boost::asio::io_service::work workIoServiceWork;
@@ -87,7 +84,7 @@ private:
   std::mutex mCondVarMutex;
   std::unique_lock<std::mutex> mUniqueLock;
 };
-  
+
 } // namespace redi
 
 #endif // REDI_SERVER

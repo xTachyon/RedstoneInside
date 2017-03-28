@@ -3,11 +3,9 @@
 
 #include <cstdint>
 
-namespace redi
-{
+namespace redi {
 
-enum class BlockType : std::uint16_t
-{
+enum class BlockType : std::uint16_t {
   Air = 0,
   Stone = 1,
   Grass = 2,
@@ -229,14 +227,14 @@ enum class BlockType : std::uint16_t
   StructureBlock = 255
 };
 
-struct Block
-{
+struct Block {
   BlockType type;
   std::uint8_t data;
   std::int8_t skylight;
   std::int8_t blocklight;
 
-  Block(BlockType type = BlockType::Air, std::uint8_t data = 0, std::int8_t skylight = 0, std::int8_t blocklight = 0)
+  Block(BlockType type = BlockType::Air, std::uint8_t data = 0,
+        std::int8_t skylight = 0, std::int8_t blocklight = 0)
       : type(type), data(data), skylight(skylight), blocklight(blocklight) {}
 };
 

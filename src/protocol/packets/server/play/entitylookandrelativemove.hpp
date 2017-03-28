@@ -3,15 +3,12 @@
 
 #include "../../packet.hpp"
 
-namespace redi
-{
-namespace packets
-{
+namespace redi {
+namespace packets {
 
-struct EntityLookAndRelativeMove : public Packet
-{
+struct EntityLookAndRelativeMove : public Packet {
   static constexpr std::int32_t SendID = 0x26;
-  
+
   std::int32_t EID;
   std::int16_t deltax;
   std::int16_t deltay;
@@ -19,15 +16,15 @@ struct EntityLookAndRelativeMove : public Packet
   float yaw;
   float pitch;
   bool onGround;
-  
-  EntityLookAndRelativeMove(std::int32_t EID = 0, std::int16_t deltax = 0, std::int16_t deltay = 0,
-                            std::int16_t deltaz = 0,
-                            float yaw = 0, float pitch = 0, bool onGround = true);
-  
- 
+
+  EntityLookAndRelativeMove(std::int32_t EID = 0, std::int16_t deltax = 0,
+                            std::int16_t deltay = 0, std::int16_t deltaz = 0,
+                            float yaw = 0, float pitch = 0,
+                            bool onGround = true);
+
   void write(ByteBuffer& buffer) override;
 };
-  
+
 } // namespace packets
 } // namespace redi
 

@@ -5,24 +5,20 @@
 #include "../nbt/nbt.hpp"
 #include "chunk.hpp"
 
-namespace redi
-{
-namespace world
-{
+namespace redi {
+namespace world {
 
-struct ChunkDeserializer
-{
+struct ChunkDeserializer {
   Chunk& chunk;
   const nbt::TagCompound& root;
 
   ChunkDeserializer(Chunk& chunk, const nbt::RootTag& root);
 
   void operator()();
-  
+
 private:
-  
   void readMisc();
-  
+
   void readSections();
   void readSection(const nbt::TagCompound& section);
   void readBlocks(const std::vector<std::int8_t>& buffer, std::int16_t yy);

@@ -3,14 +3,12 @@
 
 #include "../../packet.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct Request : public Packet
-{
+struct Request : public Packet {
   Request() = default;
   Request(PacketReader& packet);
-  
+
   void read(PacketReader& packet) override;
   virtual void process(PacketHandler& handler) override;
 };

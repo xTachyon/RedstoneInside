@@ -3,16 +3,15 @@
 
 #include "event.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct EventSessionDisconnect : public Event
-{
+struct EventSessionDisconnect : public Event {
   Session& session;
-  
-  EventSessionDisconnect(Session& s) : Event(EventType::SessionDisconnect), session(s) {}
+
+  EventSessionDisconnect(Session& s)
+      : Event(EventType::SessionDisconnect), session(s) {}
 };
-  
+
 } // namespace redi
 
 #endif // REDI_EVENTS_SESSIONDISCONNECTED_HPP

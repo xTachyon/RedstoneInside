@@ -4,21 +4,19 @@
 #include "../../packet.hpp"
 #include "../../../../vectorn.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct SpawnPosition : public Packet
-{
+struct SpawnPosition : public Packet {
   static constexpr std::int32_t SendID = 0x43;
-  
+
   Vector3i position;
-  
+
   SpawnPosition() = default;
   SpawnPosition(Vector3i position);
-  
+
   void write(ByteBuffer& buffer) override;
 };
-  
+
 } // namespace redi
 
 #endif // REDI_SPAWNPOSITION_HPP

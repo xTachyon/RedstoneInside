@@ -7,26 +7,22 @@
 #include "forward.hpp"
 #include "type.hpp"
 
-namespace redi
-{
-namespace nbt
-{
+namespace redi {
+namespace nbt {
 
-struct Serializer
-{
+struct Serializer {
   ByteBuffer& buffer;
-  
+
   Serializer(ByteBuffer& buffer);
-  
+
   ByteBuffer& operator()(const std::string& name, const TagCompound& root);
-  
+
   template <typename T>
-  void writeNumber(T x)
-  {
+  void writeNumber(T x) {
     boost::endian::native_to_big_inplace(x);
     buffer.append(x);
   }
-  
+
   void writeString(const std::string& str);
   void writeType(const Value& value);
   void writeType(Type type);
@@ -35,14 +31,12 @@ struct Serializer
 };
 
 template <>
-inline void Serializer::writeNumber<float>(float x)
-{
+inline void Serializer::writeNumber<float>(float x) {
   writeNumber(util::binaryTo<float, std::int32_t>(x));
 }
 
 template <>
-inline void Serializer::writeNumber<double>(double x)
-{
+inline void Serializer::writeNumber<double>(double x) {
   writeNumber(util::binaryTo<double, std::int64_t>(x));
 }
 

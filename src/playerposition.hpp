@@ -6,45 +6,42 @@
 #include "vectorn.hpp"
 #include "serverconfig.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct PlayerLook
-{
+struct PlayerLook {
   float yaw;
   float pitch;
-  
+
   PlayerLook(float yaw = 0.0f, float pitch = 0.0f) : yaw(yaw), pitch(pitch) {}
-  
-  void normalize()
-  {
+
+  void normalize() {
     yaw = static_cast<float>(util::normalizeAngleDegrees(yaw));
     pitch = static_cast<float>(util::normalizeAngleDegrees(pitch));
   }
 };
 
-inline std::ostream& operator<<(std::ostream& stream, const PlayerLook& obj)
-{
-//  stream << boost::format("(%1%, %2%)") % obj.yaw % obj.pitch;
+inline std::ostream& operator<<(std::ostream& stream, const PlayerLook& obj) {
+  //  stream << boost::format("(%1%, %2%)") % obj.yaw % obj.pitch;
   stream << obj.yaw << ", " << obj.pitch;
   return stream;
 }
 
-struct PlayerPosition : Vector3d, PlayerLook
-{
+struct PlayerPosition : Vector3d, PlayerLook {
   bool onGround;
   Dimension dimension;
-  
-  PlayerPosition(double x = 0.0, double y = 0.0, double z = 0.0, float yaw = 0.0f, float pitch = 0.0f, bool onGround = true, Dimension dimension = Dimension::Overworld)
-        : Vector3d(x, y, z), PlayerLook(yaw, pitch), onGround(onGround), dimension(dimension) {}
-  
-  Vector2i getChunkPosition() const
-  {
-    return Vector2i(static_cast<std::int32_t>(x / 16), static_cast<std::int32_t>(z / 16));
+
+  PlayerPosition(double x = 0.0, double y = 0.0, double z = 0.0,
+                 float yaw = 0.0f, float pitch = 0.0f, bool onGround = true,
+                 Dimension dimension = Dimension::Overworld)
+      : Vector3d(x, y, z), PlayerLook(yaw, pitch), onGround(onGround),
+        dimension(dimension) {}
+
+  Vector2i getChunkPosition() const {
+    return Vector2i(static_cast<std::int32_t>(x / 16),
+                    static_cast<std::int32_t>(z / 16));
   }
 };
 
 } // namespace redi
-
 
 #endif // REDI_PLAYERPOSITION_HPP

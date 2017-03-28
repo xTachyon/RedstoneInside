@@ -3,20 +3,18 @@
 
 #include "../../packet.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct Pong : public Packet
-{
+struct Pong : public Packet {
   static constexpr std::int32_t SendID = 0x01;
-  
+
   std::int64_t payload;
-  
+
   Pong(std::int64_t payload);
-  
+
   void write(ByteBuffer& buffer) override;
 };
-  
+
 } // namespace redi
 
 #endif // REDI_PONG_HPP

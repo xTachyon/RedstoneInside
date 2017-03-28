@@ -4,17 +4,15 @@
 #include "event.hpp"
 #include "../player.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct EventPlayerDisconnect : public Event
-{
+struct EventPlayerDisconnect : public Event {
   Player& player;
-  
-  EventPlayerDisconnect(Player& player) : Event(EventType::PlayerDisconnect), player(player) {}
-  
+
+  EventPlayerDisconnect(Player& player)
+      : Event(EventType::PlayerDisconnect), player(player) {}
 };
-  
+
 } // namespace redi
 
 #endif // REDI_EVENTS_PLAYERDISCONNECTED_HPP

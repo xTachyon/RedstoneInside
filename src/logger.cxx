@@ -6,32 +6,26 @@
 
 namespace fs = boost::filesystem;
 
-namespace redi
-{
+namespace redi {
 
-Logger::Logger()
-  : mStop(false)
-{
+Logger::Logger() : mStop(false) {
   fs::create_directories("logs");
   mFile.open("logs/latest.txt", std::ios::app);
   mThread = std::thread(&Logger::workingThread, this);
 }
 
-Logger::~Logger()
-{
+Logger::~Logger() {
   mStop = true;
   mThread.join();
 }
 
-void Logger::workingThread()
-{
+void Logger::workingThread() {
   using namespace std::chrono_literals;
 
   Container local;
   std::string result;
 
-  while (!mStop)
-  {
+  while (!mStop) {
     local.clear();
     {
       std::lock_guard<std::mutex> guard(mMutex);
@@ -45,26 +39,24 @@ void Logger::workingThread()
   run(mQueue, result);
 }
 
-void Logger::run(Container& cont, std::string& result)
-{
+void Logger::run(Container& cont, std::string& result) {
   result.clear();
 
   for (const auto& i : cont)
-    result += (boost::format("[%2% - %3%]: %1%\n") % std::get<0>(i) % std::get<1>(i) % getEnumName(std::get<2>(i))).str();
+    result += (boost::format("[%2% - %3%]: %1%\n") % std::get<0>(i) %
+               std::get<1>(i) % getEnumName(std::get<2>(i)))
+                  .str();
 
-  if (result.size() != 0)
-  {
+  if (result.size() != 0) {
     std::cout << result;
     mFile << result << std::flush;
   }
 }
 
-const char* Logger::getEnumName(LoggerLevel level)
-{
+const char* Logger::getEnumName(LoggerLevel level) {
   const char* ptr;
 
-  switch (level)
-  {
+  switch (level) {
   case LoggerLevel::Debug:
     ptr = "debug";
     break;
@@ -92,8 +84,7 @@ const char* Logger::getEnumName(LoggerLevel level)
   return ptr;
 }
 
-Logger& Logger::get()
-{
+Logger& Logger::get() {
   static Logger log;
   return log;
 }

@@ -8,27 +8,24 @@
 #include "../vectorn.hpp"
 #include "../bytebuffer.hpp"
 
-namespace redi
-{
-namespace world
-{
+namespace redi {
+namespace world {
 
-struct ChunkInfo
-{
+struct ChunkInfo {
   std::uint32_t offset, time;
   std::uint8_t sectors;
 
-  ChunkInfo(std::int32_t offset = 0, std::int32_t  time = 0, std::uint8_t sectors = 0)
+  ChunkInfo(std::int32_t offset = 0, std::int32_t time = 0,
+            std::uint8_t sectors = 0)
       : offset(offset), time(time), sectors(sectors) {}
 };
 
-class AnvilRegion
-{
+class AnvilRegion {
 public:
-
   static constexpr std::int32_t ChunksPerRegion = 1 << 10;
   static constexpr std::size_t HeaderSize = 8_KB;
-  static constexpr std::size_t SectorSize = 4_KB; // uhh, sectors. Earth is on Sector 2814
+  static constexpr std::size_t SectorSize =
+      4_KB; // uhh, sectors. Earth is on Sector 2814
   static constexpr std::size_t ChunkHeaderSize = 5;
 
   AnvilRegion() = default;
@@ -47,7 +44,6 @@ public:
   static Vector2i getRegionCoordsFromChunkCoords(const Vector2i& chcoords);
 
 private:
-  
   std::fstream mFile;
   std::vector<bool> mFreeSectors;
   std::array<ChunkInfo, ChunksPerRegion> mChunks;
@@ -59,6 +55,5 @@ private:
 
 } // namespace world
 } // namespace redi
-
 
 #endif // REDI_REGION

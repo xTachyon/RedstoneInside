@@ -3,13 +3,11 @@
 #include "response.hpp"
 #include "../../../packetwriter.hpp"
 
-namespace redi
-{
+namespace redi {
 
 Response::Response(Server& server) : server(server) {}
 
-void Response::write(ByteBuffer& buffer)
-{
+void Response::write(ByteBuffer& buffer) {
   const ServerConfig& config = server.config;
   nlohmann::json j;
 
@@ -19,10 +17,10 @@ void Response::write(ByteBuffer& buffer)
   j["players"]["max"] = config.maxPlayers;
   j["players"]["online"] = server.getOnlinePlayersNumber();
   j["players"]["sample"] = nlohmann::json::array();
-  if (config.iconb64.size() != 0) j["favicon"] = config.iconb64;
+  if (config.iconb64.size() != 0)
+    j["favicon"] = config.iconb64;
 
-  for (const auto& player: server.getOnlinePlayers())
-  {
+  for (const auto& player : server.getOnlinePlayers()) {
     nlohmann::json c;
 
     c["id"] = boost::lexical_cast<std::string>(player->getUUID());
@@ -32,7 +30,7 @@ void Response::write(ByteBuffer& buffer)
   }
 
   PacketWriter packet(buffer, SendID);
-  
+
   packet.writeString(j.dump());
 }
 

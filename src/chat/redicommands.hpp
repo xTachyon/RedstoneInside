@@ -5,18 +5,15 @@
 #include "commandmanager.hpp"
 #include "commandsender.hpp"
 
-namespace redi
-{
+namespace redi {
 
 class CommandManager;
 
-class RediCommands
-{
+class RediCommands {
 public:
-  
   RediCommands(CommandManager& manager);
   ~RediCommands();
-  
+
   static void positionCommand(CommandSender sender, CommandArguments& args);
   static void rotationCommand(CommandSender sender, CommandArguments& args);
   static void uuidCommand(CommandSender sender, CommandArguments& args);
@@ -24,9 +21,8 @@ public:
   void stopCommand(CommandSender sender, CommandArguments& args);
   void whisperCommand(CommandSender sender, CommandArguments& args);
   void kickCommand(CommandSender sender, CommandArguments& args);
-  
+
 private:
-  
   CommandManager& mCommandManager;
   std::vector<CommandListIterator> mIterators;
 };

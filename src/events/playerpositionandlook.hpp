@@ -6,18 +6,21 @@
 #include "../playerposition.hpp"
 #include "../vectorn.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct EventPlayerPositionAndLook : public Event, public Vector3d, public PlayerLook
-{
+struct EventPlayerPositionAndLook : public Event,
+                                    public Vector3d,
+                                    public PlayerLook {
   bool onGround;
   Player& player;
-  
-  EventPlayerPositionAndLook(Player& player, double x = 0.0, double y = 0.0, double z = 0.0, float yaw = 0.0f, float pitch = 0.0f, bool onGround = true)
-        : Event(EventType::PlayerPositionAndLook), Vector3d(x, y, z), PlayerLook(yaw, pitch), onGround(onGround), player(player) {}
+
+  EventPlayerPositionAndLook(Player& player, double x = 0.0, double y = 0.0,
+                             double z = 0.0, float yaw = 0.0f,
+                             float pitch = 0.0f, bool onGround = true)
+      : Event(EventType::PlayerPositionAndLook), Vector3d(x, y, z),
+        PlayerLook(yaw, pitch), onGround(onGround), player(player) {}
 };
-  
+
 } // namespace redi
 
-#endif //REDI_PLAYERPOSITIONANDLOOK_HPP
+#endif // REDI_PLAYERPOSITIONANDLOOK_HPP

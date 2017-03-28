@@ -4,25 +4,23 @@
 #include "../../packet.hpp"
 #include "../../../../playerposition.hpp"
 
-namespace redi
-{
-namespace packets
-{
+namespace redi {
+namespace packets {
 
-struct PlayerPosition : public Packet
-{
+struct PlayerPosition : public Packet {
   double x;
   double y;
   double z;
   bool onGround;
-  
+
   PlayerPosition(PacketReader& packet);
-  PlayerPosition(double x = 0.0, double y = 0.0, double z = 0.0, bool onGround = true);
-  
+  PlayerPosition(double x = 0.0, double y = 0.0, double z = 0.0,
+                 bool onGround = true);
+
   void read(PacketReader& packet) override;
   void process(PacketHandler& handler) override;
 };
-  
+
 } // namespace packets
 } // namespace redi
 

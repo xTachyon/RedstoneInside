@@ -9,30 +9,26 @@
 #include "events.hpp"
 #include "../protocol/packets/server/play/entitylookandrelativemove.hpp"
 
-namespace redi
-{
+namespace redi {
 
-class EventManager
-{
+class EventManager {
 public:
-  
   EventManager(Server& server);
-  
+
   void operator()();
-  
+
   void addEvent(EventUniquePtr&& ptr);
   void handlePlayerJoin(EventPlayerJoin& event);
   void handlePlayerDisconnect(EventPlayerDisconnect& event);
   void handleSessionDisconnect(EventSessionDisconnect& event);
   void handleChatMessage(EventChatMessage& event);
   void handleChunkLoaded(events::EventChunkLoaded& event);
-  
+
 private:
-  
   ThreadSafeQueue<EventUniquePtr> mEvents;
   Server& mServer;
 };
-  
+
 } // namespace redi
 
 #endif // REDI_EVENTS_EVENTMANAGER_HPP

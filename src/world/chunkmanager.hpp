@@ -7,33 +7,29 @@
 #include "chunk.hpp"
 #include "memoryregion.hpp"
 
-namespace redi
-{
+namespace redi {
 
 class Server;
 
-namespace world
-{
+namespace world {
 
-class ChunkManager
-{
+class ChunkManager {
 public:
-  
-  ChunkManager(Server& server, const std::string& regiondir, WorldGenerator generator);
-  
+  ChunkManager(Server& server, const std::string& regiondir,
+               WorldGenerator generator);
+
   ChunkHolder operator()(const Vector2i& coords) const;
-  
+
   void loadChunk(const Vector2i& pos, PlayerSharedPtr player = nullptr);
   void unloadRegion(const Vector2i& pos);
   bool isChunkLoaded(const Vector2i& coords) const;
-  
+
   Server& getServer() { return server; }
   const std::string& getRegionDirectory() const { return mRegionDirectory; }
-  
+
   WorldGenerator& getWorldGenerator() { return mGenerator; }
-  
-  private:
-  
+
+private:
   Server& server;
   boost::asio::io_service& workIO;
   std::map<Vector2i, world::MemoryRegionSharedPtr> regions;

@@ -6,29 +6,26 @@
 #include "../packetreader.hpp"
 #include "../../util/util.hpp"
 
-namespace redi
-{
+namespace redi {
 
 class PacketHandler;
 class Player;
 class Session;
 using SessionSharedPtr = std::shared_ptr<Session>;
 
-struct Packet
-{
+struct Packet {
   Packet() = default;
-  
+
   virtual ~Packet() = 0;
-  
+
   virtual void read(PacketReader&) {}
   virtual void write(ByteBuffer&) {}
   virtual void process(PacketHandler&) {}
-  
-  std::string getName() const
-  {
+
+  std::string getName() const {
     return util::demangleTypeName(typeid(*this).name());
   }
-  
+
   void send(Session& session);
   void send(SessionSharedPtr& session);
   void send(Player& player);

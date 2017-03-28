@@ -5,11 +5,9 @@
 #include <functional>
 #include <memory>
 
-namespace redi
-{
+namespace redi {
 
-enum class EventPriority : std::uint8_t
-{
+enum class EventPriority : std::uint8_t {
   Lowest,
   Low,
   Normal,

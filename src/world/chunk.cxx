@@ -3,11 +3,8 @@
 
 #include "../sizeliteraloperators.hpp"
 
-namespace redi
-{
+namespace redi {
 
-Chunk::Chunk() : blocks(boost::extents[16][16])
-{
-}
+Chunk::Chunk() : blocks(boost::extents[16][16]) {}
 
 } // namespace redi

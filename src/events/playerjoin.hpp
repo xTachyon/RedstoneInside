@@ -5,15 +5,15 @@
 #include "event.hpp"
 #include "../player.hpp"
 
-namespace redi
-{
+namespace redi {
 
-struct EventPlayerJoin : public Event
-{
+struct EventPlayerJoin : public Event {
   SessionSharedPtr session;
   std::string username;
-  
-  EventPlayerJoin(SessionSharedPtr session, std::string&& nick) : Event(EventType::PlayerJoin), session(session), username(std::move(nick)) {}
+
+  EventPlayerJoin(SessionSharedPtr session, std::string&& nick)
+      : Event(EventType::PlayerJoin), session(session),
+        username(std::move(nick)) {}
 };
 
 } // namespace redi
