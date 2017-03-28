@@ -194,7 +194,7 @@ set(SOURCE_FILES
         src/nbt/value.cxx
         src/nbt/value.hpp
         src/nbt/tag.hpp
-        )
+        src/datatypes.hpp src/checks.cxx)
 
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 

@@ -98,7 +98,8 @@ void Anvil::createNewRegionAndOpen(const std::string& filepath)
 
 std::int32_t Anvil::getChunkNumberInRegion(const Vector2i& other)
 {
-  return (other.x & 31) + (other.z & 31) * 32;
+  //return (other.x & 31) + (other.z & 31) * 32;
+//  return 4 * ((other.x & 31) + (other.z & 31) * 32);
 }
 
 Vector2i Anvil::getRegionCoordsFromChunkCoords(const Vector2i& chcoords)
@@ -229,6 +230,13 @@ void Anvil::writeChunk(const Vector2i& number, const ByteBuffer& uncompresseddat
 
 Anvil::ChunkReadResult Anvil::readChunk(std::int32_t number, ByteBuffer& buffer)
 {
+#ifdef REDI_DEBUG
+  if (!(0 <= number && number < 1024))
+  {
+    
+  }
+#endif
+  
   ChunkInfo info = getChunkInfo(number);
   
   if (info.offset == 0 || info.sectors == 0)
@@ -283,6 +291,13 @@ Anvil::ChunkReadResult Anvil::readChunk(std::int32_t number, ByteBuffer& buffer)
 void Anvil::writeChunk(std::int32_t number, const ByteBuffer& uncompresseddata)
 {
   constexpr std::size_t sizetmax = std::numeric_limits<std::size_t>::max();
+
+#ifdef REDI_DEBUG
+  if (!(0 <= number && number < 1024))
+  {
+    
+  }
+#endif
   
   ByteBuffer buffer;
   

@@ -25,7 +25,7 @@ struct Array : public BasicTag<Array<T>>
   Array(Array&&) = default;
   
   Array(const VectorType& other) : data(other.data) {}
-  Array(VectorType&& other) : data(std::move(other.data)) {}
+  Array(VectorType&& other) : data(std::move(other)) {}
   Array(std::size_t count) : data(count) {}
   Array(std::initializer_list<T> list) : data(list) {}
   
@@ -142,9 +142,7 @@ struct Array : public BasicTag<Array<T>>
     {
       throw "If this is happen, something went terribly wrong";
     }
-    
-    // Why isn't boost.format working here ?
-    // error: use of undeclared identifier 'abi'
+
     p.string += '[' + std::to_string(size()) + ' ';
     p.string += str;
     if (size() != 1)

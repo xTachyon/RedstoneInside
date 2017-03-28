@@ -1,6 +1,8 @@
 #ifndef REDI_LITERALOPERATORS
 #define REDI_LITERALOPERATORS
 
+#include <cstddef>
+
 namespace redi
 {
 

@@ -98,6 +98,7 @@ void MemoryRegion::writeChunk(const Vector2i& l, const Chunk& chunk)
 void MemoryRegion::readChunk(const Vector2i& v)
 {
   ChunkUniquePtr chunk = std::make_unique<Chunk>();
+  chunk->position = v;
   
   try
   {
