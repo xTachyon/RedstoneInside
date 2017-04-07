@@ -24,9 +24,10 @@ endif()
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${warnings}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 
+add_subdirectory(src)
+
 set(SOURCE_FILES
 
-        src/bytebuffer.cxx
         src/bytebuffer.hpp
         src/connectionlistener.cxx
         src/connectionlistener.hpp

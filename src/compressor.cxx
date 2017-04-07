@@ -42,7 +42,6 @@ void compressZlib(const ByteBuffer& in, ByteBuffer& out, CompressionLevel level,
 
 ByteBuffer decompressZlib(const ByteBuffer& data) {
   ByteBuffer result;
-
   {
     filtering_ostream os;
 

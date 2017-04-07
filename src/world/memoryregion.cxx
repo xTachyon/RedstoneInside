@@ -91,22 +91,24 @@ void MemoryRegion::readChunk(const Vector2i& v) {
 
     Anvil::ChunkReadResult result = region.readChunk(v, buffer);
 
-    switch (result) {
-    case Anvil::ChunkReadResult::OK: {
-      nbt::RootTag root;
+//    switch (result) {
+//    case Anvil::ChunkReadResult::OK: {
+//      nbt::RootTag root;
+//
+//      nbt::Deserializer(buffer).read(root);
+//      ChunkDeserializer (*chunk, root)();
+//    } break;
+//
+//    case Anvil::ChunkReadResult::Error: {
+//      Logger::error("Error reading chunk " + v.toString());
+//    }
+//
+//    case Anvil::ChunkReadResult::DoesntExists: {
+//      manager.getWorldGenerator()->generate(*chunk);
+//    } break;
+//    }
 
-      nbt::Deserializer(buffer).read(root);
-      ChunkDeserializer (*chunk, root)();
-    } break;
-
-    case Anvil::ChunkReadResult::Error: {
-      Logger::error("Error reading chunk " + v.toString());
-    }
-
-    case Anvil::ChunkReadResult::DoesntExists: {
-      manager.getWorldGenerator()->generate(*chunk);
-    } break;
-    }
+    manager.getWorldGenerator()->generate(*chunk);
 
   } catch (std::exception& e) {
     Logger::error(e.what());

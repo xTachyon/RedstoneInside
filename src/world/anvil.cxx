@@ -86,7 +86,7 @@ void Anvil::createNewRegionAndOpen(const std::string& filepath) {
 }
 
 std::int32_t Anvil::getChunkNumberInRegion(const Vector2i& other) {
-  // return (other.x & 31) + (other.z & 31) * 32;
+   return (other.x & 31) + (other.z & 31) * 32;
   //  return 4 * ((other.x & 31) + (other.z & 31) * 32);
 }
 

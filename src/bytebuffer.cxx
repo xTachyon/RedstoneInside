@@ -4,8 +4,8 @@
 namespace redi {
 
 ByteBuffer::ByteBuffer(const char* ptr) {
-  append(ptr, std::strlen(ptr));
   // I didn't want <cstring> in header ..
+  append(ptr, std::strlen(ptr));
 }
 
 ByteBuffer& operator+=(ByteBuffer& l, const ByteBuffer& r) {
