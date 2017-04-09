@@ -3,10 +3,6 @@
 #include <boost/format.hpp>
 #include "chatmanager.hpp"
 #include "../server.hpp"
-#include "../events/events.hpp"
-#include "../logger.hpp"
-#include "../exceptions.hpp"
-#include "../util/util.hpp"
 
 namespace redi {
 
@@ -41,7 +37,7 @@ void ChatManager::operator()(EventChatMessage& event) {
 }
 
 void ChatManager::operator()(const EventPlayerJoin& event) {
-  Player& player = event.session->getPlayer();
+  auto& player = event.session->getPlayer();
   std::string message(
       (boost::format("%1% has joined the game") % player.getUsername()).str());
   Logger::info(message);

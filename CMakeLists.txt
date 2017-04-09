@@ -27,7 +27,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${warnings}")
 add_subdirectory(src)
 
 set(SOURCE_FILES
-
+        src/bytebuffer.cxx
         src/bytebuffer.hpp
         src/connectionlistener.cxx
         src/connectionlistener.hpp
@@ -140,23 +140,23 @@ set(SOURCE_FILES
         src/protocol/packetwriter.hpp
         src/protocol/chunkserializer13.cxx
 
-        src/events/event.hpp
-        src/events/eventmanager.cxx
-        src/events/eventmanager.hpp
-        src/events/eventpriority.hpp
-        src/events/events.hpp
-        src/events/eventtype.hpp
-        src/events/playerdisconnected.hpp
-        src/events/playerjoin.hpp
-        src/events/playerlook.hpp
-        src/events/playerposition.hpp
-        src/events/playerpositionandlook.hpp
-        src/events/sendkeepalivering.hpp
-        src/events/sessiondisconnected.hpp
-        src/events/statusrequest.hpp
-        src/events/tick.hpp
-        src/events/chatmessage.hpp
-        src/events/chunkloaded.hpp
+        src/messages/event.hpp
+        src/messages/eventmanager.cxx
+        src/messages/eventmanager.hpp
+        src/messages/eventpriority.hpp
+        src/messages/events.hpp
+        src/messages/eventtype.hpp
+        src/messages/playerdisconnected.hpp
+        src/messages/playerjoin.hpp
+        src/messages/playerlook.hpp
+        src/messages/playerposition.hpp
+        src/messages/playerpositionandlook.hpp
+        src/messages/sendkeepalivering.hpp
+        src/messages/sessiondisconnected.hpp
+        src/messages/statusrequest.hpp
+        src/messages/tick.hpp
+        src/messages/chatmessage.hpp
+        src/messages/chunkloaded.hpp
 
         src/chat/chatmanager.hpp
         src/chat/commandmanager.cxx

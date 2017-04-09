@@ -53,7 +53,7 @@ void Logger::run(Container& cont, std::string& result) {
   }
 }
 
-const char* Logger::getEnumName(LoggerLevel level) {
+const char* getEnumName(LoggerLevel level) {
   const char* ptr;
 
   switch (level) {

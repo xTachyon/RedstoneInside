@@ -10,7 +10,7 @@ struct EventTick : public Event {
   EventTick() = default;
 };
 
-} // namespace events
+} // namespace messages
 } // namespace redi
 
 #endif // REDI_EVENTS_TICK_HPP

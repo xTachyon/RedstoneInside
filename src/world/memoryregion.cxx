@@ -5,7 +5,7 @@
 #include "../nbt/serializer.hpp"
 #include "chunkdeseriazer.hpp"
 #include "chunkserializer.hpp"
-#include "../events/events.hpp"
+#include "../messages/events.hpp"
 #include "../server.hpp"
 #include "../player.hpp"
 

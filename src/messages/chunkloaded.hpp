@@ -19,7 +19,7 @@ struct EventChunkLoaded : public Event {
         coordinates(coords) {}
 };
 
-} // namespace events
+} // namespace messages
 } // namespace redi
 
 #endif // REDI_EVENTS_CHUNKLOADED_HPP

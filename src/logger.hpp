@@ -13,6 +13,7 @@
 namespace redi {
 
 enum class LoggerLevel { Debug, Info, Warn, Error, Fatal };
+const char* getEnumName(LoggerLevel level);
 
 class Logger {
 public:
@@ -79,7 +80,6 @@ private:
 
   void workingThread();
   void run(Container& cont, std::string& result);
-  const char* getEnumName(LoggerLevel level);
   static Logger& get();
 };
 

@@ -4,6 +4,7 @@
 #include <deque>
 #include <mutex>
 #include <boost/optional.hpp>
+#include "../bytebuffer.hpp"
 
 namespace redi {
 namespace lockfree {
@@ -13,48 +14,57 @@ class Queue {
 public:
   using Type = T;
   using OptionalType = boost::optional<T>;
+  using Container = std::deque<T>;
 
-  ~Queue() { std::lock_guard<std::mutex> l(mMutex); }
+  ~Queue() { std::lock_guard<std::mutex> l(mutex); }
 
   void push(const T& obj) {
-    std::lock_guard<std::mutex> l(mMutex);
+    std::lock_guard<std::mutex> l(mutex);
 
-    mData.push_back(obj);
+    data.push_back(obj);
   }
 
   void push(T&& obj) {
-    std::lock_guard<std::mutex> l(mMutex);
+    std::lock_guard<std::mutex> l(mutex);
 
-    mData.push_back(std::move(obj));
+    data.push_back(std::move(obj));
   }
 
   bool pop(T& obj) {
-    std::lock_guard<std::mutex> l(mMutex);
+    std::lock_guard<std::mutex> l(mutex);
 
-    if (mData.empty()) {
+    if (data.empty()) {
       return false;
     } else {
-      obj = std::move(mData.front());
-      mData.pop_front();
+      obj = std::move(data.front());
+      data.pop_front();
       return true;
     }
   }
 
   OptionalType pop() {
-    std::lock_guard<std::mutex> l(mMutex);
+    std::lock_guard<std::mutex> l(mutex);
     OptionalType result;
 
-    if (!mData.empty()) {
-      result = std::move(mData.front());
-      mData.pop_front();
+    if (!data.empty()) {
+      result = std::move(data.front());
+      data.pop_front();
     }
 
     return result;
   }
-
+  
+  void swap(Container& cont) {
+    std::lock_guard<std::mutex> l(mutex);
+    
+    cont.swap(data);
+  }
+  
+  std::mutex& getMutex() { return mutex; }
+  
 private:
-  std::deque<T> mData;
-  std::mutex mMutex;
+  Container data;
+  std::mutex mutex;
 };
 
 using ByteBufferQueue = Queue<ByteBuffer>;
