@@ -5,6 +5,7 @@
 #include "nbt/nbt.hpp"
 #include "compressor.hpp"
 #include "world/anvil.hpp"
+#include "util/threadgroup.hpp"
 
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;

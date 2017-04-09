@@ -13,6 +13,7 @@
 #include "chat/commandmanager.hpp"
 #include "chat/redicommands.hpp"
 #include "logger.hpp"
+#include "util/threadgroup.hpp"
 
 namespace redi {
 
@@ -20,7 +21,7 @@ class Server {
 public:
   using PlayerList = std::list<PlayerSharedPtr>;
 
-  static constexpr std::size_t AsioThreadsNumber = 2;
+  static constexpr std::size_t AsioThreadsNumber = 1;
   /*
    * Minimum 1
   */
@@ -64,9 +65,7 @@ private:
   using SessionList = std::list<std::shared_ptr<Session>>;
   using WorldList = std::list<World>;
 
-  boost::asio::io_service networkIoService;
   boost::asio::io_service workIoService;
-  boost::asio::io_service::work workIoServiceWork;
   SessionList mStatusConnections;
   std::mutex mConnectedClientsMutex;
   ConnectionListenerSharedPtr mListener;
@@ -79,7 +78,8 @@ private:
   EventManager mEventManager;
   RediCommands mRediCommands;
   lockfree::Queue<PacketHandlerSharedPtr> mPacketsToBeHandle;
-  std::vector<std::thread> mAsioThreads;
+  
+  util::ThreadGroup<std::thread> asiothreads;
   std::condition_variable mCondVar;
   std::mutex mCondVarMutex;
   std::unique_lock<std::mutex> mUniqueLock;
