@@ -78,7 +78,7 @@ private:
   EventManager mEventManager;
   RediCommands mRediCommands;
   lockfree::Queue<PacketHandlerSharedPtr> mPacketsToBeHandle;
-  
+
   util::ThreadGroup<std::thread> asiothreads;
   std::condition_variable mCondVar;
   std::mutex mCondVarMutex;

@@ -19,41 +19,41 @@ Server::Server()
       mRediCommands(mCommandManager), mUniqueLock(mCondVarMutex) {
   fs::create_directories("players");
   fs::create_directories("worlds");
-  
+
   addWorld("world", "worlds/world");
-  
+
   mListener->listen();
-  
-  asiothreads.create(AsioThreadsNumber, [&]() {
+
+  asiothreads.create(AsioThreadsNumber, [&] () {
     Logger::debug((boost::format("Asio work thread id %1% started") %
                    std::this_thread::get_id())
                       .str());
-    
+
     workIoService.run();
-    
+
     Logger::debug((boost::format("Asio work thread id %1% stopped") %
                    std::this_thread::get_id())
                       .str());
   });
-  
+
   Logger::info("Redi has started");
 }
 
 Server::~Server() {
   Logger::debug("Redi is stopping");
-  
+
   workIoService.stop();
 }
 
 void Server::run() {
   using namespace std::chrono_literals;
-  
+
   while (true) {
     while (true) {
       PacketHandlerSharedPtr x;
       if (!mPacketsToBeHandle.pop(x) || !x)
         break;
-      
+
       try {
         x->handleOne();
       } catch (std::exception& e) {
@@ -64,7 +64,7 @@ void Server::run() {
         // TODO: add message
       }
     }
-    
+
     try {
       mEventManager();
     } catch (StopServer&) {
@@ -74,7 +74,7 @@ void Server::run() {
     } catch (std::exception&) {
       throw;
     }
-    
+
     mCondVar.wait(mUniqueLock);
   }
 }
@@ -97,29 +97,29 @@ void Server::addWorld(const std::string& worldname,
 
 void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr,
                                       std::function<bool(const Player&)> comp) {
-std::for_each(mPlayers.begin(), mPlayers.end(), [&](PlayerSharedPtr& player) {
-if (comp(*player)) {
-player->sendPacket(ByteBuffer(*ptr));
-}
-});
+  std::for_each(mPlayers.begin(), mPlayers.end(), [&](PlayerSharedPtr& player) {
+    if (comp(*player)) {
+      player->sendPacket(ByteBuffer(*ptr));
+    }
+  });
 }
 
 Player* Server::findPlayer(const std::string& name) {
   Player* ptr = nullptr;
-  
+
   for (auto& index : mPlayers) {
     if (util::noCaseCompareEqual(name, index->getUsername())) {
       ptr = index.get();
       break;
     }
   }
-  
+
   return ptr;
 }
 
 void Server::closeServer(const std::string& reason) {
   mListener->mIsStopping = true;
-  
+
   for (auto& i : mPlayers) {
     i->kick(reason);
   }

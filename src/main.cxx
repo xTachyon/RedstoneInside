@@ -6,6 +6,7 @@
 #include "compressor.hpp"
 #include "world/anvil.hpp"
 #include "util/threadgroup.hpp"
+#include <experimental/string_view>
 
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;
