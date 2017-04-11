@@ -46,4 +46,8 @@ message(STATUS "Current compiler: ${REDI_COMPILER_NAME}")
 message(STATUS "C flags: ${CMAKE_C_FLAGS}")
 message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
 
+get_filename_component(BOOST_INCLUDEDIR "${BOOST_INCLUDEDIR}" REALPATH)
+get_filename_component(BOOST_LIBRARYDIR "${BOOST_LIBRARYDIR}" REALPATH)
+get_filename_component(JSON_REPO_DIR "${JSON_REPO_DIR}" REALPATH)
+
 add_subdirectory(src)
