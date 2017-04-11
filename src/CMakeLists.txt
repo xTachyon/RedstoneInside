@@ -1,4 +1,4 @@
-project(redi C)
+project(redi CXX)
 
 set(SOURCE_FILES
         bytebuffer.cxx
@@ -169,7 +169,11 @@ set(SOURCE_FILES
         nbt/value.cxx
         nbt/value.hpp
         nbt/tag.hpp
-        datatypes.hpp checks.cxx util/threadgroup.hpp)
+        datatypes.hpp
+        checks.cxx
+        util/threadgroup.hpp)
+
+
 
 add_executable(redi ${SOURCE_FILES})
 
@@ -179,7 +183,7 @@ add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 if(MSVC)
   find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options system thread zlib)
 else()
-  find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options system thread)
+  find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options system)
 endif()
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
@@ -196,8 +200,8 @@ if(MINGW)
   target_link_libraries(redi ws2_32)
 endif()
 
-find_package(Threads REQUIRED)
-target_link_libraries(redi "${CMAKE_THREAD_LIBS_INIT}")
+#find_package(Threads REQUIRED)
+#target_link_libraries(redi "${CMAKE_THREAD_LIBS_INIT}")
 
 if(UNIX)
   target_link_libraries(redi pthread)
