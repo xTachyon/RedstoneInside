@@ -58,15 +58,14 @@ public:
 
   void disconnect();
   void kick(const std::string& message);
-
-  bool isDisconnecting() const { return mIsDisconnecting; }
+  
+  bool isDisconnecting() const { return isDisconnected; }
 
 private:
   using PacketPtr = std::shared_ptr<ByteBuffer>;
   using PacketQueue = ThreadSafeQueue<PacketPtr>;
 
   boost::asio::ip::tcp::socket mSocket;
-  PacketQueue mSendingQueue;
   ByteBuffer mSendingPacket;
   ByteBuffer mReceivingPacket;
   Server& mServer;
@@ -76,17 +75,15 @@ private:
   std::uint8_t mReceivingPacketSize[5];
   std::uint8_t mReceivingPacketCountSize;
   PacketHandlerSharedPtr mPacketHandler;
-  std::atomic_bool mIsDisconnecting;
+  std::atomic_bool isDisconnected;
   std::atomic_bool mIsWritting;
   lockfree::ByteBufferQueue mPacketsToBeSend;
   boost::asio::io_service::strand mStrand;
-
-  friend void sessionHandleRead(SessionSharedPtr ptr,
-                                const boost::system::error_code& error,
-                                bool header);
+  
+  void handleRead(const boost::system::error_code& error, bool header);
   void readNext();
-  friend void sessionHandleWrite(SessionSharedPtr ptr,
-                                 const boost::system::error_code& error);
+  
+  void handleWrite(const boost::system::error_code& error);
   void writeNext();
   void postWrite();
 };

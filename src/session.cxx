@@ -20,7 +20,7 @@ Session::Session(asio::ip::tcp::socket&& socket, Server& server)
       mSetCompressionIsSent(false),
       mPacketHandler(std::make_shared<PacketHandler>(
           mServer, *this, mServer.getEventManager())),
-      mIsDisconnecting(false), mIsWritting(false),
+      isDisconnected(false), mIsWritting(false),
       mStrand(mSocket.get_io_service()) {
   Logger::debug((boost::format("Session %1% created") % this).str());
 }
@@ -29,14 +29,13 @@ Session::~Session() {
   Logger::debug((boost::format("Session %1% destroyed") % this).str());
 }
 
-void sessionHandleWrite(SessionSharedPtr ptr,
-                        const boost::system::error_code& error) {
+void Session::handleWrite(const boost::system::error_code& error) {
   if (error) {
-    ptr->disconnect();
+    disconnect();
   } else {
-    ptr->mIsWritting = false;
-
-    ptr->writeNext();
+    mIsWritting = false;
+  
+    writeNext();
   }
 }
 
@@ -49,7 +48,7 @@ void Session::postWrite() {
 
   asio::async_write(mSocket,
                     asio::buffer(mSendingPacket.data(), mSendingPacket.size()),
-                    boost::bind(sessionHandleWrite, shared_from_this(),
+                    boost::bind(&Session::handleWrite, shared_from_this(),
                                 asio::placeholders::error));
 }
 
@@ -58,62 +57,61 @@ void Session::writeNext() {
       mStrand.wrap([me = shared_from_this()] { me->postWrite(); }));
 }
 
-void sessionHandleRead(SessionSharedPtr ptr,
-                       const boost::system::error_code& error, bool header) {
+void Session::handleRead(const boost::system::error_code& error, bool header) {
   if (error) {
-    ptr->disconnect();
+    disconnect();
   } else if (header) {
-    ++ptr->mReceivingPacketCountSize;
-
-    if ((ptr->mReceivingPacketSize[ptr->mReceivingPacketCountSize - 1] &
+    ++mReceivingPacketCountSize;
+  
+    if ((mReceivingPacketSize[mReceivingPacketCountSize - 1] &
          0b10000000) != 0) {
-      if (ptr->mReceivingPacketCountSize > 5)
+      if (mReceivingPacketCountSize > 5)
         static_cast<void>(header); // TODO: disconnect connection
       else
-        asio::async_read(ptr->mSocket,
-                         asio::buffer(ptr->mReceivingPacketSize +
-                                          ptr->mReceivingPacketCountSize,
+        asio::async_read(mSocket,
+                         asio::buffer(mReceivingPacketSize +
+                                      mReceivingPacketCountSize,
                                       1),
                          asio::transfer_exactly(1),
-                         boost::bind(sessionHandleRead, ptr,
+                         boost::bind(&Session::handleRead, shared_from_this(),
                                      asio::placeholders::error, true));
     } else {
-      PacketReader reader(ByteBuffer(ptr->mReceivingPacketSize,
-                                     ptr->mReceivingPacketCountSize));
+      PacketReader reader(ByteBuffer(mReceivingPacketSize,
+                                     mReceivingPacketCountSize));
       std::size_t len = static_cast<std::size_t>(reader.readVarInt());
-      ptr->mReceivingPacket.resize(len);
-      asio::async_read(ptr->mSocket,
-                       asio::buffer(ptr->mReceivingPacket.data(), len),
+      mReceivingPacket.resize(len);
+      asio::async_read(mSocket,
+                       asio::buffer(mReceivingPacket.data(), len),
                        asio::transfer_exactly(len),
-                       boost::bind(sessionHandleRead, ptr,
+                       boost::bind(&Session::handleRead, shared_from_this(),
                                    asio::placeholders::error, false));
     }
   } else {
     try {
-      ptr->mPacketHandler->readRaw(ptr->mReceivingPacket);
-      ptr->mServer.addPacket(ptr->mPacketHandler);
+      mPacketHandler->readRaw(mReceivingPacket);
+      mServer.addPacket(mPacketHandler);
     } catch (std::exception& e) {
-      if (ptr->mPlayer) {
-        ptr->mPlayer->kick(e.what());
+      if (mPlayer) {
+        mPlayer->kick(e.what());
       } else {
-        ptr->disconnect();
+        disconnect();
       }
     }
-    ptr->readNext();
+    readNext();
   }
 }
 
 void Session::readNext() {
   asio::async_read(mSocket, asio::buffer(mReceivingPacketSize, 1),
                    asio::transfer_exactly(1),
-                   boost::bind(sessionHandleRead, shared_from_this(),
+                   boost::bind(&Session::handleRead, shared_from_this(),
                                asio::placeholders::error, true));
   mReceivingPacketCountSize = 0;
 }
 
 void Session::disconnect() {
-  if (!mIsDisconnecting) {
-    mIsDisconnecting = true;
+  if (!isDisconnected) {
+    isDisconnected = true;
     if (mPlayer)
       mPlayer->disconnect();
 
