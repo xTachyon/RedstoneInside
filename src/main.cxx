@@ -6,6 +6,7 @@
 #include "compressor.hpp"
 #include "world/anvil.hpp"
 #include "util/threadgroup.hpp"
+#include "buffers.hpp"
 #include <experimental/string_view>
 
 namespace fs = boost::filesystem;
@@ -15,7 +16,8 @@ int main(int, char**) {
   using namespace redi;
   using namespace redi::nbt;
   using namespace std::string_literals;
-
+  
+  
   redi::Logger::debug("Redi is starting");
 
   try {

@@ -171,7 +171,7 @@ set(SOURCE_FILES
         nbt/tag.hpp
         datatypes.hpp
         checks.cxx
-        util/threadgroup.hpp pch/pch.hpp)
+        util/threadgroup.hpp pch/pchh.hpp buffers.hpp)
 
 
 
