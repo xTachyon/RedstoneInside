@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "commandmanager.hpp"
-#include "commandsender.hpp"
+#include "commandsender2.hpp"
 
 namespace redi {
 
@@ -13,14 +13,20 @@ class RediCommands {
 public:
   RediCommands(CommandManager& manager);
   ~RediCommands();
-
-  static void positionCommand(CommandSender sender, CommandArguments& args);
-  static void rotationCommand(CommandSender sender, CommandArguments& args);
-  static void uuidCommand(CommandSender sender, CommandArguments& args);
-  static void doesntWork(CommandSender sender, CommandArguments& args);
-  void stopCommand(CommandSender sender, CommandArguments& args);
-  void whisperCommand(CommandSender sender, CommandArguments& args);
-  void kickCommand(CommandSender sender, CommandArguments& args);
+  
+  static void positionCommand(CommandSenderOld sender, CommandArguments& args);
+  
+  static void rotationCommand(CommandSenderOld sender, CommandArguments& args);
+  
+  static void uuidCommand(CommandSenderOld sender, CommandArguments& args);
+  
+  static void doesntWork(CommandSenderOld sender, CommandArguments& args);
+  
+  void stopCommand(CommandSenderOld sender, CommandArguments& args);
+  
+  void whisperCommand(CommandSenderOld sender, CommandArguments& args);
+  
+  void kickCommand(CommandSenderOld sender, CommandArguments& args);
 
 private:
   CommandManager& mCommandManager;

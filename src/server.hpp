@@ -10,10 +10,9 @@
 #include "world.hpp"
 #include "chat/chatmanager.hpp"
 #include "messages/eventmanager.hpp"
-#include "chat/commandmanager.hpp"
-#include "chat/redicommands.hpp"
 #include "logger.hpp"
 #include "util/threadgroup.hpp"
+#include "chat/redicommands.hpp"
 
 namespace redi {
 

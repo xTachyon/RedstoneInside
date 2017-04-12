@@ -58,7 +58,7 @@ RediCommands::~RediCommands() {
   }
 }
 
-void RediCommands::positionCommand(CommandSender sender, CommandArguments&) {
+void RediCommands::positionCommand(CommandSenderOld sender, CommandArguments&) {
   if (sender.isNotPlayer())
     return;
   Player& player = sender.getPlayer();
@@ -68,7 +68,7 @@ void RediCommands::positionCommand(CommandSender sender, CommandArguments&) {
                          .str());
 }
 
-void RediCommands::rotationCommand(CommandSender sender, CommandArguments&) {
+void RediCommands::rotationCommand(CommandSenderOld sender, CommandArguments&) {
   if (sender.isNotPlayer())
     return;
   Player& player = sender.getPlayer();
@@ -78,7 +78,7 @@ void RediCommands::rotationCommand(CommandSender sender, CommandArguments&) {
                          .str());
 }
 
-void RediCommands::uuidCommand(CommandSender sender, CommandArguments&) {
+void RediCommands::uuidCommand(CommandSenderOld sender, CommandArguments&) {
   if (sender.isNotPlayer())
     return;
   Player& player = sender.getPlayer();
@@ -86,11 +86,11 @@ void RediCommands::uuidCommand(CommandSender sender, CommandArguments&) {
   player.sendMessage("UUID: " + player.getUUIDasString());
 }
 
-void RediCommands::stopCommand(CommandSender, CommandArguments&) {
+void RediCommands::stopCommand(CommandSenderOld, CommandArguments&) {
   throw StopServer();
 }
 
-void RediCommands::whisperCommand(CommandSender sender,
+void RediCommands::whisperCommand(CommandSenderOld sender,
                                   CommandArguments& args) {
   if (args.size() == 0) {
     sender.sendMessage("Usage: /w [player] <message>");
@@ -117,7 +117,7 @@ void RediCommands::whisperCommand(CommandSender sender,
   }
 }
 
-void RediCommands::kickCommand(CommandSender sender, CommandArguments& args) {
+void RediCommands::kickCommand(CommandSenderOld sender, CommandArguments& args) {
   if (args.size() == 0) {
     sender.sendMessage("Usage: /kick [player] <message>");
     return;
@@ -149,7 +149,7 @@ void RediCommands::kickCommand(CommandSender sender, CommandArguments& args) {
   }
 }
 
-void RediCommands::doesntWork(CommandSender sender, CommandArguments& args) {
+void RediCommands::doesntWork(CommandSenderOld sender, CommandArguments& args) {
   std::string message;
 
   for (const std::string& index : args) {

@@ -135,8 +135,8 @@ set(SOURCE_FILES
         chat/chatmanager.hpp
         chat/commandmanager.cxx
         chat/commandmanager.hpp
-        chat/commandsender.cxx
-        chat/commandsender.hpp
+        chat/commandsender2.cxx
+        chat/commandsender2.hpp
         chat/redicommands.cxx
         chat/redicommands.hpp
         chat/chatmanager.cxx
@@ -171,7 +171,7 @@ set(SOURCE_FILES
         nbt/tag.hpp
         datatypes.hpp
         checks.cxx
-        util/threadgroup.hpp pch/pchh.hpp buffers.hpp)
+        util/threadgroup.hpp pch/pchh.hpp buffers.hpp HasServer.hpp chat/commandsender.hpp chat/commandsender.cxx)
 
 
 

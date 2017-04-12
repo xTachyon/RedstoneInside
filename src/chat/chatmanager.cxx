@@ -7,7 +7,7 @@
 namespace redi {
 
 ChatManager::ChatManager(Server& server, CommandManager& cmdmanager)
-    : mServer(server), mCmdManager(cmdmanager) {}
+    : HasServer(server), mCmdManager(cmdmanager) {}
 
 void ChatManager::operator()(const std::string& message) {
   broadcastMessage(message, Server::toAllPlayers);
@@ -69,7 +69,13 @@ void ChatManager::broadcastMessage(const std::string& message,
 void ChatManager::broadcastJSONMessage(const std::string& json,
                                        std::function<bool(const Player&)> comp,
                                        ChatPosition position) {
-  for (PlayerSharedPtr& player : mServer.getOnlinePlayers()) {
+for (
+PlayerSharedPtr& player :
+server.
+
+getOnlinePlayers()
+
+) {
     if (comp(*player)) {
       player->sendJSONMessage(json, position);
     }

@@ -10,16 +10,14 @@
 
 namespace asio = boost::asio;
 
-enum class Items { IronShovel = 256, IronPickaxe = 257 };
-
 namespace redi {
 
 Session::Session(asio::ip::tcp::socket&& socket, Server& server)
-    : mSocket(std::move(socket)), mServer(server), mPlayer(nullptr),
+    : HasServer(server), mSocket(std::move(socket)), mPlayer(nullptr),
       mConnectionState(ConnectionState::Handshake),
       mSetCompressionIsSent(false),
       mPacketHandler(std::make_shared<PacketHandler>(
-          mServer, *this, mServer.getEventManager())),
+          server, *this, server.getEventManager())),
       isDisconnected(false), mIsWritting(false),
       mStrand(mSocket.get_io_service()) {
   Logger::debug((boost::format("Session %1% created") % this).str());
@@ -89,7 +87,7 @@ void Session::handleRead(const boost::system::error_code& error, bool header) {
   } else {
     try {
       mPacketHandler->readRaw(mReceivingPacket);
-      mServer.addPacket(mPacketHandler);
+      server.addPacket(mPacketHandler);
     } catch (std::exception& e) {
       if (mPlayer) {
         mPlayer->kick(e.what());
@@ -120,7 +118,7 @@ void Session::disconnect() {
       ptr = std::make_unique<EventSessionDisconnect>(*this);
     else
       ptr = std::make_unique<EventPlayerDisconnect>(*mPlayer);
-    mServer.addEvent(std::move(ptr));
+    server.addEvent(std::move(ptr));
   }
 }
 

@@ -10,6 +10,7 @@
 #include "enums.hpp"
 #include "protocol/packets/packethandler.hpp"
 #include "lockfree/queue.hpp"
+#include "HasServer.hpp"
 
 namespace redi {
 
@@ -20,7 +21,7 @@ class Session;
 using SessionUniquePtr = std::unique_ptr<Session>;
 using SessionSharedPtr = std::shared_ptr<Session>;
 
-class Session : public std::enable_shared_from_this<Session> {
+class Session : public HasServer, public std::enable_shared_from_this<Session> {
 public:
   friend class Server;
   friend class Player;
@@ -44,9 +45,6 @@ public:
 
   boost::asio::io_service& getIoService() { return mSocket.get_io_service(); }
 
-  Server& getServer() { return mServer; }
-  const Server& getServer() const { return mServer; }
-
   Player& getPlayer() { return *mPlayer; }
   void setPlayer(Player& player);
 
@@ -68,7 +66,6 @@ private:
   boost::asio::ip::tcp::socket mSocket;
   ByteBuffer mSendingPacket;
   ByteBuffer mReceivingPacket;
-  Server& mServer;
   Player* mPlayer;
   ConnectionState mConnectionState;
   std::atomic_bool mSetCompressionIsSent;

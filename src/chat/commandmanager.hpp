@@ -3,7 +3,7 @@
 
 #include <functional>
 #include <list>
-#include "commandsender.hpp"
+#include "commandsender2.hpp"
 
 namespace redi {
 
@@ -12,7 +12,7 @@ struct CommandData;
 
 using CommandArguments = std::vector<std::string>;
 using CommandAliases = std::vector<std::string>;
-using CommandCallback = std::function<void(CommandSender, CommandArguments&)>;
+using CommandCallback = std::function<void(CommandSenderOld, CommandArguments&)>;
 using CommandList = std::list<CommandData>;
 using CommandListIterator = CommandList::const_iterator;
 

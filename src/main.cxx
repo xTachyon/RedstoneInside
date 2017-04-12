@@ -8,10 +8,6 @@ namespace fs = boost::filesystem;
 namespace asio = boost::asio;
 
 int main(int, char**) {
-  using namespace redi;
-  using namespace redi::nbt;
-  using namespace std::string_literals;
-  
   redi::Logger::debug("Redi is starting");
 
   try {

@@ -18,11 +18,11 @@ namespace redi {
 
 Player::Player(const std::string& name, boost::uuids::uuid uuid,
                std::shared_ptr<Session> session, std::int32_t id,
-               Server* server, World* world, Gamemode gamemode)
-    : mUUID(uuid), mNickname(name), mServer(server), mWorld(world),
+               Server& server, World* world, Gamemode gamemode)
+    : HasServer(server), CommandSender(CommandSenderType::Player), mUUID(uuid), mNickname(name), mWorld(world),
       mSession(session), mGamemode(gamemode),
       mSendKeepAliveTimer(mSession->getIoService()), mTeleportID(0),
-      mEntityID(id), mHasSavedToDisk(false) {
+      mEntityID(id), hasSavedToDisk(false) {
   Logger::debug((boost::format("Player %1% created") % this).str());
 
   loadFromFile();
@@ -33,9 +33,10 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid,
 
 Player::~Player() {
   Logger::debug((boost::format("Player %1% destroyed") % this).str());
-
-  if (!mHasSavedToDisk) {
-    mHasSavedToDisk = true;
+  
+  bool saved = hasSavedToDisk.exchange(true);
+  
+  if (!saved) {
     saveToFile();
   }
 }
@@ -93,9 +94,9 @@ void Player::disconnect() {
   mSendKeepAliveTimer.cancel();
 
   mSession->disconnect();
-
-  if (!mHasSavedToDisk) {
-    mHasSavedToDisk = true;
+  
+  if (!hasSavedToDisk) {
+    hasSavedToDisk = true;
     saveToFile();
   }
 }
@@ -174,8 +175,8 @@ void Player::onEntityMovedWithLook(PlayerPosition newpos) {
   PlayerPtrVector update;
   PlayerPtrVector destroy;
   PlayerPtrVector nextEntitiesInSight;
-
-  for (PlayerSharedPtr& player : mServer->getOnlinePlayers()) {
+  
+  for (PlayerSharedPtr& player : server.getOnlinePlayers()) {
     if (*player != *this) {
       auto distance = player->getPosition().distance(mPosition);
 
@@ -292,4 +293,4 @@ void Player::onUpdateChunks() {
   mLastPositionWhenChunksWasSent = mPosition.getChunkPosition();
 }
 
-} // namespace red
+} // namespace redi

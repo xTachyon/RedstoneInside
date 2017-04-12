@@ -33,7 +33,7 @@ struct ChatMessagePart {
 
 using ChatComponent = std::vector<ChatMessagePart>;
 
-class ChatManager {
+class ChatManager : public HasServer {
 public:
   ChatManager(Server& server, CommandManager& cmdmanager);
 
@@ -52,7 +52,6 @@ public:
   static std::string componentToJson(const ChatComponent& comp);
 
 private:
-  Server& mServer;
   CommandManager& mCmdManager;
 };
 

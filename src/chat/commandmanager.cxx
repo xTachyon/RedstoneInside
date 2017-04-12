@@ -23,7 +23,7 @@ void CommandManager::operator()(Player& player, std::string& command) {
 
   for (auto& index : mCommands) {
     if (index.command == command) {
-      index.callback(CommandSender(player), splited);
+      index.callback(CommandSenderOld(player), splited);
     }
   }
 }

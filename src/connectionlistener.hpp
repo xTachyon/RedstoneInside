@@ -4,6 +4,7 @@
 #include <atomic>
 #include <thread>
 #include <boost/asio.hpp>
+#include "HasServer.hpp"
 
 namespace redi {
 
@@ -13,7 +14,7 @@ class Server;
 using ConnectionListenerSharedPtr = std::shared_ptr<ConnectionListener>;
 
 class ConnectionListener
-    : public std::enable_shared_from_this<ConnectionListener> {
+    : public HasServer, public std::enable_shared_from_this<ConnectionListener> {
 public:
   ConnectionListener(boost::asio::io_service& io, std::uint16_t port,
                      Server& server);
@@ -22,15 +23,12 @@ public:
 
   ConnectionListener& operator=(const ConnectionListener&) = delete;
 
-  Server& getServer() { return mServer; }
-
 private:
   friend class Server;
 
   boost::asio::io_service& mIoService;
   boost::asio::ip::tcp::socket mSocket;
   boost::asio::ip::tcp::acceptor mAcceptor;
-  Server& mServer;
   std::atomic_bool mIsStopping;
 
   void listen();

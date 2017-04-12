@@ -11,6 +11,7 @@
 #include "serverconfig.hpp"
 #include "playerposition.hpp"
 #include "world/memoryregion.hpp"
+#include "chat/commandsender.hpp"
 
 namespace redi {
 
@@ -19,10 +20,10 @@ class World;
 
 using PlayerSharedPtr = std::shared_ptr<Player>;
 
-class Player : public std::enable_shared_from_this<Player> {
+class Player : public HasServer, public CommandSender, public std::enable_shared_from_this<Player> {
 public:
   Player(const std::string& name, boost::uuids::uuid uuid,
-         std::shared_ptr<Session> session, std::int32_t id, Server* server,
+         std::shared_ptr<Session> session, std::int32_t id, Server& server,
          World* world, Gamemode gamemode = Gamemode::Creative);
   Player(const Player&) = delete;
   Player(Player&&) = delete;
@@ -33,9 +34,6 @@ public:
 
   Session& getSession() { return *mSession; }
   const Session& getSession() const { return *mSession; }
-
-  Server& getServer() { return *mServer; }
-  const Server& getServer() const { return *mServer; }
 
   Gamemode getGamemode() const { return mGamemode; }
   Dimension getDimension() const { return mPosition.dimension; }
@@ -75,10 +73,13 @@ public:
 
   void normalizeRotation();
 
-  //  void updateChunksNew();
   void onPositionChanged();
   void onChunkLoaded(world::ChunkHolder& chunk);
   void onUpdateChunks();
+  
+  Player& getPlayer() override { return *this; }
+  
+  Server& getSenderServer() override { return getServer(); }
 
 private:
   friend class EventManager;
@@ -95,7 +96,6 @@ private:
 
   boost::uuids::uuid mUUID;
   std::string mNickname;
-  Server* mServer;
   World* mWorld;
   SessionSharedPtr mSession;
   Gamemode mGamemode;
@@ -103,7 +103,7 @@ private:
   boost::asio::steady_timer mSendKeepAliveTimer;
   std::int32_t mTeleportID;
   const std::int32_t mEntityID;
-  std::atomic_bool mHasSavedToDisk;
+  std::atomic_bool hasSavedToDisk;
 
   std::string getPlayerDataFileName() const;
   void saveToFile();

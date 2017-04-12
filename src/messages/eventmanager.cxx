@@ -85,7 +85,7 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& packet) {
     if (*s == mSession) {
       mServer.mPlayers.emplace_back(std::make_shared<Player>(
           packet.username, uuid, std::move(s), mServer.getNewEntityID(),
-          &mServer, &mServer.mWorlds.back()));
+          mServer, &mServer.mWorlds.back()));
       mServer.mStatusConnections.remove_if(
           [](const SessionSharedPtr& par) -> bool {
             return !static_cast<bool>(par);
