@@ -3,7 +3,7 @@
 
 #include <experimental/string_view>
 #include <unordered_map>
-#include "../HasServer.hpp"
+#include "../hasserver.hpp"
 #include "commandsender.hpp"
 #include "../datatypes.hpp"
 

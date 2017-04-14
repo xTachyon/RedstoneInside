@@ -4,7 +4,7 @@
 #include <atomic>
 #include <thread>
 #include <boost/asio.hpp>
-#include "HasServer.hpp"
+#include "hasserver.hpp"
 
 namespace redi {
 

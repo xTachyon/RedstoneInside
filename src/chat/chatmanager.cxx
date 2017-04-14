@@ -1,7 +1,7 @@
 #include <json.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/format.hpp>
-#include "chatmanagerold.hpp"
+#include "chatmanager.hpp"
 #include "../server.hpp"
 
 namespace redi {

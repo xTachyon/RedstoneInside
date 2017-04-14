@@ -3,8 +3,7 @@
 
 #include <json.hpp>
 #include "../enums.hpp"
-#include "commandmanagerold.hpp"
-#include "commandmanager.hpp"
+#include "../commands/commandmanager.hpp"
 
 namespace redi {
 

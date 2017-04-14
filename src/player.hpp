@@ -11,7 +11,7 @@
 #include "serverconfig.hpp"
 #include "playerposition.hpp"
 #include "world/memoryregion.hpp"
-#include "chat/commandsender.hpp"
+#include "commands/commandsender.hpp"
 
 namespace redi {
 

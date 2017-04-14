@@ -10,7 +10,7 @@
 #include "enums.hpp"
 #include "protocol/packets/packethandler.hpp"
 #include "lockfree/queue.hpp"
-#include "HasServer.hpp"
+#include "hasserver.hpp"
 
 namespace redi {
 

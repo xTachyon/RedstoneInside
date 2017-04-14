@@ -8,12 +8,12 @@
 #include "serverconfig.hpp"
 #include "messages/events.hpp"
 #include "world.hpp"
-#include "chat/chatmanagerold.hpp"
+#include "chat/chatmanager.hpp"
 #include "messages/eventmanager.hpp"
 #include "logger.hpp"
 #include "util/threadgroup.hpp"
-#include "chat/redicommands.hpp"
-#include "chat/commandmanager.hpp"
+#include "commands/redicommands.hpp"
+#include "commands/commandmanager.hpp"
 
 namespace redi {
 

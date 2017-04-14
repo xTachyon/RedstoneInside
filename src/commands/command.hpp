@@ -1,7 +1,7 @@
 #ifndef REDI_COMMANDS_COMMAND_HPP
 #define REDI_COMMANDS_COMMAND_HPP
 
-#include "../HasServer.hpp"
+#include "../hasserver.hpp"
 #include "commandmanager.hpp"
 #include "commandsender.hpp"
 
