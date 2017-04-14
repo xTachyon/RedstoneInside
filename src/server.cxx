@@ -12,9 +12,10 @@ Server::Server()
     : config("server.properties"),
       mListener(std::make_shared<ConnectionListener>(
           workIoService, static_cast<std::uint16_t>(config.port), *this)),
-      mEntityCount(0), mOnlinePlayers(0), mCommandManager(*this),
-      mChatManager(*this, mCommandManager), mEventManager(*this),
-      mRediCommands(mCommandManager), mUniqueLock(mCondVarMutex) {
+      mEntityCount(0),
+      mChatManager(*this), mEventManager(*this),
+      commandmanager(*this), mRediCommands(*this),
+      mUniqueLock(mCondVarMutex) {
   fs::create_directories("players");
   fs::create_directories("worlds");
 

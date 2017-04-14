@@ -19,7 +19,8 @@ namespace redi {
 Player::Player(const std::string& name, boost::uuids::uuid uuid,
                std::shared_ptr<Session> session, std::int32_t id,
                Server& server, World* world, Gamemode gamemode)
-    : HasServer(server), CommandSender(CommandSenderType::Player), mUUID(uuid), mNickname(name), mWorld(world),
+    : HasServer(server), CommandSender(commands::CommandSenderType::Player), mUUID(uuid), mNickname(name),
+      mWorld(world),
       mSession(session), mGamemode(gamemode),
       mSendKeepAliveTimer(mSession->getIoService()), mTeleportID(0),
       mEntityID(id), hasSavedToDisk(false) {
@@ -29,6 +30,8 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid,
 
   mLastPositionWhenChunksWasSent.x = 0;
   mLastPositionWhenChunksWasSent.z = 0;
+
+//  world->addPlayer(*this);
 }
 
 Player::~Player() {

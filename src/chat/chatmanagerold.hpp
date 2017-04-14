@@ -3,6 +3,7 @@
 
 #include <json.hpp>
 #include "../enums.hpp"
+#include "commandmanagerold.hpp"
 #include "commandmanager.hpp"
 
 namespace redi {
@@ -35,7 +36,7 @@ using ChatComponent = std::vector<ChatMessagePart>;
 
 class ChatManager : public HasServer {
 public:
-  ChatManager(Server& server, CommandManager& cmdmanager);
+  ChatManager(Server& server);
 
   void operator()(const std::string& message);
   void operator()(EventChatMessage&);
@@ -52,7 +53,7 @@ public:
   static std::string componentToJson(const ChatComponent& comp);
 
 private:
-  CommandManager& mCmdManager;
+  commands::CommandManager& cmdmanager;
 };
 
 } // namespace redi

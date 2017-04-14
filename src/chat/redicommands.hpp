@@ -1,38 +1,22 @@
 #ifndef REDI_CHAT_REDICOMMANDS_HPP
 #define REDI_CHAT_REDICOMMANDS_HPP
 
-#include <vector>
-#include "commandmanager.hpp"
-#include "commandsender2.hpp"
+#include "command.hpp"
 
 namespace redi {
+namespace commands {
 
-class CommandManager;
-
-class RediCommands {
+class RediCommands : Command {
 public:
-  RediCommands(CommandManager& manager);
-  ~RediCommands();
+  RediCommands(Server& server);
   
-  static void positionCommand(CommandSenderOld sender, CommandArguments& args);
+  Command& operator()(CommandSender& sender, string_view command,
+                      CommandArguments& args) override;
   
-  static void rotationCommand(CommandSenderOld sender, CommandArguments& args);
-  
-  static void uuidCommand(CommandSenderOld sender, CommandArguments& args);
-  
-  static void doesntWork(CommandSenderOld sender, CommandArguments& args);
-  
-  void stopCommand(CommandSenderOld sender, CommandArguments& args);
-  
-  void whisperCommand(CommandSenderOld sender, CommandArguments& args);
-  
-  void kickCommand(CommandSenderOld sender, CommandArguments& args);
-
-private:
-  CommandManager& mCommandManager;
-  std::vector<CommandListIterator> mIterators;
+  void stopCommand(CommandSender& sender, CommandArguments& args);
 };
 
+}
 } // namespace redi
 
 #endif // REDI_CHAT_REDICOMMANDS_HPP

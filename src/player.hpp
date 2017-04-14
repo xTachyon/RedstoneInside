@@ -20,7 +20,7 @@ class World;
 
 using PlayerSharedPtr = std::shared_ptr<Player>;
 
-class Player : public HasServer, public CommandSender, public std::enable_shared_from_this<Player> {
+class Player : public HasServer, public commands::CommandSender, public std::enable_shared_from_this<Player> {
 public:
   Player(const std::string& name, boost::uuids::uuid uuid,
          std::shared_ptr<Session> session, std::int32_t id, Server& server,
@@ -78,8 +78,11 @@ public:
   void onUpdateChunks();
   
   Player& getPlayer() override { return *this; }
-  
   Server& getSenderServer() override { return getServer(); }
+  
+  string_view getSenderName() const override { return getUsername(); }
+  
+  void sendMessageToSender(string_view message) override { sendMessage(message.to_string()); }
 
 private:
   friend class EventManager;
@@ -90,8 +93,6 @@ private:
 
   std::vector<Player*> mEntitiesInSight;
   Vector2i mLastPositionWhenChunksWasSent;
-  //  std::set<Vector2i> mLoadedChunksOld;
-  //  std::set<Vector2i> mChunksToBeLoadedOld;
   std::list<world::ChunkHolder> loadedChunks;
 
   boost::uuids::uuid mUUID;

@@ -23,24 +23,24 @@ MemoryRegion::MemoryRegion(ChunkManager& manager, boost::asio::io_service& io,
               coords);
 }
 
-void MemoryRegion::increaseCount(const Vector2i& v) {
-  //  assert(chunks.count(v));
-  ++chunks[v].second;
-  ++count;
+void MemoryRegion::increaseCount(const Vector2i&) {
+//  ++chunks[v].second;
+//  ++count;
 }
 
-void MemoryRegion::decreaseCount(const Vector2i& v) {
-  assert(chunks.count(v));
-  auto& c = chunks[v].second;
-  --c;
-  if (c == 0) {
-    unloadChunk(v);
-  }
-  --count;
-  if (count == 0) {
-    //    manager.unloadRegion(regionCoordinates);
-    // TODO: what happens when no chunk is used anymore ?
-  }
+void MemoryRegion::decreaseCount(const Vector2i&) {
+//  assert(chunks.count(v));
+//  auto& c = chunks[v].second;
+//  --c;
+//  if (c == 0) {
+//    unloadChunk(v);
+//  }
+//  --count;
+//  if (count == 0) {
+//    //    manager.unloadRegion(regionCoordinates);
+//    // TODO: what happens when no chunk is used anymore ?
+//  }
+  // TODO: fix chunks here
 }
 
 void MemoryRegion::loadChunk(const Vector2i& coordinates,
@@ -89,7 +89,7 @@ void MemoryRegion::readChunk(const Vector2i& v) {
   try {
     ByteBuffer buffer;
 
-    Anvil::ChunkReadResult result = region.readChunk(v, buffer);
+//    Anvil::ChunkReadResult result = region.readChunk(v, buffer);
 
 //    switch (result) {
 //    case Anvil::ChunkReadResult::OK: {

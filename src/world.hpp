@@ -14,7 +14,7 @@ namespace redi {
 
 class Player;
 
-class World {
+class World : public HasServer {
 public:
   World(Server& server, const std::string& worldname,
         const std::string& worlddir, WorldGenerator ptr,
@@ -25,17 +25,15 @@ public:
   void addPlayer(Player& player);
   void deletePlayer(Player& player);
 
-  Server& getServer() { return server; }
   const std::string& getWorldName() const { return mWorldName; }
   std::int64_t getWorldTime() const { return worldTime; }
 
 private:
-  Server& server;
   std::string mWorldName;
   std::string mDirectory;
   WorldGenerator mGenerator;
   world::ChunkManager mChunkManager;
-  Dimension mDimension;
+  Dimension dimension;
   std::list<Player*> mPlayers;
   std::int64_t worldTime;
 };

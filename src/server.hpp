@@ -8,11 +8,12 @@
 #include "serverconfig.hpp"
 #include "messages/events.hpp"
 #include "world.hpp"
-#include "chat/chatmanager.hpp"
+#include "chat/chatmanagerold.hpp"
 #include "messages/eventmanager.hpp"
 #include "logger.hpp"
 #include "util/threadgroup.hpp"
 #include "chat/redicommands.hpp"
+#include "chat/commandmanager.hpp"
 
 namespace redi {
 
@@ -42,7 +43,8 @@ public:
 
   void addEvent(EventUniquePtr&& ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
-  std::int32_t getOnlinePlayersNumber() const { return mOnlinePlayers; }
+  
+  std::int32_t getOnlinePlayersNumber() const { return std::distance(mPlayers.begin(), mPlayers.end()); }
   PlayerList& getOnlinePlayers() { return mPlayers; }
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
   void broadcastPacketToPlayers(ByteBufferSharedPtr ptr,
@@ -53,6 +55,8 @@ public:
   void closeServer(const std::string& reason);
   ChatManager& getChatManager() { return mChatManager; }
   boost::asio::io_service& getWorkIO() { return workIoService; }
+  
+  commands::CommandManager& getCommandManager() { return commandmanager; }
 
   static bool toAllPlayers(const Player&) { return true; }
   static bool toAllPlayersExcept(const Player& player, const Player& except);
@@ -71,13 +75,12 @@ private:
   PlayerList mPlayers;
   WorldList mWorlds;
   std::int32_t mEntityCount;
-  std::int32_t mOnlinePlayers;
-  CommandManager mCommandManager;
   ChatManager mChatManager;
   EventManager mEventManager;
-  RediCommands mRediCommands;
   lockfree::Queue<PacketHandlerSharedPtr> mPacketsToBeHandle;
-
+  commands::CommandManager commandmanager;
+  commands::RediCommands mRediCommands;
+  
   util::ThreadGroup<std::thread> asiothreads;
   std::condition_variable mCondVar;
   std::mutex mCondVarMutex;

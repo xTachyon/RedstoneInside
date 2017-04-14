@@ -6,6 +6,7 @@
 
 namespace fs = boost::filesystem;
 namespace asio = boost::asio;
+using namespace redi;
 
 int main(int, char**) {
   redi::Logger::debug("Redi is starting");

@@ -95,7 +95,6 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& packet) {
   }
 
   auto& player = *mServer.mPlayers.back();
-  ++mServer.mOnlinePlayers;
 
   player.getSession().setPlayer(player);
   player.getWorld().addPlayer(player);
@@ -133,7 +132,6 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event) {
   // so we won't SIGSEGV when deferencing it after deleting
   mServer.mPlayers.remove_if(
       [&](const PlayerSharedPtr& p) { return *p == player; });
-  --mServer.mOnlinePlayers;
 }
 
 void EventManager::handleSessionDisconnect(EventSessionDisconnect& event) {

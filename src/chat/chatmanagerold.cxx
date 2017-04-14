@@ -1,13 +1,13 @@
 #include <json.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/format.hpp>
-#include "chatmanager.hpp"
+#include "chatmanagerold.hpp"
 #include "../server.hpp"
 
 namespace redi {
 
-ChatManager::ChatManager(Server& server, CommandManager& cmdmanager)
-    : HasServer(server), mCmdManager(cmdmanager) {}
+ChatManager::ChatManager(Server& server)
+    : HasServer(server), cmdmanager(server.getCommandManager()) {}
 
 void ChatManager::operator()(const std::string& message) {
   broadcastMessage(message, Server::toAllPlayers);
@@ -15,16 +15,23 @@ void ChatManager::operator()(const std::string& message) {
 }
 
 void ChatManager::operator()(EventChatMessage& event) {
-  std::string& message = event.message;
-  boost::algorithm::trim(message);
-
-  if (message.size() == 0)
-    return;
-  if (message[0] == '/') {
-    mCmdManager(event.player, message);
-
+  string_view message = util::trim(string_view(event.message));
+  
+  if (message.size() == 0) {
     return;
   }
+  if (message[0] == '/') {
+    cmdmanager(event.player, message);
+    return;
+  }
+
+//  if (message.size() == 0)
+//    return;
+//  if (message[0] == '/') {
+//    mCmdManager(event.player, message);
+//
+//    return;
+//  }
 
   std::string json = componentToJson(ChatComponent{
       ChatMessagePart(event.player.getUsername(), "aqua"),

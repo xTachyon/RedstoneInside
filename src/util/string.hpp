@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <typeinfo>
+#include "../datatypes.hpp"
 
 namespace redi {
 namespace util {
@@ -91,6 +92,38 @@ To binaryTo(const From& val) {
   std::copy(f, f + sizeof(val), t);
 
   return x;
+}
+
+//template <typename T>
+//struct IsSpace {
+//  bool operator()(const T& c) const {
+//    return std::isspace(c);
+//  }
+//};
+//
+//template <typename T>
+//struct IsWhitespace {
+//  bool operator()(const T& c) const {
+//    return std::isspace(c) || c == static_cast<T>('\t') || c == static_cast<T>('\r') || c == static_cast<T>('\n');
+//  }
+//};
+
+template <typename T>
+basic_string_view<T> trimleft(basic_string_view<T> str, basic_string_view<T> whitespaces = " \t\n\r") {
+  str.remove_prefix(std::min(str.find_first_not_of(whitespaces), str.size()));
+  return str;
+}
+
+template <typename T>
+basic_string_view<T> trimright(basic_string_view<T> str, basic_string_view<T> whitespaces = " \t\n\r") {
+  auto foundat = str.find_last_not_of(whitespaces);
+  str.remove_suffix(str.size() - std::min(foundat, str.size()) - 1);
+  return str;
+}
+
+template <typename T>
+basic_string_view<T> trim(basic_string_view<T> str, basic_string_view<T> whitespaces = " \t\n\r") {
+  return trimright(trimleft(str, whitespaces), whitespaces);
 }
 
 } // namespace util

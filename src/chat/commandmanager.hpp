@@ -1,60 +1,58 @@
-#ifndef REDI_CHAT_COMMANDMANAGER_HPP
-#define REDI_CHAT_COMMANDMANAGER_HPP
+#ifndef REDI_COMMANDS_COMMANDMANAGER_HPP
+#define REDI_COMMANDS_COMMANDMANAGER_HPP
 
-#include <functional>
-#include <list>
-#include "commandsender2.hpp"
+#include <experimental/string_view>
+#include <unordered_map>
+#include "../HasServer.hpp"
+#include "commandsender.hpp"
+#include "../datatypes.hpp"
 
 namespace redi {
+namespace commands {
 
-class Server;
-struct CommandData;
+class Command;
 
-using CommandArguments = std::vector<std::string>;
-using CommandAliases = std::vector<std::string>;
-using CommandCallback = std::function<void(CommandSenderOld, CommandArguments&)>;
-using CommandList = std::list<CommandData>;
-using CommandListIterator = CommandList::const_iterator;
+using CommandArguments = std::vector<string_view>;
 
-class CommandManager {
+enum class CommandAddResult {
+  AlreadyExists, NullPointer, Ok
+};
+
+class CommandManager : HasServer {
 public:
-  CommandManager(Server& server);
-  CommandManager(const CommandManager&) = delete;
-  CommandManager(CommandManager&&) = delete;
-
-  CommandManager& operator=(const CommandManager&) = delete;
-  CommandManager& operator=(CommandManager&&) = delete;
-
-  void operator()(Player& player, std::string& command);
-
-  CommandListIterator registerCommand(const CommandData& command);
-  CommandListIterator registerCommand(CommandData&& command);
-
-  void unregisterCommand(const std::string& command);
-  void unregisterCommand(CommandListIterator it);
-
-  bool commandExists(const std::string& command);
-
-  Server& getServer() { return mServer; }
-  const Server& getServer() const { return mServer; }
+  using OwnershipListConstIt = std::list<std::string>::const_iterator;
+  
+  struct CommandData {
+    Command* ptr;
+    OwnershipListConstIt it;
+  };
+  
+  using CommandsContainer = std::unordered_map<string_view, CommandData>;
+  
+  CommandManager(Server& server) : HasServer(server) {}
+  
+  CommandManager& operator()(CommandSender& sender, string_view message);
+  
+  CommandAddResult registerCommand(std::string&& command, Command* ptr);
+  
+  CommandAddResult registerCommand(const std::string& command, Command* ptr);
+  
+  CommandAddResult registerCommand(string_view command, Command* ptr);
+  
+  void unregisterCommand(string_view command);
+  
+  void unregisterAll(Command* ptr);
 
 private:
-  Server& mServer;
-  CommandList mCommands;
+  CommandsContainer commandsdata;
+  std::list<std::string> ownership;
+  
+  CommandAddResult registerCommand(string_view command, Command* ptr, OwnershipListConstIt it);
+  
+  void freeownership(OwnershipListConstIt it);
 };
 
-struct CommandData {
-  std::string command;
-  CommandCallback callback;
-
-  CommandData() = default;
-  CommandData(const CommandData&) = default;
-  CommandData(CommandData&&) = default;
-
-  CommandData& operator=(const CommandData&) = default;
-  CommandData& operator=(CommandData&&) = default;
-};
-
+}
 } // namespace redi
 
-#endif // REDI_CHAT_COMMANDMANAGER_HPP
+#endif // #ifndef REDI_COMMANDS_COMMANDMANAGER_HPP

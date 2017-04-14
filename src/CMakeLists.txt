@@ -132,14 +132,14 @@ set(SOURCE_FILES
         messages/chatmessage.hpp
         messages/chunkloaded.hpp
 
-        chat/chatmanager.hpp
-        chat/commandmanager.cxx
-        chat/commandmanager.hpp
+        chat/chatmanagerold.hpp
+        chat/commandmanagerold.cxx
+        chat/commandmanagerold.hpp
         chat/commandsender2.cxx
         chat/commandsender2.hpp
         chat/redicommands.cxx
         chat/redicommands.hpp
-        chat/chatmanager.cxx
+        chat/chatmanagerold.cxx
 
         lockfree/queue.hpp
 
@@ -171,7 +171,16 @@ set(SOURCE_FILES
         nbt/tag.hpp
         datatypes.hpp
         checks.cxx
-        util/threadgroup.hpp pch/pchh.hpp buffers.hpp HasServer.hpp chat/commandsender.hpp chat/commandsender.cxx)
+        util/threadgroup.hpp
+        pch/pchh.hpp
+        buffers.hpp
+        HasServer.hpp
+        chat/commandsender.hpp
+        chat/commandsender.cxx
+        chat/commandmanager.cxx
+        chat/commandmanager.hpp
+        chat/command.hpp
+        chat/command.cxx chat/redicommands.cxx)
 
 
 
