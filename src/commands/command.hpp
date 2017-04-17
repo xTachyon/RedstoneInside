@@ -8,6 +8,10 @@
 namespace redi {
 namespace commands {
 
+using CommandArguments = std::vector<string_view>;
+
+class CommandManager;
+
 class Command : HasServer {
 public:
   Command(Server& server);

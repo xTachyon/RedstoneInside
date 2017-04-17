@@ -13,7 +13,21 @@ public:
   Command& operator()(CommandSender& sender, string_view command,
                       CommandArguments& args) override;
   
-  void stopCommand(CommandSender& sender, CommandArguments& args);
+  void stop(CommandSender& sender);
+  
+  void position(CommandSender& sender, CommandArguments& args);
+  
+  void rotation(CommandSender& sender);
+  
+  void uuid(CommandSender& sender, CommandArguments& args);
+  
+  void whisper(CommandSender& sender, CommandArguments& args);
+  
+  void kick(CommandSender& sender, CommandArguments& args);
+  
+  void doesntwork(CommandSender& sender, CommandArguments& args);
+  
+  bool checkIfPlayer(CommandSender& sender);
 };
 
 }

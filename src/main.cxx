@@ -1,12 +1,4 @@
 #include "server.hpp"
-#include "nbt/primitive.hpp"
-#include "nbt/nbt.hpp"
-#include "compressor.hpp"
-#include "buffers.hpp"
-
-namespace fs = boost::filesystem;
-namespace asio = boost::asio;
-using namespace redi;
 
 int main(int, char**) {
   redi::Logger::debug("Redi is starting");

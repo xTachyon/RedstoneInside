@@ -1,3 +1,4 @@
+#include <boost/format.hpp>
 #include <boost/program_options/parsers.hpp>
 #include "commandmanager.hpp"
 #include "command.hpp"
@@ -9,25 +10,39 @@ namespace po = boost::program_options;
 namespace redi {
 namespace commands {
 
-CommandAddResult CommandManager::registerCommand(std::string&& command, Command* ptr) {
-  ownership.emplace_front(std::move(command));
-  return registerCommand(command, ptr, ownership.begin());
-}
-
-CommandAddResult CommandManager::registerCommand(const std::string& command, Command* ptr) {
-  ownership.emplace_front(command);
-  return registerCommand(command, ptr, ownership.begin());
-}
-
-CommandAddResult CommandManager::registerCommand(string_view command, Command* ptr) {
-  return registerCommand(command, ptr, CommandManager::OwnershipListConstIt());
-}
-
-void CommandManager::unregisterCommand(string_view command) {
-  auto it = commandsdata.find(command);
-  assert(it != commandsdata.end() && "The iterator should always exist.");
-  freeownership(it->second.it);
-  commandsdata.erase(it);
+CommandAddResult
+CommandManager::registerCommand(Command* ptr, string_view command, const std::vector<string_view>& aliases) {
+  if (!ptr) {
+    return CommandAddResult::NullPointer;
+  }
+  
+  {
+    bool b = commands.count(command) == 0;
+    
+    for (const auto& i : aliases) {
+      if (!b) {
+        break;
+      }
+      b = commands.count(i) == 0;
+    }
+    
+    if (!b) {
+      return CommandAddResult::AlreadyExists;
+    }
+  }
+  
+  data[ptr].push_back({});
+  CommandData& cd = data[ptr].back();
+  cd.ptr = ptr;
+  cd.command = command;
+  cd.aliases = aliases;
+  
+  commands[command] = &cd;
+  for (const auto& i : aliases) {
+    commands[i] = &cd;
+  }
+  
+  return CommandAddResult::Ok;
 }
 
 CommandManager& CommandManager::operator()(CommandSender& sender, string_view message) {
@@ -44,66 +59,40 @@ CommandManager& CommandManager::operator()(CommandSender& sender, string_view me
   }
   else {
     splited[0] = util::toLowercase(splited[0]);
-    string_view command = splited[0];
+  }
+  auto it = commands.find(splited[0]);
+  if (it == commands.end()) {
+    sender.sendMessageToSender(splited[0] + " does not exist");
+  }
+  else {
+    assert(it->second->ptr && "The pointer shouldn't be null");
+    Command& ref = *it->second->ptr;
     
-    auto it = commandsdata.find(command);
-    if (it == commandsdata.end()) {
-      sender.sendMessageToSender(command.to_string() + " does not exist");
+    // TODO: find a way which doesn't involve copying
+    CommandArguments args;
+    args.reserve(splited.size() - 1);
+    
+    for (std::size_t i = 1; i < splited.size(); ++i) {
+      args.emplace_back(splited[i]);
     }
-    else {
-      assert(it->second.ptr && "The pointer shouldn't be null");
-      Command& ref = *it->second.ptr;
-      
-      // TODO: find a way which doesn't involve copying
-      CommandArguments args;
-      args.reserve(splited.size() - 1);
-      
-      for (std::size_t i = 1; i < splited.size(); ++i) {
-        args.emplace_back(splited[i]);
-      }
-      
-      ref(sender, command, args);
-    }
+    
+    ref(sender, it->second->command, args);
   }
   
   return *this;
 }
 
-CommandAddResult
-CommandManager::registerCommand(string_view command, Command* ptr, CommandManager::OwnershipListConstIt it) {
-  
-  if (!ptr) {
-    freeownership(it);
-    return CommandAddResult::NullPointer;
-  }
-  if (commandsdata.count(command) > 0) {
-    freeownership(it);
-    return CommandAddResult::AlreadyExists;
-  }
-  
-  auto& cd = commandsdata[command];
-  cd.ptr = ptr;
-  cd.it = it;
-  
-  return CommandAddResult::Ok;
-}
-
-void CommandManager::freeownership(CommandManager::OwnershipListConstIt it) {
-  if (it != ownership.end()) {
-    ownership.erase(it);
-  }
-}
-
 void CommandManager::unregisterAll(Command* ptr) {
-  auto it = commandsdata.begin();
-  while (it != commandsdata.end()) {
-    if (it->second.ptr == ptr) {
-      it = commandsdata.erase(it);
-    }
-    else {
-      ++it;
+  auto& vec = data[ptr];
+  for (const auto& i : vec) {
+    commands.erase(i.command);
+    
+    for (const auto& j : i.aliases) {
+      commands.erase(j);
     }
   }
+  
+  data.erase(ptr);
 }
 
 }
