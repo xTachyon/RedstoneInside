@@ -2,6 +2,7 @@
 #define REDI_COMMANDS_COMMAND_HPP
 
 #include "../hasserver.hpp"
+#include "commanddata.hpp"
 #include "commandmanager.hpp"
 #include "commandsender.hpp"
 

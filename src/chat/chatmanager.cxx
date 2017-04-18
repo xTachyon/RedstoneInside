@@ -24,18 +24,8 @@ void ChatManager::operator()(EventChatMessage& event) {
     cmdmanager(event.player, message);
     return;
   }
-
-//  if (message.size() == 0)
-//    return;
-//  if (message[0] == '/') {
-//    mCmdManager(event.player, message);
-//
-//    return;
-//  }
-
-  std::string json = componentToJson(ChatComponent{
-      ChatMessagePart(event.player.getUsername(), "aqua"),
-      ChatMessagePart(": ", "yellow"), ChatMessagePart(event.message, "red")});
+  
+  std::string json = event.player.getUsername() + ": " + event.message;
 
   broadcastJSONMessage(json, Server::toAllPlayers);
   Logger::info(
@@ -48,9 +38,8 @@ void ChatManager::operator()(const EventPlayerJoin& event) {
   std::string message(
       (boost::format("%1% has joined the game") % player.getUsername()).str());
   Logger::info(message);
-  broadcastJSONMessage(
-      componentToJson(ChatComponent{ChatMessagePart(message, "green")}),
-      Server::toAllPlayers, ChatPosition::SystemMessage);
+  broadcastJSONMessage(message,
+                       Server::toAllPlayers, ChatPosition::SystemMessage);
 }
 
 void ChatManager::operator()(const EventPlayerDisconnect& event) {
@@ -58,19 +47,17 @@ void ChatManager::operator()(const EventPlayerDisconnect& event) {
       (boost::format("%1% has left the game") % event.player.getUsername())
           .str());
   Logger::info(message);
-  broadcastJSONMessage(
-      componentToJson(ChatComponent{ChatMessagePart(message, "green")}),
-      std::bind(Server::toAllPlayersExcept, std::placeholders::_1,
+  broadcastJSONMessage(message,
+                       std::bind(Server::toAllPlayersExcept, std::placeholders::_1,
                 std::ref(event.player)),
-      ChatPosition::SystemMessage);
+                       ChatPosition::SystemMessage);
 }
 
 void ChatManager::broadcastMessage(const std::string& message,
                                    std::function<bool(const Player&)> comp,
                                    ChatPosition position) {
-  broadcastJSONMessage(
-      componentToJson(ChatComponent({ChatMessagePart(message)})), comp,
-      position);
+  broadcastJSONMessage(message, comp,
+                       position);
 }
 
 void ChatManager::broadcastJSONMessage(const std::string& json,
@@ -87,35 +74,6 @@ getOnlinePlayers()
       player->sendJSONMessage(json, position);
     }
   }
-}
-
-std::string ChatManager::componentToJson(const ChatComponent& comp) {
-  nlohmann::json j;
-
-  j["text"] = "";
-  j["extra"] = {};
-
-  for (const auto& i : comp) {
-    nlohmann::json c;
-
-    c["text"] = i.message;
-    if (i.color != "white")
-      c["color"] = i.color;
-    if (i.bold)
-      c["bold"] = i.bold;
-    if (i.italic)
-      c["italic"] = i.italic;
-    if (i.underlined)
-      c["underlined"] = i.underlined;
-    if (i.strikethrough)
-      c["strikethrough"] = i.strikethrough;
-    if (i.obfuscated)
-      c["obfuscated"] = i.obfuscated;
-
-    j["extra"].push_back(c);
-  }
-
-  return j.dump();
 }
 
 } // namespace redi

@@ -123,8 +123,7 @@ void Session::disconnect() {
 }
 
 void Session::kick(const std::string& message) {
-  packets::Disconnect(ChatManager::componentToJson(
-                          ChatComponent({ChatMessagePart(std::move(message))})),
+  packets::Disconnect(message,
                       mConnectionState == ConnectionState::Play)
       .send(*this);
   disconnect();

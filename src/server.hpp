@@ -12,8 +12,8 @@
 #include "messages/eventmanager.hpp"
 #include "logger.hpp"
 #include "util/threadgroup.hpp"
-#include "commands/redicommands.hpp"
 #include "commands/commandmanager.hpp"
+#include "commands/command.hpp"
 
 namespace redi {
 
@@ -79,7 +79,7 @@ private:
   EventManager mEventManager;
   lockfree::Queue<PacketHandlerSharedPtr> mPacketsToBeHandle;
   commands::CommandManager commandmanager;
-  commands::RediCommands mRediCommands;
+  std::unique_ptr<commands::Command> commands;
   
   util::ThreadGroup<std::thread> asiothreads;
   std::condition_variable mCondVar;

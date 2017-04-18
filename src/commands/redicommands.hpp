@@ -6,7 +6,7 @@
 namespace redi {
 namespace commands {
 
-class RediCommands : Command {
+class RediCommands : public Command {
 public:
   RediCommands(Server& server);
   

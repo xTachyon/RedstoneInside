@@ -70,9 +70,7 @@ void Player::sendPacket(ByteBuffer&& packet) {
 }
 
 void Player::sendMessage(const std::string& message, ChatPosition position) {
-  sendJSONMessage(
-      ChatManager::componentToJson(ChatComponent({ChatMessagePart(message)})),
-      position);
+  sendJSONMessage(message, position);
 }
 
 void Player::sendJSONMessage(const std::string& json, ChatPosition position) {
@@ -89,8 +87,7 @@ void Player::kickJSONmessage(std::string&& json) {
 }
 
 void Player::kick(std::string&& message) {
-  kickJSONmessage(ChatManager::componentToJson(
-      ChatComponent({ChatMessagePart(std::move(message))})));
+  kickJSONmessage(std::move(message));
 }
 
 void Player::disconnect() {

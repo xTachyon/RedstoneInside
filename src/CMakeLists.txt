@@ -175,7 +175,7 @@ set(SOURCE_FILES
         commands/commandmanager.cxx
         commands/commandmanager.hpp
         commands/command.hpp
-        commands/command.cxx commands/redicommands.cxx commands/commanddata.hpp)
+        commands/command.cxx commands/redicommands.cxx commands/commanddata.hpp chat/chatcomponent.cpp chat/chatcomponent.hpp)
 
 
 

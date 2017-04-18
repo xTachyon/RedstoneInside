@@ -1,5 +1,6 @@
 #include "../server.hpp"
 #include "../exceptions.hpp"
+#include "redicommands.hpp"
 
 namespace redi {
 namespace commands {

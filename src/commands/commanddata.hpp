@@ -8,13 +8,15 @@
 namespace redi {
 namespace commands {
 
+class Command;
+
 struct CommandData {
   Command* ptr;
   string_view command;
   std::vector<string_view> aliases;
 };
 
-inline bool operator==(const CommandData& data, const std::string& str) {
+inline bool operator==(const CommandData& data, string_view str) {
   if (data.command == str) {
     return true;
   }

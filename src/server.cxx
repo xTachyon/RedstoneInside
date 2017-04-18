@@ -1,6 +1,7 @@
 #include "util/util.hpp"
 #include "logger.hpp"
 #include "exceptions.hpp"
+#include "commands/redicommands.hpp"
 #include "player.hpp"
 #include "server.hpp"
 
@@ -14,7 +15,7 @@ Server::Server()
           workIoService, static_cast<std::uint16_t>(config.port), *this)),
       mEntityCount(0),
       mChatManager(*this), mEventManager(*this),
-      commandmanager(*this), mRediCommands(*this),
+      commandmanager(*this), commands(std::make_unique<commands::RediCommands>(*this)),
       mUniqueLock(mCondVarMutex) {
   fs::create_directories("players");
   fs::create_directories("worlds");
@@ -45,8 +46,6 @@ Server::~Server() {
 }
 
 void Server::run() {
-  using namespace std::chrono_literals;
-
   while (true) {
     while (true) {
       PacketHandlerSharedPtr x;
