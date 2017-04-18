@@ -5,8 +5,13 @@
 #include <boost/endian/conversion.hpp>
 #include <boost/uuid/uuid.hpp>
 #include "../bytebuffer.hpp"
+#include "../datatypes.hpp"
 
 namespace redi {
+
+namespace chat {
+class ChatComponent;
+}
 
 class PacketWriter {
 public:
@@ -27,7 +32,8 @@ public:
   void writeULong(std::uint64_t v);
   void writeFloat(float v);
   void writeDouble(double v);
-  void writeString(const std::string& v);
+  
+  void writeString(string_view str);
   void writeVarInt(std::int32_t v);
   void writeVarInt(std::uint32_t v);
   void writeVarLong(std::int64_t v);
@@ -35,6 +41,8 @@ public:
   void writePosition(std::int64_t x, std::int64_t y, std::int64_t z);
   void writeUUID(boost::uuids::uuid uuid);
   void writeAngle(double angle);
+  
+  void writeChat(const chat::ChatComponent& chat);
   void commit(bool compressed = false);
 
   template <typename T>

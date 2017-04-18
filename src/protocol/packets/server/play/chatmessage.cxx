@@ -1,4 +1,5 @@
 #include "chatmessage.hpp"
+#include "../../../../chat/chatcomponent.hpp"
 #include "../../../packetwriter.hpp"
 #include "../../packethandler.hpp"
 
@@ -17,8 +18,8 @@ void ChatMessage::read(PacketReader& packet) { message = packet.readString(); }
 
 void ChatMessage::write(ByteBuffer& buffer) {
   PacketWriter packet(buffer, SendID);
-
-  packet.writeString(message);
+  
+  packet.writeChat(message);
   packet.writeByte(static_cast<std::int8_t>(position));
 }
 

@@ -1,4 +1,5 @@
 #include "../compressor.hpp"
+#include "../chat/chatcomponent.hpp"
 #include "packetwriter.hpp"
 
 namespace redi {
@@ -44,9 +45,9 @@ void PacketWriter::writeDouble(double v) {
   writeBNumber(c);
 }
 
-void PacketWriter::writeString(const std::string& v) {
-  writeVarInt(v.size());
-  data.append(reinterpret_cast<const std::uint8_t*>(v.data()), v.size());
+void PacketWriter::writeString(string_view str) {
+  writeVarInt(str.size());
+  data.append(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());
 }
 
 void PacketWriter::writeVarInt(std::int32_t v) {
@@ -114,6 +115,10 @@ void PacketWriter::commit(bool) {
   writeVarInt(d.size());
   data.append(d.data(), d.size());
   //  }
+}
+
+void PacketWriter::writeChat(const chat::ChatComponent& chat) {
+  writeString(chat.generate());
 }
 
 } // namespace redi
