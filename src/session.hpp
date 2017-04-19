@@ -58,6 +58,8 @@ public:
   void kick(const std::string& message);
   
   bool isDisconnecting() const { return isDisconnected; }
+  
+  void readNext();
 
 private:
   using PacketPtr = std::shared_ptr<ByteBuffer>;
@@ -78,7 +80,6 @@ private:
   boost::asio::io_service::strand mStrand;
   
   void handleRead(const boost::system::error_code& error, bool header);
-  void readNext();
   
   void handleWrite(const boost::system::error_code& error);
   void writeNext();

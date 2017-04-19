@@ -32,12 +32,7 @@ public:
   ~Server();
 
   std::int32_t getNewEntityID() { return mEntityCount++; }
-  void addConnectedSession(boost::asio::ip::tcp::socket&& socket) {
-    std::lock_guard<std::mutex> l(mConnectedClientsMutex);
-    mStatusConnections.emplace_back(
-        std::make_shared<Session>(std::move(socket), *this));
-    mStatusConnections.back()->readNext();
-  }
+  
   void run();
   void addPacket(PacketHandlerSharedPtr ptr);
 
@@ -57,10 +52,6 @@ public:
   boost::asio::io_service& getWorkIO() { return workIoService; }
   
   commands::CommandManager& getCommandManager() { return commandmanager; }
-
-  static bool toAllPlayers(const Player&) { return true; }
-  static bool toAllPlayersExcept(const Player& player, const Player& except);
-
 private:
   friend class EventManager;
   friend class PacketHandler;
@@ -69,8 +60,6 @@ private:
   using WorldList = std::list<World>;
 
   boost::asio::io_service workIoService;
-  SessionList mStatusConnections;
-  std::mutex mConnectedClientsMutex;
   ConnectionListenerSharedPtr mListener;
   PlayerList mPlayers;
   WorldList mWorlds;

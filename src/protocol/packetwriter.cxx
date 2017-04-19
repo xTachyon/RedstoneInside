@@ -90,35 +90,22 @@ void PacketWriter::writeAngle(double angle) {
 }
 
 void PacketWriter::commit(bool) {
-  //  std::cout << (int)data[0] << " -- " << std::boolalpha << compressed <<
-  //  '\n';
-  //  if (compressed)
-  //  {
-  ////    ByteBuffer comp = compressor::compressZlib(data);
-  ////    PacketWriterNoCopy wr;
-  ////    wr.writeVarInt(comp.size());
-  ////
-  ////    data.clear();
-  ////    writeVarInt(wr.data.size() + comp.size());
-  ////    data += wr.data;
-  ////    data += comp;
-  //    ByteBuffer original = data;
-  //    data.clear();
-  //    writeVarInt(original.size() + 1);
-  //    writeVarInt(0);
-  //    data += original;
-  //  }
-  //  else
-  //  {
   ByteBuffer d(std::move(data));
 
   writeVarInt(d.size());
   data.append(d.data(), d.size());
-  //  }
 }
 
 void PacketWriter::writeChat(const chat::ChatComponent& chat) {
   writeString(chat.generate());
 }
+
+//void PacketWriter::writeChat(std::string&& str) {
+//  writeChat(chat::ChatComponent(std::move(str)));
+//}
+//
+//void PacketWriter::writeChat(string_view str) {
+//  writeChat(chat::ChatComponent(str));
+//}
 
 } // namespace redi

@@ -12,6 +12,7 @@ class PacketHandler;
 class Player;
 class Session;
 using SessionSharedPtr = std::shared_ptr<Session>;
+using PlayerSharedPtr = std::shared_ptr<Player>;
 
 struct Packet {
   Packet() = default;
@@ -29,6 +30,8 @@ struct Packet {
   void send(Session& session);
   void send(SessionSharedPtr& session);
   void send(Player& player);
+  
+  void send(std::list<PlayerSharedPtr>& list);
 };
 
 using PacketUniquePtr = std::unique_ptr<Packet>;

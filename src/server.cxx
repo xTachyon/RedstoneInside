@@ -123,8 +123,4 @@ void Server::closeServer(const std::string& reason) {
   }
 }
 
-bool Server::toAllPlayersExcept(const Player& player, const Player& except) {
-  return player != except;
-}
-
 } // namespace redi

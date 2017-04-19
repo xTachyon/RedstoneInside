@@ -30,8 +30,6 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid,
 
   mLastPositionWhenChunksWasSent.x = 0;
   mLastPositionWhenChunksWasSent.z = 0;
-
-//  world->addPlayer(*this);
 }
 
 Player::~Player() {

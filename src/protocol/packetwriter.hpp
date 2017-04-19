@@ -32,7 +32,6 @@ public:
   void writeULong(std::uint64_t v);
   void writeFloat(float v);
   void writeDouble(double v);
-  
   void writeString(string_view str);
   void writeVarInt(std::int32_t v);
   void writeVarInt(std::uint32_t v);
@@ -41,8 +40,10 @@ public:
   void writePosition(std::int64_t x, std::int64_t y, std::int64_t z);
   void writeUUID(boost::uuids::uuid uuid);
   void writeAngle(double angle);
-  
   void writeChat(const chat::ChatComponent& chat);
+//  void writeChat(std::string&& str);
+//  void writeChat(string_view str);
+  
   void commit(bool compressed = false);
 
   template <typename T>

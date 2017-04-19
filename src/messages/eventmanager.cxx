@@ -79,20 +79,24 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& packet) {
 
   Session& mSession = *packet.session;
 
-  for (SessionSharedPtr& s :
-       mServer.mStatusConnections) // TODO: find a better way
-  {
-    if (*s == mSession) {
-      mServer.mPlayers.emplace_back(std::make_shared<Player>(
-          packet.username, uuid, std::move(s), mServer.getNewEntityID(),
-          mServer, &mServer.mWorlds.back()));
-      mServer.mStatusConnections.remove_if(
-          [](const SessionSharedPtr& par) -> bool {
-            return !static_cast<bool>(par);
-          });
-      break;
-    }
-  }
+//  for (SessionSharedPtr& s :
+//       mServer.mStatusConnections) // TODO: find a better way
+//  {
+//    if (s == packet.session) {
+//      mServer.mPlayers.emplace_back(std::make_shared<Player>(
+//          packet.username, uuid, std::move(s), mServer.getNewEntityID(),
+//          mServer, &mServer.mWorlds.back()));
+//      mServer.mStatusConnections.remove_if(
+//          [](const SessionSharedPtr& par) -> bool {
+//            return !static_cast<bool>(par);
+//          });
+//      break;
+//    }
+//  }
+  
+  mServer.mPlayers.emplace_back(std::make_shared<Player>(
+      packet.username, uuid, packet.session, mServer.getNewEntityID(),
+      mServer, &mServer.mWorlds.back()));
 
   auto& player = *mServer.mPlayers.back();
 
@@ -135,8 +139,9 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event) {
 }
 
 void EventManager::handleSessionDisconnect(EventSessionDisconnect& event) {
-  mServer.mStatusConnections.remove_if(
-      [&](const SessionSharedPtr& ar) { return event.session == *ar; });
+//  mServer.mStatusConnections.remove_if(
+//      [&](const SessionSharedPtr& ar) { return event.session == *ar; });
+// TODO: remove this
 }
 
 void EventManager::handleChatMessage(EventChatMessage& event) {

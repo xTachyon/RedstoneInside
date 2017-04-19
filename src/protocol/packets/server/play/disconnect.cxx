@@ -1,5 +1,6 @@
 #include "disconnect.hpp"
 #include "../../../packetwriter.hpp"
+#include "../../../../chat/chatcomponent.hpp"
 
 namespace redi {
 namespace packets {
@@ -12,8 +13,8 @@ Disconnect::Disconnect(std::string&& json, bool play)
 
 void Disconnect::write(ByteBuffer& buffer) {
   PacketWriter packet(buffer, play ? SendIDplay : SendIDlogin);
-
-  packet.writeString(json);
+  
+  packet.writeChat(json);
 }
 
 } // namespace packets

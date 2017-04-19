@@ -21,13 +21,8 @@ public:
   void operator()(EventChatMessage&);
   void operator()(const EventPlayerJoin&);
   void operator()(const EventPlayerDisconnect&);
-
-  void broadcastMessage(const std::string& message,
-                        std::function<bool(const Player&)> comp,
-                        ChatPosition position = ChatPosition::ChatBox);
-  void broadcastJSONMessage(const std::string& json,
-                            std::function<bool(const Player&)> comp,
-                            ChatPosition position = ChatPosition::ChatBox);
+  
+  void broadcast(string_view message, ChatPosition position = ChatPosition::ChatBox);
 private:
   commands::CommandManager& cmdmanager;
 };

@@ -16,4 +16,13 @@ void Packet::send(Player& player) { send(player.getSession()); }
 
 void Packet::send(SessionSharedPtr& session) { send(*session); }
 
+void Packet::send(std::list<PlayerSharedPtr>& list) {
+  ByteBuffer buffer;
+  write(buffer);
+  
+  std::for_each(list.begin(), list.end(), [&](PlayerSharedPtr& player) {
+    player->getSession().sendPacket(const_cast<const ByteBuffer&>(buffer));
+  });
+}
+
 } // namespace redi

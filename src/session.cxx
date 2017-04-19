@@ -108,8 +108,8 @@ void Session::readNext() {
 }
 
 void Session::disconnect() {
-  if (!isDisconnected) {
-    isDisconnected = true;
+  bool disc = isDisconnected.exchange(true);
+  if (!disc) {
     if (mPlayer)
       mPlayer->disconnect();
 
