@@ -5,7 +5,7 @@
 #include <experimental/string_view>
 
 namespace redi {
-using byte = std::uint8_t;
+using byte = unsigned char;
 using sbyte = std::int8_t;
 
 template <typename T>

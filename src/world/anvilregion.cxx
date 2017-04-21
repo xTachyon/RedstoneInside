@@ -3,8 +3,8 @@
 #include "anvilregion.hpp"
 #include "../bytebuffer.hpp"
 #include "../logger.hpp"
-#include "../compressor.hpp"
 #include "../util/util.hpp"
+#include "../util/compressor.hpp"
 
 namespace fs = boost::filesystem;
 namespace endian = boost::endian;
@@ -58,11 +58,11 @@ ByteBuffer AnvilRegion::readChunk(Vector2i ch) {
 
   switch (compressionFormat) {
   case 1:
-    result = compressor::decompressGzip(result);
+    result = util::zip::gzip::decompress(ConstBuffer(result));
     break;
 
   case 2:
-    result = compressor::decompressZlib(result);
+    result = util::zip::zlib::decompress(ConstBuffer(result));
     break;
 
   default:
@@ -78,7 +78,7 @@ void AnvilRegion::writeChunk(Vector2i ch, const ByteBuffer& data,
   ByteBuffer result(ChunkHeaderSize, '\0');
   std::int32_t chunknumber = getChunkNumberInRegion(ch);
   ChunkInfo& th = mChunks[chunknumber];
-  ByteBuffer dataToBeWritten(compressor::compressZlib(data));
+  ByteBuffer dataToBeWritten(util::zip::zlib::compress(ConstBuffer(data)));
   std::size_t newSectorsCount =
       ((dataToBeWritten.size() + 5) % SectorSize == 0)
           ? (dataToBeWritten.size() + 5) / SectorSize

@@ -28,7 +28,7 @@ else()
 endif()
 
 if(REDI_GCC OR REDI_CLANG)
-  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow")
+  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow -Wno-c++1z-extensions")
   if (REDI_CLANG)
     set(compiler_options "-fno-limit-debug-info")
   endif()

@@ -1,7 +1,6 @@
 #include <stdexcept>
 #include <boost/endian/conversion.hpp>
 #include "packetreader.hpp"
-#include "../compressor.hpp"
 
 namespace endian = boost::endian;
 
@@ -147,22 +146,5 @@ void PacketReader::consumeString() {
 }
 
 void PacketReader::consumeVarInt() { static_cast<void>(readVarInt()); }
-
-PacketReader PacketReader::getFromCompressedPacket(const ByteBuffer& buf) {
-  PacketReader reader(buf);
-
-  std::size_t len = static_cast<std::size_t>(reader.readVarInt());
-  if (len == 0)
-    return ByteBuffer(reader.data.begin() + reader.offset, reader.data.end());
-  else {
-    ByteBuffer buffer = compressor::decompressZlib(
-        ByteBuffer(reader.data.begin() + reader.offset, reader.data.end()));
-    if (len != buffer.size())
-      throw std::runtime_error(
-          "Uncompressed length is not equal with the one specified");
-
-    return PacketReader(std::move(buffer));
-  }
-}
 
 } // namespace redi

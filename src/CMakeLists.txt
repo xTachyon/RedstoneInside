@@ -35,9 +35,6 @@ set(SOURCE_FILES
         util/time.hpp
         util/util.hpp
 
-        compressor.hpp
-        compressor.cxx
-
         world.cxx
         world.hpp
         world/anvil.cxx
@@ -175,7 +172,7 @@ set(SOURCE_FILES
         commands/commandmanager.cxx
         commands/commandmanager.hpp
         commands/command.hpp
-        commands/command.cxx commands/redicommands.cxx commands/commanddata.hpp chat/chatcomponent.cpp chat/chatcomponent.hpp)
+        commands/command.cxx commands/redicommands.cxx commands/commanddata.hpp chat/chatcomponent.cpp chat/chatcomponent.hpp protocol/varint.cpp protocol/varint.hpp util/compressor.hpp util/compressor.cpp)
 
 
 

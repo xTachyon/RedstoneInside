@@ -3,8 +3,8 @@
 #include <boost/endian/arithmetic.hpp>
 #include "anvil.hpp"
 #include "../logger.hpp"
-#include "../compressor.hpp"
 #include "../util/util.hpp"
+#include "../util/compressor.hpp"
 
 namespace fs = boost::filesystem;
 namespace endian = boost::endian;
@@ -245,11 +245,11 @@ Anvil::ChunkReadResult Anvil::readChunk(std::int32_t number,
 
   switch (buffer[4]) {
   case 1: {
-    // TODO: fix compressor and add decompressor
+    // TODO: fix compressorold and add decompressor
   } break;
 
   case 2: {
-    buffer = compressor::decompressZlib(buffer, 5, size - 1);
+    buffer = util::zip::zlib::decompress(ConstBuffer(buffer.data() + 5, size - 1));
   } break;
 
   default: {
@@ -277,9 +277,8 @@ void Anvil::writeChunk(std::int32_t number,
     buffer.reserve(SectorSize);
     buffer.resize(5);
   }
-
-  compressor::compressZlib(uncompresseddata, buffer,
-                           compressor::CompressionLevel::BestCompression);
+  
+  util::zip::zlib::compress(ConstBuffer(uncompresseddata), buffer);
   std::size_t datasize = buffer.size();
 
   ChunkInfo info = getChunkInfo(number);

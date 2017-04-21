@@ -1,4 +1,3 @@
-#include "../compressor.hpp"
 #include "../chat/chatcomponent.hpp"
 #include "packetwriter.hpp"
 
