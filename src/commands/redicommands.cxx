@@ -37,7 +37,9 @@ void RediCommands::position(CommandSender& sender, CommandArguments& args) {
     target = &sender.getPlayer();
   }
   else {
-    target = sender.getSenderServer().findPlayer(args[0].to_string());
+    // TODO: come back here
+    std::string s(args[0]);
+    target = sender.getSenderServer().findPlayer(s);
   }
   
   if (target) {

@@ -82,7 +82,7 @@ public:
   
   string_view getSenderName() const override { return getUsername(); }
   
-  void sendMessageToSender(string_view message) override { sendMessage(message.to_string()); }
+  void sendMessageToSender(string_view message) override;
 
 private:
   friend class EventManager;

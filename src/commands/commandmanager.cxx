@@ -52,7 +52,9 @@ CommandManager& CommandManager::operator()(CommandSender& sender, string_view me
                 sender.getSenderName() % message));
   
   message.remove_prefix(1);
-  std::vector<std::string> splited = po::split_unix(message.to_string());
+  // TODO: come back here
+  std::string s(message);
+  std::vector<std::string> splited = po::split_unix(s);
   
   if (splited.size() == 0) {
     sender.sendMessageToSender("Command cannot be empty");

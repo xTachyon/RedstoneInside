@@ -1,6 +1,7 @@
 project(redi CXX)
 
 set(SOURCE_FILES
+		util/string_view.hpp
         bytebuffer.cxx
         bytebuffer.hpp
         connectionlistener.cxx
@@ -233,3 +234,4 @@ endif()
 
 include(../CMake/cotire.cmake)
 cotire(redi)
+

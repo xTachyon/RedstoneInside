@@ -50,7 +50,9 @@ void ChatManager::operator()(const EventPlayerDisconnect& event) {
 }
 
 void ChatManager::broadcast(string_view message, ChatPosition position) {
-  packets::ChatMessage(message.to_string(), position).send(server.getOnlinePlayers());
+  // TODO: come back here
+  std::string s(message);
+  packets::ChatMessage(s, position).send(server.getOnlinePlayers());
 }
 
 } // namespace redi

@@ -34,7 +34,8 @@ if(REDI_GCC OR REDI_CLANG)
   endif()
 elseif(REDI_MSVC)
   set(warnings "/W3")
-  set(compiler_options "${compiler_options} /EHsc -D_WIN32_WINNT=0x0501 -D_SCL_SECURE_NO_WARNINGS")
+  set(compiler_options "${compiler_options} /std:c++latest /EHsc  -D_WIN32_WINNT=0x0501 -D_SCL_SECURE_NO_WARNINGS -D_HAS_AUTO_PTR_ETC=1")
+  # /std:c++latest
 endif()
 
 set(compiler_options "${compiler_options} ${warnings}")

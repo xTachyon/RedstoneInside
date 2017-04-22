@@ -71,6 +71,12 @@ void Player::sendMessage(const std::string& message, ChatPosition position) {
   sendJSONMessage(message, position);
 }
 
+void Player::sendMessageToSender(string_view message) {
+  // TODO: come back here
+  std::string s(message);
+  sendMessage(s);
+}
+
 void Player::sendJSONMessage(const std::string& json, ChatPosition position) {
   packets::ChatMessage(json, position).send(*&*mSession);
 }

@@ -2,15 +2,16 @@
 #define REDI_DATATYPES_HPP
 
 #include <cstdint>
-#include <experimental/string_view>
+#include <string_view>
 
 namespace redi {
 using byte = unsigned char;
 using sbyte = std::int8_t;
 
 template <typename T>
-using basic_string_view = std::experimental::basic_string_view<T>;
-using string_view = std::experimental::string_view;
+using basic_string_view = std::basic_string_view<T>;
+using string_view = std::string_view;
+
 }
 
 #endif // REDI_DATATYPES_HPP

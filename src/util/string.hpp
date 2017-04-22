@@ -94,25 +94,16 @@ To binaryTo(const From& val) {
   return x;
 }
 
-//template <typename T>
-//struct IsSpace {
-//  bool operator()(const T& c) const {
-//    return std::isspace(c);
-//  }
-//};
-//
-//template <typename T>
-//struct IsWhitespace {
-//  bool operator()(const T& c) const {
-//    return std::isspace(c) || c == static_cast<T>('\t') || c == static_cast<T>('\r') || c == static_cast<T>('\n');
-//  }
-//};
-
 template <typename T>
 basic_string_view<T> trimleft(basic_string_view<T> str, basic_string_view<T> whitespaces = " \t\n\r") {
   str.remove_prefix(std::min(str.find_first_not_of(whitespaces), str.size()));
   return str;
 }
+
+//string_view trimleft(string_view str, string_view whitespaces = " \t\n\r") {
+//  str.remove_prefix(std::min(str.find_first_not_of(whitespaces), str.size()));
+//  return str;
+//}
 
 template <typename T>
 basic_string_view<T> trimright(basic_string_view<T> str, basic_string_view<T> whitespaces = " \t\n\r") {
@@ -123,7 +114,7 @@ basic_string_view<T> trimright(basic_string_view<T> str, basic_string_view<T> wh
 
 template <typename T>
 basic_string_view<T> trim(basic_string_view<T> str, basic_string_view<T> whitespaces = " \t\n\r") {
-  return trimright(trimleft(str, whitespaces), whitespaces);
+  return trimright<T>(trimleft<T>(str, whitespaces), whitespaces);
 }
 
 } // namespace util
