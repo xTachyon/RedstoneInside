@@ -12,11 +12,11 @@ class Command;
 
 struct CommandData {
   Command* ptr;
-  string_view command;
-  std::vector<string_view> aliases;
+  std::string command;
+  std::vector<std::string> aliases;
 };
 
-inline bool operator==(const CommandData& data, string_view str) {
+inline bool operator==(const CommandData& data, const std::string& str) {
   if (data.command == str) {
     return true;
   }

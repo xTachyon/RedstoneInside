@@ -10,7 +10,7 @@ class RediCommands : public Command {
 public:
   RediCommands(Server& server);
   
-  Command& operator()(CommandSender& sender, string_view command,
+  Command& operator()(CommandSender& sender, const std::string& command,
                       CommandArguments& args) override;
   
   void stop(CommandSender& sender);

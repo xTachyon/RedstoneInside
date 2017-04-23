@@ -44,7 +44,7 @@ void PacketWriter::writeDouble(double v) {
   writeBNumber(c);
 }
 
-void PacketWriter::writeString(string_view str) {
+void PacketWriter::writeString(const std::string& str) {
   writeVarInt(str.size());
   data.append(reinterpret_cast<const std::uint8_t*>(str.data()), str.size());
 }

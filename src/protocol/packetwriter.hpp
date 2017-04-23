@@ -32,7 +32,8 @@ public:
   void writeULong(std::uint64_t v);
   void writeFloat(float v);
   void writeDouble(double v);
-  void writeString(string_view str);
+  
+  void writeString(const std::string& str);
   void writeVarInt(std::int32_t v);
   void writeVarInt(std::uint32_t v);
   void writeVarLong(std::int64_t v);

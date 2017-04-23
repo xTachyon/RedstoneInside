@@ -27,9 +27,9 @@ public:
   
   virtual Server& getSenderServer();
   
-  virtual void sendMessageToSender(string_view message);
+  virtual void sendMessageToSender(const std::string& message);
   
-  virtual string_view getSenderName() const;
+  virtual const std::string& getSenderName() const;
   
   bool isPlayer() const { return type == CommandSenderType::Player; }
   

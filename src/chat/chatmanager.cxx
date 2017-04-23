@@ -15,7 +15,8 @@ void ChatManager::operator()(const std::string& message) {
 }
 
 void ChatManager::operator()(EventChatMessage& event) {
-  string_view message = util::trim(string_view(event.message));
+  std::string& message = event.message;
+  boost::trim(message);
   
   if (message.size() == 0) {
     return;
@@ -49,10 +50,8 @@ void ChatManager::operator()(const EventPlayerDisconnect& event) {
   broadcast(message, ChatPosition::SystemMessage);
 }
 
-void ChatManager::broadcast(string_view message, ChatPosition position) {
-  // TODO: come back here
-  std::string s(message);
-  packets::ChatMessage(s, position).send(server.getOnlinePlayers());
+void ChatManager::broadcast(const std::string& message, ChatPosition position) {
+  packets::ChatMessage(message, position).send(server.getOnlinePlayers());
 }
 
 } // namespace redi

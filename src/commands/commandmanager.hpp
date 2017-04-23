@@ -19,18 +19,19 @@ enum class CommandAddResult {
 class CommandManager : HasServer {
 public:
   
-  using CommandsContainer = std::unordered_map<string_view, CommandData>;
+  using CommandsContainer = std::unordered_map<std::string, CommandData>;
   
   CommandManager(Server& server) : HasServer(server) {}
   
-  CommandManager& operator()(CommandSender& sender, string_view message);
+  CommandManager& operator()(CommandSender& sender, std::string& message);
   
-  CommandAddResult registerCommand(Command* ptr, string_view command, const std::vector<string_view>& aliases = {});
+  CommandAddResult
+  registerCommand(Command* ptr, const std::string& command, const std::vector<std::string>& aliases = {});
   
   // void unregisterCommand(string_view command);
   void unregisterAll(Command* ptr);
 private:
-  std::unordered_map<string_view, CommandData*> commands;
+  std::unordered_map<std::string, CommandData*> commands;
   std::unordered_map<Command*, std::list<CommandData>> data;
 };
 

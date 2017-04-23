@@ -9,7 +9,7 @@
 namespace redi {
 namespace commands {
 
-using CommandArguments = std::vector<string_view>;
+using CommandArguments = std::vector<std::string>;
 
 class CommandManager;
 
@@ -19,7 +19,7 @@ public:
   
   virtual ~Command();
   
-  virtual Command& operator()(CommandSender& sender, string_view command,
+  virtual Command& operator()(CommandSender& sender, const std::string& command,
                               CommandArguments& args);
 
 protected:

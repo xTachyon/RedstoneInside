@@ -6,7 +6,7 @@ namespace chat {
 ChatComponent::ChatComponent(std::string&& str)
     : string(std::move(str)) {}
 
-ChatComponent::ChatComponent(string_view str)
+ChatComponent::ChatComponent(const std::string& str)
     : string(str) {}
 
 std::string ChatComponent::generate() const {
@@ -14,15 +14,12 @@ std::string ChatComponent::generate() const {
   return "{\"text\":\""s + get() + "\"}";
 }
 
-ChatComponent::ChatComponent(const std::string& str)
-    : ChatComponent(string_view(str)) {}
-
-ChatComponent& operator+=(ChatComponent& l, string_view r) {
+ChatComponent& operator+=(ChatComponent& l, const std::string& r) {
   l.get().append(r.data(), r.size());
   return l;
 }
 
-ChatComponent operator+(ChatComponent l, string_view r) {
+ChatComponent operator+(ChatComponent l, const std::string& r) {
   l += r;
   return l;
 }

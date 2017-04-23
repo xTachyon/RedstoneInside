@@ -80,9 +80,9 @@ public:
   Player& getPlayer() override { return *this; }
   Server& getSenderServer() override { return getServer(); }
   
-  string_view getSenderName() const override { return getUsername(); }
+  const std::string& getSenderName() const override { return getUsername(); }
   
-  void sendMessageToSender(string_view message) override;
+  void sendMessageToSender(const std::string& message) override;
 
 private:
   friend class EventManager;

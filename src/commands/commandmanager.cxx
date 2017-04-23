@@ -11,7 +11,7 @@ namespace redi {
 namespace commands {
 
 CommandAddResult
-CommandManager::registerCommand(Command* ptr, string_view command, const std::vector<string_view>& aliases) {
+CommandManager::registerCommand(Command* ptr, const std::string& command, const std::vector<std::string>& aliases) {
   if (!ptr) {
     return CommandAddResult::NullPointer;
   }
@@ -45,13 +45,13 @@ CommandManager::registerCommand(Command* ptr, string_view command, const std::ve
   return CommandAddResult::Ok;
 }
 
-CommandManager& CommandManager::operator()(CommandSender& sender, string_view message) {
+CommandManager& CommandManager::operator()(CommandSender& sender, std::string& message) {
   using namespace std::string_literals;
   
   Logger::info((boost::format("%1% issued server command \"%2%\"") %
                 sender.getSenderName() % message));
   
-  message.remove_prefix(1);
+  message.erase(message.begin());
   // TODO: come back here
   std::string s(message);
   std::vector<std::string> splited = po::split_unix(s);

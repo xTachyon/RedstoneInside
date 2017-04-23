@@ -1,7 +1,6 @@
 project(redi CXX)
 
 set(SOURCE_FILES
-		util/string_view.hpp
         bytebuffer.cxx
         bytebuffer.hpp
         connectionlistener.cxx

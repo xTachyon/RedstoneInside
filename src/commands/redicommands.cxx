@@ -12,7 +12,7 @@ RediCommands::RediCommands(Server & server)
   manager.registerCommand(this, "rotation", {"rot"});
 }
 
-Command& RediCommands::operator()(CommandSender& sender, string_view command, CommandArguments& args) {
+Command& RediCommands::operator()(CommandSender& sender, const std::string& command, CommandArguments& args) {
   
   if (command == "stop") {
     stop(sender);

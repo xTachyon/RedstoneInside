@@ -7,7 +7,7 @@ namespace commands {
 Command::Command(Server & server)
     : HasServer(server), manager(server.getCommandManager()) {}
 
-Command& Command::operator()(CommandSender&, string_view,
+Command& Command::operator()(CommandSender&, const std::string&,
                              CommandArguments&) {
   return *this;
 }

@@ -11,11 +11,11 @@ Server& CommandSender::getSenderServer() {
   throw std::runtime_error("NNOOOOOOOOOOOOOOOOOOOOOOPE");
 }
 
-void CommandSender::sendMessageToSender(string_view) {
+void CommandSender::sendMessageToSender(const std::string&) {
   throw std::runtime_error("NNOOOOOOOOOOOOOOOOOOOOOOPE");
 }
 
-string_view CommandSender::getSenderName() const {
+const std::string& CommandSender::getSenderName() const {
   throw std::runtime_error("NNOOOOOOOOOOOOOOOOOOOOOOPE");
 }
 

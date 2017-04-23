@@ -22,7 +22,7 @@ public:
   void operator()(const EventPlayerJoin&);
   void operator()(const EventPlayerDisconnect&);
   
-  void broadcast(string_view message, ChatPosition position = ChatPosition::ChatBox);
+  void broadcast(const std::string& message, ChatPosition position = ChatPosition::ChatBox);
 private:
   commands::CommandManager& cmdmanager;
 };
