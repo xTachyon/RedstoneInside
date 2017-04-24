@@ -19,5 +19,9 @@ const std::string& CommandSender::getSenderName() const {
   throw std::runtime_error("NNOOOOOOOOOOOOOOOOOOOOOOPE");
 }
 
+Player* CommandSender::getPlayerPtr() {
+  return isPlayer() ? &getPlayer() : nullptr;
+}
+
 }
 }

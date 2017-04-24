@@ -84,6 +84,10 @@ void Player::kick(const std::string& message) {
   kick(std::string(message));
 }
 
+void Player::kick() {
+  kick("nighty-night !");
+}
+
 void Player::disconnect() {
   mSendKeepAliveTimer.cancel();
 

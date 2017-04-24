@@ -1,6 +1,5 @@
 #include "util/util.hpp"
 #include "logger.hpp"
-#include "exceptions.hpp"
 #include "commands/redicommands.hpp"
 #include "player.hpp"
 #include "server.hpp"
@@ -75,10 +74,6 @@ void Server::handleOne() {
 
   try {
     mEventManager();
-  } catch (StopServer&) {
-//    closeServer("Server is closing");
-    mEventManager();
-    return;
   } catch (std::exception&) {
     throw;
   }

@@ -22,17 +22,15 @@ public:
   /*
    * Don't destroy it through this destructor, please ?
    */
-  
+
+  Player* getPlayerPtr();
   virtual Player& getPlayer();
-  
   virtual Server& getSenderServer();
   
   virtual void sendMessageToSender(const std::string& message);
-  
   virtual const std::string& getSenderName() const;
   
   bool isPlayer() const { return type == CommandSenderType::Player; }
-  
   bool isNotPlayer() const { return !isPlayer(); }
 
 private:

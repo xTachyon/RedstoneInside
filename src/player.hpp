@@ -59,6 +59,8 @@ public:
 
   void kick(const std::string& message);
   void kick(std::string&& message);
+  
+  void kick();
 
   void disconnect();
   bool isDisconnecting() const { return session->isDisconnecting(); }

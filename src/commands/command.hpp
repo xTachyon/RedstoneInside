@@ -24,6 +24,10 @@ public:
 
 protected:
   CommandManager& manager;
+  
+  Player* getPlayerOrDefault(CommandSender& sender, const CommandArguments& args) const;
+  
+  Player* getPlayerOrDefaultAndSendMessageIfNot(CommandSender& sender, const CommandArguments& args) const;
 };
 
 }
