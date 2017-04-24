@@ -25,17 +25,15 @@ struct Vector2 {
 
   Vector2(T x = 0, T z = 0) : x(x), z(z) {}
 
-  //  bool operator==(const Vector2& r) const
-  //  {
-  //    return x == r.x && z = r.z;
-  //  }
+    bool operator==(const Vector2& r) const {
+      return x == r.x && z == r.z;
+    }
 
   bool operator<(const Vector2& r) const {
     return x < r.x || (x == r.x && z < r.z);
   }
 
   std::string toString() const {
-    //    return (boost::format("(%1%, %2%)") % x % z).str();
     return std::to_string(x) + ", " + std::to_string(z);
   }
 
@@ -76,10 +74,11 @@ struct Vector3 {
            std::to_string(z);
   }
 
-  std::int64_t distanceSquared(const Vector3& r) {
-    std::int64_t xx = static_cast<std::int64_t>(x) - r.x;
-    std::int64_t yy = static_cast<std::int64_t>(y) - r.y;
-    std::int64_t zz = static_cast<std::int64_t>(z) - r.z;
+  template <typename Result = T>
+  Result distanceSquared(const Vector3& r) {
+    Result xx = static_cast<Result>(x - r.x);
+    Result yy = static_cast<Result>(y - r.y);
+    Result zz = static_cast<Result>(z - r.z);
 
     return xx * xx + yy * yy + zz * zz;
   }

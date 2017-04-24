@@ -15,7 +15,7 @@ Server::Server()
           workIoService, static_cast<std::uint16_t>(config.port), *this)),
       mEntityCount(0),
       mChatManager(*this), mEventManager(*this),
-      commandmanager(*this), commands(std::make_unique<commands::RediCommands>(*this)),
+      commandmanager(*this), commands(std::make_unique<commands::RediCommands>(*this)), running(true),
       mUniqueLock(mCondVarMutex) {
   fs::create_directories("players");
   fs::create_directories("worlds");

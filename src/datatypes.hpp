@@ -2,7 +2,6 @@
 #define REDI_DATATYPES_HPP
 
 #include <cstdint>
-#include <string_view>
 
 namespace redi {
 

@@ -69,6 +69,7 @@ private:
   lockfree::Queue<PacketHandlerSharedPtr> mPacketsToBeHandle;
   commands::CommandManager commandmanager;
   std::unique_ptr<commands::Command> commands;
+  bool running;
   
   util::ThreadGroup<std::thread> asiothreads;
   std::condition_variable mCondVar;

@@ -34,8 +34,14 @@ if(REDI_GCC OR REDI_CLANG)
   endif()
 elseif(REDI_MSVC)
   set(warnings "/W3")
-  set(compiler_options "${compiler_options} /std:c++latest /EHsc  -D_WIN32_WINNT=0x0501 -D_SCL_SECURE_NO_WARNINGS -D_HAS_AUTO_PTR_ETC=1")
+  set(compiler_options "${compiler_options} /std:c++latest /EHsc -D_WIN32_WINNT=0x0501 -D_SCL_SECURE_NO_WARNINGS -D_HAS_AUTO_PTR_ETC=1")
   # /std:c++latest
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(REDI_BUILD_TYPE "Debug")
+else()
+  set(REDI_BUILD_TYPE "Release")
 endif()
 
 set(compiler_options "${compiler_options} ${warnings}")
@@ -46,6 +52,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${compiler_options}")
 message(STATUS "Current compiler: ${REDI_COMPILER_NAME}")
 message(STATUS "C flags: ${CMAKE_C_FLAGS}")
 message(STATUS "CXX flags: ${CMAKE_CXX_FLAGS}")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE} -> ${REDI_BUILD_TYPE}")
 
 get_filename_component(BOOST_INCLUDEDIR "${BOOST_INCLUDEDIR}" REALPATH)
 get_filename_component(BOOST_LIBRARYDIR "${BOOST_LIBRARYDIR}" REALPATH)
