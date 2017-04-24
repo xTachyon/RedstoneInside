@@ -32,14 +32,12 @@ void RediCommands::stop(CommandSender& sender) {
 }
 
 void RediCommands::position(CommandSender& sender, CommandArguments& args) {
-  Player * target = nullptr;
+  Player* target = nullptr;
   if (args.size() == 0) {
     target = &sender.getPlayer();
   }
   else {
-    // TODO: come back here
-    std::string s(args[0]);
-    target = sender.getSenderServer().findPlayer(s);
+    target = sender.getSenderServer().findPlayer(args[0]);
   }
   
   if (target) {

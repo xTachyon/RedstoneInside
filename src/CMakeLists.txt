@@ -7,7 +7,6 @@ set(SOURCE_FILES
         connectionlistener.hpp
         enums.cxx
         enums.hpp
-        exceptions.hpp
         logger.cxx
         logger.hpp
         main.cxx
