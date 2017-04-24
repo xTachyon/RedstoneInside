@@ -32,10 +32,10 @@ public:
   Player& operator=(const Player&) = delete;
   Player& operator=(Player&&) = delete;
 
-  Session& getSession() { return *mSession; }
-  const Session& getSession() const { return *mSession; }
+  Session& getSession() { return *session; }
+  const Session& getSession() const { return *session; }
 
-  Gamemode getGamemode() const { return mGamemode; }
+  Gamemode getGamemode() const { return gamemode; }
   Dimension getDimension() const { return mPosition.dimension; }
   PlayerPosition getPosition() const { return mPosition; }
 
@@ -56,16 +56,12 @@ public:
   void sendPacket(ByteBuffer&& packet);
   void sendMessage(const std::string& message,
                    ChatPosition position = ChatPosition::ChatBox);
-  void sendJSONMessage(const std::string& json,
-                       ChatPosition position = ChatPosition::ChatBox);
 
-  void kickJSONmessage(const std::string& json);
-  void kickJSONmessage(std::string&& json);
   void kick(const std::string& message);
   void kick(std::string&& message);
 
   void disconnect();
-  bool isDisconnecting() const { return mSession->isDisconnecting(); }
+  bool isDisconnecting() const { return session->isDisconnecting(); }
 
   void onTick();
 
@@ -98,8 +94,8 @@ private:
   boost::uuids::uuid mUUID;
   std::string mNickname;
   World* mWorld;
-  SessionSharedPtr mSession;
-  Gamemode mGamemode;
+  SessionSharedPtr session;
+  Gamemode gamemode;
   PlayerPosition mPosition;
   boost::asio::steady_timer mSendKeepAliveTimer;
   std::int32_t mTeleportID;

@@ -21,8 +21,8 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid,
                Server& server, World* world, Gamemode gamemode)
     : HasServer(server), CommandSender(commands::CommandSenderType::Player), mUUID(uuid), mNickname(name),
       mWorld(world),
-      mSession(session), mGamemode(gamemode),
-      mSendKeepAliveTimer(mSession->getIoService()), mTeleportID(0),
+      session(session), gamemode(gamemode),
+      mSendKeepAliveTimer(session->getIoService()), mTeleportID(0),
       mEntityID(id), hasSavedToDisk(false) {
   Logger::debug((boost::format("Player %1% created") % this).str());
 
@@ -45,8 +45,8 @@ Player::~Player() {
 void Player::onSendKeepAliveTimer(const boost::system::error_code& error) {
   using namespace std::chrono_literals;
 
-  if (!error && !mSession->isDisconnecting()) {
-    packets::KeepAlive(5).send(*mSession);
+  if (!error && !session->isDisconnecting()) {
+    packets::KeepAlive(5).send(*session);
 
     mSendKeepAliveTimer.expires_from_now(15s);
     keepAliveNext();
@@ -60,44 +60,34 @@ void Player::keepAliveNext() {
 }
 
 void Player::sendPacket(const ByteBuffer& packet) {
-  mSession->sendPacket(packet);
+  session->sendPacket(packet);
 }
 
 void Player::sendPacket(ByteBuffer&& packet) {
-  mSession->sendPacket(std::move(packet));
+  session->sendPacket(std::move(packet));
 }
 
 void Player::sendMessage(const std::string& message, ChatPosition position) {
-  sendJSONMessage(message, position);
+  packets::ChatMessage(message, position).send(session);
 }
 
 void Player::sendMessageToSender(const std::string& message) {
-  // TODO: come back here
-  std::string s(message);
-  sendMessage(s);
-}
-
-void Player::sendJSONMessage(const std::string& json, ChatPosition position) {
-  packets::ChatMessage(json, position).send(*&*mSession);
-}
-
-void Player::kickJSONmessage(const std::string& json) {
-  kickJSONmessage(std::string(json));
-}
-
-void Player::kickJSONmessage(std::string&& json) {
-  packets::Disconnect(std::move(json)).send(*mSession);
-  disconnect();
+  sendMessage(message);
 }
 
 void Player::kick(std::string&& message) {
-  kickJSONmessage(std::move(message));
+  packets::Disconnect(std::move(message)).send(*session);
+  disconnect();
+}
+
+void Player::kick(const std::string& message) {
+  kick(std::string(message));
 }
 
 void Player::disconnect() {
   mSendKeepAliveTimer.cancel();
 
-  mSession->disconnect();
+  session->disconnect();
   
   if (!hasSavedToDisk) {
     hasSavedToDisk = true;
@@ -109,8 +99,6 @@ void Player::normalizeRotation() {
   mPosition.yaw = util::normalizeAngleDegrees(mPosition.yaw);
   mPosition.pitch = util::normalizeAngleDegrees(mPosition.pitch);
 }
-
-void Player::kick(const std::string& message) { kick(std::string(message)); }
 
 std::string Player::getPlayerDataFileName() const {
   return "players/" + getUUIDasString() + ".json";
@@ -243,7 +231,7 @@ void Player::onPositionChanged() {
 }
 
 void Player::onChunkLoaded(world::ChunkHolder& chunk) {
-  packets::ChunkData(*chunk, chunk.getCoords()).send(mSession);
+  packets::ChunkData(*chunk, chunk.getCoords()).send(session);
   loadedChunks.push_back(chunk);
 }
 
@@ -275,7 +263,7 @@ void Player::onUpdateChunks() {
         if (cm.isChunkLoaded(th)) {
           world::ChunkHolder chunk = cm(th);
           newchunks.push_back(chunk);
-          packets::ChunkData(*chunk, chunk.getCoords()).send(mSession);
+          packets::ChunkData(*chunk, chunk.getCoords()).send(session);
         } else {
           cm.loadChunk(th, shared_from_this());
         }
@@ -290,7 +278,7 @@ void Player::onUpdateChunks() {
   }
 
   for (const world::ChunkHolder& chunk : loadedChunks) {
-    packets::UnloadChunk(chunk.getCoords()).send(mSession);
+    packets::UnloadChunk(chunk.getCoords()).send(session);
   }
 
   loadedChunks = std::move(newchunks);

@@ -77,8 +77,13 @@ CommandManager& CommandManager::operator()(CommandSender& sender, std::string& m
     for (std::size_t i = 1; i < splited.size(); ++i) {
       args.emplace_back(splited[i]);
     }
-    
-    ref(sender, it->second->command, args);
+    try {
+      ref(sender, it->second->command, args);
+    } catch (std::exception& e) {
+      std::string error = "Internal exception occured in command \"" + it->second->command + "\": " + e.what();
+      Logger::warn(error);
+      sender.sendMessageToSender(error);
+    }
   }
   
   return *this;

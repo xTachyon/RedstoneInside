@@ -42,16 +42,15 @@ public:
   std::int32_t getOnlinePlayersNumber() const { return std::distance(mPlayers.begin(), mPlayers.end()); }
   PlayerList& getOnlinePlayers() { return mPlayers; }
   const PlayerList& getOnlinePlayers() const { return mPlayers; }
-  void broadcastPacketToPlayers(ByteBufferSharedPtr ptr,
-                                std::function<bool(const Player&)> comp);
   void sendMessage(const std::string& str) const { Logger::info(str); }
   Player* findPlayer(const std::string& name);
   EventManager& getEventManager() { return mEventManager; }
-  void closeServer(const std::string& reason);
   ChatManager& getChatManager() { return mChatManager; }
   boost::asio::io_service& getWorkIO() { return workIoService; }
   
   commands::CommandManager& getCommandManager() { return commandmanager; }
+
+  void stop();
 private:
   friend class EventManager;
   friend class PacketHandler;
@@ -75,6 +74,9 @@ private:
   std::condition_variable mCondVar;
   std::mutex mCondVarMutex;
   std::unique_lock<std::mutex> mUniqueLock;
+
+  void handleOne();
+  void closeServer();
 };
 
 } // namespace redi

@@ -27,8 +27,8 @@ Command& RediCommands::operator()(CommandSender& sender, const std::string& comm
   return *this;
 }
 
-void RediCommands::stop(CommandSender&) {
-  throw StopServer();
+void RediCommands::stop(CommandSender& sender) {
+  sender.getSenderServer().stop();
 }
 
 void RediCommands::position(CommandSender& sender, CommandArguments& args) {

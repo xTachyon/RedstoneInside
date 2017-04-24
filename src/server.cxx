@@ -46,34 +46,41 @@ Server::~Server() {
 }
 
 void Server::run() {
-  while (true) {
-    while (true) {
-      PacketHandlerSharedPtr x;
-      if (!mPacketsToBeHandle.pop(x) || !x)
-        break;
-
-      try {
-        x->handleOne();
-      } catch (std::exception& e) {
-        Logger::error(e.what());
-        // Just ignore everything bad.
-        x->getSession().disconnect();
-        // and disconnect
-        // TODO: add message
-      }
-    }
-
-    try {
-      mEventManager();
-    } catch (StopServer&) {
-      closeServer("Server is closing");
-      mEventManager();
-      return;
-    } catch (std::exception&) {
-      throw;
-    }
+  while (running) {
+    handleOne();
 
     mCondVar.wait(mUniqueLock);
+  }
+
+  closeServer();
+  handleOne();
+}
+
+void Server::handleOne() {
+  while (true) {
+    PacketHandlerSharedPtr x;
+    if (!mPacketsToBeHandle.pop(x) || !x)
+      break;
+
+    try {
+      x->handleOne();
+    } catch (std::exception& e) {
+      Logger::error(e.what());
+      // Just ignore everything bad.
+      x->getSession().disconnect();
+      // and disconnect
+      // TODO: add message
+    }
+  }
+
+  try {
+    mEventManager();
+  } catch (StopServer&) {
+//    closeServer("Server is closing");
+    mEventManager();
+    return;
+  } catch (std::exception&) {
+    throw;
   }
 }
 
@@ -93,15 +100,6 @@ void Server::addWorld(const std::string& worldname,
                        std::make_shared<TerrainGenerator>());
 }
 
-void Server::broadcastPacketToPlayers(ByteBufferSharedPtr ptr,
-                                      std::function<bool(const Player&)> comp) {
-  std::for_each(mPlayers.begin(), mPlayers.end(), [&](PlayerSharedPtr& player) {
-    if (comp(*player)) {
-      player->sendPacket(ByteBuffer(*ptr));
-    }
-  });
-}
-
 Player* Server::findPlayer(const std::string& name) {
   Player* ptr = nullptr;
 
@@ -115,12 +113,17 @@ Player* Server::findPlayer(const std::string& name) {
   return ptr;
 }
 
-void Server::closeServer(const std::string& reason) {
+void Server::closeServer() {
   mListener->mIsStopping = true;
 
   for (auto& i : mPlayers) {
-    i->kick(reason);
+    i->kick("Server is closing");
   }
+}
+
+void Server::stop() {
+  running = false;
+  mCondVar.notify_one();
 }
 
 } // namespace redi
