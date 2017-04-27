@@ -16,7 +16,6 @@ class CommandManager;
 class Command : HasServer {
 public:
   Command(Server& server);
-  
   virtual ~Command();
   
   virtual Command& operator()(CommandSender& sender, const std::string& command,
@@ -26,7 +25,6 @@ protected:
   CommandManager& manager;
   
   Player* getPlayerOrDefault(CommandSender& sender, const CommandArguments& args) const;
-  
   Player* getPlayerOrDefaultAndSendMessageIfNot(CommandSender& sender, const CommandArguments& args) const;
 };
 

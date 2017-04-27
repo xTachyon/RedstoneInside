@@ -1,5 +1,6 @@
 #include <csignal>
 #include "server.hpp"
+#include "servericon.hpp"
 
 namespace {
 
@@ -44,6 +45,8 @@ void installSignals(redi::Server& server) {
 }
 
 int main(int, char**) {
+  redi::ServerIcon icon;
+  
   redi::Logger::debug("Redi is starting");
 
   try {
