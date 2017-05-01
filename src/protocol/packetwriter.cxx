@@ -99,12 +99,4 @@ void PacketWriter::writeChat(const chat::ChatComponent& chat) {
   writeString(chat.generate());
 }
 
-//void PacketWriter::writeChat(std::string&& str) {
-//  writeChat(chat::ChatComponent(std::move(str)));
-//}
-//
-//void PacketWriter::writeChat(string_view str) {
-//  writeChat(chat::ChatComponent(str));
-//}
-
 } // namespace redi

@@ -125,7 +125,7 @@ void PacketHandler::handleOne() {
 }
 
 void PacketHandler::handleHandshake(Handshake& p) {
-  mSession.mConnectionState = p.state;
+  mSession.connectionState = p.state;
 }
 
 void PacketHandler::handleStatusRequest(Request&) {

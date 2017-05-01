@@ -38,21 +38,21 @@ public:
   void sendPacket(ByteBuffer&& packet, const std::string& message = "");
   void sendPacket(const ByteBuffer& packet, const std::string& message = "");
 
-  boost::asio::ip::tcp::socket& getSocket() { return mSocket; }
-  const boost::asio::ip::tcp::socket& getSocket() const { return mSocket; }
+  boost::asio::ip::tcp::socket& getSocket() { return socket; }
+  const boost::asio::ip::tcp::socket& getSocket() const { return socket; }
   // And no, I don't have any idea why would I need a socket constant
   // Remember to add a reason here if you ever do this
 
-  boost::asio::io_service& getIoService() { return mSocket.get_io_service(); }
+  boost::asio::io_service& getIoService() { return socket.get_io_service(); }
 
-  Player& getPlayer() { return *mPlayer; }
+  Player& getPlayer() { return *player; }
   void setPlayer(Player& player);
 
-  ConnectionState getConnectionState() const { return mConnectionState; }
-  void setConnectionState(ConnectionState s) { mConnectionState = s; }
+  ConnectionState getConnectionState() const { return connectionState; }
+  void setConnectionState(ConnectionState s) { connectionState = s; }
 
-  bool getCompressionIsSent() const { return mSetCompressionIsSent; }
-  void setCompressionIsSent(bool b) { mSetCompressionIsSent = b; }
+  bool getCompressionIsSent() const { return setCompressionIsSentVar; }
+  void setCompressionIsSent(bool b) { setCompressionIsSentVar = b; }
 
   void disconnect();
   void kick(const std::string& message);
@@ -65,22 +65,21 @@ private:
   using PacketPtr = std::shared_ptr<ByteBuffer>;
   using PacketQueue = ThreadSafeQueue<PacketPtr>;
 
-  boost::asio::ip::tcp::socket mSocket;
-  ByteBuffer mSendingPacket;
-  ByteBuffer mReceivingPacket;
-  Player* mPlayer;
-  ConnectionState mConnectionState;
-  std::atomic_bool mSetCompressionIsSent;
-  std::uint8_t mReceivingPacketSize[5];
-  std::uint8_t mReceivingPacketCountSize;
-  PacketHandlerSharedPtr mPacketHandler;
+  boost::asio::ip::tcp::socket socket;
+  ByteBuffer sendingPacket;
+  ByteBuffer receivingPacket;
+  Player* player;
+  ConnectionState connectionState;
+  std::atomic_bool setCompressionIsSentVar;
+  std::uint8_t receivingPacketSize[5];
+  std::uint8_t receivingPacketCountSize;
+  PacketHandlerSharedPtr packetHandler;
   std::atomic_bool isDisconnected;
-  std::atomic_bool mIsWritting;
-  lockfree::ByteBufferQueue mPacketsToBeSend;
-  boost::asio::io_service::strand mStrand;
+  std::atomic_bool isWritting;
+  lockfree::ByteBufferQueue packetsToBeSend;
+  boost::asio::io_service::strand strand;
   
   void handleRead(const boost::system::error_code& error, bool header);
-  
   void handleWrite(const boost::system::error_code& error);
   void writeNext();
   void postWrite();
