@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(CMAKE_CXX_STANDARD 14)
+#set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(WIN32)
@@ -28,9 +28,9 @@ else()
 endif()
 
 if(REDI_GCC OR REDI_CLANG)
-  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow -Wno-c++1z-extensions")
+  set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow -std=c++1z")
   if (REDI_CLANG)
-    set(compiler_options "-fno-limit-debug-info")
+    set(compiler_options "-fno-limit-debug-info -Wno-c++1z-extensions")
   endif()
 elseif(REDI_MSVC)
   set(warnings "/W3")

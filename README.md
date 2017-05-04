@@ -1,5 +1,5 @@
 # RedstoneInside
-[![Travis CI](https://travis-ci.com/xTachyon/RedstoneInside.svg?token=zFTuXDP6wpmADxJvPJKB&branch=master)](https://travis-ci.com/xTachyon/RedstoneInside)
+[![Travis CI](https://travis-ci.org/xTachyon/RedstoneInside.svg?branch=master)
 
 A C++ Minecraft server.
 

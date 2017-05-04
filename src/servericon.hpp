@@ -8,18 +8,16 @@ namespace redi {
 
 class ServerIcon {
 public:
-  static constexpr char const* DefaultImageLocation = "icon.png";
-  
-  ServerIcon(const boost::filesystem::path& path = DefaultImageLocation);
-  
+  ServerIcon(const boost::filesystem::path& path = "icon.png");
+
   operator const std::string() const { return getData(); }
-  
+
   operator bool() const { return loaded(); }
-  
-  void load(const boost::filesystem::path& path = DefaultImageLocation);
-  
+
+  void load(const boost::filesystem::path& path = "icon.png");
+
   const std::string& getData() const { return data; }
-  
+
   bool loaded() const { return data.size() != 0; }
 
 private:
