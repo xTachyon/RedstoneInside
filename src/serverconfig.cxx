@@ -69,7 +69,7 @@ void ServerConfig::readIcon() {
     buffer.resize(static_cast<std::size_t>(fs::file_size(iconpath)));
 
     {
-      std::ifstream file(iconpath);
+      std::ifstream file(iconpath, std::ios::binary);
       file.read(buffer.as_char(), buffer.size());
     }
 
