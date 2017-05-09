@@ -240,7 +240,7 @@ void Player::onChunkLoaded(world::ChunkHolder& chunk) {
 }
 
 void Player::onUpdateChunks() {
-  auto range = getServer().config.rangeView;
+  auto range = getServer().getServerConfiguration().rangeView;
 
   Vector2i playerchunk(static_cast<std::int32_t>(mPosition.x / 16),
                        static_cast<std::int32_t>(mPosition.z / 16));

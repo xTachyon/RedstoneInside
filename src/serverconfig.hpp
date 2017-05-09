@@ -24,6 +24,9 @@ enum PlayerAbilitiesFlag : std::int8_t {
 };
 
 struct ServerConfig {
+  static const char* ConfigFilePath;
+  static const char* DefaultConfigFileContent;
+  
   bool onlineMode;
   int maxPlayers;
   std::string motd;
@@ -35,14 +38,14 @@ struct ServerConfig {
   int port;
   std::uint16_t rangeView;
 
-  std::string configpath;
   std::string iconpath;
-
-  ServerConfig(std::string&& filepath);
+  
+  ServerConfig();
 
   void readConfig();
   void readIcon();
-  void writeConfig();
+  
+  static void writeConfig();
 };
 
 } // namespace redi

@@ -9,9 +9,8 @@ namespace fs = boost::filesystem;
 namespace redi {
 
 Server::Server()
-    : config("server.properties"),
-      mListener(std::make_shared<ConnectionListener>(
-          workIoService, static_cast<std::uint16_t>(config.port), *this)),
+    : mListener(std::make_shared<ConnectionListener>(
+    workIoService, static_cast<std::uint16_t>(configuration.port), *this)),
       mEntityCount(0),
       mChatManager(*this), mEventManager(*this),
       commandmanager(*this), commands(std::make_unique<commands::RediCommands>(*this)), running(true),
@@ -45,9 +44,13 @@ Server::~Server() {
 }
 
 void Server::run() {
-  while (running) {
+  while (true) {
     handleOne();
-
+    
+    if (!running) {
+      break;
+    }
+    
     mCondVar.wait(mUniqueLock);
   }
 

@@ -61,28 +61,30 @@ CommandManager& CommandManager::operator()(CommandSender& sender, std::string& m
   }
   else {
     splited[0] = util::toLowercase(splited[0]);
-  }
-  auto it = commands.find(splited[0]);
-  if (it == commands.end()) {
-    sender.sendMessageToSender(splited[0] + " does not exist");
-  }
-  else {
-    assert(it->second->ptr && "The pointer shouldn't be null");
-    Command& ref = *it->second->ptr;
-    
-    // TODO: find a way which doesn't involve copying
-    CommandArguments args;
-    args.reserve(splited.size() - 1);
-    
-    for (std::size_t i = 1; i < splited.size(); ++i) {
-      args.emplace_back(splited[i]);
+  
+    auto it = commands.find(splited[0]);
+    if (it == commands.end()) {
+      sender.sendMessageToSender(splited[0] + " does not exist");
     }
-    try {
-      ref(sender, it->second->command, args);
-    } catch (std::exception& e) {
-      std::string error = "Internal exception occured in command \"" + it->second->command + "\": " + e.what();
-      Logger::warn(error);
-      sender.sendMessageToSender(error);
+    else {
+      assert(it->second->ptr && "The pointer shouldn't be null");
+      Command& ref = *it->second->ptr;
+    
+      // TODO: find a way which doesn't involve copying
+      CommandArguments args;
+      args.reserve(splited.size() - 1);
+    
+      for (std::size_t i = 1; i < splited.size(); ++i) {
+        args.emplace_back(splited[i]);
+      }
+      try {
+        ref(sender, it->second->command, args);
+      }
+      catch (std::exception& e) {
+        std::string error = "Internal exception occured in command \"" + it->second->command + "\": " + e.what();
+        Logger::warn(error);
+        sender.sendMessageToSender(error);
+      }
     }
   }
   

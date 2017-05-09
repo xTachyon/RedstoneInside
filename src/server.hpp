@@ -26,8 +26,6 @@ public:
    * Minimum 1
   */
 
-  ServerConfig config;
-
   Server();
   ~Server();
 
@@ -49,6 +47,10 @@ public:
   boost::asio::io_service& getWorkIO() { return workIoService; }
   
   commands::CommandManager& getCommandManager() { return commandmanager; }
+  
+  ServerConfig& getServerConfiguration() { return configuration; }
+  
+  const ServerConfig& getServerConfiguration() const { return configuration; }
 
   void stop();
 private:
@@ -57,7 +59,9 @@ private:
 
   using SessionList = std::list<std::shared_ptr<Session>>;
   using WorldList = std::list<World>;
-
+  
+  ServerConfig configuration;
+  
   boost::asio::io_service workIoService;
   ConnectionListenerSharedPtr mListener;
   PlayerList mPlayers;

@@ -8,7 +8,7 @@ namespace redi {
 Response::Response(Server& server) : server(server) {}
 
 void Response::write(ByteBuffer& buffer) {
-  const ServerConfig& config = server.config;
+  const ServerConfig& config = server.getServerConfiguration();
   nlohmann::json j;
 
   j["description"]["text"] = config.motd;

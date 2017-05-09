@@ -1,99 +1,152 @@
-#include <fstream>
-#include <boost/filesystem.hpp>
-#include <boost/program_options.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include "serverconfig.hpp"
 #include "util/util.hpp"
+#include "filesystem.hpp"
+#include "logger.hpp"
 
-namespace fs = boost::filesystem;
 namespace po = boost::program_options;
 
 namespace redi {
 
-ServerConfig::ServerConfig(std::string&& filepath)
-    : configpath(std::move(filepath)) {
-  readConfig();
-}
+const char* ServerConfig::ConfigFilePath = "configuration.txt";
+const char* ServerConfig::DefaultConfigFileContent =
+    "# Hello !\n"
+        "online=false\n"
+        "maxplayers=1472\n"
+        "motd=Redi - Highly flammable\n"
+        "gamemode=1\n"
+        "difficulty=0\n"
+        "leveltype=DEFAULT\n"
+        "port=25565\n"
+        "icon=icon.png\n"
+        "rangeview=5";
 
-void ServerConfig::readConfig() {
-  bool notexists = !fs::exists(configpath) || fs::file_size(configpath) == 0;
-  if (notexists) {
-    std::ofstream(configpath) << "";
-    // For whatever reasons, simply std::ofstream(configpath) doesn't work to
-    // create new empty file
-  }
-
-  int gm, diff;
-
-  po::options_description desc("options");
-  desc.add_options()("online",
-                     po::value<bool>(&onlineMode)->default_value(false),
-                     "If server is in online mode")(
-      "max-players", po::value<int>(&maxPlayers)->default_value(20),
-      "Maximum number of players")(
-      "motd",
-      po::value<std::string>(&motd)->default_value("Redi - Highly flammable"),
-      "Server description")("gamemode", po::value<int>(&gm)->default_value(1),
-                            "Gamemode")(
-      "level-type",
-      po::value<std::string>(&levelType)->default_value("default"),
-      "Level type")("difficulty", po::value<int>(&diff)->default_value(0),
-                    "Difficulty")(
-      "server-icon",
-      po::value<std::string>(&iconpath)->default_value("icon.png"),
-      "Server icon path")("port", po::value<int>(&port)->default_value(25565),
-                          "Port")(
-      "rangeview", po::value<std::uint16_t>(&rangeView)->default_value(5),
-      "Range view");
-
-  po::variables_map vm;
-  std::ifstream file(configpath);
-
-  po::store(po::parse_config_file(file, desc), vm);
-  po::notify(vm);
-
-  gamemode = static_cast<Gamemode>(gm);
-  difficulty = static_cast<Difficulty>(diff);
+ServerConfig::ServerConfig() {
+  onlineMode = false;
+  maxPlayers = 1472;
+  motd = "Redi - Highly flammable";
+  gamemode = Gamemode::Creative;
+  difficulty = Difficulty::Peaceful;
+  levelType = "DEFAULT";
   reducedDebugInfo = false;
-  readIcon();
-
-  if (notexists) {
+  port = 25565;
+  iconpath = "icon.png";
+  rangeView = 5;
+  
+  if (fs::exists(ConfigFilePath)) {
+    try {
+      readConfig();
+    }
+    catch (std::exception&) {
+      Logger::error("Error while parsing the configuration file");
+      throw;
+    }
+  }
+  else {
     writeConfig();
   }
 }
 
-void ServerConfig::readIcon() {
-  if (fs::exists(iconpath)) {
-    ByteBuffer buffer;
-    buffer.resize(static_cast<std::size_t>(fs::file_size(iconpath)));
-
-    {
-      std::ifstream file(iconpath, std::ios::binary);
-      file.read(buffer.as_char(), buffer.size());
-    }
-
-    iconb64 = std::string("data:image/png;base64,") +
-              util::Base64Encoder::encodeToString(buffer);
+void ServerConfig::readConfig() {
+  static const char* OnlineText = "online";
+  static const char* MaxPlayerText = "maxplayers";
+  static const char* MotdText = "motd";
+  static const char* GamemodeText = "gamemode";
+  static const char* DifficultyText = "difficulty";
+  static const char* LevelTypeText = "leveltype";
+  static const char* PortText = "port";
+  static const char* IconText = "icon";
+  static const char* RangeViewText = "rangeview";
+  
+  boost::property_tree::ptree tree;
+  
+  /*
+   * Just a tree, keep scrolling.
+              _{\ _{\{\/}/}/}__
+             {/{/\}{/{/\}(\}{/\} _
+            {/{/\}{/{/\}(_)\}{/{/\}  _
+         {\{/(\}\}{/{/\}\}{/){/\}\} /\}
+        {/{/(_)/}{\{/)\}{\(_){/}/}/}/}
+       _{\{/{/{\{/{/(_)/}/}/}{\(/}/}/}
+      {/{/{\{\{\(/}{\{\/}/}{\}(_){\/}\}
+      _{\{/{\{/(_)\}/}{/{/{/\}\})\}{/\}
+     {/{/{\{\(/}{/{\{\{\/})/}{\(_)/}/}\}
+      {\{\/}(_){\{\{\/}/}(_){\/}{\/}/})/}
+       {/{\{\/}{/{\{\{\/}/}{\{\/}/}\}(_)
+      {/{\{\/}{/){\{\{\/}/}{\{\(/}/}\}/}
+       {/{\{\/}(_){\{\{\(/}/}{\(_)/}/}\}
+         {/({/{\{/{\{\/}(_){\/}/}\}/}(\}
+          (_){/{\/}{\{\/}/}{\{\)/}/}(_)
+            {/{/{\{\/}{/{\{\{\(_)/}
+             {/{\{\{\/}/}{\{\\}/}
+              {){/ {\/}{\/} \}\}
+              (_)  \.-'.-/
+          __...--- |'-.-'| --...__
+   _...--"   .-'   |'-.-'|  ' -.  ""--..__
+ -"    ' .  . '    |.'-._| '  . .  '   jro
+ .  '-  '    .--'  | '-.'|    .  '  . '
+          ' ..     |'-_.-|
+  .  '  .       _.-|-._ -|-._  .  '  .
+              .'   |'- .-|   '.
+  ..-'   ' .  '.   `-._.-´   .'  '  - .
+   .-' '        '-._______.-'     '  .
+        .      ~,
+    .       .   |\   .    ' '-.
+   */
+  
+  boost::property_tree::ini_parser::read_ini(ConfigFilePath, tree);
+  
+  if (tree.count(OnlineText)) {
+    onlineMode = tree.get<bool>(OnlineText);
+  }
+  if (tree.count(MaxPlayerText)) {
+    maxPlayers = tree.get<int>(MaxPlayerText);
+  }
+  if (tree.count(MotdText)) {
+    motd = tree.get<std::string>(MotdText);
+  }
+  if (tree.count(GamemodeText)) {
+    gamemode = static_cast<Gamemode>(tree.get<int>(GamemodeText));
+  }
+  if (tree.count(DifficultyText)) {
+    difficulty = static_cast<Difficulty>(tree.get<int>(DifficultyText));
+  }
+  if (tree.count(LevelTypeText)) {
+    levelType = tree.get<std::string>(LevelTypeText);
+  }
+  if (tree.count(PortText)) {
+    port = tree.get<int>(PortText);
+  }
+  if (tree.count(IconText)) {
+    iconpath = tree.get<std::string>(IconText);
+    readIcon();
+  }
+  if (tree.count(RangeViewText)) {
+    rangeView = tree.get<std::uint16_t>(RangeViewText);
   }
 }
 
+/*
+ * Reads the server icon from disk.
+ */
+void ServerConfig::readIcon() {
+  if (fs::exists(iconpath)) {
+    ByteBuffer buffer = util::readFile(iconpath);
+    
+    iconb64 = std::string("data:image/png;base64,") +
+              util::Base64Encoder::encodeToString(buffer);
+    /*
+     * Icon has to be sent encoded as base64.
+     */
+  }
+}
+
+/*
+ * Writes the default configuration file.
+ */
 void ServerConfig::writeConfig() {
-  using boost::property_tree::ptree;
-
-  ptree root;
-
-  root.put("online", onlineMode);
-  root.put("max-players", maxPlayers);
-  root.put("motd", motd);
-  root.put("gamemode", static_cast<int>(gamemode));
-  root.put("difficulty", static_cast<int>(difficulty));
-  root.put("level-type", levelType);
-  root.put("port", port);
-  root.put("server-icon", "icon.png");
-  root.put("rangeview", rangeView);
-
-  write_ini(configpath, root);
+  std::ofstream(ConfigFilePath) << DefaultConfigFileContent;
 }
 
 const char* GamemodeEnumToString(Gamemode g) {
