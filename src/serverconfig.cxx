@@ -5,8 +5,6 @@
 #include "filesystem.hpp"
 #include "logger.hpp"
 
-namespace po = boost::program_options;
-
 namespace redi {
 
 const char* ServerConfig::ConfigFilePath = "configuration.txt";
