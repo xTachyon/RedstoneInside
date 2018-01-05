@@ -1,6 +1,7 @@
 #ifndef REDI_PACKET_HPP
 #define REDI_PACKET_HPP
 
+#include <list>
 #include <memory>
 #include "../../bytebuffer.hpp"
 #include "../packetreader.hpp"

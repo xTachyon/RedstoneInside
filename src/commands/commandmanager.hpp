@@ -1,6 +1,7 @@
 #ifndef REDI_COMMANDS_COMMANDMANAGER_HPP
 #define REDI_COMMANDS_COMMANDMANAGER_HPP
 
+#include <list>
 #include <unordered_map>
 #include "../hasserver.hpp"
 #include "commandsender.hpp"

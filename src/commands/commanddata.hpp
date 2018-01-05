@@ -1,6 +1,7 @@
 #ifndef REDI_COMMANDS_COMMANDDATA_HPP
 #define REDI_COMMANDS_COMMANDDATA_HPP
 
+#include <algorithm>
 #include <string>
 #include <vector>
 #include "command.hpp"

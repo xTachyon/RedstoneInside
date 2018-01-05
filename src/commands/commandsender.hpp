@@ -1,6 +1,7 @@
 #ifndef REDI_COMMANDSENDER_HPP
 #define REDI_COMMANDSENDER_HPP
 
+#include <string>
 #include "../datatypes.hpp"
 
 namespace redi {

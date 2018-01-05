@@ -1,6 +1,7 @@
 #ifndef REDI_CHAT_CHATCOMPONENT_HPP
 #define REDI_CHAT_CHATCOMPONENT_HPP
 
+#include <string>
 #include "../datatypes.hpp"
 
 namespace redi {

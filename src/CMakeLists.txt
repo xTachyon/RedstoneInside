@@ -231,5 +231,5 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 include(../CMake/cotire.cmake)
-cotire(redi)
+#cotire(redi)
 
