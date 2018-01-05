@@ -38,8 +38,8 @@ void ChunkDeserializer::readSection(const nbt::TagCompound& section) {
 
 void ChunkDeserializer::readBlocks(const std::vector<std::int8_t>& buffer,
                                    std::int16_t yy) {
-  const std::uint8_t* ptr =
-      reinterpret_cast<const std::uint8_t*>(buffer.data());
+//  const std::uint8_t* ptr =
+//      reinterpret_cast<const std::uint8_t*>(buffer.data());
   std::size_t k = 0;
 
   for (std::uint8_t y = 0; y < 16; ++y) {

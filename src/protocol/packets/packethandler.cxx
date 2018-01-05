@@ -47,6 +47,7 @@ void PacketHandler::readRaw(ByteBuffer buffer) {
       break;
     }
   }
+    break;
 
   case ConnectionState::Login: {
     switch (type) {
@@ -54,7 +55,7 @@ void PacketHandler::readRaw(ByteBuffer buffer) {
       LoginStart ls(packet);
       handleLoginStart(ls);
       return;
-    } break;
+    }
 
     default:
       break;
