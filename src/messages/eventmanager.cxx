@@ -1,7 +1,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include "eventmanager.hpp"
 #include "../server.hpp"
 #include "../util/util.hpp"

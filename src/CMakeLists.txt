@@ -213,7 +213,7 @@ if("${JSON_REPO_DIR} " STREQUAL " ")
   message(FATAL_ERROR "JSON NOT found. Set JSON_REPO_DIR to the repository folder.")
 else()
   message(STATUS "JSON found : ${JSON_REPO_DIR}/src")
-  include_directories(${JSON_REPO_DIR}/src)
+  include_directories(${JSON_REPO_DIR}/include)
 endif()
 
 if(UNIX OR MINGW)

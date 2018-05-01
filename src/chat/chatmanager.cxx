@@ -1,4 +1,4 @@
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/format.hpp>
 #include "chatmanager.hpp"

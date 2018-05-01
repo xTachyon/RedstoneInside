@@ -1,7 +1,7 @@
 #ifndef REDI_CHATMANAGER_HPP
 #define REDI_CHATMANAGER_HPP
 
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include "../enums.hpp"
 #include "../commands/commandmanager.hpp"
 
