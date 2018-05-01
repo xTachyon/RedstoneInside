@@ -7,13 +7,16 @@
 #include "protocol/packetreader.hpp"
 #include "server.hpp"
 #include "protocol/packets/server/play/disconnect.hpp"
+#include "protocol/packetwriter.hpp"
+#include "protocol/varint.hpp"
 
 namespace asio = boost::asio;
 
 namespace redi {
 
 Session::Session(asio::ip::tcp::socket&& socket, Server& server)
-  : HasServer(server), socket(std::move(socket)), player(nullptr),
+  : HasServer(server), socket(std::move(socket)),
+    player(nullptr),
   connectionState(ConnectionState::Handshake),
   setCompressionIsSentVar(false),
   packetHandler(std::make_shared<PacketHandler>(
@@ -132,15 +135,16 @@ void Session::kick(const std::string& message) {
 
 void Session::setPlayer(Player& player) { this->player = std::addressof(player); }
 
-void Session::sendPacket(ByteBuffer&& packet, const std::string&) {
-  packetsToBeSend.push(std::move(packet));
-  writeNext();
+void Session::sendPacket(const ByteBuffer& packet, const std::string& message) {
+  sendPacket(ByteBuffer(packet), message);
 }
 
-void Session::sendPacket(const ByteBuffer& packet, const std::string& message) {
+void Session::sendPacket(ByteBuffer&& packet, const std::string& message) {
   static_cast<void>(message);
 
-  packetsToBeSend.push(std::move(packet));
+  auto result = protocol::varint::encodeVarInt(packet.size());
+
+  packetsToBeSend.push(ConstBuffer(result.first.data(), result.second).toByteBuffer(), std::move(packet));
   writeNext();
 }
 

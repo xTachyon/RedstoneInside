@@ -8,8 +8,6 @@ PacketWriter::PacketWriter(ByteBuffer& data, std::int32_t packetid)
   writeVarInt(packetid);
 }
 
-PacketWriter::~PacketWriter() { commit(); }
-
 void PacketWriter::writeBool(bool v) { data.push_back(v ? 1 : 0); }
 
 void PacketWriter::writeByte(std::int8_t v) {
@@ -86,13 +84,6 @@ void PacketWriter::writeUUID(boost::uuids::uuid uuid) {
 
 void PacketWriter::writeAngle(double angle) {
   writeByte(static_cast<std::int8_t>(255 * angle / 360));
-}
-
-void PacketWriter::commit(bool) {
-  ByteBuffer d(std::move(data));
-
-  writeVarInt(d.size());
-  data.append(d.data(), d.size());
 }
 
 void PacketWriter::writeChat(const chat::ChatComponent& chat) {

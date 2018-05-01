@@ -18,7 +18,6 @@ public:
   ByteBuffer& data;
 
   PacketWriter(ByteBuffer& data, std::int32_t packetid);
-  ~PacketWriter();
 
   operator ByteBuffer &&() { return std::move(data); }
 
@@ -42,8 +41,6 @@ public:
   void writeAngle(double angle);
   void writeChat(const chat::ChatComponent& chat);
   
-  void commit(bool compressed = false);
-
   template <typename T>
   void writeVarInt(T number) {
     writeVarInt(static_cast<std::int32_t>(number));

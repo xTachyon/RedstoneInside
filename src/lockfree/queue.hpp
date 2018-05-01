@@ -30,6 +30,13 @@ public:
     data.push_back(std::move(obj));
   }
 
+  void push(T&& first, T&& second) {
+    std::lock_guard<std::mutex> l(mutex);
+
+    data.push_back(std::move(first));
+    data.push_back(std::move(second));
+  }
+
   bool pop(T& obj) {
     std::lock_guard<std::mutex> l(mutex);
 

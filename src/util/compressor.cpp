@@ -16,7 +16,7 @@ void compress(ConstBuffer input, ByteBuffer& output, CompressionLevel level) {
     os.push(boost::iostreams::zlib_compressor(static_cast<int>(level)));
     os.push(std::back_inserter(output));
     
-    boost::iostreams::write(os, input.asConstChar(), input.getSize());
+    boost::iostreams::write(os, input.asConstChar(), input.size());
   }
 }
 
@@ -33,7 +33,7 @@ void decompress(ConstBuffer input, ByteBuffer& output) {
     os.push(zlib_decompressor());
     os.push(std::back_inserter(output));
     
-    write(os, input.asConstChar(), input.getSize());
+    write(os, input.asConstChar(), input.size());
   }
 }
 
@@ -54,7 +54,7 @@ void compress(ConstBuffer input, ByteBuffer& output, CompressionLevel level) {
     os.push(boost::iostreams::gzip_compressor(static_cast<int>(level)));
     os.push(std::back_inserter(output));
     
-    boost::iostreams::write(os, input.asConstChar(), input.getSize());
+    boost::iostreams::write(os, input.asConstChar(), input.size());
   }
 }
 
@@ -71,7 +71,7 @@ void decompress(ConstBuffer input, ByteBuffer& output) {
     os.push(gzip_decompressor());
     os.push(std::back_inserter(output));
     
-    write(os, input.asConstChar(), input.getSize());
+    write(os, input.asConstChar(), input.size());
   }
 }
 

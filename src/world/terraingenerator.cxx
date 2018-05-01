@@ -12,7 +12,7 @@ void TerrainGenerator::generate(Chunk& chunk) {
         if (y == 0) {
           chunk(x, y, z).type = BlockType::Bedrock;
         } else if (y < 2) {
-          chunk(x, y, z).type = BlockType::GrassPath;
+          chunk(x, y, z).type = BlockType::DiamondBlock;
         }
       }
     }

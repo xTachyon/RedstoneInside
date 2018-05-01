@@ -1,7 +1,5 @@
 #include "varint.hpp"
 
-namespace redi {
-namespace protocol {
+namespace redi::protocol {
 
-}
 } // namespace redi

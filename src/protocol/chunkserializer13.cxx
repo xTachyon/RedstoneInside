@@ -15,7 +15,6 @@ ByteBuffer ChunkSerializer13::operator()() {
   writeBiomes();        // Biomes
   writeBlockEntities(); // A big 0
 
-  packet.commit();
   return mBuffer;
 }
 

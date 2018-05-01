@@ -11,7 +11,6 @@ public:
       : server(serv) {}
   
   Server& getServer() { return server; }
-  
   const Server& getServer() const { return server; }
 
 protected:

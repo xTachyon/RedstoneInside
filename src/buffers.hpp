@@ -2,6 +2,7 @@
 #define REDI_BUFFERS_HPP
 
 #include <cstddef>
+#include <cstring>
 #include "bytebuffer.hpp"
 #include "datatypes.hpp"
 
@@ -10,13 +11,14 @@ namespace redi {
 class MutableBuffer {
 public:
   using value_type = byte*;
+  using const_value_type = const byte*;
   using const_iterator = const byte*;
   using iterator = byte*;
   
-  explicit MutableBuffer() : data(nullptr), size(0) {}
+  explicit MutableBuffer() : ptr(nullptr), ptrsize(0) {}
   
   explicit MutableBuffer(value_type data, std::size_t size)
-      : data(data), size(size) {}
+      : ptr(data), ptrsize(size) {}
   
   explicit MutableBuffer(void* data, std::size_t size)
       : MutableBuffer(reinterpret_cast<value_type>(data), size) {}
@@ -30,23 +32,25 @@ public:
   explicit MutableBuffer(char* str)
       : MutableBuffer(str, std::strlen(str)) {}
   
-  value_type getBuffer() { return data; }
+  value_type data() { return ptr; }
+  const_value_type data() const { return ptr; }
+
+  char* asChar() { return reinterpret_cast<char*>(data()); }
+  const char* asConstChar() const { return reinterpret_cast<const char*>(data()); }
   
-  char* asChat() { return reinterpret_cast<char*>(data); }
+  std::size_t size() const { return ptrsize; }
   
-  const char* asConstChar() const { return reinterpret_cast<const char*>(data); }
+  iterator begin() { return data(); }
+  iterator end() { return begin() + size(); }
   
-  std::size_t getSize() const { return size; }
-  
-  iterator begin() { return reinterpret_cast<byte*>(data); }
-  iterator end() { return begin() + size; }
-  
-  const_iterator begin() const { return reinterpret_cast<byte*>(data); }
-  const_iterator end() const { return begin() + size; }
+  const_iterator begin() const { return data(); }
+  const_iterator end() const { return begin() + size(); }
+
+  ByteBuffer toByteBuffer() const { return ByteBuffer(data(), size()); }
 
 private:
-  value_type data;
-  std::size_t size;
+  value_type ptr;
+  std::size_t ptrsize;
 };
 
 class ConstBuffer {
@@ -55,16 +59,16 @@ public:
   using const_iterator = const byte*;
   using iterator = byte*;
   
-  explicit ConstBuffer() : data(nullptr), size(0) {}
+  explicit ConstBuffer() : ptr(nullptr), ptrsize(0) {}
   
   explicit ConstBuffer(value_type data, std::size_t size)
-      : data(data), size(size) {}
+      : ptr(data), ptrsize(size) {}
   
   explicit ConstBuffer(const void* data, std::size_t size)
       : ConstBuffer(reinterpret_cast<value_type>(data), size) {}
   
   explicit ConstBuffer(MutableBuffer& buffer)
-      : ConstBuffer(buffer.getBuffer(), buffer.getSize()) {}
+      : ConstBuffer(buffer.data(), buffer.size()) {}
   
   explicit ConstBuffer(const ByteBuffer& buf)
       : ConstBuffer(buf.data(), buf.size()) {}
@@ -74,19 +78,26 @@ public:
   
   explicit ConstBuffer(const char* str)
       : ConstBuffer(str, std::strlen(str)) {}
+
+  template <typename T, std::size_t Size, typename = std::enable_if_t<sizeof(T) == 1>>
+  explicit ConstBuffer(const std::array<T, Size>& array)
+      : ConstBuffer(array.data(), array.size()) {}
+
   
-  value_type getBuffer() { return data; }
+  value_type data() const { return ptr; }
   
-  const char* asConstChar() const { return reinterpret_cast<const char*>(data); }
+  const char* asConstChar() const { return reinterpret_cast<const char*>(ptr); }
   
-  std::size_t getSize() const { return size; }
+  std::size_t size() const { return ptrsize; }
   
-  const_iterator begin() const { return reinterpret_cast<const byte*>(data); }
-  const_iterator end() const { return begin() + size; }
+  const_iterator begin() const { return reinterpret_cast<const byte*>(ptr); }
+  const_iterator end() const { return begin() + ptrsize; }
+
+  ByteBuffer toByteBuffer() const { return ByteBuffer(data(), size()); }
 
 private:
-  value_type data;
-  std::size_t size;
+  value_type ptr;
+  std::size_t ptrsize;
 };
 
 }
