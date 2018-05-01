@@ -25,7 +25,7 @@ struct Packet {
   virtual void process(PacketHandler&) {}
 
   std::string getName() const {
-    return util::demangleTypeName(typeid(*this).name());
+    return util::demangleTypeName(*this);
   }
 
   void send(Session& session);
