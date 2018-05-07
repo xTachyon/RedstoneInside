@@ -1,34 +1,74 @@
-#ifndef REDI_NBT_BASIC_HPP
-#define REDI_NBT_BASIC_HPP
+#pragma once
 
 #include "tag.hpp"
+#include "visitor.hpp"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
 template <typename T>
-class BasicTag : public Tag {
+class basic_tag : public tag {
 public:
-  virtual ~BasicTag() {}
+  ~basic_tag() override = default;
 
-  Tag& assign(Tag&& tag) override { return der() = dynamic_cast<T&&>(tag); }
-  Tag& assign(const Tag& tag) override {
-    return der() = dynamic_cast<const T&>(tag);
-  }
+  tag& assign(tag&& tag) override;
+  tag& assign(const tag& tag) override;
 
-  Type getType() const override { return T::type; }
+  tag_type get_type() const override;
 
-  TagUniquePtr clone() const& override { return std::make_unique<T>(der()); }
-  TagUniquePtr move() && override {
-    return std::make_unique<T>(std::move(der()));
-  }
+  tag_unique_ptr clone() const& override;
+  tag_unique_ptr move() && override;
+
+  void visit(nbt_visitor& visitor) override;
+  void visit(const_nbt_visitor& visitor) const override;
 
 private:
-  T& der() { return static_cast<T&>(*this); }
-  const T& der() const { return static_cast<const T&>(*this); }
+  T& der();
+  const T& der() const;
 };
 
-} // namespace nbt
-} // namespace redi
+template<typename T>
+inline void basic_tag<T>::visit(nbt_visitor& visitor) {
+  visitor.visit(der());
+}
 
-#endif // REDI_NBT_BASIC_HPP
+template<typename T>
+inline void basic_tag<T>::visit(const_nbt_visitor& visitor) const {
+  visitor.visit(der());
+}
+
+template<typename T>
+inline tag& basic_tag<T>::assign(tag&& tag) {
+  return der() = dynamic_cast<T&&>(tag);
+}
+
+template<typename T>
+inline tag& basic_tag<T>::assign(const tag& tag) {
+  return der() = dynamic_cast<const T&>(tag);
+}
+
+template<typename T>
+inline tag_type basic_tag<T>::get_type() const {
+  return T::type;
+}
+
+template<typename T>
+inline tag_unique_ptr basic_tag<T>::clone() const& {
+  return std::make_unique<T>(der());
+}
+
+template<typename T>
+inline tag_unique_ptr basic_tag<T>::move()&& {
+  return std::make_unique<T>(std::move(der()));
+}
+
+template<typename T>
+inline T& basic_tag<T>::der() {
+  return static_cast<T&>(*this);
+}
+
+template<typename T>
+inline const T& basic_tag<T>::der() const {
+  return static_cast<const T&>(*this);
+}
+
+} // namespace redi::nbt

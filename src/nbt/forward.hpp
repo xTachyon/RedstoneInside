@@ -1,43 +1,45 @@
-#ifndef REDI_NBT_FORWARD_HPP
-#define REDI_NBT_FORWARD_HPP
+#pragma once
 
 #include <cstdint>
+#include "datatypes.h"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
-class Tag;
-
-template <typename T>
-class BasicTag;
+class tag;
 
 template <typename T>
-struct Primitive;
+class basic_tag;
 
 template <typename T>
-struct Array;
+struct primitive;
 
-using TagByte = Primitive<std::int8_t>;
-using TagShort = Primitive<std::int16_t>;
-using TagInt = Primitive<std::int32_t>;
-using TagLong = Primitive<std::int64_t>;
-using TagFloat = Primitive<float>;
-using TagDouble = Primitive<double>;
+template <typename T>
+struct array;
 
-using TagByteArray = Array<std::int8_t>;
-using TagIntArray = Array<std::int32_t>;
 
-struct TagString;
-class TagCompound;
-class TagList;
-struct RootTag;
+using tag_byte = primitive<nbt_byte>;
+using tag_short = primitive<nbt_short>;
+using tag_int = primitive<nbt_int>;
+using tag_long = primitive<nbt_long>;
+using tag_float = primitive<nbt_float>;
+using tag_double = primitive<nbt_double>;
 
-struct Serializer;
+using tag_byte_array = array<nbt_byte>;
+using tag_int_array = array<nbt_int>;
+using tag_long_array = array<nbt_long>;
+
+class tag_end;
+struct tag_string;
+class tag_compound;
+class tag_list;
+struct root_tag;
+
 struct Deserializer;
-struct PrettyPrint;
-class Value;
+struct pretty_printer;
+struct serializer;
+class tag_value;
 
-} // namespace nbt
-} // namespace redi
+class nbt_visitor;
+class const_nbt_visitor;
 
-#endif // REDI_NBT_FORWARD_HPP
+} // namespace redi::nbt

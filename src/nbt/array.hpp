@@ -1,118 +1,73 @@
-#ifndef REDI_NBT_ARRAY_HPP
-#define REDI_NBT_ARRAY_HPP
+#pragma once
 
 #include "basic.hpp"
+#include "forward.hpp"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
 template <typename T>
-struct Array : public BasicTag<Array<T>> {
-  using VectorType = std::vector<T>;
+struct array : public basic_tag<array<T>> {
+  using array_container = std::vector<T>;
 
-  using reference = typename VectorType::reference;
-  using const_reference = typename VectorType::const_reference;
+  using reference = typename array_container::reference;
+  using const_reference = typename array_container::const_reference;
 
-  static constexpr Type type = TypeToNumber<Array<T>>::value;
+  static constexpr tag_type type = type_to_number<array<T>>::value;
 
-  std::vector<T> data;
+  array_container data;
 
-  Array() = default;
-  Array(const Array&) = default;
-  Array(Array&&) = default;
+  array() = default;
+  array(const array&) = default;
+  array(array&&) noexcept = default;
 
-  Array(const VectorType& other) : data(other.data) {}
-  Array(VectorType&& other) : data(std::move(other)) {}
-  Array(std::size_t count) : data(count) {}
-  Array(std::initializer_list<T> list) : data(list) {}
+  explicit array(const array_container& other) : data(other.data) {}
 
-  Array& operator=(const Array& other) {
+  explicit array(array_container&& other) : data(std::move(other)) {}
+  explicit array(std::size_t count) : data(count) {}
+  array(std::initializer_list<T> list) : data(list) {}
+
+  array& operator=(const array& other) noexcept {
     *this = other.data;
     return *this;
   }
 
-  Array& operator=(Array&& other) {
+  array& operator=(array&& other) noexcept {
     *this = std::move(other.data);
     return *this;
   }
 
-  Array& operator=(const VectorType& other) {
+  array& operator=(const array_container& other) {
     data = other;
     return *this;
   }
 
-  Array& operator=(VectorType&& other) {
+  array& operator=(array_container&& other) {
     data = std::move(other);
     return *this;
   }
 
-  Array& operator=(std::initializer_list<T> list) {
+  array& operator=(std::initializer_list<T> list) {
     data = list;
     return *this;
   }
 
   reference operator[](std::size_t index) { return data[index]; }
-
   const_reference operator[](std::size_t index) const { return data[index]; }
 
   reference at(std::size_t index) { return at(index); }
-
   const_reference at(std::size_t index) const { return at(index); }
 
   reference front() { return data.front(); }
-
   const_reference front() const { return data.front(); }
 
   reference back() { return data.back(); }
-
   const_reference back() const { return data.back(); }
 
   std::size_t size() const override { return data.size(); }
-
-  void write(Serializer& s) const override {
-    s.writeNumber<std::int32_t>(static_cast<std::int32_t>(size()));
-    for (const T& index : data) {
-      s.writeNumber(index);
-    }
-  }
-
-  void read(Deserializer& s) override {
-    std::size_t siz = static_cast<std::size_t>(s.readNumber<std::int32_t>());
-    data.reserve(size() + siz);
-
-    for (std::size_t i = 0; i < siz; ++i) {
-      data.emplace_back(s.readNumber<T>());
-    }
-  }
-
-  void writePretty(PrettyPrint& p) const override {
-    Type t = BasicTag<Array<T>>::getType();
-    const char* str;
-
-    if (t == Type::ByteArray) {
-      str = "byte";
-    } else if (t == Type::ShortArray) {
-      str = "short";
-    } else if (t == Type::IntArray) {
-      str = "int";
-    } else {
-      throw "If this is happen, something went terribly wrong";
-    }
-
-    p.string += '[' + std::to_string(size()) + ' ';
-    p.string += str;
-    if (size() != 1) {
-      p.string += 's';
-    }
-    p.string += ']';
-  }
 };
 
-using TagByteArray = Array<std::int8_t>;
-using TagShortArray = Array<std::int16_t>;
-using TagIntArray = Array<std::int32_t>;
+using tag_byte_array_container = tag_byte_array::array_container;
+using tag_int_array_container = tag_int_array::array_container;
+using tag_long_array_container = tag_long_array::array_container;
 
-} // namespace nbt
-} // namespace redi
-
-#endif // REDI_NBT_ARRAY_HPP
+} // namespace redi::nbt

@@ -62,17 +62,17 @@ void MemoryRegion::unloadChunk(const Vector2i& v) {
 
   workIO.post(strand.wrap([
     me = shared_from_this(), v, chunk = std::shared_ptr<Chunk>(std::move(ptr))
-  ] { me->writeChunk(v, std::move(*chunk)); }));
+  ] { me->writeChunk(v, *chunk); }));
 }
 
 void MemoryRegion::writeChunk(const Vector2i& l, const Chunk& chunk) {
   try {
-    nbt::RootTag root;
+    nbt::root_tag root;
 
     ChunkSerializer(root, chunk)();
 
     ByteBuffer buffer;
-    nbt::Serializer(buffer).write(root);
+    nbt::serializer(buffer).visit(root);
 
     region.writeChunk(l, buffer);
   } catch (std::exception& e) {

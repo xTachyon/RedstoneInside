@@ -1,22 +1,24 @@
-#ifndef REDI_NBT_ROOTTAG_HPP
-#define REDI_NBT_ROOTTAG_HPP
+#pragma once
 
 #include "compound.hpp"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
-struct RootTag : public TagCompound {
+struct root_tag {
+  static constexpr tag_type type = tag_type::type_compound;
+
   std::string name;
+  tag_compound compound;
 
-  using TagCompound::TagCompound;
-  using TagCompound::operator=;
-  using TagCompound::operator[];
+  tag_value& at(const std::string& key);
+  const tag_value& at(const std::string& key) const;
 
-  void writePretty(PrettyPrint& p) const;
+  tag_value& operator[](const std::string& key);
+  tag_value& operator[](std::string&& key);
+
+  void visit(const_nbt_visitor& visitor) const;
 };
 
-} // namespace nbt
-} // namespace redi
+std::ostream& operator<<(std::ostream& stream, const root_tag& root);
 
-#endif // REDI_NBT_ROOTTAG_HPP
+} // namespace redi::nbt

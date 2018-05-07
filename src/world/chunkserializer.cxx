@@ -4,7 +4,7 @@
 namespace redi {
 namespace world {
 
-ChunkSerializer::ChunkSerializer(nbt::RootTag& root, const Chunk& chunk)
+ChunkSerializer::ChunkSerializer(nbt::root_tag& root, const Chunk& chunk)
     : chunk(chunk), root(resolve(root)) {}
 
 void ChunkSerializer::operator()() {
@@ -18,23 +18,23 @@ void ChunkSerializer::writeMisc() {
   root["InhabitedTime"] = chunk.inhabitedTime;
 }
 
-nbt::TagCompound& ChunkSerializer::resolve(nbt::RootTag& root) {
-  root["Level"] = nbt::create(nbt::Type::Compound);
+nbt::tag_compound& ChunkSerializer::resolve(nbt::root_tag& root) {
+  root["Level"] = nbt::create(nbt::tag_type::type_compound);
   return root["Level"].getCompound();
 }
 
 void ChunkSerializer::writeSections() {
-  root["Sections"] = nbt::create(nbt::Type::List);
-  nbt::TagList& list = root["Sections"].getList();
+  root["Sections"] = nbt::create(nbt::tag_type::type_list);
+  nbt::tag_list& list = root["Sections"].getList();
 
   for (std::uint8_t i = 0; i < 16; ++i) {
     writeSection(list, i);
   }
 }
 
-void ChunkSerializer::writeSection(nbt::TagList& list, std::uint8_t y) {
+  void ChunkSerializer::writeSection(nbt::tag_list& list, std::uint8_t y) {
   std::vector<sbyte> buffer;
-  nbt::TagCompound comp;
+  nbt::tag_compound comp;
   std::int16_t yy = y * y;
 
   {
@@ -43,7 +43,7 @@ void ChunkSerializer::writeSection(nbt::TagList& list, std::uint8_t y) {
       return;
     }
 
-    comp["Blocks"] = nbt::TagByteArray(std::move(buffer));
+    comp["Blocks"] = nbt::tag_byte_array(std::move(buffer));
   }
 
   {
@@ -54,24 +54,24 @@ void ChunkSerializer::writeSection(nbt::TagList& list, std::uint8_t y) {
     buffer.resize(2_KB);
     writeData(reinterpret_cast<byte*>(buffer.data()), yy);
 
-    comp["Data"] = nbt::TagByteArray(std::move(buffer));
+    comp["Data"] = nbt::tag_byte_array(std::move(buffer));
   }
 
   {
     buffer.resize(2_KB);
     writeBlockLight(reinterpret_cast<byte*>(buffer.data()), yy);
 
-    comp["BlockLight"] = nbt::TagByteArray(std::move(buffer));
+    comp["BlockLight"] = nbt::tag_byte_array(std::move(buffer));
   }
 
   {
     buffer.resize(2_KB);
     writeSkyLight(reinterpret_cast<byte*>(buffer.data()), yy);
 
-    comp["SkyLight"] = nbt::TagByteArray(std::move(buffer));
+    comp["SkyLight"] = nbt::tag_byte_array(std::move(buffer));
   }
 
-  { comp["Y"] = nbt::TagByte(y); }
+  { comp["Y"] = nbt::tag_byte(y); }
 
   list.push_back(std::move(comp));
 }

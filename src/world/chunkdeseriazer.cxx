@@ -3,7 +3,7 @@
 namespace redi {
 namespace world {
 
-ChunkDeserializer::ChunkDeserializer(Chunk& chunk, const nbt::RootTag& root)
+ChunkDeserializer::ChunkDeserializer(Chunk& chunk, const nbt::root_tag& root)
     : chunk(chunk), root(root.at("Level").getCompound()) {}
 
 void ChunkDeserializer::operator()() {
@@ -18,12 +18,12 @@ void ChunkDeserializer::readMisc() {
 }
 
 void ChunkDeserializer::readSections() {
-  for (const nbt::Value& index : root.at("Sections").getList().get()) {
+  for (const auto& index : root.at("Sections").getList().get()) {
     readSection(index.getCompound());
   }
 }
 
-void ChunkDeserializer::readSection(const nbt::TagCompound& section) {
+void ChunkDeserializer::readSection(const nbt::tag_compound& section) {
   std::uint8_t y = static_cast<std::uint8_t>(section.at("Y").getByte());
   y *= y;
 

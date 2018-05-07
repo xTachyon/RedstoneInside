@@ -10,9 +10,9 @@ namespace world {
 
 struct ChunkDeserializer {
   Chunk& chunk;
-  const nbt::TagCompound& root;
+  const nbt::tag_compound& root;
 
-  ChunkDeserializer(Chunk& chunk, const nbt::RootTag& root);
+  ChunkDeserializer(Chunk& chunk, const nbt::root_tag& root);
 
   void operator()();
 
@@ -20,7 +20,7 @@ private:
   void readMisc();
 
   void readSections();
-  void readSection(const nbt::TagCompound& section);
+  void readSection(const nbt::tag_compound& section);
   void readBlocks(const std::vector<std::int8_t>& buffer, std::int16_t yy);
   void readAdd(const std::vector<std::int8_t>& buffer, std::int16_t yy);
   void readData(const std::vector<std::int8_t>& buffer, std::int16_t yy);

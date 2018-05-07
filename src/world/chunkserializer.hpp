@@ -10,19 +10,19 @@ namespace world {
 
 struct ChunkSerializer {
   const Chunk& chunk;
-  nbt::TagCompound& root;
+  nbt::tag_compound& root;
 
-  ChunkSerializer(nbt::RootTag& root, const Chunk& chunk);
+  ChunkSerializer(nbt::root_tag& root, const Chunk& chunk);
 
   void operator()();
 
 private:
-  static nbt::TagCompound& resolve(nbt::RootTag& root);
+  static nbt::tag_compound& resolve(nbt::root_tag& root);
 
   void writeMisc();
 
   void writeSections();
-  void writeSection(nbt::TagList& list, std::uint8_t y);
+  void writeSection(nbt::tag_list& list, std::uint8_t y);
   bool writeBlocks(byte* bytes, std::int16_t yy);
   //  void writeAdd(const std::vector<std::int8_t>& buffer, std::int16_t yy);
   void writeData(byte* bytes, std::int16_t yy);

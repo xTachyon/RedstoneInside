@@ -1,96 +1,94 @@
-#ifndef REDI_NBT_VALUE_HPP
-#define REDI_NBT_VALUE_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
 #include "tag.hpp"
+#include "prettyprinter.hpp"
+#include "array.hpp"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
-class Value {
+class tag_value {
 public:
-  Value() = default;
-  Value(const Value& obj);
-  Value(Value&& obj) = default;
-  Value(Tag&& tag);
+  tag_value() = default;
+  tag_value(const tag_value& obj);
+  tag_value(tag_value&& obj) = default;
+  explicit tag_value(tag&& tag);
+  explicit tag_value(nbt_byte x);
+  explicit tag_value(nbt_short x);
+  explicit tag_value(nbt_int x);
+  explicit tag_value(nbt_long x);
+  explicit tag_value(nbt_float x);
+  explicit tag_value(nbt_double x);
+  explicit tag_value(nbt_string_view x);
+  explicit tag_value(nbt_string&& x);
+  explicit tag_value(tag_unique_ptr&& ptr);
+  explicit tag_value(std::nullptr_t x);
 
-  Value(std::int8_t x);
-  Value(std::int16_t x);
-  Value(std::int32_t x);
-  Value(std::int64_t x);
-  Value(float x);
-  Value(double x);
-  Value(const std::string& x);
-  Value(std::string&& x);
-  Value(const char* x);
-  Value(TagUniquePtr&& ptr);
-  Value(std::nullptr_t x);
+  tag_value& operator=(const tag_value& other);
+  tag_value& operator=(const tag& tag);
+  tag_value& operator=(tag&& tag);
+  tag_value& operator=(tag_unique_ptr&& ptr);
 
-  Value& operator=(const Value& other);
-  Value& operator=(const Tag& tag);
-  Value& operator=(Tag&& tag);
-  Value& operator=(TagUniquePtr&& ptr);
+  tag_value& operator=(std::int8_t x);
+  tag_value& operator=(std::int16_t x);
+  tag_value& operator=(std::int32_t x);
+  tag_value& operator=(std::int64_t x);
+  tag_value& operator=(float x);
+  tag_value& operator=(double x);
+  tag_value& operator=(const std::string& x);
+  tag_value& operator=(std::string&& x);
+  tag_value& operator=(std::nullptr_t x);
 
-  Value& operator=(std::int8_t x);
-  Value& operator=(std::int16_t x);
-  Value& operator=(std::int32_t x);
-  Value& operator=(std::int64_t x);
-  Value& operator=(float x);
-  Value& operator=(double x);
-  Value& operator=(const std::string& x);
-  Value& operator=(std::string&& x);
-  Value& operator=(std::nullptr_t x);
+  tag_value& operator=(tag_value&& other) noexcept;
 
-  Value& operator[](const std::string& key);
-  Value& operator[](std::string&& key);
-  Value& operator[](const char* key);
+  tag_value& operator[](const nbt_string& key);
+  tag_value& operator[](nbt_string&& key);
+  tag_value& operator[](const char* key);
 
-  operator bool() const { return static_cast<bool>(data); }
+  explicit operator bool() const { return static_cast<bool>(data); }
 
-  const Tag& get() const { return *data; }
-  Tag& get() { return *data; }
+  const tag& get() const { return *data; }
+  tag& get() { return *data; }
 
-  void assign(Tag&& tag);
-  Type getType() const;
-  static Type getType(const TagUniquePtr& ptr);
-  void write(Serializer& s) const;
-  void writePretty(PrettyPrint& p) const;
+//  void assign(tag&& tag);
+  tag_type get_type() const;
+  static tag_type get_type(const tag_unique_ptr& ptr);
 
-  std::int8_t& getByte();
-  std::int16_t& getShort();
-  std::int32_t& getInt();
-  std::int64_t& getLong();
-  float& getFloat();
-  double& getDouble();
-  std::vector<std::int8_t>& getByteArray();
-  std::string& getString();
-  TagList& getList();
-  TagCompound& getCompound();
-  std::vector<std::int32_t>& getIntArray();
-  std::vector<std::int16_t>& getShortArray();
+  nbt_byte& getByte();
+  nbt_short& getShort();
+  nbt_int& getInt();
+  nbt_long& getLong();
+  nbt_float& getFloat();
+  nbt_double& getDouble();
+  tag_byte_array_container& getByteArray();
+  nbt_string& getString();
+  tag_list& getList();
+  tag_compound& getCompound();
+  tag_int_array_container& getIntArray();
+  tag_long_array_container& getLongArray();
 
-  const std::int8_t& getByte() const;
-  const std::int16_t& getShort() const;
-  const std::int32_t& getInt() const;
-  const std::int64_t& getLong() const;
-  const float& getFloat() const;
-  const double& getDouble() const;
-  const std::vector<std::int8_t>& getByteArray() const;
-  const std::string& getString() const;
-  const TagList& getList() const;
-  const TagCompound& getCompound() const;
-  const std::vector<std::int32_t>& getIntArray() const;
-  const std::vector<std::int16_t>& getShortArray() const;
+  const nbt_byte& getByte() const;
+  const nbt_short& getShort() const;
+  const nbt_int& getInt() const;
+  const nbt_long& getLong() const;
+  const nbt_float& getFloat() const;
+  const nbt_double& getDouble() const;
+  const tag_byte_array_container& getByteArray() const;
+  const nbt_string& getString() const;
+  const tag_list& getList() const;
+  const tag_compound& getCompound() const;
+  const tag_int_array_container& getIntArray() const;
+  const tag_long_array_container& getLongArray() const;
+
+  void visit(nbt_visitor&);
+  void visit(const_nbt_visitor&) const;
 
 private:
-  std::unique_ptr<Tag> data;
+  std::unique_ptr<tag> data;
 
-  void throwIfNot(Type type) const;
-  void throwIfNullOrIsNot(Type type) const;
+  void throwIfNot(tag_type type) const;
+  void throwIfNullOrIsNot(tag_type type) const;
 };
 
-} // namespace nbt
-} // namespace redi
-
-#endif // REDI_NBT_VALUE_HPP
+} // namespace redi::nbt

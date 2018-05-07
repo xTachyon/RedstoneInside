@@ -1,5 +1,4 @@
-#ifndef REDI_NBT_NBT_HPP
-#define REDI_NBT_NBT_HPP
+#pragma once
 
 #include "type.hpp"
 #include "tag.hpp"
@@ -16,5 +15,3 @@
 #include "deserializer.hpp"
 #include "prettyprinter.hpp"
 #include "creator.hpp"
-
-#endif // REDI_NBT_NBT_HPP

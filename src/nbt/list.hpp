@@ -1,46 +1,41 @@
-#ifndef REDI_NBT_LIST_HPP
-#define REDI_NBT_LIST_HPP
+#pragma once
 
 #include <vector>
 #include "basic.hpp"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
-class TagList : public BasicTag<TagList> {
+class tag_list : public basic_tag<tag_list> {
 public:
-  static constexpr Type type = Type::List;
+  static constexpr tag_type type = tag_type::type_list;
 
-  TagList() = default;
-  TagList(const TagList& other);
-  TagList(TagList&& other) = default;
+  tag_list() = default;
+  tag_list(const tag_list& other);
+  tag_list(tag_list&& other) = default;
 
-  TagList& operator=(const TagList& other);
-  TagList& operator=(TagList&& other) = default;
+  tag_list& operator=(const tag_list& other);
+  tag_list& operator=(tag_list&& other) = default;
 
-  Value& operator[](std::size_t pos) { return data[pos]; }
-  const Value& operator[](std::size_t pos) const { return data[pos]; }
+  tag_value& operator[](std::size_t pos) { return data[pos]; }
+  const tag_value& operator[](std::size_t pos) const { return data[pos]; }
 
-  void push_back(const Value& value) { data.push_back(value); }
-  void push_back(Value&& value) { data.push_back(std::move(value)); }
+  void push_back(const tag_value& value) { data.push_back(value); }
+  void push_back(tag_value&& value) { data.push_back(std::move(value)); }
+  void push_back(tag&& tag) { push_back(tag_value(std::move(tag).move())); }
 
   void pop_back() { data.pop_back(); }
 
   std::size_t size() const override { return data.size(); }
   bool empty() const { return data.empty(); }
 
-  void write(Serializer& s) const override;
-  void read(Deserializer& s) override;
-  Type getListType() const;
-  void writePretty(PrettyPrint& p) const override;
+  tag_type getListType() const;
 
-  const std::vector<Value>& get() const { return data; }
+  const std::vector<tag_value>& get() const { return data; }
+  std::vector<tag_value>& getData() { return data; } // Use at own risk
+  const std::vector<tag_value>& getData() const { return data; }
 
 private:
-  std::vector<Value> data;
+  std::vector<tag_value> data;
 };
 
-} // namespace nbt
-} // namespace redi
-
-#endif // REDI_NBT_LIST_HPP
+} // namespace redi::nbt

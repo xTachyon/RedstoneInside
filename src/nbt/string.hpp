@@ -1,51 +1,37 @@
-#ifndef REDI_NBT_STRING_HPP
-#define REDI_NBT_STRING_HPP
+#pragma once
 
 #include "basic.hpp"
 #include "deserializer.hpp"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
-struct TagString : public BasicTag<TagString> {
-  static constexpr Type type = Type::String;
+struct tag_string : public basic_tag<tag_string> {
+  static constexpr tag_type type = tag_type::type_string;
 
-  std::string data;
+  nbt_string data;
 
-  TagString() {}
-  TagString(const std::string& str) : data(str) {}
-  TagString(std::string&& str) : data(std::move(str)) {}
-  TagString(const char* str) : data(str) {}
+  tag_string() = default;
+  tag_string(nbt_string_view str) : data(str) {}
+  tag_string(nbt_string&& str) : data(std::move(str)) {}
+//  tag_string(const char* str) : data(str) {}
 
-  TagString& operator=(const std::string& str) {
+  tag_string& operator=(const std::string& str) {
     data = str;
     return *this;
   }
 
-  TagString& operator=(std::string&& str) {
+  tag_string& operator=(std::string&& str) {
     data = std::move(str);
     return *this;
   }
 
-  TagString& operator=(const char* str) {
+  tag_string& operator=(const char* str) {
     data = str;
     return *this;
   }
 
-  operator std::string&() { return data; }
-  operator const std::string&() const { return data; }
-
-  void write(Serializer& s) const override { s.writeString(data); }
-
-  void read(Deserializer& s) override { data = s.readString(); }
-
-  void writePretty(PrettyPrint& p) const override {
-    p.string += '\"';
-    p.string += data + '\"';
-  }
+//  explicit operator std::string&() { return data; }
+//  explicit operator const std::string&() const { return data; }
 };
 
-} // namespace nbt
-} // namespace redi
-
-#endif // REDI_NBT_STRING_HPP
+} // namespace redi::nbt

@@ -1,63 +1,47 @@
-#ifndef REDI_NBT_DESERIALIZER_HPP
-#define REDI_NBT_DESERIALIZER_HPP
+#pragma once
 
 #include <boost/endian/conversion.hpp>
 #include "../bytebuffer.hpp"
-//#include "../util/util.hpp"
 #include "type.hpp"
-
-//#include "../util/base64.hpp"
-//#include "../util/file.hpp"
 #include "../util/string.hpp"
-//#include "../util/time.hpp"
-//#include "../util/maths.hpp"
-//#include "../util/random.hpp"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
-struct Deserializer {
+class deserializer : public nbt_visitor {
+public:
+  explicit deserializer(const ByteBuffer& buffer, std::size_t offset = 0);
+
+  void visit(tag_end& x) override;
+  void visit(tag_byte& x) override;
+  void visit(tag_short& x) override;
+  void visit(tag_int& x) override;
+  void visit(tag_long& x) override;
+  void visit(tag_float& x) override;
+  void visit(tag_double& x) override;
+  void visit(tag_byte_array& array) override;
+  void visit(tag_string& string) override;
+  void visit(tag_list& list) override;
+  void visit(tag_compound& compound) override;
+  void visit(root_tag& tag) override;
+  void visit(tag_int_array& array) override;
+  void visit(tag_long_array& array) override;
+
+  void visit(nbt_string& name, tag_compound& compound);
+
+private:
   const ByteBuffer& buffer;
   std::size_t offset;
 
-  Deserializer(const ByteBuffer& buffer, std::size_t offset = 0);
-
-  void operator()(std::string& name, TagCompound& root);
-  void operator()(TagCompound& root);
-
   template <typename T>
-  T readNumber() {
-    need(sizeof(T));
-    T x;
-
-    std::copy(buffer.data() + offset, buffer.data() + offset + sizeof(T),
-              reinterpret_cast<std::uint8_t*>(std::addressof(x)));
-    offset += sizeof(T);
-    return boost::endian::big_to_native(x);
-  }
-
-  std::string readString();
-  Type readType();
-  void read(std::string& name, TagCompound& root);
-  void read(TagCompound& root);
-  void read(RootTag& root);
+  T readNumber();
+  template <typename T>
+  void readNumber(T& x);
+  template <typename T>
+  void readArray(std::vector<T>& array);
+  nbt_string readString();
+  tag_type readType();
 
   void need(std::size_t bytes);
 };
 
-template <>
-inline float Deserializer::readNumber<float>() {
-  std::int32_t x = readNumber<std::int32_t>();
-  return util::binaryTo<std::int32_t, float>(x);
-}
-
-template <>
-inline double Deserializer::readNumber<double>() {
-  std::int64_t x = readNumber<std::int64_t>();
-  return util::binaryTo<std::int64_t, double>(x);
-}
-
-} // namespace nbt
-} // namespace redi
-
-#endif // REDI_NBT_DESERIALIZER_HPP
+} // namespace redi::nbt

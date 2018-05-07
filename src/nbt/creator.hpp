@@ -1,16 +1,11 @@
-#ifndef REDI_NBT_CREATOR_HPP
-#define REDI_NBT_CREATOR_HPP
+#pragma once
 
 #include "tag.hpp"
 #include "value.hpp"
 
-namespace redi {
-namespace nbt {
+namespace redi::nbt {
 
-TagUniquePtr create(Type t);
-Value createValue(Type t);
+tag_unique_ptr create(tag_type t);
+tag_value createValue(tag_type t);
 
-} // namespace nbt
-} // namespace redi
-
-#endif // REDI_NBT_CREATOR_HPP
+} // namespace redi:nbt
