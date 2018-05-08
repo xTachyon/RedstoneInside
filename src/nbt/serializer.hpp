@@ -13,6 +13,7 @@ class serializer: public const_nbt_visitor {
 public:
   explicit serializer(ByteBuffer& buffer);
 
+  void visit(const tag_end& x) override;
   void visit(const tag_byte& x) override;
   void visit(const tag_short& x) override;
   void visit(const tag_int& x) override;
@@ -35,7 +36,7 @@ public:
   void write(nbt_string_view string);
   void write(tag_type type);
   template <typename Iterator>
-  void write(tag_type t, Iterator begin, Iterator end);
+  void write(Iterator begin, Iterator end);
 
 private:
   ByteBuffer& buffer;

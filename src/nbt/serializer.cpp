@@ -9,6 +9,8 @@ namespace redi::nbt {
 serializer::serializer(ByteBuffer& buf)
       : buffer(buf) {}
 
+void serializer::visit(const tag_end&) {}
+
 void serializer::visit(const tag_byte& x) {
   write(x.data);
 }
@@ -34,7 +36,7 @@ void serializer::visit(const tag_double& x) {
 }
 
 void serializer::visit(const tag_byte_array& array) {
-  write(array.get_type(), array.data.begin(), array.data.end());
+  write(array.data.begin(), array.data.end());
 }
 
 void serializer::visit(const tag_string& x) {
@@ -75,11 +77,11 @@ void serializer::visit(const root_tag& tag) {
 }
 
 void serializer::visit(const tag_int_array& array) {
-  write(array.get_type(), array.data.begin(), array.data.end());
+  write(array.data.begin(), array.data.end());
 }
 
 void serializer::visit(const tag_long_array& array) {
-  write(array.get_type(), array.data.begin(), array.data.end());
+  write(array.data.begin(), array.data.end());
 }
 
 void serializer::visit(nbt_string_view name, const tag_compound& root) {
@@ -110,10 +112,10 @@ void serializer::write(tag_type type) {
 }
 
 template <typename Iterator>
-void serializer::write(tag_type t, Iterator begin, Iterator end) {
+void serializer::write(Iterator begin, Iterator end) {
   write(static_cast<nbt_int>(end - begin));
   std::for_each(begin, end, [this](const auto& x) {
-    write(x);
+    this->write(x);
   });
 }
 

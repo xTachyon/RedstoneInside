@@ -35,8 +35,8 @@ class tag_list;
 struct root_tag;
 
 struct Deserializer;
-struct pretty_printer;
-struct serializer;
+class pretty_printer;
+class serializer;
 class tag_value;
 
 class nbt_visitor;
