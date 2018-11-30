@@ -135,11 +135,7 @@ void Session::kick(const std::string& message) {
 
 void Session::setPlayer(Player& player) { this->player = std::addressof(player); }
 
-void Session::sendPacket(const ByteBuffer& packet, const std::string& message) {
-  sendPacket(ByteBuffer(packet), message);
-}
-
-void Session::sendPacket(ByteBuffer&& packet, const std::string& message) {
+void Session::sendPacket(ByteBuffer packet, const std::string& message) {
   static_cast<void>(message);
 
   auto result = protocol::varint::encodeVarInt(packet.size());

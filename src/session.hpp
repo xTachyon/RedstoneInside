@@ -35,8 +35,7 @@ public:
   Session& operator=(const Session&) = delete;
   Session& operator=(Session&&) = delete;
 
-  void sendPacket(ByteBuffer&& packet, const std::string& message = "");
-  void sendPacket(const ByteBuffer& packet, const std::string& message = "");
+  void sendPacket(ByteBuffer packet, const std::string& message = "");
 
   boost::asio::ip::tcp::socket& getSocket() { return socket; }
   const boost::asio::ip::tcp::socket& getSocket() const { return socket; }
