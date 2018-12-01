@@ -3,9 +3,9 @@ set -x
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
 if [ ! -d "libs/boost/lib/" ]; then
-  wget http://kent.dl.sourceforge.net/project/boost/boost/1.62.0/boost_1_62_0.tar.bz2
-  tar -xjf boost_1_62_0.tar.bz2
-  cd boost_1_62_0/
+  wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2
+  tar -xjf boost_1_68_0.tar.bz2
+  cd boost_1_68_0/
   sudo ./bootstrap.sh --prefix=../libs/boost/
   sudo ./b2 install -j 8
   cd ..
