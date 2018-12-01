@@ -22,7 +22,7 @@ public:
 
   void addPacket(PacketUniquePtr&& packet);
   void handleOne();
-  void readRaw(ByteBuffer buffer);
+  void readRaw(ConstBuffer buffer);
 
   void handleHandshake(Handshake& packet);
 

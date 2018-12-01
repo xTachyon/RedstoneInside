@@ -29,7 +29,7 @@ void PacketHandler::addPacket(PacketUniquePtr&& packet) {
   mPackets.emplace_back(std::move(packet));
 }
 
-void PacketHandler::readRaw(ByteBuffer buffer) {
+void PacketHandler::readRaw(ConstBuffer buffer) {
   PacketReader packet(buffer);
   std::int32_t type = packet.readVarInt();
   PacketUniquePtr ptr;

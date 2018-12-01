@@ -34,9 +34,11 @@ AsioSocket::AsioSocket(asio::ip::tcp::socket&& socket)
   : socket(std::move(socket)), strand(socket.get_io_context()) {}
 
 void AsioSocket::write(ConstBuffer buffer) {
-  std::lock_guard<std::mutex> l(writing_mutex);
-
-  current_vector.append(buffer.data(), buffer.size());
+  {
+    std::lock_guard<std::mutex> l(writing_mutex);
+    current_vector.append(buffer.data(), buffer.size());
+  }
+  writeNext();
 }
 
 void AsioSocket::writeNext() {

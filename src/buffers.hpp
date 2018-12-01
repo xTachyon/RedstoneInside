@@ -83,7 +83,8 @@ public:
   explicit ConstBuffer(const std::array<T, Size>& array)
       : ConstBuffer(array.data(), array.size()) {}
 
-  
+  const byte& operator[](size_t index) const { return ptr[index]; }
+
   value_type data() const { return ptr; }
   
   const char* asConstChar() const { return reinterpret_cast<const char*>(ptr); }
@@ -94,7 +95,6 @@ public:
   const_iterator end() const { return begin() + ptrsize; }
 
   ByteBuffer toByteBuffer() const { return ByteBuffer(data(), size()); }
-
 private:
   value_type ptr;
   std::size_t ptrsize;

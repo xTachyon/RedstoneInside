@@ -5,19 +5,20 @@
 #include <boost/endian/conversion.hpp>
 #include "../bytebuffer.hpp"
 #include "../vectorn.hpp"
+#include "../buffers.hpp"
 
 namespace redi {
 
 class PacketReader {
 public:
-  ByteBuffer data;
+  ConstBuffer data;
   std::size_t offset;
 
-  PacketReader(std::size_t offset = 0) : offset(offset) {}
-  PacketReader(const ByteBuffer& data, std::size_t offset = 0)
+  explicit PacketReader(std::size_t offset = 0) : offset(offset) {}
+  explicit PacketReader(const ByteBuffer& buffer)
+    : PacketReader(ConstBuffer(buffer)) {}
+  explicit PacketReader(ConstBuffer data, std::size_t offset = 0)
       : data(data), offset(offset) {}
-  PacketReader(ByteBuffer&& data, std::size_t offset = 0)
-      : data(std::move(data)), offset(offset) {}
 
   bool readBool();
   std::int8_t readByte();
@@ -40,14 +41,6 @@ public:
   void consumeVarInt();
 
   static PacketReader getFromCompressedPacket(const ByteBuffer& buffer);
-
-  template <typename T>
-  static T readVarIntPacket(const std::uint8_t* ptr, std::size_t& bytes) {
-    PacketReader r(ByteBuffer(ptr, 3));
-    T result = static_cast<T>(r.readVarInt());
-    bytes = r.offset;
-    return result;
-  }
 
 private:
   void need(std::size_t bytes);

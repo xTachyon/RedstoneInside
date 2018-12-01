@@ -13,7 +13,7 @@ bool PacketReader::readBool() {
 
 std::int8_t PacketReader::readByte() {
   need(sizeof(std::int8_t));
-  return *reinterpret_cast<std::int8_t*>(std::addressof(data[offset++]));
+  return *reinterpret_cast<const std::int8_t*>(std::addressof(data[offset++]));
 }
 
 std::uint8_t PacketReader::readUByte() {

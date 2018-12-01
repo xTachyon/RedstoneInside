@@ -34,7 +34,7 @@ Session::~Session() {
 
 void Session::on_read(size_t bytes, std::string error) {
   if (!error.empty()) {
-    Logger::debug(error);
+    disconnect();
     return;
   }
   reading_buffer_vector.append(reading_buffer, bytes);
@@ -77,14 +77,17 @@ void Session::sendPacket(ByteBuffer packet, const std::string& message) {
 
 void Session::deserialize_packets() {
   while (protocol::varint::is_complete(ConstBuffer(reading_buffer_vector))) {
-    PacketReader reader(reading_buffer_vector);
+    PacketReader reader((ConstBuffer(reading_buffer_vector)));
     auto size = static_cast<size_t>(reader.readVarInt());
     auto varint_size = protocol::varint::varint_size(size);
     if (size + varint_size > reading_buffer_vector.size()) {
       return;
     }
-    ByteBuffer buffer(reading_buffer_vector.data() + varint_size, size);
+    ConstBuffer buffer(reading_buffer_vector.data() + varint_size, size);
     packetHandler->readRaw(buffer);
+    server.addTask([handler = this->packetHandler] {
+      handler->handleOne();
+    } );
 
     reading_buffer_vector.erase(reading_buffer_vector.begin(),
         reading_buffer_vector.begin() + varint_size + size);
