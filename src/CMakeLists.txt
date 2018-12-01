@@ -187,9 +187,10 @@ set(SOURCE_FILES
       servericon.cpp
       servericon.hpp
       filesystem.hpp
-      util/string.cpp socket.hpp socket.cpp socketasio.cpp task.hpp)
-
-
+      util/string.cpp
+      socket.hpp
+      socket.cpp
+      socketasio.cpp)
 
 add_executable(redi ${SOURCE_FILES})
 
