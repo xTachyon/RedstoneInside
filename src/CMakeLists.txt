@@ -188,9 +188,9 @@ set(SOURCE_FILES
       servericon.hpp
       filesystem.hpp
       util/string.cpp
-      socket.hpp
-      socket.cpp
-      socketasio.cpp)
+      networking.hpp
+      networking_linux.cpp
+      networking_asio.cpp)
 
 add_executable(redi ${SOURCE_FILES})
 

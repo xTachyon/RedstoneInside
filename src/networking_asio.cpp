@@ -1,7 +1,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <mutex>
-#include "socket.hpp"
+#include "networking.hpp"
 #include "bytebuffer.hpp"
 
 namespace asio = boost::asio;

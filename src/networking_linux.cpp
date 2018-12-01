@@ -1,7 +1,7 @@
 #include <utility>
 
 #include <thread>
-#include "socket.hpp"
+#include "networking.hpp"
 
 namespace redi {
 

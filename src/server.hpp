@@ -14,7 +14,7 @@
 #include "util/threadgroup.hpp"
 #include "commands/commandmanager.hpp"
 #include "commands/command.hpp"
-#include "socket.hpp"
+#include "networking.hpp"
 
 namespace redi {
 

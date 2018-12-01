@@ -11,7 +11,7 @@
 #include "protocol/packets/packethandler.hpp"
 #include "lockfree/queue.hpp"
 #include "hasserver.hpp"
-#include "socket.hpp"
+#include "networking.hpp"
 
 namespace redi {
 
