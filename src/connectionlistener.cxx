@@ -32,7 +32,7 @@ void ConnectionListener::handleAccept(const boost::system::error_code& error) {
   if (error) {
     Logger::error(error.message());
   } else if (!mIsStopping) {
-    std::make_shared<Session>(std::move(mSocket), server)->readNext();
+//    std::make_shared<Session>(std::move(mSocket), server)->readNext();
     listen();
   }
 }

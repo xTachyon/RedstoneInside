@@ -43,6 +43,8 @@ void installSignals(redi::Server& server) {
 
 }
 
+//std::unique_ptr<redi::Networking> getAsioNetworking(boost::asio::io_context& context);
+
 int main(int, char**) {
   redi::Logger::debug("Redi is starting");
 

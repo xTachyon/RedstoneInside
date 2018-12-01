@@ -14,101 +14,32 @@ namespace asio = boost::asio;
 
 namespace redi {
 
-Session::Session(asio::ip::tcp::socket&& socket, Server& server)
-  : HasServer(server), socket(std::move(socket)),
+Session::Session(SocketSharedPtr socket, Server& server)
+  : HasServer(server), socket(socket),
     player(nullptr),
   connectionState(ConnectionState::Handshake),
   setCompressionIsSentVar(false),
   packetHandler(std::make_shared<PacketHandler>(
     server, *this, server.getEventManager())),
-  isDisconnected(false), isWritting(false),
-  strand(socket.get_io_service()) {
+  isDisconnected(false), isWritting(false) {
   Logger::debug((boost::format("Session %1% created") % this).str());
+
+  socket->set_read_handler([this] (auto bytes, auto error) { this->on_read(bytes, error); });
+  socket->read(MutableBuffer(reading_buffer, sizeof(reading_buffer)));
 }
 
 Session::~Session() {
   Logger::debug((boost::format("Session %1% destroyed") % this).str());
 }
 
-void Session::handleWrite(const boost::system::error_code& error) {
-  if (error) {
-    disconnect();
-  } else {
-    isWritting = false;
-
-    writeNext();
-  }
-}
-
-void Session::postWrite() {
-  if (isWritting || !packetsToBeSend.pop(sendingPacket)) {
+void Session::on_read(size_t bytes, std::string error) {
+  if (!error.empty()) {
+    Logger::debug(error);
     return;
   }
-
-  isWritting = true;
-
-  asio::async_write(socket,
-    asio::buffer(sendingPacket.data(), sendingPacket.size()),
-    boost::bind(&Session::handleWrite, shared_from_this(),
-      asio::placeholders::error));
-}
-
-void Session::writeNext() {
-  socket.get_io_service().post(
-    strand.wrap([me = shared_from_this()]{ me->postWrite(); }));
-}
-
-void Session::handleRead(const boost::system::error_code& error, bool header) {
-  if (error) {
-    disconnect();
-  } else if (header) {
-    ++receivingPacketCountSize;
-
-    if ((receivingPacketSize[receivingPacketCountSize - 1] &
-      0b10000000) != 0) {
-      if (receivingPacketCountSize > 5) {
-        disconnect();
-      } else {
-        asio::async_read(socket,
-          asio::buffer(receivingPacketSize +
-            receivingPacketCountSize,
-            1),
-          asio::transfer_exactly(1),
-          boost::bind(&Session::handleRead, shared_from_this(),
-            asio::placeholders::error, true));
-      }
-    } else {
-      PacketReader reader(ByteBuffer(receivingPacketSize,
-        receivingPacketCountSize));
-      std::size_t len = static_cast<std::size_t>(reader.readVarInt());
-      receivingPacket.resize(len);
-      asio::async_read(socket,
-        asio::buffer(receivingPacket.data(), len),
-        asio::transfer_exactly(len),
-        boost::bind(&Session::handleRead, shared_from_this(),
-          asio::placeholders::error, false));
-    }
-  } else {
-    try {
-      packetHandler->readRaw(receivingPacket);
-      server.addPacket(packetHandler);
-    } catch (std::exception& e) {
-      if (player) {
-        player->kick(e.what());
-      } else {
-        disconnect();
-      }
-    }
-    readNext();
-  }
-}
-
-void Session::readNext() {
-  asio::async_read(socket, asio::buffer(receivingPacketSize, 1),
-    asio::transfer_exactly(1),
-    boost::bind(&Session::handleRead, shared_from_this(),
-      asio::placeholders::error, true));
-  receivingPacketCountSize = 0;
+  reading_buffer_vector.append(reading_buffer, bytes);
+  deserialize_packets();
+  socket->read(MutableBuffer(reading_buffer, sizeof(reading_buffer)));
 }
 
 void Session::disconnect() {
@@ -140,8 +71,24 @@ void Session::sendPacket(ByteBuffer packet, const std::string& message) {
 
   auto result = protocol::varint::encodeVarInt(packet.size());
 
-  packetsToBeSend.push(ConstBuffer(result.first.data(), result.second).toByteBuffer(), std::move(packet));
-  writeNext();
+  socket->write(ConstBuffer(result.first.data(), result.second));
+  socket->write(packet);
+}
+
+void Session::deserialize_packets() {
+  while (protocol::varint::is_complete(ConstBuffer(reading_buffer_vector))) {
+    PacketReader reader(reading_buffer_vector);
+    auto size = static_cast<size_t>(reader.readVarInt());
+    auto varint_size = protocol::varint::varint_size(size);
+    if (size + varint_size > reading_buffer_vector.size()) {
+      return;
+    }
+    ByteBuffer buffer(reading_buffer_vector.data() + varint_size, size);
+    packetHandler->readRaw(buffer);
+
+    reading_buffer_vector.erase(reading_buffer_vector.begin(),
+        reading_buffer_vector.begin() + varint_size + size);
+  }
 }
 
 } // namespace redi

@@ -36,7 +36,6 @@ public:
   void handlePlayerLook(packets::PlayerLook& packet);
 
   Session& getSession() { return mSession; }
-
 private:
   Server& mServer;
   Session& mSession;

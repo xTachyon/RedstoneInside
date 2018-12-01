@@ -14,6 +14,7 @@
 #include "util/threadgroup.hpp"
 #include "commands/commandmanager.hpp"
 #include "commands/command.hpp"
+#include "socket.hpp"
 
 namespace redi {
 
@@ -32,7 +33,7 @@ public:
   std::int32_t getNewEntityID() { return mEntityCount++; }
   
   void run();
-  void addPacket(PacketHandlerSharedPtr ptr);
+  void addTask(std::function<void()> function);
 
   void addEvent(EventUniquePtr&& ptr);
   void addWorld(const std::string& worldname, const std::string& worlddir);
@@ -63,16 +64,18 @@ private:
   ServerConfig configuration;
   
   boost::asio::io_service workIoService;
-  ConnectionListenerSharedPtr mListener;
+  std::unique_ptr<Networking> networking;
+  std::shared_ptr<Socket> connectionListener;
   PlayerList mPlayers;
   WorldList mWorlds;
   std::int32_t mEntityCount;
   ChatManager mChatManager;
   EventManager mEventManager;
-  lockfree::Queue<PacketHandlerSharedPtr> mPacketsToBeHandle;
+  lockfree::Queue<std::function<void()>> mPacketsToBeHandle;
   commands::CommandManager commandmanager;
   std::unique_ptr<commands::Command> commands;
   bool running;
+  SessionList sessions;
   
   util::ThreadGroup<std::thread> asiothreads;
   std::condition_variable mCondVar;
@@ -81,6 +84,8 @@ private:
 
   void handleOne();
   void closeServer();
+
+  void onSocketConnected(std::shared_ptr<Socket> socket, std::string error);
 };
 
 } // namespace redi

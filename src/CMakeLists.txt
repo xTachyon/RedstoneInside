@@ -187,7 +187,7 @@ set(SOURCE_FILES
       servericon.cpp
       servericon.hpp
       filesystem.hpp
-      util/string.cpp)
+      util/string.cpp socket.hpp socket.cpp socketasio.cpp task.hpp)
 
 
 

@@ -6,11 +6,18 @@
 
 namespace fs = boost::filesystem;
 
+std::unique_ptr<redi::Networking> getAsioNetworking(boost::asio::io_context& context);
+
 namespace redi {
 
 Server::Server()
-    : mListener(std::make_shared<ConnectionListener>(
-    workIoService, static_cast<std::uint16_t>(configuration.port), *this)),
+    : 
+//    mListener(std::make_shared<ConnectionListener>(
+//    workIoService, static_cast<std::uint16_t>(configuration.port), *this)),
+      networking(getAsioNetworking(workIoService)),
+      connectionListener(networking->getListener([this] (std::shared_ptr<Socket> socket, std::string message) {
+        this->onSocketConnected(socket, message);
+      }, static_cast<uint16_t>(configuration.port))),
       mEntityCount(0),
       mChatManager(*this), mEventManager(*this),
       commandmanager(*this), commands(std::make_unique<commands::RediCommands>(*this)), running(true),
@@ -20,7 +27,7 @@ Server::Server()
 
   addWorld("world", "worlds/world");
 
-  mListener->listen();
+//  mListener->listen();
 
   asiothreads.create(AsioThreadsNumber, [&] () {
     Logger::debug((boost::format("Asio work thread id %1% started") %
@@ -43,6 +50,11 @@ Server::~Server() {
   workIoService.stop();
 }
 
+void Server::onSocketConnected(std::shared_ptr<redi::Socket> socket, std::string error) {
+  auto session = std::make_shared<Session>(std::move(socket), *this);
+  addTask([session, this] () { sessions.push_back(session); });
+}
+
 void Server::run() {
   while (true) {
     handleOne();
@@ -60,16 +72,16 @@ void Server::run() {
 
 void Server::handleOne() {
   while (true) {
-    PacketHandlerSharedPtr x;
+    std::function<void()> x;
     if (!mPacketsToBeHandle.pop(x) || !x)
       break;
 
     try {
-      x->handleOne();
+      x();
     } catch (std::exception& e) {
       Logger::error(e.what());
       // Just ignore everything bad.
-      x->getSession().disconnect();
+//      x->getSession().disconnect();
       // and disconnect
       // TODO: add message
     }
@@ -82,8 +94,8 @@ void Server::handleOne() {
   }
 }
 
-void Server::addPacket(PacketHandlerSharedPtr ptr) {
-  mPacketsToBeHandle.push(ptr);
+void Server::addTask(std::function<void()> function) {
+  mPacketsToBeHandle.push(std::move(function));
   mCondVar.notify_one();
 }
 
@@ -112,7 +124,7 @@ Player* Server::findPlayer(const std::string& name) {
 }
 
 void Server::closeServer() {
-  mListener->mIsStopping = true;
+//  mListener->mIsStopping = true;
 
   for (auto& i : mPlayers) {
     i->kick("Server is closing");

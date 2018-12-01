@@ -31,4 +31,12 @@ std::pair<std::array<byte, 10>, std::size_t> encodeVarInt(T x) {
   return result;
 }
 
+
+template <typename T>
+size_t varint_size(T x) {
+  return encodeVarInt<T>(x).second;
+}
+
+bool is_complete(ConstBuffer buffer);
+
 } // namespace redi

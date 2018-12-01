@@ -22,7 +22,7 @@ Player::Player(const std::string& name, boost::uuids::uuid uuid,
     : HasServer(server), CommandSender(commands::CommandSenderType::Player), mUUID(uuid), mNickname(name),
       mWorld(world),
       session(session), gamemode(gamemode),
-      mSendKeepAliveTimer(session->getIoService()), mTeleportID(0),
+      mSendKeepAliveTimer(server.getWorkIO()), mTeleportID(0),
       mEntityID(id), hasSavedToDisk(false) {
   Logger::debug((boost::format("Player %1% created") % this).str());
 
