@@ -149,8 +149,8 @@ std::shared_ptr<Socket> AsioNetworking::getListener(socket_accept_handler handle
   return listener;
 }
 
-}
-
 std::unique_ptr<redi::Networking> getAsioNetworking(boost::asio::io_context& context) {
   return std::make_unique<redi::AsioNetworking>(context);
+}
+
 }

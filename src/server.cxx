@@ -6,15 +6,15 @@
 
 namespace fs = boost::filesystem;
 
-std::unique_ptr<redi::Networking> getAsioNetworking(boost::asio::io_context& context);
-
 namespace redi {
+
+std::unique_ptr<redi::Networking> getAsioNetworking(boost::asio::io_context& context);
+std::unique_ptr<redi::Networking> getLinuxNetworking();
 
 Server::Server()
     : 
-//    mListener(std::make_shared<ConnectionListener>(
-//    workIoService, static_cast<std::uint16_t>(configuration.port), *this)),
-      networking(getAsioNetworking(workIoService)),
+//      networking(getAsioNetworking(workIoService)),
+      networking(getLinuxNetworking()),
       connectionListener(networking->getListener([this] (std::shared_ptr<Socket> socket, std::string message) {
         this->onSocketConnected(socket, message);
       }, static_cast<uint16_t>(configuration.port))),
