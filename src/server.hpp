@@ -63,7 +63,8 @@ private:
   
   ServerConfig configuration;
   
-  boost::asio::io_service workIoService;
+  boost::asio::io_context workIoService;
+  boost::asio::io_context::work workWorkIoService;
   std::unique_ptr<Networking> networking;
   std::shared_ptr<Socket> connectionListener;
   PlayerList mPlayers;

@@ -12,7 +12,8 @@ std::unique_ptr<redi::Networking> getAsioNetworking(boost::asio::io_context& con
 std::unique_ptr<redi::Networking> getLinuxNetworking();
 
 Server::Server()
-    : 
+    :
+      workWorkIoService(workIoService),
 //      networking(getAsioNetworking(workIoService)),
       networking(getLinuxNetworking()),
       connectionListener(networking->getListener([this] (std::shared_ptr<Socket> socket, std::string message) {

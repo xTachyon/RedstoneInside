@@ -16,6 +16,8 @@ public:
   using iterator = byte*;
   
   explicit MutableBuffer() : ptr(nullptr), ptrsize(0) {}
+
+  explicit MutableBuffer(const MutableBuffer&) = default;
   
   explicit MutableBuffer(value_type data, std::size_t size)
       : ptr(data), ptrsize(size) {}
@@ -31,6 +33,8 @@ public:
   
   explicit MutableBuffer(char* str)
       : MutableBuffer(str, std::strlen(str)) {}
+
+  MutableBuffer& operator=(const MutableBuffer&) = default;
   
   value_type data() { return ptr; }
   const_value_type data() const { return ptr; }
