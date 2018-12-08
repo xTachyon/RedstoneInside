@@ -70,9 +70,6 @@ void AutoCloseableDescriptor::close() {
   fd = -1;
 }
 
-#define SMART_LOCK(networking) ThreadLockable my_mutex(*networking);\
-std::lock_guard<ThreadLockable> my_lock_guard(my_mutex);
-
 class LinuxNetworking;
 
 class LinuxSocket : public Socket {
@@ -100,17 +97,6 @@ private:
 
 Networking::~Networking() = default;
 
-class LinuxNetworking;
-
-struct ThreadLockable {
-  LinuxNetworking& networking;
-
-  ThreadLockable(LinuxNetworking& networking);
-
-  void lock();
-  void unlock();
-};
-
 void set_non_blocking(int fd) {
   auto current = fcntl(fd, F_GETFL, 0);
   CHECK(current);
@@ -129,7 +115,7 @@ private:
 
   std::thread thread;
   std::vector<std::shared_ptr<LinuxSocket>> sockets;
-  std::mutex mutex;
+  std::recursive_mutex mutex;
   bool running;
   AutoCloseableDescriptor reading_pipe;
   AutoCloseableDescriptor writing_pipe;
@@ -179,7 +165,7 @@ std::shared_ptr<Socket> LinuxNetworking::getListener(socket_accept_handler handl
   CHECK(bind(listener->fd.fd, (__CONST_SOCKADDR_ARG) &server, sizeof(server)));
   CHECK(listen(listener->fd.fd, 20));
 
-  SMART_LOCK(this);
+  std::lock_guard<std::recursive_mutex> lock_guard(mutex);
   sockets.push_back(listener);
   CHECK(::write(writing_pipe.fd, "0", 1));
 
@@ -198,7 +184,7 @@ void LinuxNetworking::run_loop() {
   update_list();
   while (running) {
     {
-      std::lock_guard<std::mutex> l(mutex);
+      std::lock_guard<std::recursive_mutex> lock_guard(mutex);
       handle_events();
       update_list();
     }
@@ -287,13 +273,13 @@ int LinuxSocket::get_fd() const {
 }
 
 void LinuxSocket::read(MutableBuffer buffer) {
-  SMART_LOCK(networking);
+  std::lock_guard<std::recursive_mutex> lock_guard(networking->mutex);
   read_buffer = buffer;
   CHECK(::write(networking->writing_pipe.fd, "0", 1));
 }
 
 void LinuxSocket::write(ConstBuffer buffer) {
-  SMART_LOCK(networking);
+  std::lock_guard<std::recursive_mutex> lock_guard(networking->mutex);
   write_buffer.insert(write_buffer.end(), buffer.data(), buffer.data() + buffer.size());
   CHECK(::write(networking->writing_pipe.fd, "0", 1));
 }
@@ -310,7 +296,7 @@ void LinuxSocket::on_read() {
     auto socket = std::make_shared<LinuxSocket>(client, networking);
     accept_handler(socket, "");
 
-    SMART_LOCK(networking);
+    std::lock_guard<std::recursive_mutex> lock_guard(networking->mutex);
     networking->sockets.push_back(socket);
     CHECK(::write(networking->writing_pipe.fd, "0", 1));
   } else {
@@ -322,21 +308,6 @@ void LinuxSocket::on_read() {
     CHECK(read_size);
     read_buffer = MutableBuffer();
     read_handler(static_cast<size_t>(read_size), "");
-  }
-}
-
-ThreadLockable::ThreadLockable(redi::LinuxNetworking& networking)
-    : networking(networking) {}
-
-void ThreadLockable::lock() {
-  if (networking.thread.get_id() != std::this_thread::get_id()) {
-    networking.mutex.lock();
-  }
-}
-
-void ThreadLockable::unlock() {
-  if (networking.thread.get_id() != std::this_thread::get_id()) {
-    networking.mutex.unlock();
   }
 }
 
