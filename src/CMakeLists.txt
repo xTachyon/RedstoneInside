@@ -1,117 +1,117 @@
 project(redi CXX)
 
 set(SOURCE_FILES
-      bytebuffer.cxx
+      bytebuffer.cpp
       bytebuffer.hpp
-      connectionlistener.cxx
+      connectionlistener.cpp
       connectionlistener.hpp
-      enums.cxx
+      enums.cpp
       enums.hpp
-      logger.cxx
+      logger.cpp
       logger.hpp
-      main.cxx
-      player.cxx
+      main.cpp
+      player.cpp
       player.hpp
       playerposition.hpp
-      server.cxx
+      server.cpp
       server.hpp
-      serverconfig.cxx
+      serverconfig.cpp
       serverconfig.hpp
-      session.cxx
+      session.cpp
       session.hpp
       sizeliteraloperators.hpp
       threadsafequeue.hpp
       vectorn.hpp
 
       util/base64.hpp
-      util/file.cxx
+      util/file.cpp
       util/file.hpp
-      util/maths.cxx
+      util/maths.cpp
       util/maths.hpp
       util/random.hpp
       util/string.hpp
-      util/time.cxx
+      util/time.cpp
       util/time.hpp
       util/util.hpp
 
-      world.cxx
+      world.cpp
       world.hpp
-      world/anvil.cxx
+      world/anvil.cpp
       world/anvil.hpp
-      world/anvilregion.cxx
+      world/anvilregion.cpp
       world/anvilregion.hpp
       world/biome.hpp
-      world/chunk.cxx
+      world/chunk.cpp
       world/chunk.hpp
       world/chunkcolumn.hpp
-      world/chunkmanager.cxx
+      world/chunkmanager.cpp
       world/chunkmanager.hpp
-      world/memoryregion.cxx
+      world/memoryregion.cpp
       world/memoryregion.hpp
-      world/terraingenerator.cxx
+      world/terraingenerator.cpp
       world/terraingenerator.hpp
       world/block.hpp
-      world/chunkdeseriazer.cxx
+      world/chunkdeseriazer.cpp
       world/chunkdeseriazer.hpp
-      world/chunkserializer.cxx
+      world/chunkserializer.cpp
       world/chunkserializer.hpp
 
       protocol/chunkserializer13.hpp
-      protocol/packetreader.cxx
+      protocol/packetreader.cpp
       protocol/packetreader.hpp
-      protocol/packets/packet.cxx
+      protocol/packets/packet.cpp
       protocol/packets/packet.hpp
-      protocol/packets/packethandler.cxx
+      protocol/packets/packethandler.cpp
       protocol/packets/packethandler.hpp
-      protocol/packets/server/handshake/handshake.cxx
+      protocol/packets/server/handshake/handshake.cpp
       protocol/packets/server/handshake/handshake.hpp
-      protocol/packets/server/login/loginstart.cxx
+      protocol/packets/server/login/loginstart.cpp
       protocol/packets/server/login/loginstart.hpp
-      protocol/packets/server/login/loginsucces.cxx
+      protocol/packets/server/login/loginsucces.cpp
       protocol/packets/server/login/loginsucces.hpp
-      protocol/packets/server/login/setcompression.cxx
+      protocol/packets/server/login/setcompression.cpp
       protocol/packets/server/login/setcompression.hpp
-      protocol/packets/server/play/chatmessage.cxx
+      protocol/packets/server/play/chatmessage.cpp
       protocol/packets/server/play/chatmessage.hpp
-      protocol/packets/server/play/chunkdata.cxx
+      protocol/packets/server/play/chunkdata.cpp
       protocol/packets/server/play/chunkdata.hpp
-      protocol/packets/server/play/disconnect.cxx
+      protocol/packets/server/play/disconnect.cpp
       protocol/packets/server/play/disconnect.hpp
-      protocol/packets/server/play/entitylookandrelativemove.cxx
+      protocol/packets/server/play/entitylookandrelativemove.cpp
       protocol/packets/server/play/entitylookandrelativemove.hpp
-      protocol/packets/server/play/joingame.cxx
+      protocol/packets/server/play/joingame.cpp
       protocol/packets/server/play/joingame.hpp
-      protocol/packets/server/play/keepalive.cxx
+      protocol/packets/server/play/keepalive.cpp
       protocol/packets/server/play/keepalive.hpp
-      protocol/packets/server/play/playerlistitem.cxx
+      protocol/packets/server/play/playerlistitem.cpp
       protocol/packets/server/play/playerlistitem.hpp
-      protocol/packets/server/play/playerlook.cxx
+      protocol/packets/server/play/playerlook.cpp
       protocol/packets/server/play/playerlook.hpp
-      protocol/packets/server/play/playerposition.cxx
+      protocol/packets/server/play/playerposition.cpp
       protocol/packets/server/play/playerposition.hpp
-      protocol/packets/server/play/playerpositionandlook.cxx
+      protocol/packets/server/play/playerpositionandlook.cpp
       protocol/packets/server/play/playerpositionandlook.hpp
-      protocol/packets/server/play/spawnplayer.cxx
+      protocol/packets/server/play/spawnplayer.cpp
       protocol/packets/server/play/spawnplayer.hpp
-      protocol/packets/server/play/spawnposition.cxx
+      protocol/packets/server/play/spawnposition.cpp
       protocol/packets/server/play/spawnposition.hpp
       protocol/packets/server/play/timeupdate.hpp
-      protocol/packets/server/play/unloadchunk.cxx
+      protocol/packets/server/play/unloadchunk.cpp
       protocol/packets/server/play/unloadchunk.hpp
-      protocol/packets/server/status/ping.cxx
+      protocol/packets/server/status/ping.cpp
       protocol/packets/server/status/ping.hpp
-      protocol/packets/server/status/pong.cxx
+      protocol/packets/server/status/pong.cpp
       protocol/packets/server/status/pong.hpp
-      protocol/packets/server/status/request.cxx
+      protocol/packets/server/status/request.cpp
       protocol/packets/server/status/request.hpp
-      protocol/packets/server/status/response.cxx
+      protocol/packets/server/status/response.cpp
       protocol/packets/server/status/response.hpp
-      protocol/packetwriter.cxx
+      protocol/packetwriter.cpp
       protocol/packetwriter.hpp
-      protocol/chunkserializer13.cxx
+      protocol/chunkserializer13.cpp
 
       messages/event.hpp
-      messages/eventmanager.cxx
+      messages/eventmanager.cpp
       messages/eventmanager.hpp
       messages/eventpriority.hpp
       messages/events.hpp
@@ -129,9 +129,9 @@ set(SOURCE_FILES
       messages/chunkloaded.hpp
 
       chat/chatmanager.hpp
-      commands/redicommands.cxx
+      commands/redicommands.cpp
       commands/redicommands.hpp
-      chat/chatmanager.cxx
+      chat/chatmanager.cpp
 
       lockfree/queue.hpp
 
@@ -166,17 +166,17 @@ set(SOURCE_FILES
       nbt/visitor.hpp
 
       datatypes.hpp
-      checks.cxx
+      checks.cpp
       util/threadgroup.hpp
       buffers.hpp
       hasserver.hpp
       commands/commandsender.hpp
-      commands/commandsender.cxx
-      commands/commandmanager.cxx
+      commands/commandsender.cpp
+      commands/commandmanager.cpp
       commands/commandmanager.hpp
       commands/command.hpp
-      commands/command.cxx
-      commands/redicommands.cxx
+      commands/command.cpp
+      commands/redicommands.cpp
       commands/commanddata.hpp
       chat/chatcomponent.cpp
       chat/chatcomponent.hpp
