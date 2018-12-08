@@ -13,10 +13,10 @@ using socket_read_handler = std::function<void(size_t, std::string)>;
 
 class Socket {
 public:
+  Socket();
   virtual ~Socket() = 0;
 
   virtual void read(MutableBuffer buffer) = 0;
-  virtual void write(ByteBuffer buffer);
   virtual void write(ConstBuffer buffer) = 0;
 
   void set_accept_handler(socket_accept_handler handler);

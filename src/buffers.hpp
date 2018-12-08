@@ -65,16 +65,16 @@ public:
   
   explicit ConstBuffer() : ptr(nullptr), ptrsize(0) {}
   
-  explicit ConstBuffer(value_type data, std::size_t size)
+  ConstBuffer(value_type data, std::size_t size)
       : ptr(data), ptrsize(size) {}
   
-  explicit ConstBuffer(const void* data, std::size_t size)
+  ConstBuffer(const void* data, std::size_t size)
       : ConstBuffer(reinterpret_cast<value_type>(data), size) {}
   
   explicit ConstBuffer(MutableBuffer& buffer)
       : ConstBuffer(buffer.data(), buffer.size()) {}
   
-  explicit ConstBuffer(const ByteBuffer& buf)
+  ConstBuffer(const ByteBuffer& buf)
       : ConstBuffer(buf.data(), buf.size()) {}
   
   explicit ConstBuffer(const std::string& str)

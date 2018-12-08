@@ -15,14 +15,16 @@
 
 namespace redi {
 
-Socket::~Socket() = default;
+Socket::Socket() {
+  Logger::debug(boost::format("Socket %1% created") % this);
+}
+
+Socket::~Socket() {
+  Logger::debug(boost::format("Socket %1% destroyed") % this);
+}
 
 void Socket::set_accept_handler(socket_accept_handler handler) {
   accept_handler = std::move(handler);
-}
-
-void Socket::write(ByteBuffer buffer) {
-  write(ConstBuffer(buffer));
 }
 
 void Socket::set_read_handler(socket_read_handler handler) {

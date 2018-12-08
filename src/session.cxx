@@ -71,7 +71,7 @@ void Session::sendPacket(ByteBuffer packet, const std::string& message) {
 
   auto result = protocol::varint::encodeVarInt(packet.size());
 
-  socket->write(ConstBuffer(result.first.data(), result.second));
+  socket->write({ result.first.data(), result.second });
   socket->write(packet);
 }
 
