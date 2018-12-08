@@ -3,7 +3,6 @@ project(redi CXX)
 set(SOURCE_FILES
       bytebuffer.cpp
       bytebuffer.hpp
-      connectionlistener.cpp
       connectionlistener.hpp
       enums.cpp
       enums.hpp

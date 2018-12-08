@@ -3,7 +3,6 @@
 #include <list>
 #include <condition_variable>
 #include "player.hpp"
-#include "connectionlistener.hpp"
 #include "serverconfig.hpp"
 #include "messages/events.hpp"
 #include "world.hpp"

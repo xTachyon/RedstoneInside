@@ -34,4 +34,4 @@ fi
 mkdir build
 cd build
 cmake .. -DBOOST_INCLUDEDIR=libs/boost/include -DBOOST_LIBRARYDIR=libs/boost/lib -DJSON_REPO_DIR=libs/json
-make
+make -j4
