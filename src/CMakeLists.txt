@@ -188,7 +188,8 @@ set(SOURCE_FILES
       util/string.cpp
       networking.hpp
       networking_linux.cpp
-      networking_asio.cpp)
+      networking_asio.cpp
+      asiofile.cpp)
 
 add_executable(redi ${SOURCE_FILES})
 

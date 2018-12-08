@@ -27,6 +27,8 @@ else()
   message(FATAL_ERROR "Unknown compiler")
 endif()
 
+add_definitions(-DBOOST_ASIO_SEPARATE_COMPILATION)
+
 if(REDI_GCC OR REDI_CLANG)
   set(warnings "-Wall -Wextra -Wpedantic -Wreorder -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-overflow")
   if (REDI_GCC)
