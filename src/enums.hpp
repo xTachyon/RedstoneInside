@@ -1,5 +1,4 @@
-#ifndef REDI_ENUMS_HPP
-#define REDI_ENUMS_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -28,5 +27,3 @@ enum class PlayerListItemAction {
 };
 
 } // namespace redi
-
-#endif // REDI_ENUMS_HPP

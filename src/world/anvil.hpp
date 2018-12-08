@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_ANVIL_HPP
-#define REDI_WORLD_ANVIL_HPP
+#pragma once
 
 #include <fstream>
 #include <array>
@@ -71,5 +70,3 @@ private:
 
 } // namespace world
 } // namespace redi
-
-#endif // REDI_WORLD_ANVIL_HPP

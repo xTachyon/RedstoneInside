@@ -1,5 +1,4 @@
-#ifndef REDI_CHATMESSAGE_HPP
-#define REDI_CHATMESSAGE_HPP
+#pragma once
 
 #include "../../packet.hpp"
 #include "../../../../enums.hpp"
@@ -24,5 +23,3 @@ struct ChatMessage : public Packet {
 };
 }
 } // namespace redi
-
-#endif // REDI_CHATMESSAGE_HPP

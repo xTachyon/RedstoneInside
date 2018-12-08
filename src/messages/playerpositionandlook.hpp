@@ -1,5 +1,4 @@
-#ifndef REDI_PLAYERPOSITIONANDLOOK_HPP
-#define REDI_PLAYERPOSITIONANDLOOK_HPP
+#pragma once
 
 #include "event.hpp"
 #include "../player.hpp"
@@ -22,5 +21,3 @@ struct EventPlayerPositionAndLook : public Event,
 };
 
 } // namespace redi
-
-#endif // REDI_PLAYERPOSITIONANDLOOK_HPP

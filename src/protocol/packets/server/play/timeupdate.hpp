@@ -1,5 +1,4 @@
-#ifndef REDI_PACKETS_TIMEUPDATE_HPP
-#define REDI_PACKETS_TIMEUPDATE_HPP
+#pragma once
 
 #include "../../packet.hpp"
 #include "../../../../world.hpp"
@@ -25,5 +24,3 @@ struct TimeUpdate : public Packet {
 
 } // namespace packets
 } // namespace redi
-
-#endif // REDI_PACKETS_TIMEUPDATE_HPP

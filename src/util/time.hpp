@@ -1,5 +1,4 @@
-#ifndef REDI_UTIL_TIME
-#define REDI_UTIL_TIME
+#pragma once
 
 #include <cstdint>
 
@@ -13,5 +12,3 @@ std::int32_t getRandomInt32();
 
 } // namespace util
 } // namespace redi
-
-#endif // REDI_UTIL_TIME

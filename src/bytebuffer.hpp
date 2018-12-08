@@ -1,5 +1,4 @@
-#ifndef REDI_BINARYDATA
-#define REDI_BINARYDATA
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -51,5 +50,3 @@ ByteBuffer operator+(ByteBuffer l, const ByteBuffer& r);
 using ByteBufferSharedPtr = std::shared_ptr<ByteBuffer>;
 
 } // namespace redi
-
-#endif // REDI_BINARYDATA

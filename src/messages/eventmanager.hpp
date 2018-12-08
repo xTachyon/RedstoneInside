@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_EVENTMANAGER_HPP
-#define REDI_EVENTS_EVENTMANAGER_HPP
+#pragma once
 
 #include <map>
 #include "eventtype.hpp"
@@ -30,5 +29,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_EVENTS_EVENTMANAGER_HPP

@@ -1,5 +1,4 @@
-#ifndef REDI_PACKETREADER_HPP
-#define REDI_PACKETREADER_HPP
+#pragma once
 
 #include <string>
 #include <boost/endian/conversion.hpp>
@@ -66,5 +65,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_PACKETREADER_HPP

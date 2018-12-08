@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD
-#define REDI_WORLD
+#pragma once
 
 #include <functional>
 #include <list>
@@ -39,5 +38,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_WORLD

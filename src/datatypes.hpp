@@ -1,5 +1,4 @@
-#ifndef REDI_DATATYPES_HPP
-#define REDI_DATATYPES_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -9,5 +8,3 @@ using byte = unsigned char;
 using sbyte = std::int8_t;
 
 }
-
-#endif // REDI_DATATYPES_HPP

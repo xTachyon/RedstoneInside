@@ -1,5 +1,4 @@
-#ifndef REDI_PACKETS_ENTITYLOOKANDRELATIVEMOVE_HPP
-#define REDI_PACKETS_ENTITYLOOKANDRELATIVEMOVE_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -27,5 +26,3 @@ struct EntityLookAndRelativeMove : public Packet {
 
 } // namespace packets
 } // namespace redi
-
-#endif // REDI_PACKETS_ENTITYLOOKANDRELATIVEMOVE_HPP

@@ -1,5 +1,4 @@
-#ifndef REDI_UTIL_STRING
-#define REDI_UTIL_STRING
+#pragma once
 
 #include <algorithm>
 #include <cctype>
@@ -83,5 +82,3 @@ To binaryTo(const From& val) {
 
 } // namespace util
 } // namespace redi
-
-#endif // REDI_UTIL_STRING

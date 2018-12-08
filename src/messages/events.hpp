@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_EVENTS_HPP
-#define REDI_EVENTS_EVENTS_HPP
+#pragma once
 
 #include "eventtype.hpp"
 #include "event.hpp"
@@ -13,5 +12,3 @@
 #include "playerposition.hpp"
 #include "playerpositionandlook.hpp"
 #include "chunkloaded.hpp"
-
-#endif // REDI_EVENTS_EVENTS_HPP

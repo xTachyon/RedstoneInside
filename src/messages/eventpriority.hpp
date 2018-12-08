@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_PRIORITY
-#define REDI_EVENTS_PRIORITY
+#pragma once
 
 #include <cstdint>
 #include <functional>
@@ -17,5 +16,3 @@ enum class EventPriority : std::uint8_t {
 };
 
 } // namespace redi
-
-#endif // REDI_EVENTS_PRIORITY

@@ -1,5 +1,4 @@
-#ifndef REDI_SERVERICON_HPP
-#define REDI_SERVERICON_HPP
+#pragma once
 
 #include <string>
 #include <boost/filesystem.hpp>
@@ -23,5 +22,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_SERVERICON_HPP

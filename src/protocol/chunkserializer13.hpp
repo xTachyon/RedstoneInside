@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_CHUNKSERIALIZER13_HPP
-#define REDI_WORLD_CHUNKSERIALIZER13_HPP
+#pragma once
 
 #include "../world/chunk.hpp"
 #include "../serverconfig.hpp"
@@ -47,5 +46,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_CHUNKSERIALIZER13_HPP

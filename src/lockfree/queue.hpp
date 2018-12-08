@@ -1,5 +1,4 @@
-#ifndef REDI_LOCKFREE_QUEUE
-#define REDI_LOCKFREE_QUEUE
+#pragma once
 
 #include <deque>
 #include <mutex>
@@ -78,5 +77,3 @@ using ByteBufferQueue = Queue<ByteBuffer>;
 
 } // namespace lockfree
 } // namespace redi
-
-#endif // REDI_LOCKFREE_QUEUE

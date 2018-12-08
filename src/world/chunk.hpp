@@ -1,5 +1,4 @@
-#ifndef REDI_CHUNK
-#define REDI_CHUNK
+#pragma once
 
 #include <cstdint>
 #include <boost/multi_array.hpp>
@@ -49,5 +48,3 @@ private:
 using ChunkUniquePtr = std::unique_ptr<Chunk>;
 
 } // namespace redi
-
-#endif // REDI_CHUNK

@@ -1,5 +1,4 @@
-#ifndef REDI_UTIL_THREADGROUP_HPP
-#define REDI_UTIL_THREADGROUP_HPP
+#pragma once
 
 #include <thread>
 #include <vector>
@@ -44,5 +43,3 @@ struct ThreadGroup {
 
 }
 }
-
-#endif // REDI_UTIL_THREADGROUP_HPP

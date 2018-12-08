@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_CHUNKTONBT_HPP
-#define REDI_WORLD_CHUNKTONBT_HPP
+#pragma once
 
 #include "../bytebuffer.hpp"
 #include "../nbt/nbt.hpp"
@@ -30,5 +29,3 @@ private:
 
 } // namespace world
 } // namespace redi
-
-#endif // REDI_CHUNKTONBT_HPP

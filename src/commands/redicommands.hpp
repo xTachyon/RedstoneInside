@@ -1,5 +1,4 @@
-#ifndef REDI_CHAT_REDICOMMANDS_HPP
-#define REDI_CHAT_REDICOMMANDS_HPP
+#pragma once
 
 #include "command.hpp"
 
@@ -25,5 +24,3 @@ public:
 
 }
 } // namespace redi
-
-#endif // REDI_CHAT_REDICOMMANDS_HPP

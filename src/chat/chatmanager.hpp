@@ -1,5 +1,4 @@
-#ifndef REDI_CHATMANAGER_HPP
-#define REDI_CHATMANAGER_HPP
+#pragma once
 
 #include <nlohmann/json.hpp>
 #include "../enums.hpp"
@@ -28,5 +27,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_CHATMANAGER_HPP

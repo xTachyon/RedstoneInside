@@ -1,5 +1,4 @@
-#ifndef REDI_PACKET_PLAYERPOSITIONANDLOOK_HPP
-#define REDI_PACKET_PLAYERPOSITIONANDLOOK_HPP
+#pragma once
 
 #include "../../packet.hpp"
 #include "../../../../playerposition.hpp"
@@ -32,5 +31,3 @@ struct PlayerPositionAndLook : public Packet {
 
 } // namespace packets
 } // namespace redi
-
-#endif // REDI_PACKET_PLAYERPOSITIONANDLOOK_HPP

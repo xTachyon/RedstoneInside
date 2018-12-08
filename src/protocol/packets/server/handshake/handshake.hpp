@@ -1,5 +1,4 @@
-#ifndef REDI_HANDSHAKE_HPP
-#define REDI_HANDSHAKE_HPP
+#pragma once
 
 #include "../../packet.hpp"
 #include "../../../../enums.hpp"
@@ -22,5 +21,3 @@ struct Handshake : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_HANDSHAKE_HPP

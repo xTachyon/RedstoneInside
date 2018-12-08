@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_CHUNKLOADED_HPP
-#define REDI_EVENTS_CHUNKLOADED_HPP
+#pragma once
 
 #include "event.hpp"
 #include "../world/memoryregion.hpp"
@@ -21,5 +20,3 @@ struct EventChunkLoaded : public Event {
 
 } // namespace messages
 } // namespace redi
-
-#endif // REDI_EVENTS_CHUNKLOADED_HPP

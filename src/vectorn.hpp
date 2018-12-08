@@ -1,5 +1,4 @@
-#ifndef REDI_VECTORN_HPP
-#define REDI_VECTORN_HPP
+#pragma once
 
 #include <cmath>
 #include <cstdint>
@@ -97,5 +96,3 @@ using Vector3i = Vector3<std::int32_t>;
 using Vector3d = Vector3<double>;
 
 } // namespace redi
-
-#endif // REDI_VECTORN_HPP

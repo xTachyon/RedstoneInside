@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_BIOME_HPP
-#define REDI_WORLD_BIOME_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -71,5 +70,3 @@ enum class Biome : std::uint8_t {
 };
 
 } // namespace redi
-
-#endif // REDI_WORLD_BIOME_HPP

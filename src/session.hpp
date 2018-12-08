@@ -1,5 +1,4 @@
-#ifndef REDI_SESSION
-#define REDI_SESSION
+#pragma once
 
 #include <atomic>
 #include <memory>
@@ -75,5 +74,3 @@ inline bool operator==(const Session& l, const Session& r) { return &l == &r; }
 inline bool operator!=(const Session& l, const Session& r) { return !(l == r); }
 
 } // namespace redi
-
-#endif // REDI_SESSION

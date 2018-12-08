@@ -1,5 +1,4 @@
-#ifndef REDI_CONNECTIONLISTENER
-#define REDI_CONNECTIONLISTENER
+#pragma once
 
 #include <atomic>
 #include <thread>
@@ -36,5 +35,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_CONNECTIONLISTENER

@@ -1,5 +1,4 @@
-#ifndef REDI_STATUSREQUEST_HPP
-#define REDI_STATUSREQUEST_HPP
+#pragma once
 
 #include "event.hpp"
 #include "../session.hpp"
@@ -14,5 +13,3 @@ struct EventStatusRequest : public Event {
 };
 
 } // namespace redi
-
-#endif // REDI_STATUSREQUEST_HPP

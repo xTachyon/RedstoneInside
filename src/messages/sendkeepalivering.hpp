@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_SENDKEEPALIVERING_HPP
-#define REDI_EVENTS_SENDKEEPALIVERING_HPP
+#pragma once
 
 #include "event.hpp"
 #include "../session.hpp"
@@ -14,5 +13,3 @@ struct EventSendKeepAliveRing : public Event {
 };
 
 } // namespace redi
-
-#endif // REDI_EVENTS_SENDKEEPALIVERING_HPP

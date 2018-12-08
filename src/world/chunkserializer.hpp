@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_CHUNKSERIALIZER_HPP
-#define REDI_WORLD_CHUNKSERIALIZER_HPP
+#pragma once
 
 #include "chunk.hpp"
 #include "../nbt/nbt.hpp"
@@ -32,5 +31,3 @@ private:
 
 } // namespace world
 } // namespace redi
-
-#endif // REDI_WORLD_CHUNKSERIALIZER_HPP

@@ -1,5 +1,4 @@
-#ifndef REDI_SETCOMPRESSION_HPP
-#define REDI_SETCOMPRESSION_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -17,5 +16,3 @@ struct SetCompression : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_SETCOMPRESSION_HPP

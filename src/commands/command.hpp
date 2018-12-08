@@ -1,5 +1,4 @@
-#ifndef REDI_COMMANDS_COMMAND_HPP
-#define REDI_COMMANDS_COMMAND_HPP
+#pragma once
 
 #include "../hasserver.hpp"
 #include "commanddata.hpp"
@@ -30,5 +29,3 @@ protected:
 
 }
 } // namespace redi
-
-#endif // REDI_COMMANDS_COMMAND_HPP

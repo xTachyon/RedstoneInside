@@ -1,5 +1,4 @@
-#ifndef REDI_UTILS_MATHS_HPP
-#define REDI_UTILS_MATHS_HPP
+#pragma once
 
 #include <cmath>
 #include <cstdint>
@@ -36,5 +35,3 @@ inline std::pair<std::uint8_t, std::uint8_t> splitNibble(const T& l) {
 
 } // namespace util
 } // namespace redi
-
-#endif // REDI_UTILS_MATHS_HPP

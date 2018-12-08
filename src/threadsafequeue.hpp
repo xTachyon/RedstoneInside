@@ -1,5 +1,4 @@
-#ifndef REDI_THREADSAFEQUEUE
-#define REDI_THREADSAFEQUEUE
+#pragma once
 
 #include <deque>
 #include <mutex>
@@ -38,5 +37,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_THREADSAFEQUEUE

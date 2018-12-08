@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_PLAYERJOINED_HPP
-#define REDI_EVENTS_PLAYERJOINED_HPP
+#pragma once
 
 #include <string>
 #include "event.hpp"
@@ -17,5 +16,3 @@ struct EventPlayerJoin : public Event {
 };
 
 } // namespace redi
-
-#endif // REDI_EVENTS_PLAYERJOINED_HPP

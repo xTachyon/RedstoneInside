@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_PLAYERPOSITION_HPP
-#define REDI_EVENTS_PLAYERPOSITION_HPP
+#pragma once
 
 #include "event.hpp"
 #include "../player.hpp"
@@ -18,5 +17,3 @@ struct EventPlayerPosition : public Event, public Vector3d {
 };
 
 } // namespace redi
-
-#endif // REDI_EVENTS_PLAYERPOSITION_HPP

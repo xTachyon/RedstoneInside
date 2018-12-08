@@ -1,5 +1,4 @@
-#ifndef REDI_PONG_HPP
-#define REDI_PONG_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -16,5 +15,3 @@ struct Pong : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_PONG_HPP

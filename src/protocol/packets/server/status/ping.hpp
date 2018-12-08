@@ -1,5 +1,4 @@
-#ifndef REDI_PING_HPP
-#define REDI_PING_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -16,5 +15,3 @@ struct Ping : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_PING_HPP

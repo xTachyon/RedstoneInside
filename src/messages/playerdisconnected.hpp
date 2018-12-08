@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_PLAYERDISCONNECTED_HPP
-#define REDI_EVENTS_PLAYERDISCONNECTED_HPP
+#pragma once
 
 #include "event.hpp"
 #include "../player.hpp"
@@ -14,5 +13,3 @@ struct EventPlayerDisconnect : public Event {
 };
 
 } // namespace redi
-
-#endif // REDI_EVENTS_PLAYERDISCONNECTED_HPP

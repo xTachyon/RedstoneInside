@@ -1,5 +1,4 @@
-#ifndef REDI_CHAT_CHATCOMPONENT_HPP
-#define REDI_CHAT_CHATCOMPONENT_HPP
+#pragma once
 
 #include <string>
 #include "../datatypes.hpp"
@@ -34,5 +33,3 @@ ChatComponent operator+(ChatComponent l, const std::string& r);
 
 }
 } // namespace redi
-
-#endif // REDI_CHAT_CHATCOMPONENT_HPP

@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_TICK_HPP
-#define REDI_EVENTS_TICK_HPP
+#pragma once
 
 #include "event.hpp"
 
@@ -12,5 +11,3 @@ struct EventTick : public Event {
 
 } // namespace messages
 } // namespace redi
-
-#endif // REDI_EVENTS_TICK_HPP

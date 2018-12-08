@@ -1,5 +1,4 @@
-#ifndef REDI_SERVER
-#define REDI_SERVER
+#pragma once
 
 #include <list>
 #include <condition_variable>
@@ -90,5 +89,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_SERVER

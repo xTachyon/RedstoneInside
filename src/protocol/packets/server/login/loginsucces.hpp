@@ -1,5 +1,4 @@
-#ifndef REDI_LOGINSUCCES_HPP
-#define REDI_LOGINSUCCES_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -19,5 +18,3 @@ struct LoginSucces : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_LOGINSUCCES_HPP

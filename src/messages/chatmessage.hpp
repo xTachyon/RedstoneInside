@@ -1,5 +1,4 @@
-#ifndef REDI_EVENT_CHATMESSAGE_HPP
-#define REDI_EVENT_CHATMESSAGE_HPP
+#pragma once
 
 #include "event.hpp"
 #include "../player.hpp"
@@ -16,5 +15,3 @@ struct EventChatMessage : public Event {
 };
 
 } // namespace redi
-
-#endif // REDI_EVENT_CHATMESSAGE_HPP

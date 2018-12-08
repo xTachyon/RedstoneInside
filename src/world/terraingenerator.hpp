@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_TERRAINGENERATOR_HPP
-#define REDI_WORLD_TERRAINGENERATOR_HPP
+#pragma once
 
 namespace redi {
 
@@ -15,5 +14,3 @@ public:
 using WorldGenerator = std::shared_ptr<TerrainGenerator>;
 
 } // namespace redi
-
-#endif // REDI_WORLD_TERRAINGENERATOR_HPP

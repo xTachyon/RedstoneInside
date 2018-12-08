@@ -1,5 +1,4 @@
-#ifndef REDI_COMMANDSENDER_HPP
-#define REDI_COMMANDSENDER_HPP
+#pragma once
 
 #include <string>
 #include "../datatypes.hpp"
@@ -40,5 +39,3 @@ private:
 
 }
 }
-
-#endif // REDI_COMMANDSENDER_HPP

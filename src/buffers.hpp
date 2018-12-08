@@ -1,5 +1,4 @@
-#ifndef REDI_BUFFERS_HPP
-#define REDI_BUFFERS_HPP
+#pragma once
 
 #include <cstddef>
 #include <cstring>
@@ -105,5 +104,3 @@ private:
 };
 
 }
-
-#endif // REDI_BUFFERS_HPP

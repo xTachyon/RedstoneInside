@@ -1,5 +1,4 @@
-#ifndef REDI_HASSERVER_HPP
-#define REDI_HASSERVER_HPP
+#pragma once
 
 namespace redi {
 
@@ -20,5 +19,3 @@ protected:
 };
 
 }
-
-#endif // REDI_HASSERVER_HPP

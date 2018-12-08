@@ -1,5 +1,4 @@
-#ifndef REDI_REQUEST_HPP
-#define REDI_REQUEST_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -14,5 +13,3 @@ struct Request : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_REQUEST_HPP

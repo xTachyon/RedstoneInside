@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_CHUNKMANAGER_HPP
-#define REDI_WORLD_CHUNKMANAGER_HPP
+#pragma once
 
 #include <map>
 #include "../vectorn.hpp"
@@ -39,5 +38,3 @@ private:
 
 } // namespace world
 } // namespace redi
-
-#endif // REDI_WORLD_CHUNKMANAGER_HPP

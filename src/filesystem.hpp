@@ -1,5 +1,4 @@
-#ifndef REDI_FILESYSTEM_HPP
-#define REDI_FILESYSTEM_HPP
+#pragma once
 
 #include <boost/filesystem.hpp>
 
@@ -9,6 +8,5 @@ using namespace boost::filesystem;
 }
 
 namespace fs = filesystem;
-}
 
-#endif // REDI_FILESYSTEM_HPP
+}

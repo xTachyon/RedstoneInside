@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_MEMORYREGION_HPP
-#define REDI_WORLD_MEMORYREGION_HPP
+#pragma once
 
 #include <map>
 #include <set>
@@ -131,5 +130,3 @@ private:
 
 } // namespace world
 } // namespace redi
-
-#endif // REDI_WORLD_MEMORYREGION_HPP

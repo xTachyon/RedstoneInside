@@ -1,6 +1,3 @@
-#ifndef REDI_BASE64_HPP
-#define REDI_BASE64_HPP
-
 #include <string>
 #include <boost/archive/iterators/base64_from_binary.hpp>
 #include <boost/archive/iterators/binary_from_base64.hpp>
@@ -84,5 +81,3 @@ private:
 
 } // namespace util
 } // namespace redi
-
-#endif // REDI_BASE64_HPP

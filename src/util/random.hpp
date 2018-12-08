@@ -1,5 +1,4 @@
-#ifndef REDI_UTIL_RANDOM_HPP
-#define REDI_UTIL_RANDOM_HPP
+#pragma once
 
 #include <random>
 
@@ -45,5 +44,3 @@ using Random = BasicRandom<std::mt19937>;
 
 } // namespace util
 } // namespace redi
-
-#endif // REDI_UTIL_RANDOM_HPP

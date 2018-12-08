@@ -1,5 +1,4 @@
-#ifndef REDI_CHUNKDATA_HPP
-#define REDI_CHUNKDATA_HPP
+#pragma once
 
 #include "../../packet.hpp"
 #include "../../../../world/chunk.hpp"
@@ -20,5 +19,3 @@ struct ChunkData : public Packet {
 
 } // namespace packets
 } // namespace redi
-
-#endif // REDI_CHUNKDATA_HPP

@@ -1,5 +1,4 @@
-#ifndef REDI_PLAYERLOOK_HPP
-#define REDI_PLAYERLOOK_HPP
+#pragma once
 
 #include "event.hpp"
 #include "../player.hpp"
@@ -18,5 +17,3 @@ struct EventPlayerLook : public Event, public PlayerLook {
 };
 
 } // namespace redi
-
-#endif // REDI_PLAYERLOOK_HPP

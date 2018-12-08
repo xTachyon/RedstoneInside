@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_PLAYERLISTITEM_HPP
-#define REDI_EVENTS_PLAYERLISTITEM_HPP
+#pragma once
 
 #include "../../packet.hpp"
 #include "../../../../player.hpp"
@@ -20,5 +19,3 @@ struct PlayerListItem : public Packet {
 
 } // namespace packets
 } // namespace redi
-
-#endif // REDI_PLAYERLISTITEM_HPP

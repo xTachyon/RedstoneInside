@@ -1,5 +1,4 @@
-#ifndef REDI_COMMANDS_COMMANDDATA_HPP
-#define REDI_COMMANDS_COMMANDDATA_HPP
+#pragma once
 
 #include <algorithm>
 #include <string>
@@ -27,5 +26,3 @@ inline bool operator==(const CommandData& data, const std::string& str) {
 
 }
 }
-
-#endif // REDI_COMMANDS_COMMANDDATA_HPP

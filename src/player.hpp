@@ -1,5 +1,4 @@
-#ifndef REDI_PLAYER
-#define REDI_PLAYER
+#pragma once
 
 #include <list>
 #include <boost/asio/steady_timer.hpp>
@@ -118,5 +117,3 @@ bool operator==(const Player& l, const Player& r);
 bool operator!=(const Player& l, const Player& r);
 
 } // namespace redi
-
-#endif // REDI_PLAYER

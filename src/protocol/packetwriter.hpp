@@ -1,5 +1,4 @@
-#ifndef REDI_PACKETWRITERNOCOPY_HPP
-#define REDI_PACKETWRITERNOCOPY_HPP
+#pragma once
 
 #include <string>
 #include <boost/endian/conversion.hpp>
@@ -73,5 +72,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // #define REDI_PACKETWRITERNOCOPY_HPP

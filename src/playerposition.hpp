@@ -1,5 +1,4 @@
-#ifndef REDI_PLAYERPOSITION_HPP
-#define REDI_PLAYERPOSITION_HPP
+#pragma once
 
 #include "util/util.hpp"
 #include "enums.hpp"
@@ -43,5 +42,3 @@ struct PlayerPosition : Vector3d, PlayerLook {
 };
 
 } // namespace redi
-
-#endif // REDI_PLAYERPOSITION_HPP

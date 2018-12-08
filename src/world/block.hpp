@@ -1,5 +1,4 @@
-#ifndef REDI_BLOCK
-#define REDI_BLOCK
+#pragma once
 
 #include <cstdint>
 
@@ -239,5 +238,3 @@ struct Block {
 };
 
 } // namespace redi
-
-#endif // REDI_BLOCK

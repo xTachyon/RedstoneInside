@@ -1,7 +1,6 @@
-#include "../buffers.hpp"
+#pragma once
 
-#ifndef REDI_UTIL_ZIP_HPP
-#define REDI_COMPRESSOR_HPP
+#include "../buffers.hpp"
 
 namespace redi::util::zip {
 
@@ -12,7 +11,7 @@ enum class CompressionLevel {
   * boost here.
   */
       
-      NoCompression = 0,
+  NoCompression = 0,
   Default = -1,
   BestSpeed = 1,
   BestCompression = 9
@@ -43,5 +42,3 @@ ByteBuffer decompress(ConstBuffer input);
 }
 
 } // namespace redi::util::zip
-
-#endif // REDI_COMPRESSOR_HPP

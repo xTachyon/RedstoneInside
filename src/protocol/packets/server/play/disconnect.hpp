@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_DISCONNECT_HPP
-#define REDI_EVENTS_DISCONNECT_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -21,5 +20,3 @@ struct Disconnect : public Packet {
 
 } // namespace packets
 } // namespace redi
-
-#endif // REDI_EVENTS_DISCONNECT_HPP

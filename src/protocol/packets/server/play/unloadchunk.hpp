@@ -1,5 +1,4 @@
-#ifndef REDI_PACKETS_UNLOADCHUNK_HPP
-#define REDI_PACKETS_UNLOADCHUNK_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -18,5 +17,3 @@ struct UnloadChunk : public Packet {
 
 } // namespace packets
 } // namespace redi
-
-#endif // REDI_PACKETS_UNLOADCHUNK_HPP

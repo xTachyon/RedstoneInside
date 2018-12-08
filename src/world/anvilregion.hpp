@@ -1,5 +1,4 @@
-#ifndef REDI_REGION
-#define REDI_REGION
+#pragma once
 
 #include <array>
 #include <fstream>
@@ -55,5 +54,3 @@ private:
 
 } // namespace world
 } // namespace redi
-
-#endif // REDI_REGION

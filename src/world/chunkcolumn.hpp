@@ -1,5 +1,4 @@
-#ifndef REDI_WORLD_CHUNKCOLUMN_HPP
-#define REDI_WORLD_CHUNKCOLUMN_HPP
+#pragma once
 
 #include <array>
 #include <cstdint>
@@ -21,5 +20,3 @@ struct ChunkColumn {
 };
 
 } // namespace redi
-
-#endif // REDI_WORLD_CHUNKCOLUMN_HPP

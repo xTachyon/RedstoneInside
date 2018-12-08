@@ -1,5 +1,4 @@
-#ifndef REDI_JOINGAME_HPP
-#define REDI_JOINGAME_HPP
+#pragma once
 
 #include "../../packet.hpp"
 #include "../../../../player.hpp"
@@ -17,5 +16,3 @@ struct JoinGame : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_JOINGAME_HPP

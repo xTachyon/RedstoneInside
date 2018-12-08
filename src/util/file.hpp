@@ -1,5 +1,4 @@
-#ifndef REDI_UTIL_FILE_HPP
-#define REDI_UTIL_FILE_HPP
+#pragma once
 
 #include <string>
 #include "../bytebuffer.hpp"
@@ -12,5 +11,3 @@ std::string readFileToString(const std::string& path);
 
 } // namespace util
 } // namespace redi
-
-#endif // REDI_UTIL_FILE_HPP

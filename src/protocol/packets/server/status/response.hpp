@@ -1,5 +1,4 @@
-#ifndef REDI_RESPONSE_HPP
-#define REDI_RESPONSE_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -19,5 +18,3 @@ struct Response : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_RESPONSE_HPP

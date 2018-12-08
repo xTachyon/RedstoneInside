@@ -1,5 +1,4 @@
-#ifndef REDI_LOGGER
-#define REDI_LOGGER
+#pragma once
 
 #include <deque>
 #include <fstream>
@@ -84,5 +83,3 @@ private:
 };
 
 } // namespace redi
-
-#endif // REDI_LOGGER

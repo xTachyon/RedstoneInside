@@ -1,5 +1,4 @@
-#ifndef REDI_SPAWNPOSITION_HPP
-#define REDI_SPAWNPOSITION_HPP
+#pragma once
 
 #include "../../packet.hpp"
 #include "../../../../vectorn.hpp"
@@ -18,5 +17,3 @@ struct SpawnPosition : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_SPAWNPOSITION_HPP

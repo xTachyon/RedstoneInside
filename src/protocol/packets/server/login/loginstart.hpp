@@ -1,5 +1,4 @@
-#ifndef REDI_LOGINSTART_HPP
-#define REDI_LOGINSTART_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -18,5 +17,3 @@ struct LoginStart : public Packet {
 };
 
 } // namespace redi
-
-#endif // REDI_LOGINSTART_HPP

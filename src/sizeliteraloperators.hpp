@@ -1,5 +1,4 @@
-#ifndef REDI_LITERALOPERATORS
-#define REDI_LITERALOPERATORS
+#pragma once
 
 #include <cstddef>
 
@@ -39,5 +38,3 @@ constexpr std::size_t operator""_EB(unsigned long long int data) {
 }
 
 } // namespace redi
-
-#endif // REDI_LITERALOPERATORS

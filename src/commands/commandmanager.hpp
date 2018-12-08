@@ -1,5 +1,4 @@
-#ifndef REDI_COMMANDS_COMMANDMANAGER_HPP
-#define REDI_COMMANDS_COMMANDMANAGER_HPP
+#pragma once
 
 #include <list>
 #include <unordered_map>
@@ -38,5 +37,3 @@ private:
 
 }
 } // namespace redi
-
-#endif // REDI_COMMANDS_COMMANDMANAGER_HPP

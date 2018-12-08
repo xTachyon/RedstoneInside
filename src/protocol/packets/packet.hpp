@@ -1,5 +1,4 @@
-#ifndef REDI_PACKET_HPP
-#define REDI_PACKET_HPP
+#pragma once
 
 #include <list>
 #include <memory>
@@ -38,5 +37,3 @@ struct Packet {
 using PacketUniquePtr = std::unique_ptr<Packet>;
 
 } // namespace redi
-
-#endif // REDI_PACKET_HPP

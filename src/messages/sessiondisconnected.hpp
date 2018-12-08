@@ -1,5 +1,4 @@
-#ifndef REDI_EVENTS_SESSIONDISCONNECTED_HPP
-#define REDI_EVENTS_SESSIONDISCONNECTED_HPP
+#pragma once
 
 #include "event.hpp"
 
@@ -13,5 +12,3 @@ struct EventSessionDisconnect : public Event {
 };
 
 } // namespace redi
-
-#endif // REDI_EVENTS_SESSIONDISCONNECTED_HPP

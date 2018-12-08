@@ -1,5 +1,4 @@
-#ifndef REDI_PACKETHANDLER_HPP
-#define REDI_PACKETHANDLER_HPP
+#pragma once
 
 #include "../../threadsafequeue.hpp"
 #include "server/handshake/handshake.hpp"
@@ -46,5 +45,3 @@ private:
 using PacketHandlerSharedPtr = std::shared_ptr<PacketHandler>;
 
 } // namespace redi
-
-#endif // REDI_PACKETHANDLER_HPP

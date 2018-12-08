@@ -1,5 +1,4 @@
-#ifndef REDI_KEEPALIVE_HPP
-#define REDI_KEEPALIVE_HPP
+#pragma once
 
 #include "../../packet.hpp"
 
@@ -18,5 +17,3 @@ struct KeepAlive : public Packet {
 
 } // namespace packets
 } // namespace redi
-
-#endif // REDI_KEEPALIVE_HPP

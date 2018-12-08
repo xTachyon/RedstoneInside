@@ -1,5 +1,4 @@
-#ifndef REDI_EVENT_HPP
-#define REDI_EVENT_HPP
+#pragma once
 
 #include "eventtype.hpp"
 
@@ -28,5 +27,3 @@ inline Event::~Event() {}
 using EventUniquePtr = std::unique_ptr<Event>;
 
 } // namespace redi
-
-#endif // REDI_EVENT_HPP

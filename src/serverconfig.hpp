@@ -1,5 +1,4 @@
-#ifndef REDI_SERVERCONFIG_HPP
-#define REDI_SERVERCONFIG_HPP
+#pragma once
 
 #include <string>
 #include "bytebuffer.hpp"
@@ -49,5 +48,3 @@ struct ServerConfig {
 };
 
 } // namespace redi
-
-#endif // REDI_SERVERCONFIG_HPP
