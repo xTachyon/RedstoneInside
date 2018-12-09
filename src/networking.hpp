@@ -18,6 +18,8 @@ public:
 
   virtual void read(MutableBuffer buffer) = 0;
   virtual void write(ConstBuffer buffer) = 0;
+  virtual void write(ConstBuffer* buffers, size_t size);
+  virtual void close() = 0;
 
   void set_accept_handler(socket_accept_handler handler);
   void set_read_handler(socket_read_handler handler);
@@ -33,6 +35,7 @@ public:
   virtual ~Networking() = 0;
 
   virtual std::shared_ptr<Socket> getListener(socket_accept_handler handler, uint16_t port) = 0;
+  virtual void stop() = 0;
 };
 
 }

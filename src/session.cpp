@@ -43,18 +43,18 @@ void Session::on_read(size_t bytes, std::string error) {
 }
 
 void Session::disconnect() {
-  bool disc = isDisconnected.exchange(true);
-  if (!disc) {
-    if (player)
-      player->disconnect();
-
-    EventUniquePtr ptr;
-    if (player == nullptr)
-      ptr = std::make_unique<EventSessionDisconnect>(*this);
-    else
-      ptr = std::make_unique<EventPlayerDisconnect>(*player);
-    server.addEvent(std::move(ptr));
+  bool disconnected = isDisconnected.exchange(true);
+  if (disconnected) {
+    return;
   }
+  socket->close();
+
+  if (player) {
+    player->disconnect();
+    server.addEvent(std::make_unique<EventPlayerDisconnect>(*player));
+  }
+
+  server.addEvent(std::make_unique<EventSessionDisconnect>(*this));
 }
 
 void Session::kick(const std::string& message) {
@@ -71,8 +71,10 @@ void Session::sendPacket(ByteBuffer packet, const std::string& message) {
 
   auto result = protocol::varint::encodeVarInt(packet.size());
 
-  socket->write({ result.first.data(), result.second });
-  socket->write(packet);
+  std::array<ConstBuffer, 2> buffers;
+  buffers[0] = { result.first.data(), result.second };
+  buffers[1] = packet;
+  socket->write(buffers.data(), buffers.size());
 }
 
 void Session::deserialize_packets() {

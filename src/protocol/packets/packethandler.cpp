@@ -19,6 +19,8 @@
 #include "server/play/playerlistitem.hpp"
 #include "server/play/timeupdate.hpp"
 
+namespace asio = boost::asio;
+
 namespace redi {
 
 PacketHandler::PacketHandler(Server& server, Session& session, EventManager&)
@@ -135,7 +137,13 @@ void PacketHandler::handleStatusRequest(Request&) {
 
 void PacketHandler::handleStatusPing(Ping& packet) {
   Pong(packet.payload).send(mSession);
-  mSession.disconnect();
+  Server& server = mSession.getServer();
+  auto timer = std::make_shared<boost::asio::steady_timer>(server.getWorkIO(), asio::chrono::seconds(10));
+  timer->async_wait([timer, session = mSession.shared_from_this()] (const boost::system::error_code& error) {
+    auto count = session.use_count();
+    auto count2 = timer.use_count();
+    session->disconnect();
+  });
 }
 
 void PacketHandler::handleLoginStart(LoginStart& packet) {

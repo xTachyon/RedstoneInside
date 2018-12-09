@@ -7,6 +7,7 @@
 #include <tuple>
 #include <boost/chrono/chrono.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/format.hpp>
 #include <boost/thread/thread.hpp>
 
 namespace redi {
@@ -26,6 +27,10 @@ public:
     mSstream << val;
     mQueue.push_back(std::make_tuple(
         mSstream.str(), boost::posix_time::second_clock::local_time(), level));
+  }
+
+  static void debug(const boost::format& format) {
+    debug(format.str());
   }
 
   template <typename T>

@@ -138,10 +138,9 @@ void EventManager::handlePlayerDisconnect(EventPlayerDisconnect& event) {
       [&](const PlayerSharedPtr& p) { return *p == player; });
 }
 
-void EventManager::handleSessionDisconnect(EventSessionDisconnect&) {
-//  mServer.mStatusConnections.remove_if(
-//      [&](const SessionSharedPtr& ar) { return event.session == *ar; });
-// TODO: remove this
+void EventManager::handleSessionDisconnect(EventSessionDisconnect& event) {
+  mServer.sessions.remove_if(
+      [&](const SessionSharedPtr& ar) { return event.session == *ar; });
 }
 
 void EventManager::handleChatMessage(EventChatMessage& event) {

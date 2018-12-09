@@ -125,11 +125,10 @@ Player* Server::findPlayer(const std::string& name) {
 }
 
 void Server::closeServer() {
-//  mListener->mIsStopping = true;
-
   for (auto& i : mPlayers) {
     i->kick("Server is closing");
   }
+  networking->stop();
 }
 
 void Server::stop() {

@@ -10,11 +10,12 @@ namespace redi {
 
 class AsioSocket : public Socket, public std::enable_shared_from_this<AsioSocket> {
 public:
-  AsioSocket(asio::ip::tcp::socket&& socket);
+  explicit AsioSocket(asio::ip::tcp::socket&& socket);
   ~AsioSocket() override = default;
 
   void read(MutableBuffer buffer) override;
   void write(ConstBuffer buffer) override;
+  void close() override;
 private:
   asio::ip::tcp::socket socket;
   asio::io_context::strand strand;
@@ -90,6 +91,10 @@ void AsioSocket::handleRead(const boost::system::error_code& error, size_t bytes
   }
 }
 
+void AsioSocket::close() {
+  socket.close();
+}
+
 class AsioListener : public Socket, public std::enable_shared_from_this<AsioListener> {
 public:
   AsioListener(asio::io_context& context, uint16_t port);
@@ -98,6 +103,7 @@ public:
 
   void write(ConstBuffer buffer) override;
   void read(MutableBuffer buffer) override;
+  void close() override;
 private:
   asio::ip::tcp::socket socket_to_be_accepted;
   boost::asio::ip::tcp::acceptor acceptor;
@@ -130,11 +136,16 @@ void AsioListener::read(MutableBuffer) {}
 
 void AsioListener::write(ConstBuffer) {}
 
+void AsioListener::close() {
+  acceptor.close();
+}
+
 class AsioNetworking : public Networking {
 public:
   explicit AsioNetworking(asio::io_context& context);
 
   std::shared_ptr<Socket> getListener(socket_accept_handler handler, uint16_t port) override;
+  void stop() override;
 private:
   asio::io_context& context;
 };
@@ -148,6 +159,8 @@ std::shared_ptr<Socket> AsioNetworking::getListener(socket_accept_handler handle
   listener->listen();
   return listener;
 }
+
+void AsioNetworking::stop() {}
 
 std::unique_ptr<redi::Networking> getAsioNetworking(boost::asio::io_context& context) {
   return std::make_unique<redi::AsioNetworking>(context);

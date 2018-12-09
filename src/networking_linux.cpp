@@ -16,11 +16,11 @@
 namespace redi {
 
 Socket::Socket() {
-  Logger::debug(boost::format("Socket %1% created") % this);
+  Logger::debug(boost::format("LinuxSocket %1% created") % this);
 }
 
 Socket::~Socket() {
-  Logger::debug(boost::format("Socket %1% destroyed") % this);
+  Logger::debug(boost::format("LinuxSocket %1% destroyed") % this);
 }
 
 void Socket::set_accept_handler(socket_accept_handler handler) {
@@ -31,22 +31,44 @@ void Socket::set_read_handler(socket_read_handler handler) {
   read_handler = std::move(handler);
 }
 
-#define CHECK(x) { if ((x) < 0) { throw std::runtime_error(#x); } }
+void Socket::write(ConstBuffer* buffers, size_t size) {
+  for (size_t i = 0; i < size; ++i) {
+    write(buffers[i]);
+  }
+}
+
+#define CHECK(x) {\
+    if ((x) < 0) {\
+      throw std::runtime_error(\
+        (boost::format(__FILE__ ":%1% %2% %3%" ) % __LINE__ % #x % strerror(errno)).str()\
+      );\
+    }\
+  }
+
+#define CHECK_DC(socket, x)\
+  if ((x) < 0) {\
+    socket->read_handler(0, (boost::format(__FILE__ ":%1% %2%" ) % __LINE__ % strerror(errno)).str());\
+    return;\
+  }
 
 struct AutoCloseableDescriptor {
   int fd;
 
-  explicit AutoCloseableDescriptor(int fd = -1);
+  AutoCloseableDescriptor(int fd = -1);
   AutoCloseableDescriptor(AutoCloseableDescriptor&& other) noexcept;
   ~AutoCloseableDescriptor();
 
-  AutoCloseableDescriptor& operator=(int fd);
+  AutoCloseableDescriptor& operator=(AutoCloseableDescriptor&&);
 
   void close();
 };
 
 AutoCloseableDescriptor::AutoCloseableDescriptor(int fd)
-  : fd(fd) {}
+  : fd(fd) {
+  if (fd != -1) {
+    Logger::debug(boost::format("[AutoCloseableDescriptor] Created %1%") % fd);
+  }
+}
 
 AutoCloseableDescriptor::AutoCloseableDescriptor(redi::AutoCloseableDescriptor&& other) noexcept  {
   fd = other.fd;
@@ -54,13 +76,10 @@ AutoCloseableDescriptor::AutoCloseableDescriptor(redi::AutoCloseableDescriptor&&
 }
 
 AutoCloseableDescriptor::~AutoCloseableDescriptor() {
+  if (fd != -1) {
+    Logger::debug(boost::format("[AutoCloseableDescriptor] Closed %1%") % fd);
+  }
   close();
-}
-
-AutoCloseableDescriptor& AutoCloseableDescriptor::operator=(int fd) {
-  close();
-  this->fd = fd;
-  return *this;
 }
 
 void AutoCloseableDescriptor::close() {
@@ -68,6 +87,13 @@ void AutoCloseableDescriptor::close() {
     ::close(fd);
   }
   fd = -1;
+}
+
+AutoCloseableDescriptor& AutoCloseableDescriptor::operator=(AutoCloseableDescriptor&& other) {
+  close();
+  fd = other.fd;
+  other.fd = -1;
+  return *this;
 }
 
 class LinuxNetworking;
@@ -81,6 +107,8 @@ public:
 
   void read(MutableBuffer buffer) override;
   void write(ConstBuffer buffer) override;
+  void write(ConstBuffer* buffers, size_t size) override;
+  void close() override;
 
   bool can_read() const;
   void on_read();
@@ -109,6 +137,7 @@ public:
   ~LinuxNetworking() override;
 
   std::shared_ptr<Socket> getListener(socket_accept_handler handler, uint16_t port) override;
+  void stop() override;
 private:
   friend class LinuxSocket;
   friend struct ThreadLockable;
@@ -246,7 +275,7 @@ void LinuxNetworking::handle_events() {
       std::copy(socket.write_buffer.begin(), socket.write_buffer.begin() + to_copy, buffer);
       auto wrote = write(socket.fd.fd, buffer, to_copy);
       CHECK(wrote);
-      Logger::info(boost::format("Send %1% bytes") % wrote);
+//      Logger::info(boost::format("Send %1% bytes") % wrote);
       socket.write_buffer.erase(socket.write_buffer.begin(), socket.write_buffer.begin() + wrote);
     }
   }
@@ -257,6 +286,12 @@ LinuxSocket& LinuxNetworking::get_socket(size_t i) {
     return socket->fd.fd == static_cast<int>(i);
   });
   return *x;
+}
+
+void LinuxNetworking::stop() {
+  std::lock_guard<std::recursive_mutex> lock_guard(mutex);
+  running = false;
+  CHECK(::write(writing_pipe.fd, "0", 1));
 }
 
 LinuxSocket::LinuxSocket(LinuxNetworking* networking)
@@ -284,6 +319,13 @@ void LinuxSocket::write(ConstBuffer buffer) {
   CHECK(::write(networking->writing_pipe.fd, "0", 1));
 }
 
+void LinuxSocket::write(ConstBuffer* buffers, size_t size) {
+  std::lock_guard<std::recursive_mutex> lock_guard(networking->mutex);
+  for (size_t i = 0; i < size; ++i) {
+    write(buffers[i]);
+  }
+}
+
 bool LinuxSocket::can_read() const {
   return read_buffer.size() != 0 || accept_handler;
 }
@@ -305,10 +347,16 @@ void LinuxSocket::on_read() {
       destroyed = true;
       return;
     }
-    CHECK(read_size);
+    CHECK_DC(this, read_size);
     read_buffer = MutableBuffer();
     read_handler(static_cast<size_t>(read_size), "");
   }
+}
+
+void LinuxSocket::close() {
+  std::lock_guard<std::recursive_mutex> lock_guard(networking->mutex);
+  destroyed = true;
+  CHECK(::write(networking->writing_pipe.fd, "0", 1));
 }
 
 std::unique_ptr<redi::Networking> getLinuxNetworking() {
