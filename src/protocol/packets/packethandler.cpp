@@ -140,8 +140,6 @@ void PacketHandler::handleStatusPing(Ping& packet) {
   Server& server = mSession.getServer();
   auto timer = std::make_shared<boost::asio::steady_timer>(server.getWorkIO(), asio::chrono::seconds(10));
   timer->async_wait([timer, session = mSession.shared_from_this()] (const boost::system::error_code& error) {
-    auto count = session.use_count();
-    auto count2 = timer.use_count();
     session->disconnect();
   });
 }
