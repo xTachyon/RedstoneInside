@@ -1,9 +1,33 @@
-#include <nlohmann/json.hpp>
-#include "../../../../server.hpp"
-#include "response.hpp"
-#include "../../../packetwriter.hpp"
+#include "statuspackets.hpp"
+#include "../../packetwriter.hpp"
+#include "../packethandler.hpp"
+#include "../../../server.hpp"
 
-namespace redi {
+namespace redi::packets {
+
+Ping::Ping(std::int64_t payload) : payload(payload) {}
+
+Ping::Ping(PacketReader& packet) { read(packet); }
+
+void Ping::read(PacketReader& packet) { payload = packet.readLong(); }
+
+void Ping::process(PacketHandler& handler) { handler.handleStatusPing(*this); }
+
+Pong::Pong(std::int64_t payload) : payload(payload) {}
+
+void Pong::write(ByteBuffer& buffer) {
+  PacketWriter packet(buffer, SendID);
+
+  packet.writeLong(payload);
+}
+
+Request::Request(PacketReader& packet) { read(packet); }
+
+void Request::read(PacketReader&) {}
+
+void Request::process(PacketHandler& handler) {
+  handler.handleStatusRequest(*this);
+}
 
 Response::Response(Server& server) : server(server) {}
 
@@ -17,8 +41,9 @@ void Response::write(ByteBuffer& buffer) {
   j["players"]["max"] = config.maxPlayers;
   j["players"]["online"] = server.getOnlinePlayersNumber();
   j["players"]["sample"] = nlohmann::json::array();
-  if (config.iconb64.size() != 0)
+  if (!config.iconb64.empty()) {
     j["favicon"] = config.iconb64;
+  }
 
   for (const auto& player : server.getOnlinePlayers()) {
     nlohmann::json c;
@@ -34,4 +59,4 @@ void Response::write(ByteBuffer& buffer) {
   packet.writeString(j.dump());
 }
 
-} // namespace redi
+}

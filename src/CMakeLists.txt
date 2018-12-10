@@ -96,14 +96,6 @@ set(SOURCE_FILES
       protocol/packets/server/play/timeupdate.hpp
       protocol/packets/server/play/unloadchunk.cpp
       protocol/packets/server/play/unloadchunk.hpp
-      protocol/packets/server/status/ping.cpp
-      protocol/packets/server/status/ping.hpp
-      protocol/packets/server/status/pong.cpp
-      protocol/packets/server/status/pong.hpp
-      protocol/packets/server/status/request.cpp
-      protocol/packets/server/status/request.hpp
-      protocol/packets/server/status/response.cpp
-      protocol/packets/server/status/response.hpp
       protocol/packetwriter.cpp
       protocol/packetwriter.hpp
       protocol/chunkserializer13.cpp
@@ -189,7 +181,10 @@ set(SOURCE_FILES
       networking.hpp
       networking_linux.cpp
       networking_asio.cpp
-      asiofile.cpp)
+      asiofile.cpp
+      protocol/packets/server/statuspackets.hpp
+      protocol/packets/server/statuspackets.cpp
+      )
 
 add_executable(redi ${SOURCE_FILES})
 

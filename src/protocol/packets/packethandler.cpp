@@ -10,8 +10,6 @@
 #include "../../player.hpp"
 #include "server/login/setcompression.hpp"
 #include "server/login/loginsucces.hpp"
-#include "server/status/response.hpp"
-#include "server/status/pong.hpp"
 #include "server/play/joingame.hpp"
 #include "server/play/spawnposition.hpp"
 #include "server/play/playerpositionandlook.hpp"
@@ -67,11 +65,11 @@ void PacketHandler::readRaw(ConstBuffer buffer) {
   case ConnectionState::Status: {
     switch (type) {
     case 0x00:
-      ptr = std::make_unique<Request>(packet);
+      ptr = std::make_unique<packets::Request>(packet);
       break;
 
     case 0x01:
-      ptr = std::make_unique<Ping>(packet);
+      ptr = std::make_unique<packets::Ping>(packet);
       break;
 
     default:
@@ -131,15 +129,15 @@ void PacketHandler::handleHandshake(Handshake& p) {
   mSession.connectionState = p.state;
 }
 
-void PacketHandler::handleStatusRequest(Request&) {
-  Response(mServer).send(mSession);
+void PacketHandler::handleStatusRequest(packets::Request&) {
+  packets::Response(mServer).send(mSession);
 }
 
-void PacketHandler::handleStatusPing(Ping& packet) {
-  Pong(packet.payload).send(mSession);
+void PacketHandler::handleStatusPing(packets::Ping& packet) {
+  packets::Pong(packet.payload).send(mSession);
   Server& server = mSession.getServer();
   auto timer = std::make_shared<boost::asio::steady_timer>(server.getWorkIO(), asio::chrono::seconds(10));
-  timer->async_wait([timer, session = mSession.shared_from_this()] (const boost::system::error_code& error) {
+  timer->async_wait([timer, session = mSession.shared_from_this()] (const boost::system::error_code&) {
     session->disconnect();
   });
 }

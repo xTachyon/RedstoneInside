@@ -8,6 +8,7 @@
 #include "vectorn.hpp"
 #include "world/chunkmanager.hpp"
 #include "serverconfig.hpp"
+#include "hasserver.hpp"
 
 namespace redi {
 
