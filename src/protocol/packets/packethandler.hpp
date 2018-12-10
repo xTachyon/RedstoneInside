@@ -1,11 +1,7 @@
 #pragma once
 
 #include "../../threadsafequeue.hpp"
-#include "server/handshake/handshake.hpp"
-#include "server/play/chatmessage.hpp"
-#include "server/play/playerpositionandlook.hpp"
-#include "server/play/playerposition.hpp"
-#include "server/play/playerlook.hpp"
+#include "server/handshakepackets.hpp"
 #include "server/statuspackets.hpp"
 #include "server/loginpackets.hpp"
 #include "server/playpackets.hpp"

@@ -1,8 +1,8 @@
 #include <boost/format.hpp>
-#include "handshake.hpp"
-#include "../../../../logger.hpp"
-#include "../../../packetwriter.hpp"
-#include "../../packethandler.hpp"
+#include "handshakepackets.hpp"
+#include "../../../logger.hpp"
+#include "../../packetwriter.hpp"
+#include "../packethandler.hpp"
 
 namespace redi {
 

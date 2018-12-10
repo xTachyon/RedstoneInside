@@ -5,11 +5,6 @@
 #include "server.hpp"
 #include "logger.hpp"
 #include "util/util.hpp"
-#include "protocol/packets/server/play/keepalive.hpp"
-#include "protocol/packets/server/play/disconnect.hpp"
-#include "protocol/packets/server/play/spawnplayer.hpp"
-#include "protocol/packets/server/play/chunkdata.hpp"
-#include "protocol/packets/server/play/unloadchunk.hpp"
 
 namespace asio = boost::asio;
 namespace fs = boost::filesystem;

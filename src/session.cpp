@@ -6,7 +6,6 @@
 #include "logger.hpp"
 #include "protocol/packetreader.hpp"
 #include "server.hpp"
-#include "protocol/packets/server/play/disconnect.hpp"
 #include "protocol/packetwriter.hpp"
 #include "protocol/varint.hpp"
 

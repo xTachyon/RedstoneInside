@@ -61,8 +61,8 @@ set(SOURCE_FILES
       protocol/packets/packet.hpp
       protocol/packets/packethandler.cpp
       protocol/packets/packethandler.hpp
-      protocol/packets/server/handshake/handshake.cpp
-      protocol/packets/server/handshake/handshake.hpp
+      protocol/packets/server/handshakepackets.cpp
+      protocol/packets/server/handshakepackets.hpp
       protocol/packetwriter.cpp
       protocol/packetwriter.hpp
       protocol/chunkserializer13.cpp

@@ -8,12 +8,6 @@
 #include "../../util/util.hpp"
 #include "../../server.hpp"
 #include "../../player.hpp"
-#include "server/play/joingame.hpp"
-#include "server/play/spawnposition.hpp"
-#include "server/play/playerpositionandlook.hpp"
-#include "server/play/chunkdata.hpp"
-#include "server/play/playerlistitem.hpp"
-#include "server/play/timeupdate.hpp"
 
 namespace asio = boost::asio;
 

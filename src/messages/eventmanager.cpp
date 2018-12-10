@@ -6,10 +6,6 @@
 #include "../server.hpp"
 #include "../util/util.hpp"
 #include "../player.hpp"
-#include "../protocol/packets/server/play/playerlistitem.hpp"
-#include "../protocol/packets/server/play/joingame.hpp"
-#include "../protocol/packets/server/play/spawnposition.hpp"
-#include "../protocol/packets/server/play/timeupdate.hpp"
 
 namespace redi {
 

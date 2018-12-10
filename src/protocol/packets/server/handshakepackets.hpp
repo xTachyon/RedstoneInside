@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../packet.hpp"
-#include "../../../../enums.hpp"
+#include "../packet.hpp"
+#include "../../../enums.hpp"
 
 namespace redi {
 
