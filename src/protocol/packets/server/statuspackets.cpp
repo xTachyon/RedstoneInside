@@ -5,7 +5,7 @@
 
 namespace redi::packets {
 
-Ping::Ping(std::int64_t payload) : payload(payload) {}
+Ping::Ping(i64 payload) : payload(payload) {}
 
 Ping::Ping(PacketReader& packet) { read(packet); }
 
@@ -13,7 +13,7 @@ void Ping::read(PacketReader& packet) { payload = packet.readLong(); }
 
 void Ping::process(PacketHandler& handler) { handler.handleStatusPing(*this); }
 
-Pong::Pong(std::int64_t payload) : payload(payload) {}
+Pong::Pong(i64 payload) : payload(payload) {}
 
 void Pong::write(ByteBuffer& buffer) {
   PacketWriter packet(buffer, SendID);
