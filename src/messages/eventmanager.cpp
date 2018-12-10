@@ -103,8 +103,8 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& packet) {
 
   packets::SetCompression(-1).send(mSession);
   packets::LoginSucces(player.getUUIDasString(), player.getUsername()).send(mSession);
-  JoinGame(&player).send(mSession);
-  SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
+  packets::JoinGame(&player).send(mSession);
+  packets::SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
   packets::PlayerPositionAndLook(player.getPosition(),
                                  player.getNewTeleportID())
       .send(mSession);

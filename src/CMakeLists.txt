@@ -63,33 +63,6 @@ set(SOURCE_FILES
       protocol/packets/packethandler.hpp
       protocol/packets/server/handshake/handshake.cpp
       protocol/packets/server/handshake/handshake.hpp
-      protocol/packets/server/play/chatmessage.cpp
-      protocol/packets/server/play/chatmessage.hpp
-      protocol/packets/server/play/chunkdata.cpp
-      protocol/packets/server/play/chunkdata.hpp
-      protocol/packets/server/play/disconnect.cpp
-      protocol/packets/server/play/disconnect.hpp
-      protocol/packets/server/play/entitylookandrelativemove.cpp
-      protocol/packets/server/play/entitylookandrelativemove.hpp
-      protocol/packets/server/play/joingame.cpp
-      protocol/packets/server/play/joingame.hpp
-      protocol/packets/server/play/keepalive.cpp
-      protocol/packets/server/play/keepalive.hpp
-      protocol/packets/server/play/playerlistitem.cpp
-      protocol/packets/server/play/playerlistitem.hpp
-      protocol/packets/server/play/playerlook.cpp
-      protocol/packets/server/play/playerlook.hpp
-      protocol/packets/server/play/playerposition.cpp
-      protocol/packets/server/play/playerposition.hpp
-      protocol/packets/server/play/playerpositionandlook.cpp
-      protocol/packets/server/play/playerpositionandlook.hpp
-      protocol/packets/server/play/spawnplayer.cpp
-      protocol/packets/server/play/spawnplayer.hpp
-      protocol/packets/server/play/spawnposition.cpp
-      protocol/packets/server/play/spawnposition.hpp
-      protocol/packets/server/play/timeupdate.hpp
-      protocol/packets/server/play/unloadchunk.cpp
-      protocol/packets/server/play/unloadchunk.hpp
       protocol/packetwriter.cpp
       protocol/packetwriter.hpp
       protocol/chunkserializer13.cpp
@@ -179,7 +152,9 @@ set(SOURCE_FILES
       protocol/packets/server/statuspackets.hpp
       protocol/packets/server/statuspackets.cpp
       protocol/packets/server/loginpackets.hpp
-      protocol/packets/server/loginpackets.cpp)
+      protocol/packets/server/loginpackets.cpp
+      protocol/packets/server/playpackets.hpp
+      protocol/packets/server/playpackets.cpp)
 
 add_executable(redi ${SOURCE_FILES})
 

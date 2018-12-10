@@ -8,6 +8,7 @@
 #include "server/play/playerlook.hpp"
 #include "server/statuspackets.hpp"
 #include "server/loginpackets.hpp"
+#include "server/playpackets.hpp"
 
 namespace redi {
 
