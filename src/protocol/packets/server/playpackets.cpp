@@ -227,6 +227,16 @@ void SpawnPosition::write(ByteBuffer& buffer) {
   packet.writePosition(position.x, position.y, position.z);
 }
 
+TimeUpdate::TimeUpdate(const redi::World& world)
+    : world(world) {}
+
+void TimeUpdate::write(ByteBuffer& buffer) {
+  PacketWriter packet(buffer, SendID);
+
+  packet.writeLong(world.getWorldTime());
+  packet.writeLong(world.getWorldTime() % 24'000);
+}
+
 UnloadChunk::UnloadChunk(Vector2i position) : position(position) {}
 
 void UnloadChunk::write(ByteBuffer& buffer) {
@@ -234,7 +244,6 @@ void UnloadChunk::write(ByteBuffer& buffer) {
 
   packet.writeInt(position.x);
   packet.writeInt(position.z);
-  //  Logger::debug((boost::format("Send unload chunk %1%") % position).str());
 }
 
 }

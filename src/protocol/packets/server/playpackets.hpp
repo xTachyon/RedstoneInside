@@ -4,7 +4,6 @@
 #include "../../../enums.hpp"
 #include "../../../world/chunk.hpp"
 #include "../../../world.hpp"
-#include "../../packetwriter.hpp"
 #include "../../../playerposition.hpp"
 
 namespace redi::packets {
@@ -174,14 +173,9 @@ struct TimeUpdate : public Packet {
 
   const World& world;
 
-  TimeUpdate(const World& world) : world(world) {}
+  explicit TimeUpdate(const World& world);
 
-  void write(ByteBuffer& buffer) override {
-    PacketWriter packet(buffer, SendID);
-
-    packet.writeLong(world.getWorldTime());
-    packet.writeLong(world.getWorldTime() % 24'000);
-  }
+  void write(ByteBuffer& buffer) override;
 };
 
 struct UnloadChunk : public Packet {

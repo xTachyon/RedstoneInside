@@ -57,18 +57,11 @@ public:
   }
 
 private:
-  PacketWriter() = default;
+  template <typename T>
+  void writeNumber(T number);
 
   template <typename T>
-  void writeNumber(T number) {
-    data.append(reinterpret_cast<const std::uint8_t*>(std::addressof(number)),
-                sizeof(T));
-  }
-
-  template <typename T>
-  void writeBNumber(T number) {
-    writeNumber(boost::endian::native_to_big(number));
-  }
+  void writeBNumber(T number);
 };
 
 } // namespace redi
