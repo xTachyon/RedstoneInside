@@ -63,12 +63,6 @@ set(SOURCE_FILES
       protocol/packets/packethandler.hpp
       protocol/packets/server/handshake/handshake.cpp
       protocol/packets/server/handshake/handshake.hpp
-      protocol/packets/server/login/loginstart.cpp
-      protocol/packets/server/login/loginstart.hpp
-      protocol/packets/server/login/loginsucces.cpp
-      protocol/packets/server/login/loginsucces.hpp
-      protocol/packets/server/login/setcompression.cpp
-      protocol/packets/server/login/setcompression.hpp
       protocol/packets/server/play/chatmessage.cpp
       protocol/packets/server/play/chatmessage.hpp
       protocol/packets/server/play/chunkdata.cpp
@@ -184,7 +178,8 @@ set(SOURCE_FILES
       asiofile.cpp
       protocol/packets/server/statuspackets.hpp
       protocol/packets/server/statuspackets.cpp
-      )
+      protocol/packets/server/loginpackets.hpp
+      protocol/packets/server/loginpackets.cpp)
 
 add_executable(redi ${SOURCE_FILES})
 

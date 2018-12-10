@@ -8,8 +8,6 @@
 #include "../../util/util.hpp"
 #include "../../server.hpp"
 #include "../../player.hpp"
-#include "server/login/setcompression.hpp"
-#include "server/login/loginsucces.hpp"
 #include "server/play/joingame.hpp"
 #include "server/play/spawnposition.hpp"
 #include "server/play/playerpositionandlook.hpp"
@@ -52,7 +50,7 @@ void PacketHandler::readRaw(ConstBuffer buffer) {
   case ConnectionState::Login: {
     switch (type) {
     case 0x00: {
-      LoginStart ls(packet);
+      packets::LoginStart ls(packet);
       handleLoginStart(ls);
       return;
     }
@@ -142,7 +140,7 @@ void PacketHandler::handleStatusPing(packets::Ping& packet) {
   });
 }
 
-void PacketHandler::handleLoginStart(LoginStart& packet) {
+void PacketHandler::handleLoginStart(packets::LoginStart& packet) {
   mServer.addEvent(std::make_unique<EventPlayerJoin>(
       mSession.shared_from_this(), std::move(packet.username)));
 }

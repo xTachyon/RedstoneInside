@@ -2,12 +2,12 @@
 
 #include "../../threadsafequeue.hpp"
 #include "server/handshake/handshake.hpp"
-#include "server/login/loginstart.hpp"
 #include "server/play/chatmessage.hpp"
 #include "server/play/playerpositionandlook.hpp"
 #include "server/play/playerposition.hpp"
 #include "server/play/playerlook.hpp"
 #include "server/statuspackets.hpp"
+#include "server/loginpackets.hpp"
 
 namespace redi {
 
@@ -27,7 +27,7 @@ public:
   void handleStatusRequest(packets::Request& packet);
   void handleStatusPing(packets::Ping& packet);
 
-  void handleLoginStart(LoginStart& packet);
+  void handleLoginStart(packets::LoginStart& packet);
   void handleChatMessage(packets::ChatMessage& packet);
   void handlePlayerPositionAndLook(packets::PlayerPositionAndLook& packet);
   void handlePlayerPosition(packets::PlayerPosition& packet);

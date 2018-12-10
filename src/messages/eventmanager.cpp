@@ -7,8 +7,6 @@
 #include "../util/util.hpp"
 #include "../player.hpp"
 #include "../protocol/packets/server/play/playerlistitem.hpp"
-#include "../protocol/packets/server/login/setcompression.hpp"
-#include "../protocol/packets/server/login/loginsucces.hpp"
 #include "../protocol/packets/server/play/joingame.hpp"
 #include "../protocol/packets/server/play/spawnposition.hpp"
 #include "../protocol/packets/server/play/timeupdate.hpp"
@@ -103,8 +101,8 @@ void EventManager::handlePlayerJoin(EventPlayerJoin& packet) {
   player.getSession().setPlayer(player);
   player.getWorld().addPlayer(player);
 
-  SetCompression(-1).send(mSession);
-  LoginSucces(player.getUUIDasString(), player.getUsername()).send(mSession);
+  packets::SetCompression(-1).send(mSession);
+  packets::LoginSucces(player.getUUIDasString(), player.getUsername()).send(mSession);
   JoinGame(&player).send(mSession);
   SpawnPosition(Vector3i(0, 50, 0)).send(mSession);
   packets::PlayerPositionAndLook(player.getPosition(),
