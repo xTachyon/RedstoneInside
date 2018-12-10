@@ -30,7 +30,7 @@ void PacketHandler::readRaw(ConstBuffer buffer) {
   case ConnectionState::Handshake: {
     switch (type) {
     case 0x00: {
-      Handshake handshake(packet);
+      packets::Handshake handshake(packet);
       handleHandshake(handshake);
       return;
     } break;
@@ -117,7 +117,7 @@ void PacketHandler::handleOne() {
   }
 }
 
-void PacketHandler::handleHandshake(Handshake& p) {
+void PacketHandler::handleHandshake(packets::Handshake& p) {
   mSession.connectionState = p.state;
 }
 

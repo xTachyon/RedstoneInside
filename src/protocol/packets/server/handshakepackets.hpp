@@ -3,7 +3,7 @@
 #include "../packet.hpp"
 #include "../../../enums.hpp"
 
-namespace redi {
+namespace redi::packets {
 
 struct Handshake : public Packet {
   std::int32_t version;

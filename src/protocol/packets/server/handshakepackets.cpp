@@ -4,7 +4,7 @@
 #include "../../packetwriter.hpp"
 #include "../packethandler.hpp"
 
-namespace redi {
+namespace redi::packets {
 
 Handshake::Handshake(PacketReader& packet) { read(packet); }
 

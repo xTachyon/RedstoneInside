@@ -19,7 +19,7 @@ public:
   void handleOne();
   void readRaw(ConstBuffer buffer);
 
-  void handleHandshake(Handshake& packet);
+  void handleHandshake(packets::Handshake& packet);
 
   void handleStatusRequest(packets::Request& packet);
   void handleStatusPing(packets::Ping& packet);
