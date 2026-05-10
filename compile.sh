@@ -7,8 +7,6 @@ rm -rf build
 # cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -G Ninja
 # cmake --build build
 
-
-ls -lh /cmake/cmake-3.8.2-Linux-x86_64
 cmake --version
 mkdir build
 cd build
