@@ -1,6 +1,7 @@
 #include "servericon.hpp"
 #include "bytebuffer.hpp"
 #include "util/util.hpp"
+#include <fstream>
 
 namespace fs = boost::filesystem;
 
