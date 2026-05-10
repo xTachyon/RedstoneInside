@@ -147,7 +147,7 @@ set(SOURCE_FILES
       util/string.cpp
       networking.hpp
       networking_linux.cpp
-      networking_asio.cpp
+      # networking_asio.cpp
       asiofile.cpp
       protocol/packets/server/statuspackets.hpp
       protocol/packets/server/statuspackets.cpp

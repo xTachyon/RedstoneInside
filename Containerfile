@@ -12,9 +12,9 @@ RUN apt install -y python3 python3-dev git
 FROM base_image as build_boost
 
 WORKDIR /b
-RUN wget https://archives.boost.io/release/1.69.0/source/boost_1_69_0.tar.bz2
-RUN tar -xjf boost_1_69_0.tar.bz2
-WORKDIR /b/boost_1_69_0
+RUN wget https://archives.boost.io/release/1.70.0/source/boost_1_70_0.tar.bz2
+RUN tar -xjf boost_1_70_0.tar.bz2
+WORKDIR /b/boost_1_70_0
 RUN ./bootstrap.sh --prefix=/b/boost/
 RUN ./b2 install -j $(nproc)
 
