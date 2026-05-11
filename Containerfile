@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 as base_image
+FROM ubuntu:26.04 as base_image
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y ninja-build build-essential zlib1g-dev
