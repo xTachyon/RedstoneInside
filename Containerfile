@@ -16,7 +16,7 @@ RUN wget https://archives.boost.io/release/1.80.0/source/boost_1_80_0.tar.bz2
 RUN tar -xjf boost_1_80_0.tar.bz2
 WORKDIR /b/boost_1_80_0
 RUN ./bootstrap.sh --prefix=/b/boost/
-RUN ./b2 install -j $(nproc)
+RUN ./b2 install -j $(nproc) --with-system --with-filesystem --with-iostreams --with-program_options
 
 # -----------------------------------------------------------------------------
 
