@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 as base_image
+FROM ubuntu:24.04 as base_image
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y ninja-build build-essential zlib1g-dev
@@ -8,11 +8,17 @@ RUN apt install -y python3 python3-dev git
 
 
 # -----------------------------------------------------------------------------
+    
+FROM base_image as download_boost
+WORKDIR /b
+RUN wget https://archives.boost.io/release/1.85.0/source/boost_1_85_0.tar.bz2
+
+# -----------------------------------------------------------------------------
 
 FROM base_image as build_boost
 
 WORKDIR /b
-RUN wget https://archives.boost.io/release/1.85.0/source/boost_1_85_0.tar.bz2
+COPY --from=download_boost /b /b
 RUN tar -xjf boost_1_85_0.tar.bz2
 WORKDIR /b/boost_1_85_0
 RUN ./bootstrap.sh --prefix=/b/boost/
