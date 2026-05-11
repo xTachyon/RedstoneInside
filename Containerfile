@@ -1,9 +1,13 @@
 FROM ubuntu:26.04 as base_image
 
 RUN apt update \
-    && DEBIAN_FRONTEND=noninteractive apt install -y ninja-build build-essential zlib1g-dev
-RUN apt install -y wget
-RUN apt install -y python3 python3-dev git
+    && DEBIAN_FRONTEND=noninteractive apt install -y ninja-build zlib1g-dev \
+    clang build-essential \
+    wget python3 python3-dev git
+
+
+# ENV CC=clang
+# ENV CXX=clang
 
 
 # -----------------------------------------------------------------------------
@@ -25,23 +29,24 @@ RUN ./b2 install -j $(nproc) --with-system --with-filesystem --with-iostreams --
 
 # -----------------------------------------------------------------------------
 
-FROM base_image
-
-RUN apt update \
-    && DEBIAN_FRONTEND=noninteractive apt install -y ninja-build build-essential cmake
-RUN apt install -y wget
-RUN apt install -y python3 python3-dev git
+FROM base_image as clone_json
 
 WORKDIR /libs
 RUN git clone https://github.com/nlohmann/json.git
 RUN cd json && git checkout v3.12.0
 
+# -----------------------------------------------------------------------------
+
+FROM base_image
+
+RUN apt update \
+    && DEBIAN_FRONTEND=noninteractive apt install -y ninja-build build-essential cmake clang
+RUN apt install -y wget
+RUN apt install -y python3 python3-dev git
+
 COPY --from=build_boost /b/boost /libs/boost
+COPY --from=clone_json /libs/json /libs/json
 
-# ENV PATH "$PATH:/cmake/cmake-3.8.2-Linux-x86_64/bin"
-
-# ENV CC=clang
-# ENV CXX=clang
 ENV CMAKE_COLOR_DIAGNOSTICS=ON
 
 ENTRYPOINT /x/compile.sh

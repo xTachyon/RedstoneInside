@@ -1,5 +1,3 @@
-#include <boost/asio.hpp>
-#include <boost/bind.hpp>
 #include <boost/format.hpp>
 #include <boost/filesystem.hpp>
 #include "session.hpp"
