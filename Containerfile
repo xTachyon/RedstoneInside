@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as base_image
+FROM ubuntu:22.04 as base_image
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y ninja-build build-essential zlib1g-dev
