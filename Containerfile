@@ -11,10 +11,10 @@ RUN apt update \
 
 
 # -----------------------------------------------------------------------------
-    
+
 FROM base_image as download_boost
 WORKDIR /b
-RUN wget https://archives.boost.io/release/1.85.0/source/boost_1_85_0.tar.bz2
+RUN wget https://archives.boost.io/release/1.86.0/source/boost_1_86_0.tar.bz2
 
 # -----------------------------------------------------------------------------
 
@@ -22,8 +22,8 @@ FROM base_image as build_boost
 
 WORKDIR /b
 COPY --from=download_boost /b /b
-RUN tar -xjf boost_1_85_0.tar.bz2
-WORKDIR /b/boost_1_85_0
+RUN tar -xjf boost_1_86_0.tar.bz2
+WORKDIR /b/boost_1_86_0
 RUN ./bootstrap.sh --prefix=/b/boost/
 RUN ./b2 install -j $(nproc) --with-system --with-filesystem --with-iostreams --with-program_options
 
