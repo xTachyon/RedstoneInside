@@ -32,11 +32,11 @@ RUN apt update \
 RUN apt install -y wget
 RUN apt install -y python3 python3-dev git
 
-WORKDIR /json
+WORKDIR /libs
 RUN git clone https://github.com/nlohmann/json.git
 RUN cd json && git checkout v3.12.0
 
-COPY --from=build_boost /b/boost /b/boost
+COPY --from=build_boost /b/boost /libs/boost
 
 # ENV PATH "$PATH:/cmake/cmake-3.8.2-Linux-x86_64/bin"
 

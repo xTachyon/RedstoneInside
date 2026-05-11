@@ -10,5 +10,5 @@ rm -rf build/CMakeCache.txt
 cmake --version
 mkdir -p build
 cd build
-cmake .. -DBOOST_INCLUDEDIR=/b/boost/include -DBOOST_LIBRARYDIR=/b/boost/lib -DJSON_REPO_DIR=/json/json
-make -j$(nproc)
+cmake .. -DBOOST_INCLUDEDIR=/libs/boost/include -DBOOST_LIBRARYDIR=/libs/boost/lib -DJSON_REPO_DIR=/libs/json -G Ninja
+cmake --build .
