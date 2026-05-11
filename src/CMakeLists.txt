@@ -208,6 +208,3 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_definitions(-DREDI_DEBUG)
 endif()
-
-# include(../CMake/cotire.cmake)
-#cotire(redi)
