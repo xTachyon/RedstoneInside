@@ -161,7 +161,7 @@ add_executable(redi ${SOURCE_FILES})
 set(Boost_USE_STATIC_LIBS ON)
 add_definitions(-DBOOST_SYSTEM_NO_DEPRECATED)
 
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};../CMake")
+cmake_policy(SET CMP0167 OLD)
 find_package(Boost REQUIRED COMPONENTS filesystem iostreams program_options system)
 
 if(Boost_FOUND)

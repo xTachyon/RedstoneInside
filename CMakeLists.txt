@@ -4,6 +4,12 @@ project(redi)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# add_compile_options(-fsanitize=address)
+# add_link_options(-fsanitize=address)
+
+add_compile_options(-fsanitize=thread)
+add_link_options(-fsanitize=thread)
+
 if(WIN32)
   add_definitions(-DREDI_WINDOWS)
 elseif(UNIX)
